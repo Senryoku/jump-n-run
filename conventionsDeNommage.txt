@@ -1,0 +1,17 @@
+Conventions de nommage
+
+Tous les noms sont en anglais, le français est juste utilisé dans les commentaires et la documentation.
+
+-Structures, membres des structures et fonctions globales suivent la convention d'écriture UpperCamelCase. Ex: PreviousPosition
+-Les fonctions des modules (qui prennent en paramètre un pointeur vers la structure) sont écrites en loweCamelCase et c'est le début de la fonction qui définit à quel module appartient cette fonction. Chaque module donne dans la documentation (donc au début de l'entête) le mot qui fait de préfixe aux fonctions. Ex: les listes utilisent le préfixe lst : lstInit(…)
+-Les constantes globales et les constantes de préprocesseurs (#define …) sont écrites toutes en majuscules avec des underscores "_" entre les différents noms. Ex: MIN(…), PI, WIN_WIDTH
+-Les variables locales aux fonctions ne suivent aucune conventions car elles sont relatives à l'implémentation de la fonction elle même
+-Les accolades sont utilisées ainsi:
+if (var)
+{
+	/*
+	code
+	*/
+}
+-On utilise des fabulations et non pas des espaces
+-Le format d'encodage est UTF-8
