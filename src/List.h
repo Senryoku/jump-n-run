@@ -30,10 +30,15 @@ List* newList();
 **/
 void lstInit(List* L);
 
-/** @brief Libère les Node de la liste puis libère la liste
+/** @brief Libère les Nodes de la liste puis libère la liste
  *
 **/
 void delList(List* L);
+
+/** @brief Libère les Nodes de la liste
+ *
+ **/
+void lstFree(List* L);
 
 /** @brief Ajoute un élément en fin (enfile)
 **/

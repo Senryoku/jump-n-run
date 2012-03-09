@@ -1,4 +1,4 @@
-﻿#include "list.h"
+﻿#include "List.h"
 
 List* newList()
 {
@@ -73,5 +73,17 @@ void lstRem(List* L, Node* N)
 bool lstEmpty(List* L)
 {
 	return (L->Count == 0);
+}
+
+void lstFree(List* L)
+{
+	Node* tmp;
+	while(!lstEmpty(L))
+	{
+		tmp = L->First;
+		L->First = nodeGetNext(tmp);
+		delNode(tmp);
+		L->Count -= 1;
+	}
 }
 
