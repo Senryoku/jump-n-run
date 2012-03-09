@@ -66,7 +66,7 @@ Vec2 vec2Normalized(Vec2 V);
 
 /** @brief Test d'égalité des Vec2
 **/
-bool vec2Equal(Vec2 V1, Vec2 V2);
+Bool vec2Equal(Vec2 V1, Vec2 V2);
 
 /** @brief Copie V2 dans V1
  *

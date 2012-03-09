@@ -6,6 +6,7 @@
 #include <string>
 #include <assert.h>
 #include "Vec2.h"
+#include <new>
 #include <SFML/Audio.hpp>
 
 /**
@@ -17,7 +18,7 @@
  * @{
  */
 
-typedef struct s_SoundManager {
+typedef struct {
 	List Sounds;
 	std::map<std::string, sf::SoundBuffer*> SoundBuffers;
 	sf::Listener Listener;
@@ -76,7 +77,7 @@ void sndmStopAll(SoundManager* SM);
  * @param SM SoundManager où s'effectue la fonction
  * @param Position nouvelle position
  */
-void sndmSetListenerPosition(SoundManager* SM, const Vec2& Position);
+void sndmSetListenerPosition(SoundManager* SM, const Vec2& Position, float MinDist=200.f, float Attenuation=1.f);
 
 /**
  * @brief Obtient la position du Listener

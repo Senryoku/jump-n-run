@@ -1,5 +1,5 @@
 #include "SoundManager.h"
-#include <new>
+
 #include <stdio.h>
 
 
@@ -29,7 +29,7 @@ void sndmLoadFile(SoundManager* SM, const std::string &Key, const std::string &F
 	SM->SoundBuffers[Key]->LoadFromFile(File);
 }
 
-void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position)
+void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position, float MinDist, float Attenuation)
 {
 	std::map<std::string, sf::SoundBuffer*>::iterator it = SM->SoundBuffers.find(Key);
 	assert(it != SM->SoundBuffers.end());
@@ -39,6 +39,8 @@ void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position)
 	lstAdd(&(SM->Sounds), snd);
 	snd->SetBuffer(*(it->second));
 	snd->SetPosition(Position.x, Position.y, 0.f);
+	snd->SetMinDistance(MinDist);
+	snd->SetAttenuation(Attenuation);
 	snd->Play();
 }
 
@@ -107,6 +109,11 @@ void sndmSetListenerPosition(SoundManager* SM, const Vec2& Position)
 
 Vec2 sndmGetListenerPosition(const SoundManager* SM)
 {
-	return vec2(SM->Listener.GetPosition().x, SM->Listener.GetPosition().y);
+	//vec2(float, float) ne marche pas ?!
+	Vec2 V;
+	V.x=SM->Listener.GetPosition().x;
+	V.y=SM->Listener.GetPosition().y;
+	return V;
+	//return vec2(SM->Listener.GetPosition().x, SM->Listener.GetPosition().y);
 }
 

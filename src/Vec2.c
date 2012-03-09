@@ -55,7 +55,7 @@ float vec2SqLength(Vec2 V)
 	return (V.x*V.x + V.y*V.y);
 }
 
-bool vec2Equal(Vec2 V1, Vec2 V2)
+Bool vec2Equal(Vec2 V1, Vec2 V2)
 {
 	return (V1.x == V2.x && V1.y == V2.y);
 }
