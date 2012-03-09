@@ -13,7 +13,7 @@ void lstInit(List* L)
 	L->Count = 0;
 }
 
-void delList(List* L)
+void lstFree(List* L)
 {
 	Node* tmp;
 	while(!lstEmpty(L))
@@ -23,6 +23,12 @@ void delList(List* L)
 		delNode(tmp);
 		L->Count -= 1;
 	}
+}
+
+void delList(List* L)
+{
+	lstFree(L);
+	free(L);
 }
 
 void lstAdd(List* L, Elem Data)
@@ -73,17 +79,5 @@ void lstRem(List* L, Node* N)
 bool lstEmpty(List* L)
 {
 	return (L->Count == 0);
-}
-
-void lstFree(List* L)
-{
-	Node* tmp;
-	while(!lstEmpty(L))
-	{
-		tmp = L->First;
-		L->First = nodeGetNext(tmp);
-		delNode(tmp);
-		L->Count -= 1;
-	}
 }
 
