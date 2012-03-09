@@ -73,7 +73,7 @@ void sndmUpdate(SoundManager* SM)
 			last_snd=snd;
 			snd=nodeGetNext(snd);
 			lstRem(&SM->Sounds, last_snd);
-			printf("Un son eliminé");
+			printf("Un son eliminé\n");
 		}
 		else
 			snd=nodeGetNext(snd);

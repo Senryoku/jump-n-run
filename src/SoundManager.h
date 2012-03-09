@@ -51,7 +51,7 @@ void sndmLoadFile(SoundManager* SM, const std::string &Key, const std::string &F
  * @param Key Clé pour accéder au son
  * @param Position position où se trouve le son
  */
-void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position);
+void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position, float MinDist=200.f, float Attenuation=1.f);
 
 /**
  * @brief Joue un son sans position (non relatif au Listener)
@@ -77,7 +77,7 @@ void sndmStopAll(SoundManager* SM);
  * @param SM SoundManager où s'effectue la fonction
  * @param Position nouvelle position
  */
-void sndmSetListenerPosition(SoundManager* SM, const Vec2& Position, float MinDist=200.f, float Attenuation=1.f);
+void sndmSetListenerPosition(SoundManager* SM, const Vec2& Position);
 
 /**
  * @brief Obtient la position du Listener
