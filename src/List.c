@@ -1,4 +1,4 @@
-#include "list.h"
+﻿#include "list.h"
 
 List* newList()
 {
@@ -10,7 +10,6 @@ List* newList()
 void lstInit(List* L)
 {
 	L->First = NULL;
-	L->Last = NULL;
 	L->Count = 0;
 }
 
@@ -28,7 +27,7 @@ void delList(List* L)
 
 void lstAdd(List* L, Elem Data)
 {
-	Node* Node = newNode(Data, NULL);
+	Node* Node = newNode(Data, L->Last, NULL);
 	if(L->Count == 0) L->First = Node; else L->Last->Next = Node;
 	L->Last = Node;
 	L->Count += 1;
@@ -53,6 +52,22 @@ void lstDel(List* L, Elem E)
 		}
 		delNode(tmpNode);
 	}
+}
+
+void lstRem(List* L, Node* N)
+{
+	if(N == L->First)
+	{
+		nodeSetPrev(nodeGetNext(N), NULL);
+		L->First = nodeGetNext(N);
+	} else if(N == L->Last) {
+		nodeSetNext(nodeGetPrev(N), NULL);
+		L->Last = nodeGetPrev(N);
+	} else {
+		nodeSetNext(nodeGetPrev(N), nodeGetNext(N));
+		nodeSetPrev(nodeGetNext(N), nodeGetPrev(N));
+	}
+	delNode(N);
 }
 
 bool lstEmpty(List* L)
