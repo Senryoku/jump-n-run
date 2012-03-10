@@ -124,7 +124,7 @@ void sndmMusicFade(SoundManager* SM, const std::string &NextKey, float FadeSpeed
 	if (SM->IsFading) return; //On est en milieu d'un fade on ne va pas en faire un
 	
 	SM->FadeSpeed=FadeSpeed;
-	SM->IsFading=0;
+	//SM->IsFading=0;
 	SM->NextMusic=it;
 	SM->Loop=Loop;
 }
@@ -215,6 +215,49 @@ void sndmUpdate(SoundManager* SM)
 	
 }
 
+void sndmPauseAllSounds(SoundManager* SM)
+{
+	if (lstEmpty(&SM->Sounds))
+		return;
+	Node* snd;
+	snd=lstFirst(&SM->Sounds);
+	
+	while (snd!=NULL)
+	{
+		sf::Sound* snd_ptr=((sf::Sound*)nodeGetData(snd));
+		snd_ptr->Pause();
+		snd=nodeGetNext(snd);		
+	}
+}
+
+void sndmResumeAllSounds(SoundManager* SM)
+{
+	if (lstEmpty(&SM->Sounds))
+		return;
+	Node* snd;
+	snd=lstFirst(&SM->Sounds);
+	
+	while (snd!=NULL)
+	{
+		sf::Sound* snd_ptr=((sf::Sound*)nodeGetData(snd));
+		snd_ptr->Play();
+		snd=nodeGetNext(snd);		
+	}
+}
+
+void sndmPauseMusic(SoundManager* SM)
+{
+	for (std::map<std::string, sf::Music*>::iterator it = SM->Musics.begin(); it!=SM->Musics.end(); it++)
+		if (it->second->GetStatus() == sf::Music::Playing)
+			it->second->Pause();
+}
+
+void sndmResumeMusic(SoundManager* SM)
+{
+	for (std::map<std::string, sf::Music*>::iterator it = SM->Musics.begin(); it!=SM->Musics.end(); it++)
+		if (it->second->GetStatus() == sf::Music::Paused)
+			it->second->Play();
+}
 
 
 void sndmStopAll(SoundManager* SM)

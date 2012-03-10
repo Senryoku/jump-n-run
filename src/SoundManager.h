@@ -131,6 +131,31 @@ void sndmMusicFade(SoundManager* SM, const std::string &NextKey, float FadeSpeed
 void sndmMusicFadeToStop(SoundManager* SM, float FadeSpeed);
 
 /**
+ * @brief Pause tous les sons
+ * @param SM SoundManager où s'effectue la fonction
+ */
+void sndmPauseAllSounds(SoundManager* SM);
+
+/**
+ * @brief Résume tous les sons
+ * @param SM SoundManager où s'effectue la fonction
+ */
+void sndmResumeAllSounds(SoundManager* SM);
+
+/**
+ * @brief Pause la musique
+ * @param SM SoundManager où s'effectue la fonction
+ */
+void sndmPauseMusic(SoundManager* SM);
+
+/**
+ * @brief Résume les musiques en pause
+ * @param SM SoundManager où s'effectue la fonction
+ */
+void sndmResumeMusic(SoundManager* SM);
+
+
+/**
  * @brief Fait une mise à jours sur les sons (élimine de la mémoire les sons qui ne sont plus utilisés
  * @param SM SoundManager où s'effectue la fonction
  */
