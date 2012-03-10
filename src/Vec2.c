@@ -66,7 +66,7 @@ void vec2Cp(Vec2* V1, Vec2 V2)
 	V1->y = V2.y;
 }
 
-void vec2TestRegression()
+void vec2TestRegression(void)
 {
 	Vec2 V1;
 	Vec2 V2;

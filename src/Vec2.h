@@ -78,7 +78,7 @@ void vec2Cp(Vec2* V1, Vec2 V2);
 
 /** @brief Test de régression de Vec2
 **/
-void vec2TestRegression();
+void vec2TestRegression(void);
 
 /** @}
 **/

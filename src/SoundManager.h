@@ -14,14 +14,20 @@
  *
  * Sert à gèrer les sons en mémoires et les instances de ceux-ci
  * Préfixe: sndm
- * @todo Ajouter des const pour les modes
+ * @todo Ajouter des const pour les modes. Certains on ne peux pas car il les fonctions sur les map nécessitent ne pas être const
  * @{
  */
 
 typedef struct {
 	List Sounds;
 	std::map<std::string, sf::SoundBuffer*> SoundBuffers;
+	std::map<std::string, sf::Music*> Musics;
 	sf::Listener Listener;
+	
+	//Pour le fading entre deux musiques
+	float FadeSpeed;
+	std::map<std::string, sf::Music*>::iterator NextMusic;
+	bool IsFading, Loop;
 } SoundManager;
 
 /**
@@ -43,7 +49,15 @@ void sndmFree(SoundManager* SM);
  * @param Key Clé pour accéder au son
  * @param File Adrsse du fichier
  */
-void sndmLoadFile(SoundManager* SM, const std::string &Key, const std::string &File);
+void sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::string &File);
+
+/**
+ * @brief Charge une musique en mémoire et l'ajoute avec une clé
+ * @param SM SoundManager où s'effectue la fonction
+ * @param Key Clé pour accéder au son
+ * @param File Adrsse du fichier
+ */
+void sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::string &File);
 
 /**
  * @brief Joue un son à une position donnée
@@ -61,6 +75,62 @@ void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position, fl
 void sndmPlay(SoundManager* SM, const std::string &Key);
 
 /**
+ * @brief Joue une musique
+ * @param SM SoundManager où s'effectue la fonction
+ * @param Key Clé pour accéder au son
+ * @param Loop looper la chanson ou pas
+ */
+void sndmPlayMusic(SoundManager* SM, const std::string &Key, bool Loop=1);
+
+/**
+ * @brief Change le volume d'une musique
+ * @param SM SoundManager où s'effectue la fonction
+ * @param Key Clé pour accéder au son
+ * @param Volume nouvel volume [0..100]
+ */
+void sndmMusicSetVolume(SoundManager* SM, const std::string &Key, float Volume);
+
+/**
+ * @brief Change le pitch d'une musique
+ * @param SM SoundManager où s'effectue la fonction
+ * @param Key Clé pour accéder au son
+ * @param pitch nouvel pitch normal = 1.f
+ */
+void sndmMusicSetPitch(SoundManager* SM, const std::string &Key, float Pitch);
+
+/**
+ * @brief Donne le volume d'une musique
+ * @param SM SoundManager où s'effectue la fonction
+ * @param Key Clé pour accéder au son
+ * @return Volume [0..100]
+ */
+float sndmMusicGetVolume(SoundManager* SM, const std::string &Key);
+
+/**
+ * @brief Donne le pitch d'une musique
+ * @param SM SoundManager où s'effectue la fonction
+ * @param Key Clé pour accéder au son
+ * @return pitch normal = 1.f
+ */
+float sndmMusicGetPitch(SoundManager* SM, const std::string &Key);
+
+/**
+ * @brief Fait un effet de Fade entre deux musiques
+ * @param SM SoundManager où s'effectue la fonction
+ * @param NextKey Clé pour accéder au son
+ * @param FadeSpeed vitesse du fading 100 = tout le volume d'un coup
+ */
+void sndmMusicFade(SoundManager* SM, const std::string &NextKey, float FadeSpeed, bool Loop=1);
+
+/**
+ * @brief Fait un effet de Fade et stoppe la musique à la fin
+ * @param SM SoundManager où s'effectue la fonction
+ * @param NextKey Clé pour accéder au son
+ * @param FadeSpeed vitesse du fading 100 = tout le volume d'un coup
+ */
+void sndmMusicFadeToStop(SoundManager* SM, float FadeSpeed);
+
+/**
  * @brief Fait une mise à jours sur les sons (élimine de la mémoire les sons qui ne sont plus utilisés
  * @param SM SoundManager où s'effectue la fonction
  */
@@ -71,6 +141,19 @@ void sndmUpdate(SoundManager* SM);
  * @param SM SoundManager où s'effectue la fonction
  */
 void sndmStopAll(SoundManager* SM);
+
+/**
+ * @brief Stope toutes les musiques
+ * @param SM SoundManager où s'effectue la fonction
+ */
+void sndmStopAllMusic(SoundManager* SM);
+
+/**
+ * @brief Stope une musique
+ * @param SM SoundManager où s'effectue la fonction
+ * @param Key Clé de la musique
+ */
+void sndmStopMusic(SoundManager* SM, const std::string &Key);
 
 /**
  * @brief Change la position du Listener
