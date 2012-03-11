@@ -7,6 +7,7 @@
  *
  * Liaison Rigid entre deux Vertex
  * Préfixe des méthodes : rd
+ * @todo Test de régression complet
  * @{
 **/
 
@@ -23,13 +24,14 @@ typedef struct
  * @param V2 Deuxième Vertex
  * @param L Longueur à l'équilibre
 **/
-Rigid* newRigid(const Vertex* V1, const Vertex* V2, float L);
+Rigid* newRigid(Vertex* V1, Vertex* V2, float L);
 
 /** @brief Initialise R
  *
- * N'agit pas sur les Vertices
+ * N'agit pas sur les Vertices, ils ne peuvent cependant
+ * être passé en const (warnings)
 **/
-void rdInit(Rigid* R, const Vertex* V1, const Vertex* V2, float L);
+void rdInit(Rigid* R, Vertex* V1, Vertex* V2, float L);
 
 /** @brief Destructeur
  *
@@ -37,7 +39,16 @@ void rdInit(Rigid* R, const Vertex* V1, const Vertex* V2, float L);
 **/
 void delRigid(Rigid* R);
 
+/** @brief Résout la contrainte
+ *
+ * @param R Contrainte rigide à résoudre
+**/
 void rdResolve(Rigid* R);
+
+/** @brief Retourne le vecteur formé par les deux points de la contrainte
+ *
+**/
+Vec2 rdVector(Rigid* R);
 
 /** @}
 **/

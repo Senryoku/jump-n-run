@@ -55,6 +55,16 @@ float vec2SqLength(Vec2 V)
 	return (V.x*V.x + V.y*V.y);
 }
 
+Vec2 vec2Ortho(Vec2 V)
+{
+	return vec2(-1.f*V.y, V.x);
+}
+
+Vec2 vec2Normalized(Vec2 V)
+{
+	return vec2Div(V, vec2Length(V));
+}
+
 Bool vec2Equal(Vec2 V1, Vec2 V2)
 {
 	return (V1.x == V2.x && V1.y == V2.y);

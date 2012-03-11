@@ -7,6 +7,13 @@ DynArr da()
 	return DA;
 }
 
+DynArr* newDynArr()
+{
+	DynArr* DA;
+	daInit(DA);
+	return DA;
+}
+
 void daInit(DynArr* DA)
 {
 	DA->First = calloc(1, sizeof(void*));
@@ -19,6 +26,12 @@ void daFree(DynArr* DA)
 	free(DA->First);
 	DA->Capacity = 0;
 	DA->Size = 0;
+}
+
+void delDynArr(DynArr* DA)
+{
+	daFree(DA);
+	free(DA);
 }
 
 void daReserve(DynArr* DA, unsigned int newCapa)
@@ -57,4 +70,14 @@ void daDel(DynArr* DA, unsigned int Pos)
 void* daGet(const DynArr* DA, unsigned int Pos)
 {
 	return DA->First[Pos];
+}
+
+unsigned int daGetSize(const DynArr* DA)
+{
+	return DA->Size;
+}
+
+unsigned int daGetCapacity(const DynArr* DA)
+{
+	return DA->Capacity;
 }

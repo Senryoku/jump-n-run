@@ -5,6 +5,8 @@
 **/
 
 #include "Vertex.h"
+#include "Rigid.h"
+#include "Polygon.h"
 
 /** @}
 **/

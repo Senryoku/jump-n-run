@@ -33,7 +33,7 @@ Vec2 vxGetPosition(const Vertex* V) { return V->Position; }
 Vec2 vxGetOldPos(const Vertex* V) { return V->OldPos; }
 Vec2 vxGetAcceleration(const Vertex* V) { return V->Acceleration; }
 float vxGetMass(const Vertex* V) { return V->Mass; }
-bool vxIsFixe(const Vertex* V) { return V->Fixe; }
+Bool vxIsFixe(const Vertex* V) { return V->Fixe; }
 
 
 void vxSetPosition(Vertex* V, Vec2 newPos)

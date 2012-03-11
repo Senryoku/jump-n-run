@@ -20,7 +20,7 @@ typedef struct
 	Vec2 OldPos;
 	Vec2 Acceleration;
 	float Mass;
-	bool Fixe;
+	Bool Fixe;
 } Vertex;
 
 /** @brief Constructeur
@@ -66,7 +66,7 @@ float vxGetMass(const Vertex* V);
  * @param V Pointeur vers le vecteur considéré
  * @return true si le point est fixe
 **/
-bool vxIsFixe(const Vertex* V);
+Bool vxIsFixe(const Vertex* V);
 
 /** @brief Mutateur de la position
  *

@@ -7,6 +7,7 @@
  *
  * Tableau dynamique de void*
  * Préfixe des méthodes : da
+ * @todo Test de régression complet
  * @{
 **/
 
@@ -22,6 +23,11 @@ typedef struct
 **/
 DynArr da();
 
+/** @brief Constructeur
+ *
+**/
+DynArr* newDynArr();
+
 /** @brief Initialise un DynArr
  *
  * @param DA Le DynArr à intialiser
@@ -33,6 +39,11 @@ void daInit(DynArr* DA);
  * @param DA Le DynArr à libérer
 **/
 void daFree(DynArr* DA);
+
+/** @brief Destructeur
+ *
+**/
+void delDynArr(DynArr* DA);
 
 /** @brief Redimensionne le tableau
  *
@@ -62,6 +73,16 @@ void daDel(DynArr* DA, unsigned int Pos);
  * @param Pos Position de l'entrée à renvoyer (0 - Size-1)
 **/
 void* daGet(const DynArr* DA, unsigned int Pos);
+
+/** @brief Accesseur de la taille utilisée
+ *
+**/
+unsigned int daGetSize(const DynArr* DA);
+
+/** @brief Accesseur de la capacité
+ *
+**/
+unsigned int daGetCapacity(const DynArr* DA);
 
 #endif
 

@@ -1,13 +1,13 @@
 #include "Rigid.h"
 
-Rigid* newRigid(const Vertex* V1, const Vertex* V2, float L)
+Rigid* newRigid(Vertex* V1, Vertex* V2, float L)
 {
 	Rigid* R = (Rigid*) malloc(sizeof(Rigid));
 	rdInit(R, V1, V2, L);
 	return R;
 }
 
-void rdInit(Rigid* R, const Vertex* V1, const Vertex* V2, float L)
+void rdInit(Rigid* R, Vertex* V1, Vertex* V2, float L)
 {
 	R->V1 = V1;
 	R->V2 = V2;
@@ -40,4 +40,9 @@ void rdResolve(Rigid* R)
 	else
 		vxCorrectPosition(R->V2, vec2Prod(Vect, -factor*0.5f)),
 		vxCorrectPosition(R->V1, vec2Prod(Vect, factor*0.5f));
+}
+
+Vec2 rdVector(Rigid* R)
+{
+	return vec2Sub(vxGetPosition(R->V2), vxGetPosition(R->V1));
 }
