@@ -12,10 +12,10 @@ OS := $(shell uname)
 endif
 
 ifeq ($(OS), Linux)
-RM = rm -rf
+RM = rm
 endif
 ifeq ($(OS), Darwin)
-RM = rm -rf
+RM = rm
 endif
 ifeq ($(OS), Win)
 RM = del
@@ -36,7 +36,15 @@ OPT = -Wall -pedantic -g
 
 run :
 	./$(EXEC)
+.PHONY : run
 
 clean:
-	$(RM) -rf $(OBJ)*.o $(BIN)*
+	$(RM) $(OBJ)*.o $(BIN)*
+.PHONY : clean
+
+doc:
+	cd doc/ ; \
+	doxygen Doxyfile ; \
+	cd ..
+.PHONY : doc
  

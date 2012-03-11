@@ -48,7 +48,7 @@ void sndmFree(SoundManager* SM);
  * @param SM SoundManager où s'effectue la fonction
  * @param Key Clé pour accéder au son
  * @param File Adrsse du fichier
- * @return faux s'il y a eu ue erreur
+ * @return faux s'il y a eu une erreur
  */
 bool sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::string &File);
 
@@ -57,7 +57,7 @@ bool sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::stri
  * @param SM SoundManager où s'effectue la fonction
  * @param Key Clé pour accéder au son
  * @param File Adrsse du fichier
- * @return faux s'il y a eu ue erreur
+ * @return faux s'il y a eu une erreur
  */
 bool sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::string &File);
 
