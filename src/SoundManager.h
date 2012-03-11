@@ -7,7 +7,7 @@
 #include <assert.h>
 #include "Vec2.h"
 #include <new>
-#include <SFML/Audio.hpp>
+#include "SoundImpl.h"
 
 /**
  * @defgroup SoundManager
@@ -20,13 +20,13 @@
 
 typedef struct {
 	List Sounds;
-	std::map<std::string, sf::SoundBuffer*> SoundBuffers;
-	std::map<std::string, sf::Music*> Musics;
+	std::map<std::string, SoundBuffer*> SoundBuffers;
+	std::map<std::string, Music*> Musics;
 	sf::Listener Listener;
 	
 	//Pour le fading entre deux musiques
 	float FadeSpeed;
-	std::map<std::string, sf::Music*>::iterator NextMusic;
+	std::map<std::string, Music*>::iterator NextMusic;
 	bool IsFading, Loop;
 } SoundManager;
 
@@ -48,16 +48,18 @@ void sndmFree(SoundManager* SM);
  * @param SM SoundManager où s'effectue la fonction
  * @param Key Clé pour accéder au son
  * @param File Adrsse du fichier
+ * @return faux s'il y a eu ue erreur
  */
-void sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::string &File);
+bool sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::string &File);
 
 /**
  * @brief Charge une musique en mémoire et l'ajoute avec une clé
  * @param SM SoundManager où s'effectue la fonction
  * @param Key Clé pour accéder au son
  * @param File Adrsse du fichier
+ * @return faux s'il y a eu ue erreur
  */
-void sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::string &File);
+bool sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::string &File);
 
 /**
  * @brief Joue un son à une position donnée

@@ -28,22 +28,41 @@ void sndmFree(SoundManager* SM)
 	SM->Musics.clear();
 }
 
-void sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::string &File)
+bool sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::string &File)
 {
 	//On vérifie que la clé n'existe pas déjà
 	assert(SM->SoundBuffers.count(Key)==0);
 	
 	SM->SoundBuffers[Key] = new sf::SoundBuffer;
-	SM->SoundBuffers[Key]->LoadFromFile(File);
+	if (!SM->SoundBuffers[Key]->LoadFromFile(File))
+	{
+		//Le chargement a raté
+		delete SM->SoundBuffers[Key];
+		std::map<std::string, sf::SoundBuffer*>::iterator it;
+		it=SM->SoundBuffers.find(Key);
+		SM->SoundBuffers.erase(it);
+		return 0;
+	}
+	return 1;
 }
 
-void sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::string &File)
+bool sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::string &File)
 {
 	//On vérifie que la clé n'existe pas déjà
 	assert(SM->Musics.count(Key)==0);
 	
 	SM->Musics[Key] = new sf::Music;
-	SM->Musics[Key]->OpenFromFile(File);
+	if (!SM->Musics[Key]->OpenFromFile(File))
+	{
+		//Le chargement a raté
+		delete SM->Musics[Key];
+		std::map<std::string, sf::Music*>::iterator it;
+		it=SM->Musics.find(Key);
+		SM->Musics.erase(it);
+		return 0;
+	}
+	
+	return 1;
 }
 
 void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position, float MinDist, float Attenuation)
