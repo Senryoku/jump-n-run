@@ -52,7 +52,7 @@ Node* nodeGetNext(Node* ptrNode);
  *
  * @return true si la fin de la liste est atteinte
 **/
-bool nodeEnd(Node* ptrNode);
+Bool nodeEnd(Node* ptrNode);
 
 /* Mutateurs */
 /** @brief Mutateur du précédent

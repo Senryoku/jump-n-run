@@ -31,6 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="src\Circle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\Circle.h" />
 		<Unit filename="src\DynArr.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -67,6 +71,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src\Vertex.h" />
+		<Unit filename="src\World.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

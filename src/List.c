@@ -76,7 +76,7 @@ void lstRem(List* L, Node* N)
 	delNode(N);
 }
 
-bool lstEmpty(List* L)
+Bool lstEmpty(List* L)
 {
 	return (L->Count == 0);
 }

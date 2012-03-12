@@ -203,9 +203,20 @@ Vec2 polyGetCenter(Polygon* P)
 	return vec2Div(Center, daGetSize(&P->Vertices));
 }
 
+void polyResolve(Polygon* P)
+{
+	unsigned int i;
+	for(i = 0; i < daGetSize(&P->Rigids); i++)
+		rdResolve(daGet(&P->Rigids, i));
+	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
+		rdResolve(daGet(&P->InternalRigids, i));
+}
+
 void polyTestRegression()
 {
 	printf("\n === Debut du test de regression de Polygon === \n\n");
+	unsigned int i;
+	float prevdt = 1.f, dt = 1.f;
 	Vertex* V1 = newVertex();
 	Vertex* V2 = newVertex();
 	Vertex* V3 = newVertex();
@@ -215,8 +226,42 @@ void polyTestRegression()
 	Vertex* V12 = newVertex();
 	Vertex* V13 = newVertex();
 
+	vxSetPosition(V1, vec2(0.f, 0.f));
+	vxSetPosition(V2, vec2(10.f, 0.f));
+	vxSetPosition(V3, vec2(0.f, 10.f));
+
+	vxSetPosition(V10, vec2(20.f, 0.f));
+	vxSetPosition(V11, vec2(30.f, 0.f));
+	vxSetPosition(V12, vec2(30.f, 10.f));
+	vxSetPosition(V13, vec2(20.f, 10.f));
+
 	Polygon* Poly = newPolygon(3, V1, V2, V3);
 	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
+
+	for(i = 0; i < 10; i++)
+	{
+		printf("Frame #%d\n", i);
+		printf("Triangle : (%f, %f) (%f, %f) (%f, %f)\n\n",
+				vxGetPosition(V1).x, vxGetPosition(V1).y,
+				vxGetPosition(V2).x, vxGetPosition(V2).y,
+				vxGetPosition(V3).x, vxGetPosition(V3).y);
+		printf("Rectangle : (%f, %f) (%f, %f) \n (%f, %f), (%f, %f)\n\n",
+				vxGetPosition(V10).x, vxGetPosition(V10).y,
+				vxGetPosition(V11).x, vxGetPosition(V11).y,
+				vxGetPosition(V12).x, vxGetPosition(V12).y,
+				vxGetPosition(V13).x, vxGetPosition(V13).y);
+		vxApplyForce(V1, vec2(1.f, 0.f));
+		vxApplyForce(V10, vec2(1.f, 0.f));
+		vxResolve(V1, prevdt, dt);
+		vxResolve(V2, prevdt, dt);
+		vxResolve(V3, prevdt, dt);
+		vxResolve(V10, prevdt, dt);
+		vxResolve(V11, prevdt, dt);
+		vxResolve(V12, prevdt, dt);
+		vxResolve(V13, prevdt, dt);
+		polyResolve(Poly);
+		polyResolve(Rectangle);
+	}
 
 	delPolygon(Rectangle);
 	delPolygon(Poly);
@@ -230,4 +275,19 @@ void polyTestRegression()
 	delVertex(V2);
 	delVertex(V1);
 	printf("\n === Fin du test de regression de Polygon === \n\n");
+}
+
+Bool polyIsFixe(Polygon* P)
+{
+	return P->Fixe;
+}
+
+void polySetFixe(Polygon* P, Bool B)
+{
+	unsigned int i;
+	for (i = 0; i < daGetSize(&P->Vertices); i++)
+	{
+		vxSetFixe(daGet(&P->Vertices, i), B);
+	}
+	P->Fixe = B;
 }

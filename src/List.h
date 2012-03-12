@@ -62,7 +62,7 @@ void lstRem(List* L, Node* N);
 
 /** @brief Renvoi vrai si la file est vide
 **/
-bool lstEmpty(List*);
+Bool lstEmpty(List*);
 
 /** @brief Retourne un pointeur vers le premier Node de la liste
 **/

@@ -10,7 +10,7 @@
 
 /** @defgroup Polygon
  *
- * Polygone composé de Vertex reliés par des Rigid
+ * Polygone convexe composé de Vertex reliés par des Rigid
  * Préfixe des méthodes : poly
  * @todo Test de régression complet
  * @{
@@ -28,6 +28,7 @@ typedef struct
 	DynArr Vertices; /**< Vertices composant le polygon **/
 	DynArr Rigids; /**< Limites du polygon, générées automatiquement **/
 	DynArr InternalRigids; /**< Contraintes internes **/
+	Bool Fixe; /**< Indique que tout les Vertices sont fixes **/
 } Polygon;
 
 /** @brief Constructeur
@@ -117,12 +118,31 @@ void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis);
 **/
 Vec2 polyGetCenter(Polygon* P);
 
+/** @brief Appelle rdResolve pour chaque contrainte du Polygon
+ *
+ * @param P Polygon
+**/
+void polyResolve(Polygon* P);
+
+/** @brief Accesseur de Fixe
+ *
+ * @param P Polygon
+**/
+Bool polyIsFixe(Polygon* P);
+
+/** @brief Mutateur de Fixe
+ *
+ * Modifie également l'état de TOUT les vertices de P
+ * @param P Polygon à modifier
+ * @param B Nouvelle valeur pour Fixe
+**/
+void polySetFixe(Polygon* P, Bool B);
+
 /** @brief Test de régression
  *
  * Fait des tests...
 **/
 void polyTestRegression();
-
 
 /** @}
 **/

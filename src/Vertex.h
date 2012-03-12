@@ -89,6 +89,13 @@ void vxCorrectPosition(Vertex* V, Vec2 addPos);
 **/
 void vxSetMass(Vertex* V, float newMass);
 
+/** @brief Mutateur de Fixe
+ *
+ * @param V Pointeur vers le vecteur à modifier
+ * @param B Nouvelle valeur de Fixe
+**/
+void vxSetFixe(Vertex* V, Bool B);
+
 /** @brief Mutateur de l'accélération
  *
  * @param V Pointeur vers le vecteur à modifier

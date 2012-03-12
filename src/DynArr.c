@@ -9,14 +9,14 @@ DynArr da()
 
 DynArr* newDynArr()
 {
-	DynArr* DA;
+	DynArr* DA = (DynArr*) malloc(sizeof(DynArr));
 	daInit(DA);
 	return DA;
 }
 
 void daInit(DynArr* DA)
 {
-	DA->First = calloc(1, sizeof(void*));
+	DA->First = malloc(sizeof(void*));
 	DA->Capacity = 1;
 	DA->Size = 0;
 }
@@ -40,7 +40,7 @@ void daReserve(DynArr* DA, unsigned int newCapa)
 	int i;
 	if(newCapa > DA->Capacity)
 	{
-		tmp = calloc(newCapa, sizeof(void*));
+		tmp = malloc(newCapa*sizeof(void*));
 		for(i = 0; i < DA->Size; i++)
 			tmp[i] = DA->First[i];
 		free(DA->First);
