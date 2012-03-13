@@ -23,10 +23,10 @@ Polygon* newPolygon(unsigned int nbVx, ...)
 	deux Vertices de la liste et la distance les séparant, puis l'ajoute
 	 à la liste */
 	for(i = 0; i < nbVx; i++)
-		daAdd(&newPoly->Rigids, newRigid(daGet(&newPoly->Vertices, i),
-			daGet(&newPoly->Vertices, (i+1)%nbVx),
-			vec2Length(vec2Sub(vxGetPosition(daGet(&newPoly->Vertices, i)),
-					vxGetPosition(daGet(&newPoly->Vertices, (i+1)%nbVx))))));
+		daAdd(&newPoly->Rigids, newRigid((Vertex*)daGet(&newPoly->Vertices, i),
+			(Vertex*)daGet(&newPoly->Vertices, (i+1)%nbVx),
+			vec2Length(vec2Sub(vxGetPosition((Vertex*)daGet(&newPoly->Vertices, i)),
+					vxGetPosition((Vertex*)daGet(&newPoly->Vertices, (i+1)%nbVx))))));
 
 	return newPoly;
 }
@@ -51,10 +51,10 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 	deux Vertices de la liste et la distance les séparant, puis l'ajoute
 	 à la liste */
 	for(i = 0; i < nbVx; i++)
-		daAdd(&P->Rigids, newRigid(daGet(&P->Vertices, i),
-			daGet(&P->Vertices, (i+1)%nbVx),
-			vec2Length(vec2Sub(vxGetPosition(daGet(&P->Vertices, i)),
-					vxGetPosition(daGet(&P->Vertices, (i+1)%nbVx))))));
+		daAdd(&P->Rigids, newRigid((Vertex*)daGet(&P->Vertices, i),
+			(Vertex*)daGet(&P->Vertices, (i+1)%nbVx),
+			vec2Length(vec2Sub(vxGetPosition((Vertex*)daGet(&P->Vertices, i)),
+					vxGetPosition((Vertex*)daGet(&P->Vertices, (i+1)%nbVx))))));
 }
 
 void delPolygon(Polygon* P)
@@ -64,11 +64,11 @@ void delPolygon(Polygon* P)
 	/* Destruction des liaisons */
 	for(i = 0; i < daGetSize(&P->Rigids); i++)
 	{
-		delRigid(daGet(&P->Rigids, i));
+		delRigid((Rigid*)daGet(&P->Rigids, i));
 	}
 	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
 	{
-		delRigid(daGet(&P->InternalRigids, i));
+		delRigid((Rigid*)daGet(&P->InternalRigids, i));
 	}
 
 	/* Libération des Dynamic Arrays */
@@ -83,10 +83,10 @@ void polyAddInternal(Polygon* P, unsigned int V1, unsigned int V2, float Length)
 {
 	/* Si la longueur n'est pas valide, on la calcule */
 	if(Length <= 0)
-		Length = vec2Length(vec2Sub(vxGetPosition(daGet(&P->Vertices, V1)),
-									vxGetPosition(daGet(&P->Vertices, V2))));
-	daAdd(&P->InternalRigids, newRigid(daGet(&P->Vertices, V1),
-										daGet(&P->Vertices, V2),
+		Length = vec2Length(vec2Sub(vxGetPosition((Vertex*)daGet(&P->Vertices, V1)),
+									vxGetPosition((Vertex*)daGet(&P->Vertices, V2))));
+	daAdd(&P->InternalRigids, newRigid((Vertex*)daGet(&P->Vertices, V1),
+										(Vertex*)daGet(&P->Vertices, V2),
 										Length));
 }
 
@@ -102,10 +102,10 @@ void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis)
 {
 	int i;
 	float tmp;
-	*Min = *Max = vec2Dot(Axis, vxGetPosition(daGet(&P->Vertices, 0)));
+	*Min = *Max = vec2Dot(Axis, vxGetPosition((Vertex*)daGet(&P->Vertices, 0)));
 	for(i = 1; i < daGetSize(&P->Vertices); i++)
 	{
-		tmp = vec2Dot(Axis, vxGetPosition(daGet(&P->Vertices, i)));
+		tmp = vec2Dot(Axis, vxGetPosition((Vertex*)daGet(&P->Vertices, i)));
 		*Min = (*Min > tmp) ? tmp : *Min;
 		*Max = (*Max < tmp) ? tmp : *Max;
 	}
@@ -139,9 +139,9 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 	{
 		/* On récupère la face à tester */
 		if(i < daGetSize(&P1->Rigids))
-			Edge = daGet(&P1->Rigids, i);
+			Edge = (Rigid*)daGet(&P1->Rigids, i);
 		else
-			Edge = daGet(&P2->Rigids, i - daGetSize(&P1->Rigids)),
+			Edge = (Rigid*)daGet(&P2->Rigids, i - daGetSize(&P1->Rigids)),
 			Info.P1 = P2, /* On s'assure que Info.P1 est toujours bien celui
 			dont on test une face */
 			Info.P2 = P1;
@@ -184,11 +184,11 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 	{
 		/* Calcul de la distance P1 - Vertex */
 		tmpGap = vec2Dot(Info.Normal, vec2Sub(
-				vxGetPosition(daGet(&Info.P2->Vertices, i)),
+				vxGetPosition((Vertex*)daGet(&Info.P2->Vertices, i)),
 				Center));
 		if(tmpGap < Gap)
 			Gap = tmpGap,
-			Info.V = daGet(&Info.P2->Vertices, i);
+			Info.V = (Vertex*)daGet(&Info.P2->Vertices, i);
 	}
 
 	return Info;
@@ -199,7 +199,7 @@ Vec2 polyGetCenter(Polygon* P)
 	unsigned int i;
 	Vec2 Center = vec2(0.f, 0.f);
 	for(i = 0; i < daGetSize(&P->Vertices); i++)
-		Center = vec2Add(Center, vxGetPosition(daGet(&P->Vertices, i)));
+		Center = vec2Add(Center, vxGetPosition((Vertex*)daGet(&P->Vertices, i)));
 	return vec2Div(Center, daGetSize(&P->Vertices));
 }
 
@@ -207,9 +207,9 @@ void polyResolve(Polygon* P)
 {
 	unsigned int i;
 	for(i = 0; i < daGetSize(&P->Rigids); i++)
-		rdResolve(daGet(&P->Rigids, i));
+		rdResolve((Rigid*)daGet(&P->Rigids, i));
 	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
-		rdResolve(daGet(&P->InternalRigids, i));
+		rdResolve((Rigid*)daGet(&P->InternalRigids, i));
 }
 
 void polyTestRegression()
@@ -287,7 +287,7 @@ void polySetFixe(Polygon* P, Bool B)
 	unsigned int i;
 	for (i = 0; i < daGetSize(&P->Vertices); i++)
 	{
-		vxSetFixe(daGet(&P->Vertices, i), B);
+		vxSetFixe((Vertex*)daGet(&P->Vertices, i), B);
 	}
 	P->Fixe = B;
 }
