@@ -6,7 +6,7 @@ void wdResolveRigid(World* W)
 	Node* it = lstFirst(&W->Rigids);
 
 	/* Parcoure les contraintes orphelines */
-	while(it != NULL)
+	while(!nodeEnd(it))
 	{
 		rdResolve(nodeGetData(it));
 		it = nodeGetNext(it);
@@ -14,7 +14,7 @@ void wdResolveRigid(World* W)
 
 	/* Parcoure les Polygons */
 	it = lstFirst(&W->Polygons);
-	while(it != NULL)
+	while(!nodeEnd(it))
 	{
 		/* Leurs faces */
  		for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->Rigids); i++)
@@ -30,5 +30,15 @@ void wdResolveRigid(World* W)
 
 void wdHandleCollision(World* W)
 {
-
+	CollisionInfo Info;
+	Node* it = lstFirst(&W->Polygons);
+	Node* it2;
+	while(!nodeEnd(it))
+	{
+		it2 = lstFirst(&W->Polygons);
+		while(!nodeEnd(it2))
+		{
+			Info = polyCollide();
+		}
+	}
 }
