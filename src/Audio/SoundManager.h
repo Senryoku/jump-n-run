@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <Core/Vec2.h>
 #include <new>
-#include "Audio/SoundImpl.h"
+#include "SoundImpl.h"
 
 /**
  * @defgroup SoundManager
