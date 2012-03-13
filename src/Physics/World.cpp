@@ -8,7 +8,7 @@ void wdResolveRigid(World* W)
         /* Parcoure les contraintes orphelines */
         while(!nodeEnd(it))
         {
-                rdResolve(nodeGetData(it));
+                rdResolve( (Rigid*) nodeGetData(it));
                 it = nodeGetNext(it);
         }
 
@@ -18,10 +18,10 @@ void wdResolveRigid(World* W)
         {
                 /* Leurs faces */
                 for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->Rigids); i++)
-                        rdResolve(daGet(&((Polygon*) nodeGetData(it))->Rigids, i));
+                        rdResolve( (Rigid*) daGet(&((Polygon*) nodeGetData(it))->Rigids, i));
                 /* Leurs contraintes internes */
                 for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->InternalRigids); i++)
-                        rdResolve(daGet(&((Polygon*) nodeGetData(it))->InternalRigids, i));
+                        rdResolve( (Rigid*) daGet(&((Polygon*) nodeGetData(it))->InternalRigids, i));
 
                 it = nodeGetNext(it);
         }
@@ -39,7 +39,7 @@ void wdHandleCollision(World* W)
                 while(!nodeEnd(it2))
                 {
                         if(it == it2) continue;
-                        Info = polyCollide(nodeGetData(it), nodeGetData(it2));
+                        Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
                         if(Info.P1 != NULL) /* Il y a collision */
                         {
                                 Vec2 CollisionVector = vec2Prod(Info.Normal, Info.Depth);

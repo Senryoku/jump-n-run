@@ -59,7 +59,7 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 
 void delPolygon(Polygon* P)
 {
-	int i;
+	unsigned int i;
 
 	/* Destruction des liaisons */
 	for(i = 0; i < daGetSize(&P->Rigids); i++)

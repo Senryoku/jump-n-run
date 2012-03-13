@@ -7,18 +7,25 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/JumpnRun" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Debug/" />
+				<Option output="bin\Debug\JumpnRun" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="src" />
 				</Compiler>
+				<Linker>
+					<Add option="-lsfml-graphics" />
+					<Add option="-lsfml-audio" />
+					<Add option="-lsfml-window" />
+					<Add option="-lsfml-system" />
+					<Add option="-lopengl32" />
+				</Linker>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/JumpnRun" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
+				<Option output="bin\Release\JumpnRun" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -32,49 +39,34 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="src/Core/DynArr.c">
+		<Unit filename="src\Audio\SoundImpl.h" />
+		<Unit filename="src\Audio\SoundManager.cpp" />
+		<Unit filename="src\Audio\SoundManager.h" />
+		<Unit filename="src\Core\DynArr.cpp" />
+		<Unit filename="src\Core\DynArr.h" />
+		<Unit filename="src\Core\List.cpp" />
+		<Unit filename="src\Core\List.h" />
+		<Unit filename="src\Core\Node.cpp" />
+		<Unit filename="src\Core\Node.h" />
+		<Unit filename="src\Core\Tools.cpp" />
+		<Unit filename="src\Core\Tools.h" />
+		<Unit filename="src\Core\Vec2.cpp" />
+		<Unit filename="src\Core\Vec2.h" />
+		<Unit filename="src\Physics\Circle.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/Core/DynArr.h" />
-		<Unit filename="src/Core/List.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Core/List.h" />
-		<Unit filename="src/Core/Node.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Core/Node.h" />
-		<Unit filename="src/Core/Tools.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Core/Tools.h" />
-		<Unit filename="src/Core/Vec2.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Core/Vec2.h" />
-		<Unit filename="src/Physics/Circle.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Physics/Circle.h" />
-		<Unit filename="src/Physics/Polygon.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Physics/Polygon.h" />
-		<Unit filename="src/Physics/Rigid.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Physics/Rigid.h" />
-		<Unit filename="src/Physics/Vertex.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Physics/Vertex.h" />
-		<Unit filename="src/Physics/World.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src/Physics/World.h" />
-		<Unit filename="src/Test.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="src\Physics\Circle.cpp" />
+		<Unit filename="src\Physics\Circle.h" />
+		<Unit filename="src\Physics\Physics.h" />
+		<Unit filename="src\Physics\Polygon.cpp" />
+		<Unit filename="src\Physics\Polygon.h" />
+		<Unit filename="src\Physics\Rigid.cpp" />
+		<Unit filename="src\Physics\Rigid.h" />
+		<Unit filename="src\Physics\Vertex.cpp" />
+		<Unit filename="src\Physics\Vertex.h" />
+		<Unit filename="src\Physics\World.cpp" />
+		<Unit filename="src\Physics\World.h" />
+		<Unit filename="src\Test.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
