@@ -81,3 +81,13 @@ Bool lstEmpty(List* L)
 	return (L->Count == 0);
 }
 
+Node* lstFirst(List* L)
+{
+	return L->First;
+}
+
+Node* lstEnd(List* L)
+{
+	return L->Last;
+}
+
