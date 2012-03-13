@@ -119,7 +119,7 @@ void vxResolve(Vertex* V, float prevdt, float dt);
 
 /** @brief Test de régression de Vertex
 **/
-void vxTestRegression();
+void vxTestRegression(void);
 
 /** @}
 **/
