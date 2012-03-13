@@ -1,7 +1,7 @@
 #ifndef _RIGID_H_
 #define _RIGID_H_
 
-#include "Vertex.h"
+#include "Physics/Vertex.h"
 
 /** @defgroup Rigid
  *
@@ -49,6 +49,16 @@ void rdResolve(Rigid* R);
  *
 **/
 Vec2 rdVector(Rigid* R);
+
+/** @brief Accesseur de V1
+ *
+**/
+Vertex* rdGetV1(Rigid* R);
+
+/** @brief Accesseur de V2
+ *
+**/
+Vertex* rdGetV2(Rigid* R);
 
 /** @}
 **/

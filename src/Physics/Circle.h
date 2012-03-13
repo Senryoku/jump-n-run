@@ -1,7 +1,7 @@
 #ifndef _CIRCLE_H_
 #define _CIRCLE_H_
 
-#include "Vertex.h"
+#include "Physics/Vertex.h"
 
 /** @defgroup Circle
  *

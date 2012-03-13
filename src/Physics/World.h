@@ -1,11 +1,11 @@
 #ifndef _WORLD_H_
 #define _WORLD_H_
 
-#include "List.h"
-#include "Vertex.h"
-#include "Rigid.h"
-#include "Polygon.h"
-#include "Circle.h"
+#include "Core/List.h"
+#include "Physics/Vertex.h"
+#include "Physics/Rigid.h"
+#include "Physics/Polygon.h"
+#include "Physics/Circle.h"
 
 /** @defgroup World
  *

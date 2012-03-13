@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <Core/Vec2.h>
 #include <new>
-#include "SoundImpl.h"
+#include "Audio/SoundImpl.h"
 
 /**
  * @defgroup SoundManager
@@ -23,7 +23,7 @@ typedef struct {
 	std::map<std::string, SoundBuffer*> SoundBuffers;
 	std::map<std::string, Music*> Musics;
 	SoundListener Listener;
-	
+
 	//Pour le fading entre deux musiques
 	float FadeSpeed;
 	std::map<std::string, Music*>::iterator NextMusic;

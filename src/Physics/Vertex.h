@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Tools.h"
-#include "Vec2.h"
+#include "Core/Tools.h"
+#include "Core/Vec2.h"
 
 /** @defgroup Vertex
  *

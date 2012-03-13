@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "Tools.h"
-#include "DynArr.h"
-#include "Rigid.h"
+#include "Core/Tools.h"
+#include "Core/DynArr.h"
+#include "Physics/Rigid.h"
 
 /** @defgroup Polygon
  *

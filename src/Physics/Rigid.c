@@ -46,3 +46,13 @@ Vec2 rdVector(Rigid* R)
 {
 	return vec2Sub(vxGetPosition(R->V2), vxGetPosition(R->V1));
 }
+
+Vertex* rdGetV1(Rigid* R)
+{
+	return R->V1;
+}
+
+Vertex* rdGetV2(Rigid* R)
+{
+	return R->V2;
+}
