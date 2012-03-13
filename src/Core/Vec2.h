@@ -50,6 +50,7 @@ float vec2Dot(Vec2 V1, Vec2 V2);
 /** @brief Calcul de la Norme
 **/
 float vec2Length(Vec2 V);
+
 /** @brief Norme au carré
 **/
 float vec2SqLength(Vec2 V);

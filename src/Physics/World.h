@@ -25,6 +25,11 @@ typedef struct
 	float Heigth; /**< Hauteur du monde **/
 } World;
 
+/** @brief Ajoute un polygone au monde
+ *
+**/
+void wdAddPolygon(World* W, Polygon* P);
+
 /** @brief Appelle Resolve() pour tout les Rigid du monde
  *
  * Resolve() les contraintes rigides isolées et contenues dans des polygones
@@ -36,6 +41,7 @@ void wdResolveRigid(World* W);
 /** @brief Recherche et réagit aux collisions
  *
  * Gère les collision Polygon/Polygon, Circle/Polygon, Circle/Cirle
+ * @todo Circle
  * @param W World
 **/
 void wdHandleCollision(World* W);
