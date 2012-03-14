@@ -102,7 +102,8 @@ void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis)
 {
 	int i;
 	float tmp;
-	*Min = *Max = vec2Dot(Axis, vxGetPosition((Vertex*)daGet(&P->Vertices, 0)));
+	*Min = vec2Dot(Axis, vxGetPosition((Vertex*)daGet(&P->Vertices, 0)));
+	*Max = *Min;
 	for(i = 1; i < daGetSize(&P->Vertices); i++)
 	{
 		tmp = vec2Dot(Axis, vxGetPosition((Vertex*)daGet(&P->Vertices, i)));

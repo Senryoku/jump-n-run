@@ -6,6 +6,8 @@
 /** @defgroup Rigid
  *
  * Liaison Rigid entre deux Vertex
+ * Attention ! Des liaisons de longueur nulle donneront des résultats
+ * assez aléatoire (pas de plantage mais un comportement peu réaliste...)
  * Préfixe des méthodes : rd
  * @todo Test de régression complet
  * @{

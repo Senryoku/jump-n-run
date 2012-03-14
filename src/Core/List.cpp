@@ -57,6 +57,7 @@ void lstDel(List* L, Elem E)
 			nodeSetNext(prevNode, nodeGetNext(tmpNode));
 		}
 		delNode(tmpNode);
+		L->Count--;
 	}
 }
 
@@ -64,8 +65,14 @@ void lstRem(List* L, Node* N)
 {
 	if(N == L->First)
 	{
-		nodeSetPrev(nodeGetNext(N), NULL);
-		L->First = nodeGetNext(N);
+		if(N == L->Last)
+		{
+			L->First = NULL;
+			L->Last = NULL;
+		} else {
+			nodeSetPrev(nodeGetNext(N), NULL);
+			L->First = nodeGetNext(N);
+		}
 	} else if(N == L->Last) {
 		nodeSetNext(nodeGetPrev(N), NULL);
 		L->Last = nodeGetPrev(N);
@@ -74,6 +81,7 @@ void lstRem(List* L, Node* N)
 		nodeSetPrev(nodeGetNext(N), nodeGetPrev(N));
 	}
 	delNode(N);
+	L->Count--;
 }
 
 Bool lstEmpty(List* L)

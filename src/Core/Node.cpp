@@ -46,5 +46,5 @@ Node* nodeGetNext(Node* ptrNode)
 
 Bool nodeEnd(Node* ptrNode)
 {
-	return nodeGetNext(ptrNode) == NULL;
+	return ptrNode == NULL;
 }

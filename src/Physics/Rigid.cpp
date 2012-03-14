@@ -31,7 +31,13 @@ void rdResolve(Rigid* R)
 
 	/* Normalisation du vecteur (pas besoin de vec2Normalized(),
 								 on a déjà acLength) */
-	Vect = vec2Div(Vect, acLength);
+	if(acLength != 0)
+		Vect = vec2Div(Vect, acLength);
+	else
+		Vect = vec2(1.f, 0.f); /* Vecteur quelconque en cas de deux points
+		 superposés, il ne peut raisonnablement être déduit des poistions
+		 précédentes, en effet, que faire si les points étaient déjà
+		 superposés à la frame précédente ?... */
 
 	if(vxIsFixe(R->V2))
 		vxCorrectPosition(R->V1, vec2Prod(Vect, factor));
