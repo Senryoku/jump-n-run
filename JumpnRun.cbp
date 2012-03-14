@@ -52,11 +52,6 @@
 		<Unit filename="src\Core\Tools.h" />
 		<Unit filename="src\Core\Vec2.cpp" />
 		<Unit filename="src\Core\Vec2.h" />
-		<Unit filename="src\Physics\Circle.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="src\Physics\Circle.cpp" />
-		<Unit filename="src\Physics\Circle.h" />
 		<Unit filename="src\Physics\Physics.h" />
 		<Unit filename="src\Physics\Polygon.cpp" />
 		<Unit filename="src\Physics\Polygon.h" />

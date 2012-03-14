@@ -12,7 +12,6 @@ void wdInit(World* W, float Width, float Height)
 	lstInit(&W->Vertices);
 	lstInit(&W->Rigids);
 	lstInit(&W->Polygons);
-	lstInit(&W->Circles);
 
 	W->Width = Width;
 	W->Height = Height;

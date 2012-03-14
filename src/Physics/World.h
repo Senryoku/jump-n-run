@@ -5,7 +5,7 @@
 #include "Physics/Vertex.h"
 #include "Physics/Rigid.h"
 #include "Physics/Polygon.h"
-#include "Physics/Circle.h"
+/*#include "Physics/Circle.h"*/
 
 /** @defgroup World
  *
@@ -27,7 +27,6 @@ typedef struct
 	List Vertices; /**< Liste de Vertices **/
 	List Rigids; /**< Liste de contraintes isolées **/
 	List Polygons; /**< Liste de Polygones **/
-	List Circles; /**< Liste de Cercles **/
 
 	float Width; /**< Largeur du monde **/
 	float Height; /**< Hauteur du monde **/
@@ -65,7 +64,7 @@ void wdAddPolygon(World* W, Polygon* P);
 /** @brief Applique une force à tout les vextices du monde
  *
  * Ne parcours que la liste Vertices, les vertices faisant partie d'un
- * ensemble plus grand du monde (polygon, cercle...) doivent aussi y figurer !
+ * ensemble plus grand du monde (polygon...) doivent aussi y figurer !
  * @param W Monde à mettre à jour
 **/
 void wdApplyForce(World* W, Vec2 Force);
@@ -73,7 +72,7 @@ void wdApplyForce(World* W, Vec2 Force);
 /** @brief Appelle Resolve pour tout les Vertices du monde
  *
  * Ne parcours que la liste Vertices, les vertices faisant partie d'un
- * ensemble plus grand du monde (polygon, cercle...) doivent aussi y figurer !
+ * ensemble plus grand du monde (polygon...) doivent aussi y figurer !
  * @param W Monde à mettre à jour
 **/
 void wdResolveVextex(World* W);
@@ -88,8 +87,7 @@ void wdResolveRigid(World* W);
 
 /** @brief Recherche et réagit aux collisions
  *
- * Gère les collision Polygon/Polygon, Circle/Polygon, Circle/Cirle
- * @todo Circle
+ * Gère les collision Polygon/Polygon
  * @param W World
 **/
 void wdHandleCollision(World* W);
