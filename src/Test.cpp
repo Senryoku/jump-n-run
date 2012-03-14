@@ -122,8 +122,29 @@ int main(int argc, char** argv)
 
 void glDrawPolygon(Polygon* P)
 {
+	unsigned int i;
+
+	glColor3f(1.f, 1.f, 1.f);
 	glBegin(GL_POLYGON);
-	for (unsigned int i=0; i<daGetSize(&P->Vertices); i++)
+	for(i = 0; i<daGetSize(&P->Vertices); i++)
 		glVertex2f(vxGetPosition((Vertex*)daGet(&P->Vertices, i)).x, vxGetPosition((Vertex*)daGet(&P->Vertices, i)).y);
 	glEnd();
+
+	glColor3f(1.f, 0.f, 0.f);
+	for(i = 0; i < daGetSize(&P->Rigids); i++)
+	{
+		glBegin(GL_LINES);
+			glVertex2f(vxGetPosition(rdGetV1((Rigid*)daGet(&P->Rigids, i))).x, vxGetPosition(rdGetV1((Rigid*)daGet(&P->Rigids, i))).y);
+			glVertex2f(vxGetPosition(rdGetV2((Rigid*)daGet(&P->Rigids, i))).x, vxGetPosition(rdGetV2((Rigid*)daGet(&P->Rigids, i))).y);
+		glEnd();
+	}
+
+	glColor3f(0.f, 0.f, 1.f);
+	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
+	{
+		glBegin(GL_LINES);
+			glVertex2f(vxGetPosition(rdGetV1((Rigid*)daGet(&P->InternalRigids, i))).x, vxGetPosition(rdGetV1((Rigid*)daGet(&P->InternalRigids, i))).y);
+			glVertex2f(vxGetPosition(rdGetV2((Rigid*)daGet(&P->InternalRigids, i))).x, vxGetPosition(rdGetV2((Rigid*)daGet(&P->InternalRigids, i))).y);
+		glEnd();
+	}
 }
