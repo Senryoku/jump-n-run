@@ -96,6 +96,8 @@ void wdHandleCollision(World* W)
         CollisionInfo Info;
         Node* it = lstFirst(&W->Polygons);
         Node* it2;
+        Vec2 CollisionVector, PosE1, PosE2;
+        float PositionOnEdge, CorrectionFactor;
         while(!nodeEnd(it))
         {
                 it2 = lstFirst(&W->Polygons);
@@ -106,12 +108,12 @@ void wdHandleCollision(World* W)
 						Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
 						if(Info.P1 != NULL) /* Il y a collision */
 						{
-								Vec2 CollisionVector = vec2Prod(Info.Normal, Info.Depth);
+								CollisionVector = vec2Prod(Info.Normal, Info.Depth);
 
-								Vec2 PosE1 = vxGetPosition(rdGetV1(Info.Edge));
-								Vec2 PosE2 = vxGetPosition(rdGetV2(Info.Edge));
+								PosE1 = vxGetPosition(rdGetV1(Info.Edge));
+								PosE2 = vxGetPosition(rdGetV2(Info.Edge));
 
-								float PositionOnEdge; /* Position du point sur la face
+								/* Position du point sur la face,
 								 On évite les divisions par 0 ! */
 								if(abs(PosE1.x - PosE2.x) > abs(PosE1.y - PosE2.y))
 								PositionOnEdge = (vxGetPosition(Info.V).x - CollisionVector.x
@@ -120,7 +122,7 @@ void wdHandleCollision(World* W)
 								PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
 								- PosE1.y)/(PosE2.y - PosE1.y);
 
-								float CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge + (1 - PositionOnEdge)*(1 - PositionOnEdge));
+								CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge + (1 - PositionOnEdge)*(1 - PositionOnEdge));
 
 								/* Correction des positions */
 								vxCorrectPosition(Info.V, vec2Prod(CollisionVector, 0.5f)); /* Du vertex */

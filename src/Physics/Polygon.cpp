@@ -2,7 +2,7 @@
 
 Polygon* newPolygon(unsigned int nbVx, ...)
 {
-	int i;
+	unsigned int i;
 	va_list ap;
 	Polygon* newPoly = (Polygon*) malloc(sizeof(Polygon));
 
@@ -33,7 +33,7 @@ Polygon* newPolygon(unsigned int nbVx, ...)
 
 void polyInit(Polygon* P, unsigned int nbVx, ...)
 {
-	int i;
+	unsigned int i;
 	va_list ap;
 
 	/* Initialisation des Dynamic Arrays */
@@ -100,7 +100,7 @@ Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4)
 
 void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis)
 {
-	int i;
+	unsigned int i;
 	float tmp;
 	*Min = *Max = vec2Dot(Axis, vxGetPosition((Vertex*)daGet(&P->Vertices, 0)));
 	for(i = 1; i < daGetSize(&P->Vertices); i++)
@@ -126,7 +126,7 @@ CollisionInfo nullCollisionInfo()
 CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 {
 	unsigned int i;
-	Vec2 Axis, Center;
+	Vec2 Axis, CenterP1;
 	Rigid* Edge;
 	CollisionInfo Info = nullCollisionInfo();
 	Info.P1 = P1;
@@ -175,23 +175,56 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 	/* Cas extrème ou aucune face n'a été testée... */
 	if(Info.Edge == NULL) return nullCollisionInfo();
 
+	CenterP1 = polyGetCenter(Info.P1);
+
+	/* On s'assure que la normal est dans le bon sens (pointe vers P1) */
+	if(vec2Dot(Info.Normal, vec2Sub(polyGetCenter(Info.P2), CenterP1)) < 0)
+		Info.Normal = vec2Prod(Info.Normal, -1.f);
+
 	/* Recherche du point de collision dans Info.P2
 	On suppose que c'est le plus proche de P1 !
 	On intialise Gap à une valeur élevée... */
 	Gap = INFINITY;
-	Center = polyGetCenter(Info.P1);
 	for(i = 0; i < daGetSize(&Info.P2->Vertices); i++)
 	{
 		/* Calcul de la distance P1 - Vertex */
 		tmpGap = vec2Dot(Info.Normal, vec2Sub(
 				vxGetPosition((Vertex*)daGet(&Info.P2->Vertices, i)),
-				Center));
+				CenterP1));
 		if(tmpGap < Gap)
 			Gap = tmpGap,
 			Info.V = (Vertex*)daGet(&Info.P2->Vertices, i);
 	}
 
 	return Info;
+}
+
+Bool polyIsInside(Polygon* P, Vertex* V)
+{
+	unsigned int i;
+	Rigid* Edge;
+	Vec2 Axis, VPos = vxGetPosition(V);
+	float MinP, MaxP, ProjectV;
+	for(i = 0; i < daGetSize(&P->Rigids); i++)
+	{
+		Edge = (Rigid*)daGet(&P->Rigids, i);
+		/* On évite les faces "nulles" */
+		if(vec2Equal(rdVector(Edge), vec2(0.f, 0.f))) continue;
+
+		/* On calcule l'axe sur lequel projeter (Normal à la face) */
+		Axis = vec2Normalized(vec2Ortho(rdVector(Edge)));
+
+		/* Projection */
+		polyProject(P, &MinP, &MaxP, Axis);
+		ProjectV = vec2Dot(VPos, Axis);
+
+		/* Si la projection du point n'est pas dans l'intervalle
+		défini par le polygone, par de collision */
+		if(ProjectV < MinP || ProjectV > MaxP)
+			return false;
+	}
+	/* Toutes les faces ont été testées */
+	return true;
 }
 
 Vec2 polyGetCenter(Polygon* P)

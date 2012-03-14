@@ -31,7 +31,7 @@ void rdResolve(Rigid* R)
 
 	/* Normalisation du vecteur (pas besoin de vec2Normalized(),
 								 on a déjà acLength) */
-	if(acLength != 0)
+	if(acLength != 0.f)
 		Vect = vec2Div(Vect, acLength);
 	else
 		Vect = vec2(1.f, 0.f); /* Vecteur quelconque en cas de deux points

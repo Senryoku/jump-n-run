@@ -100,6 +100,12 @@ CollisionInfo nullCollisionInfo();
 **/
 CollisionInfo polyCollide(Polygon* P1, Polygon* P2);
 
+/** @brief Test si un Vextex est à l'intérieur d'un Polygon
+ *
+ * @return Vrai si le Vertex est dans le Polygon
+**/
+Bool polyIsInside(Polygon* P, Vertex* V);
+
 /** @brief Projete un Polygon sur un axe
  *
  * Calcule une projection sur un axe (Intervalle 1D) d'un polygon par

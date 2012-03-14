@@ -37,7 +37,7 @@ void delDynArr(DynArr* DA)
 void daReserve(DynArr* DA, unsigned int newCapa)
 {
 	void* *tmp;
-	int i;
+	unsigned int i;
 	if(newCapa > DA->Capacity)
 	{
 		tmp = (void**)malloc(newCapa*sizeof(void*));
@@ -61,7 +61,7 @@ void daAdd(DynArr* DA, void* ptr)
 
 void daDel(DynArr* DA, unsigned int Pos)
 {
-	int i;
+	unsigned int i;
 	for(i = Pos; i < DA->Size - 1; i++)
 		DA->First[i] = DA->First[i+1];
 	DA->Size--;

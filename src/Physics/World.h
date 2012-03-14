@@ -5,7 +5,6 @@
 #include "Physics/Vertex.h"
 #include "Physics/Rigid.h"
 #include "Physics/Polygon.h"
-/*#include "Physics/Circle.h"*/
 
 /** @defgroup World
  *
