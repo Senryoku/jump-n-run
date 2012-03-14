@@ -45,6 +45,7 @@ void wdResolveVextex(World* W)
 	while(!nodeEnd(it))
 	{
 		vxResolve((Vertex*) nodeGetData(it), W->prevdt, W->dt);
+
 		/* Garde le Vertex dans les limites du monde */
 		curPos = vxGetPosition((Vertex*) nodeGetData(it));
 		if(curPos.x > W->Width)
@@ -58,6 +59,7 @@ void wdResolveVextex(World* W)
 			newPos.y = 0;
 		else newPos.y = curPos.y;
 		vxSetPosition((Vertex*) nodeGetData(it), newPos);
+
 		it = nodeGetNext(it);
 	}
 	W->prevdt = W->dt;
@@ -122,15 +124,17 @@ void wdHandleCollision(World* W)
 								PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
 								- PosE1.y)/(PosE2.y - PosE1.y);
 
-								CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge + (1 - PositionOnEdge)*(1 - PositionOnEdge));
+								CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
+									+ (1 - PositionOnEdge)*(1 - PositionOnEdge));
 
-								/* Correction des positions */
-								vxCorrectPosition(Info.V, vec2Prod(CollisionVector, 0.5f)); /* Du vertex */
+								/* Correction des positions
+								Du vertex */
+								vxCorrectPosition(Info.V, vec2Prod(CollisionVector, 0.5f));
 								/* De la face */
 								vxCorrectPosition(rdGetV1(Info.Edge), vec2Prod(CollisionVector,
-								CorrectionFactor*(1-PositionOnEdge)*0.5f));
+								CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
 								vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
-								CorrectionFactor*(PositionOnEdge)*0.5f));
+								CorrectionFactor*PositionOnEdge*0.5f));
 						}
 					}
 					it2 = nodeGetNext(it2);

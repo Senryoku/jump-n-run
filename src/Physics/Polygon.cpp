@@ -162,7 +162,7 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 			Gap = MinP1 - MaxP2;
 
 		/* Pas de collision */
-		if(Gap > 0) return nullCollisionInfo();
+		if(Gap >= 0) return nullCollisionInfo();
 
 		/* Il y a "collision" sur cet axe, on cherche le point d'entrée,
 		c'est probablement le plus proche du bord... */

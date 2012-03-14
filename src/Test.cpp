@@ -3,6 +3,7 @@
 #include <SFML/OpenGL.hpp>
 
 void glDrawPolygon(Polygon *P);
+void glDrawWorld(World* W);
 
 int main(int argc, char** argv)
 {
@@ -39,13 +40,13 @@ int main(int argc, char** argv)
 	wdAddPolygon(W, Rectangle);
 
 	V10 = newVertex();
-	vxSetPosition(V10, vec2(50.f, 100.f));
+	vxSetPosition(V10, vec2(51.f, 100.f));
 	V11 = newVertex();
-	vxSetPosition(V11, vec2(100.f, 100.f));
+	vxSetPosition(V11, vec2(101.f, 100.f));
 	V12 = newVertex();
-	vxSetPosition(V12, vec2(100.f, 150.f));
+	vxSetPosition(V12, vec2(101.f, 150.f));
 	V13 = newVertex();
-	vxSetPosition(V13, vec2(50.f, 150.f));
+	vxSetPosition(V13, vec2(51.f, 150.f));
 	wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
 	Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle2);
@@ -78,7 +79,7 @@ int main(int argc, char** argv)
 				window.close();
 		}
 
-		wdApplyForce(W, vec2(0.f, 2.f));
+		wdApplyForce(W, vec2(0.f, 9.f));
 		wdResolveVextex(W);
 		for(i=0; i<10; i++)
 		{
@@ -94,10 +95,7 @@ int main(int argc, char** argv)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
-		glColor3f(1.f, 1.f, 1.f);
-		glDrawPolygon(Rectangle);
-		glDrawPolygon(Rectangle2);
-		glDrawPolygon(Poly);
+		glDrawWorld(W);
 
 		// Update the window
 		window.display();
@@ -131,20 +129,44 @@ void glDrawPolygon(Polygon* P)
 	glEnd();
 
 	glColor3f(1.f, 0.f, 0.f);
+	glBegin(GL_LINES);
 	for(i = 0; i < daGetSize(&P->Rigids); i++)
 	{
-		glBegin(GL_LINES);
 			glVertex2f(vxGetPosition(rdGetV1((Rigid*)daGet(&P->Rigids, i))).x, vxGetPosition(rdGetV1((Rigid*)daGet(&P->Rigids, i))).y);
 			glVertex2f(vxGetPosition(rdGetV2((Rigid*)daGet(&P->Rigids, i))).x, vxGetPosition(rdGetV2((Rigid*)daGet(&P->Rigids, i))).y);
-		glEnd();
 	}
 
 	glColor3f(0.f, 0.f, 1.f);
 	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
 	{
-		glBegin(GL_LINES);
 			glVertex2f(vxGetPosition(rdGetV1((Rigid*)daGet(&P->InternalRigids, i))).x, vxGetPosition(rdGetV1((Rigid*)daGet(&P->InternalRigids, i))).y);
 			glVertex2f(vxGetPosition(rdGetV2((Rigid*)daGet(&P->InternalRigids, i))).x, vxGetPosition(rdGetV2((Rigid*)daGet(&P->InternalRigids, i))).y);
+	}
+	glEnd();
+}
+
+
+void glDrawWorld(World* W)
+{
+	Node* it = lstFirst(&W->Vertices);
+	glColor3f(0.f, 1.f, 0.f);
+	while(!nodeEnd(it))
+	{
+		glBegin(GL_TRIANGLE_FAN);
+		glVertex2f(vxGetPosition((Vertex*) nodeGetData(it)).x, vxGetPosition((Vertex*) nodeGetData(it)).y);
+		for (int i=0; i<=16; i++)
+		{
+			glVertex2f(1*4.0*cos((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition((Vertex*) nodeGetData(it)).x,
+					1*4.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition((Vertex*) nodeGetData(it)).y);
+		}
+		it = nodeGetNext(it);
 		glEnd();
+	}
+
+	it = lstFirst(&W->Polygons);
+	while(!nodeEnd(it))
+	{
+		glDrawPolygon((Polygon*) nodeGetData(it));
+		it = nodeGetNext(it);
 	}
 }
