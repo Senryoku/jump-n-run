@@ -73,7 +73,12 @@ void vxResolve(Vertex* V, float prevdt, float dt)
 {
 	if(vxIsFixe(V)) return;
 	Vec2 tmp = V->Position;
-	V->Position = vec2Add(vec2Add(V->Position, vec2Prod(vec2Add(V->Position, vec2Prod(V->OldPos, -1.f)), 0.99f*(dt/prevdt))), vec2Prod(V->Acceleration, dt*dt));
+	V->Position = vec2Add(vec2Add(
+				V->Position,
+				vec2Prod(vec2Sub(V->Position,
+								V->OldPos),
+							0.99f*(dt/prevdt))),
+		vec2Prod(V->Acceleration, dt*dt));
 	V->OldPos = tmp;
 	vxSetAcceleration(V, vec2(0.f, 0.f));
 }
