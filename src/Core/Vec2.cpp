@@ -35,8 +35,8 @@ Vec2 vec2Prod(Vec2 V, float f)
 Vec2 vec2Div(Vec2 V, float f)
 {
 	Vec2 tmp;
-	tmp.y = V.y/f;
 	tmp.x = V.x/f;
+	tmp.y = V.y/f;
 	return tmp;
 }
 

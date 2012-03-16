@@ -18,21 +18,21 @@ int main(int argc, char** argv)
 	World* W = newWorld(800.f, 600.f);
 
 	Vertex* V1 = newVertex();
-	vxSetPosition(V1, vec2(0.f, 0.f));
+	vxSetPosition(V1, vec2(0.f, 500.f));
 	Vertex* V2 = newVertex();
-	vxSetPosition(V2, vec2(30.f, 0.f));
+	vxSetPosition(V2, vec2(30.f, 500.f));
 	Vertex* V3 = newVertex();
-	vxSetPosition(V3, vec2(0.f, 50.f));
+	vxSetPosition(V3, vec2(0.f, 550.f));
 	wdAddVertex(W, V1); wdAddVertex(W, V2); wdAddVertex(W, V3);
 
 	Vertex* V10 = newVertex();
-	vxSetPosition(V10, vec2(50.f, 0.f));
+	vxSetPosition(V10, vec2(50.f, 500.f));
 	Vertex* V11 = newVertex();
-	vxSetPosition(V11, vec2(100.f, 0.f));
+	vxSetPosition(V11, vec2(100.f, 500.f));
 	Vertex* V12 = newVertex();
-	vxSetPosition(V12, vec2(100.f, 50.f));
+	vxSetPosition(V12, vec2(100.f, 550.f));
 	Vertex* V13 = newVertex();
-	vxSetPosition(V13, vec2(50.f, 50.f));
+	vxSetPosition(V13, vec2(50.f, 550.f));
 	wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
 
 	Polygon* Poly = newPolygon(3, V1, V2, V3);
@@ -40,13 +40,13 @@ int main(int argc, char** argv)
 	wdAddPolygon(W, Rectangle);
 
 	V10 = newVertex();
-	vxSetPosition(V10, vec2(51.f, 100.f));
+	vxSetPosition(V10, vec2(51.f, 400.f));
 	V11 = newVertex();
-	vxSetPosition(V11, vec2(101.f, 100.f));
+	vxSetPosition(V11, vec2(101.f, 400.f));
 	V12 = newVertex();
-	vxSetPosition(V12, vec2(101.f, 150.f));
+	vxSetPosition(V12, vec2(101.f, 450.f));
 	V13 = newVertex();
-	vxSetPosition(V13, vec2(51.f, 150.f));
+	vxSetPosition(V13, vec2(51.f, 450.f));
 	wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
 	Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle2);
@@ -143,6 +143,17 @@ void glDrawPolygon(Polygon* P)
 			glVertex2f(vxGetPosition(rdGetV2((Rigid*)daGet(&P->InternalRigids, i))).x, vxGetPosition(rdGetV2((Rigid*)daGet(&P->InternalRigids, i))).y);
 	}
 	glEnd();
+
+	glColor3f(0.f, 0.f, 1.f);
+	Vec2 Center = polyGetCenter(P);
+		glBegin(GL_TRIANGLE_FAN);
+		glVertex2f(Center.x, Center.y);
+		for (int i=0; i<=16; i++)
+		{
+			glVertex2f(1*4.0*cos((2.0*M_PI)*(i/static_cast<double>(16))) + Center.x,
+					1*4.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + Center.y);
+		}
+		glEnd();
 }
 
 

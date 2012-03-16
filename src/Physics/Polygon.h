@@ -144,6 +144,13 @@ Bool polyIsFixe(Polygon* P);
 **/
 void polySetFixe(Polygon* P, Bool B);
 
+/** @brief Applique une force à tous les vertices du Polygon
+ *
+ * @param P Polygon
+ * @param Force Force à appliquer
+**/
+void polyApplyForce(Polygon* P, Vec2 Force);
+
 /** @brief Test de régression
  *
  * Fait des tests...

@@ -15,8 +15,8 @@ void wdInit(World* W, float Width, float Height)
 
 	W->Width = Width;
 	W->Height = Height;
-	W->prevdt = 1.f;
-	W->dt = 1.f;
+	W->prevdt = 0.5f;
+	W->dt = 0.5f;
 }
 
 void wdAddVertex(World* W, Vertex* V)
@@ -118,14 +118,22 @@ void wdHandleCollision(World* W)
 								/* Position du point sur la face,
 								 On évite les divisions par 0 ! */
 								if(abs(PosE1.x - PosE2.x) > abs(PosE1.y - PosE2.y))
-								PositionOnEdge = (vxGetPosition(Info.V).x - CollisionVector.x
+									PositionOnEdge = (vxGetPosition(Info.V).x - CollisionVector.x
 								- PosE1.x)/(PosE2.x - PosE1.x);
 								else
-								PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
+									PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
 								- PosE1.y)/(PosE2.y - PosE1.y);
+
+								// DEBUG !
+								if(PositionOnEdge > 1.f || PositionOnEdge < 0.f)
+									if(abs(PosE1.x - PosE2.x) > abs(PosE1.y - PosE2.y))
+										printf("#ERROR#\n vxGetPosition(Info.V).x : %f \n CollisionVector.x : %f \n PosE1.x : %f \n PosE2.x : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).x, CollisionVector.x, PosE1.x, PosE2.x, PositionOnEdge);
+									else
+										printf("#ERROR#\n vxGetPosition(Info.V).y : %f \n CollisionVector.y : %f \n PosE1.y : %f \n PosE2.y : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).y, CollisionVector.y, PosE1.y, PosE2.y, PositionOnEdge);
 
 								CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
 									+ (1 - PositionOnEdge)*(1 - PositionOnEdge));
+
 
 								/* Correction des positions
 								Du vertex */
