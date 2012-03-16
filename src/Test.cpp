@@ -35,23 +35,23 @@ int main(int argc, char** argv)
 	vxSetPosition(V13, vec2(50.f, 550.f));
 	wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
 
-	Polygon* Poly = newPolygon(3, V1, V2, V3);
+	//Polygon* Poly = newPolygon(3, V1, V2, V3);
 	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle);
 
 	V10 = newVertex();
-	vxSetPosition(V10, vec2(51.f, 400.f));
+	vxSetPosition(V10, vec2(50.f, 400.f));
 	V11 = newVertex();
-	vxSetPosition(V11, vec2(101.f, 400.f));
+	vxSetPosition(V11, vec2(100.f, 400.f));
 	V12 = newVertex();
-	vxSetPosition(V12, vec2(101.f, 450.f));
+	vxSetPosition(V12, vec2(100.f, 450.f));
 	V13 = newVertex();
-	vxSetPosition(V13, vec2(51.f, 450.f));
+	vxSetPosition(V13, vec2(50.f, 450.f));
 	wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
 	Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle2);
 
-	wdAddPolygon(W, Poly);
+	//wdAddPolygon(W, Poly);
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "window");
 	window.setFramerateLimit(60.f);

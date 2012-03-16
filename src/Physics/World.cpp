@@ -117,7 +117,7 @@ void wdHandleCollision(World* W)
 
 								/* Position du point sur la face,
 								 On évite les divisions par 0 ! */
-								if(abs(PosE1.x - PosE2.x) > abs(PosE1.y - PosE2.y))
+								if(fabs(PosE1.x - PosE2.x) > fabs(PosE1.y - PosE2.y))
 									PositionOnEdge = (vxGetPosition(Info.V).x - CollisionVector.x
 								- PosE1.x)/(PosE2.x - PosE1.x);
 								else
@@ -126,7 +126,7 @@ void wdHandleCollision(World* W)
 
 								// DEBUG !
 								if(PositionOnEdge > 1.f || PositionOnEdge < 0.f)
-									if(abs(PosE1.x - PosE2.x) > abs(PosE1.y - PosE2.y))
+									if(fabs(PosE1.x - PosE2.x) > fabs(PosE1.y - PosE2.y))
 										printf("#ERROR#\n vxGetPosition(Info.V).x : %f \n CollisionVector.x : %f \n PosE1.x : %f \n PosE2.x : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).x, CollisionVector.x, PosE1.x, PosE2.x, PositionOnEdge);
 									else
 										printf("#ERROR#\n vxGetPosition(Info.V).y : %f \n CollisionVector.y : %f \n PosE1.y : %f \n PosE2.y : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).y, CollisionVector.y, PosE1.y, PosE2.y, PositionOnEdge);

@@ -42,7 +42,7 @@ void rdResolve(Rigid* R)
 	if(vxIsFixe(R->V2))
 		vxCorrectPosition(R->V1, vec2Prod(Vect, factor));
 	else if(vxIsFixe(R->V1))
-		vxCorrectPosition(R->V1, vec2Prod(Vect, -factor));
+		vxCorrectPosition(R->V2, vec2Prod(Vect, -factor));
 	else
 		vxCorrectPosition(R->V2, vec2Prod(Vect, -factor*0.5f)),
 		vxCorrectPosition(R->V1, vec2Prod(Vect, factor*0.5f));

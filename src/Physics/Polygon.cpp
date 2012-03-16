@@ -167,8 +167,8 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 
 		/* Il y a "collision" sur cet axe, on cherche le point d'entrée,
 		c'est probablement le plus proche du bord... */
-		if(abs(Gap) < Info.Depth)
-			Info.Depth = abs(Gap),
+		if(-Gap < Info.Depth)
+			Info.Depth = -Gap,
 			Info.Normal = Axis,
 			Info.Edge = Edge;
 	}
@@ -188,10 +188,10 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 	Gap = INFINITY;
 	for(i = 0; i < daGetSize(&Info.P2->Vertices); i++)
 	{
-		/* Calcul de la distance P1 - Vertex au carré */
-		tmpGap = vec2SqLength(vec2Sub(
-				vxGetPosition((Vertex*) daGet(&Info.P2->Vertices, i)),
-				CenterP1));
+		/* Calcul de la "distance P1" - Vertex */
+		tmpGap = vec2Dot(Info.Normal, vec2Sub(
+					vxGetPosition((Vertex*) daGet(&Info.P2->Vertices, i)),
+					CenterP1));
 		if(tmpGap < Gap)
 			Gap = tmpGap,
 			Info.V = (Vertex*) daGet(&Info.P2->Vertices, i);
