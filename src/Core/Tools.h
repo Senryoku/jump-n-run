@@ -14,6 +14,7 @@ typedef enum e_bool
 #define MIN( X, Y ) ( (X) < (Y) ? (X) : (Y) ) /* Deux macros qui déterminent le min et le max */
 #define MAX( X, Y ) ( (X) > (Y) ? (X) : (Y) )
 #define SGN( X ) ( (X) < 0 ? (-1) : (1) ) /* Signe de X */
+#define ABS( X ) ( (X) < 0 ? (-(X)) : (X) ) /* Valeur absolue de X */
 
 /**
  * @brief Fait une transition enre deux variables

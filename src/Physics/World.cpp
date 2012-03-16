@@ -131,6 +131,7 @@ void wdHandleCollision(World* W)
 									else
 										printf("#ERROR#\n vxGetPosition(Info.V).y : %f \n CollisionVector.y : %f \n PosE1.y : %f \n PosE2.y : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).y, CollisionVector.y, PosE1.y, PosE2.y, PositionOnEdge);
 
+								
 								CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
 									+ (1 - PositionOnEdge)*(1 - PositionOnEdge));
 

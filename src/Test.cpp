@@ -4,6 +4,7 @@
 
 void glDrawPolygon(Polygon *P);
 void glDrawWorld(World* W);
+Vertex* GetNearest(World* W, const sf::Window &win);
 
 int main(int argc, char** argv)
 {
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
 	vxSetPosition(V13, vec2(50.f, 550.f));
 	wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
 
-	//Polygon* Poly = newPolygon(3, V1, V2, V3);
+	Polygon* Poly = newPolygon(3, V1, V2, V3);
 	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle);
 
@@ -51,17 +52,18 @@ int main(int argc, char** argv)
 	Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle2);
 
-	//wdAddPolygon(W, Poly);
+	wdAddPolygon(W, Poly);
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "window");
 	window.setFramerateLimit(60.f);
+	window.setKeyRepeatEnabled(0);
 
 	glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
 	glLoadIdentity();
 	glOrtho(0.0, 800.0, 600.0, 0.0, 0.0, 100.0);
 	glDisable(GL_DEPTH_TEST);
 
-
+	Vertex *grab=NULL;
 
 	// Start the game loop
 	while (window.isOpen())
@@ -77,7 +79,19 @@ int main(int argc, char** argv)
 			// Escape pressed : exit
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 				window.close();
+			
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G)
+			{
+				grab=GetNearest(W, window);
+			}
+			
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::G)
+				grab=NULL;
+			
 		}
+		
+		if (grab!=NULL)
+			vxSetPosition(grab, vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
 
 		wdApplyForce(W, vec2(0.f, 9.f));
 		wdResolveVextex(W);
@@ -180,4 +194,29 @@ void glDrawWorld(World* W)
 		glDrawPolygon((Polygon*) nodeGetData(it));
 		it = nodeGetNext(it);
 	}
+}
+
+
+Vertex* GetNearest(World* W, const sf::Window &win)
+{
+	if (lstEmpty(&W->Vertices)) return NULL;
+	float dist = 9999999.f;
+	Vertex* grab=NULL;
+	
+	Node* it = lstFirst(&W->Vertices);
+	while(!nodeEnd(it))
+	{
+		Vec2 vertex=vxGetPosition((Vertex*)nodeGetData(it));
+		Vec2 v=vec2(sf::Mouse::getPosition(win).x - vertex.x, sf::Mouse::getPosition(win).y - vertex.y);
+		if (vec2Length(v)<dist)
+		{
+			dist=vec2Length(v);
+			grab=(Vertex*)nodeGetData(it);
+		}
+		
+		it = nodeGetNext(it);
+	}
+	
+	return grab;
+	
 }
