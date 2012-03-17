@@ -18,6 +18,7 @@ int main(int argc, char** argv)
 
 	World* W = newWorld(800.f, 600.f);
 
+	/*
 	Vertex* V1 = newVertex();
 	vxSetPosition(V1, vec2(0.f, 500.f));
 	Vertex* V2 = newVertex();
@@ -25,7 +26,7 @@ int main(int argc, char** argv)
 	Vertex* V3 = newVertex();
 	vxSetPosition(V3, vec2(0.f, 550.f));
 	wdAddVertex(W, V1); wdAddVertex(W, V2); wdAddVertex(W, V3);
-
+	 */
 	Vertex* V10 = newVertex();
 	vxSetPosition(V10, vec2(50.f, 500.f));
 	Vertex* V11 = newVertex();
@@ -34,11 +35,14 @@ int main(int argc, char** argv)
 	vxSetPosition(V12, vec2(100.f, 550.f));
 	Vertex* V13 = newVertex();
 	vxSetPosition(V13, vec2(50.f, 550.f));
-	wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
+	wdAddVertex(W, V10);
+	wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
 
-	Polygon* Poly = newPolygon(3, V1, V2, V3);
+	//Polygon* Poly = newPolygon(3, V1, V2, V3);
 	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle);
+	 
+	 
 
 	V10 = newVertex();
 	vxSetPosition(V10, vec2(50.f, 400.f));
@@ -52,7 +56,8 @@ int main(int argc, char** argv)
 	Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle2);
 
-	wdAddPolygon(W, Poly);
+	//wdAddPolygon(W, Poly);
+
 	
 	
 	//Un rectangle fixe
@@ -69,6 +74,7 @@ int main(int argc, char** argv)
 	Polygon* FixeRect = polyRectangle(VF1, VF2, VF3, VF4);
 	polySetFixe(FixeRect, 1);
 	wdAddPolygon(W, FixeRect);
+	 
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "window");
 	window.setFramerateLimit(60.f);
@@ -108,6 +114,7 @@ int main(int argc, char** argv)
 		}
 		
 		if (grab!=NULL)
+			//grab->Position=vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 			vxSetPosition(grab, vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
 		
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
@@ -118,22 +125,22 @@ int main(int argc, char** argv)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
-		wdApplyForce(W, vec2(0.f, 9.f));
+		
+		wdApplyForce(W, vec2(0.f, 1.f));
 		
 		wdResolveVextex(W);
-		wdResolveRigid(W);
+		
 		for(i=0; i<10; i++)
 		{
 			wdResolveRigid(W);
 			wdHandleCollision(W, i==0);
 		}
-
 		
 
 		glDrawWorld(W);
 		
 		//Une regle
-		
+		glColor3f(0.f, 0.f, 1.f);
 		glBegin(GL_LINES);
 		glVertex2f(0.f, sf::Mouse::getPosition(window).y);
 		glVertex2f(800.f, sf::Mouse::getPosition(window).y);

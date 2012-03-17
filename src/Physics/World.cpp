@@ -59,6 +59,8 @@ void wdResolveVextex(World* W)
 		else if(curPos.y < 0)
 			newPos.y = 0;
 		else newPos.y = curPos.y;
+		//printf("new pos : %f, %f ; curpos: %f, %f\n", newPos.x, newPos.y, curPos.x, curPos.y);
+		if (curPos.y != newPos.y || curPos.x != newPos.x)
 		vxSetPosition((Vertex*) nodeGetData(it), newPos);
 
 		it = nodeGetNext(it);
