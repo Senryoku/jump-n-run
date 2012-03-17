@@ -130,6 +130,26 @@ int main(int argc, char** argv)
 		
 
 		glDrawWorld(W);
+		
+		//Une regle
+		
+		glBegin(GL_LINES);
+		glVertex2f(0.f, sf::Mouse::getPosition(window).y);
+		glVertex2f(800.f, sf::Mouse::getPosition(window).y);
+		glEnd();
+		
+		glBegin(GL_LINES);
+		for (float i=0.f; i<800.f; i+=10.f)
+		{
+			glVertex2f(i, sf::Mouse::getPosition(window).y);
+			if (static_cast<int>(i)%100 == 0)
+				glVertex2f(i, sf::Mouse::getPosition(window).y-5.f);
+			else if (static_cast<int>(i)%50 == 0)
+				glVertex2f(i, sf::Mouse::getPosition(window).y-3.5f);
+			else
+				glVertex2f(i, sf::Mouse::getPosition(window).y-2.5f);
+		}
+		glEnd();
 
 		// Update the window
 		window.display();
