@@ -1,14 +1,14 @@
-#ifndef _RIGID_H_
-#define _RIGID_H_
+#ifndef _ELASTIC_H_
+#define _ELASTIC_H_
 
 #include "Physics/Vertex.h"
 
-/** @defgroup Rigid
+/** @defgroup Elastic
  *
- * Liaison Rigid entre deux Vertex
+ * Liaison élastique entre deux Vertex, implémente la loi de Hooke
  * Attention ! Des liaisons de longueur nulle donneront des résultats
  * assez aléatoire (pas de plantage mais un comportement peu réaliste...)
- * Préfixe des méthodes : rd
+ * Préfixe des méthodes : elastic
  * @todo Test de régression complet
  * @{
 **/
@@ -18,7 +18,8 @@ typedef struct
 	Vertex* V1;
 	Vertex* V2;
 	float Length; /**< Longueur à l'équilibre **/
-} Rigid;
+	float Spring; /**< Constante de Ressort **/
+} Elastic;
 
 /** @brief Constructeur
  *
@@ -26,43 +27,45 @@ typedef struct
  * @param V2 Deuxième Vertex
  * @param L Longueur à l'équilibre
 **/
-Rigid* newRigid(Vertex* V1, Vertex* V2, float L);
+Elastic* newElastic(Vertex* V1, Vertex* V2, float L);
+
 
 /** @brief Initialise R
  *
  * N'agit pas sur les Vertices, ils ne peuvent cependant
  * être passé en const (warnings)
 **/
-void rdInit(Rigid* R, Vertex* V1, Vertex* V2, float L);
+void elasticInit(Elastic* R, Vertex* V1, Vertex* V2, float L);
 
 /** @brief Destructeur
  *
  * Ne libère pas les Vertices
 **/
-void delRigid(Rigid* R);
+void delElastic(Elastic* R);
 
 /** @brief Résout la contrainte
  *
- * @param R Contrainte rigide à résoudre
+ * @param R Contrainte Elastice à résoudre
 **/
-void rdResolve(Rigid* R);
+void elasticResolve(Elastic* R);
 
 /** @brief Retourne le vecteur formé par les deux points de la contrainte
  *
 **/
-Vec2 rdVector(Rigid* R);
+Vec2 elasticVector(Elastic* R);
 
 /** @brief Accesseur de V1
  *
 **/
-Vertex* rdGetV1(Rigid* R);
+Vertex* elasticGetV1(Elastic* R);
 
 /** @brief Accesseur de V2
  *
 **/
-Vertex* rdGetV2(Rigid* R);
+Vertex* elasticGetV2(Elastic* R);
 
 /** @}
 **/
 
 #endif
+
