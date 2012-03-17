@@ -140,17 +140,8 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 	{
 		/* On récupère la face à tester */
 		if(i < daGetSize(&P1->Rigids))
-		{
 			Edge = (Rigid*) daGet(&P1->Rigids, i);
-			Info.P1 = P1; /* On s'assure que Info.P1 est toujours bien celui
-			dont on test une face */
-			Info.P2 = P2;
-		} else {
-			Edge = (Rigid*) daGet(&P2->Rigids, i - daGetSize(&P1->Rigids));
-			Info.P1 = P2; /* On s'assure que Info.P1 est toujours bien celui
-			dont on test une face */
-			Info.P2 = P1;
-		}
+		else Edge = (Rigid*) daGet(&P2->Rigids, i - daGetSize(&P1->Rigids));
 
 		/* On ne teste surtout pas une face nulle... */
 		if(vec2Equal(rdVector(Edge), vec2(0.f, 0.f))) continue;
@@ -173,9 +164,21 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 		/* Il y a "collision" sur cet axe, on cherche le point d'entrée,
 		c'est probablement le plus proche du bord... */
 		if(-Gap < Info.Depth)
-			Info.Depth = -Gap,
-			Info.Normal = Axis,
+		{
+			Info.Depth = -Gap;
+			Info.Normal = Axis;
 			Info.Edge = Edge;
+			/* On s'assure que Info.P1 est toujours bien celui
+			dont on test une face */
+			if(i < daGetSize(&P1->Rigids))
+			{
+				Info.P1 = P1;
+				Info.P2 = P2;
+			} else {
+				Info.P1 = P2;
+				Info.P2 = P1;
+			}
+		}
 	}
 
 	/* Cas extrème ou aucune face n'a été testée... */

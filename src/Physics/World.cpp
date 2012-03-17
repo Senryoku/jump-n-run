@@ -135,9 +135,7 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 								PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
 							- PosE1.y)/(PosE2.y - PosE1.y);
 
-							CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
-								+ (1.f - PositionOnEdge)*(1.f - PositionOnEdge));
-
+							/* DEBUG ! */
 							if (DebugDraw)
 							{
 								// DEBUG !
@@ -147,6 +145,8 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 										printf("#ERROR#\n vxGetPosition(Info.V).x : %f \n CollisionVector.x : %f \n PosE1.x : %f \n PosE2.x : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).x, CollisionVector.x, PosE1.x, PosE2.x, PositionOnEdge);
 									else
 										printf("#ERROR#\n vxGetPosition(Info.V).y : %f \n CollisionVector.y : %f \n PosE1.y : %f \n PosE2.y : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).y, CollisionVector.y, PosE1.y, PosE2.y, PositionOnEdge);
+									it2 = nodeGetNext(it2); continue; /* Mesure temporaire, si la collision n'est pas valide,
+									on l'ignore, bien sur, il faudrait que ça ne puisse pas arriver... */
 								}
 
 								//On déssine un peu de Debug
@@ -169,6 +169,8 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 								glEnd();
 							}
 
+							CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
+								+ (1.f - PositionOnEdge)*(1.f - PositionOnEdge));
 
 							/* Correction des positions
 							 Du vertex */
