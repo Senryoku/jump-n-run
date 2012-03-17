@@ -143,18 +143,15 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 							if (DebugDraw)
 							{
 								//On déssine un peu de Debug
+								//le vertice en collision
 								glColor3f(1.f, 0.f, 0.f);
 								glBegin(GL_LINES);
 								glVertex2f(PosE1.x, PosE1.y);
 								glVertex2f(PosE2.x, PosE2.y);
 								glEnd();
 								
-								glColor3f(1.f, 0.f, 0.f);
-								glBegin(GL_LINES);
-								glVertex2f(vxGetPosition(Info.V).x, vxGetPosition(Info.V).y);
-								glVertex2f(vxGetPosition(Info.V).x + Info.Normal.x, vxGetPosition(Info.V).y + Info.Normal.y);
-								glEnd();
 								
+								//Le vertex concerné
 								glBegin(GL_TRIANGLE_FAN);
 								glVertex2f(vxGetPosition(Info.V).x, vxGetPosition(Info.V).y);
 								for (int i=0; i<=16; i++)
