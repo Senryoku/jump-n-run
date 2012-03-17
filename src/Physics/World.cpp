@@ -1,4 +1,5 @@
 #include "World.h"
+#include <SFML/OpenGL.hpp>
 
 World* newWorld(float Width, float Height)
 {
@@ -93,8 +94,9 @@ void wdResolveRigid(World* W)
 }
 
 
-void wdHandleCollision(World* W)
+void wdHandleCollision(World* W, Bool DebugDraw)
 {
+	
         CollisionInfo Info;
         Node* it = lstFirst(&W->Polygons);
         Node* it2;
@@ -110,6 +112,9 @@ void wdHandleCollision(World* W)
 						Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
 						if(Info.P1 != NULL) /* Il y a collision */
 						{
+							if (vec2Dot(Info.Normal, vec2Sub(polyGetCenter(Info.P2), polyGetCenter(Info.P1))) < 0.f)
+								Info.Normal=vec2Prod(Info.Normal, -1.f);
+							
 								CollisionVector = vec2Prod(Info.Normal, Info.Depth);
 
 								PosE1 = vxGetPosition(rdGetV1(Info.Edge));
@@ -133,17 +138,43 @@ void wdHandleCollision(World* W)
 
 
 								CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
-									+ (1 - PositionOnEdge)*(1 - PositionOnEdge));
-
-
+									+ (1.f - PositionOnEdge)*(1.f - PositionOnEdge));
+							
+							if (DebugDraw)
+							{
+								//On déssine un peu de Debug
+								glColor3f(1.f, 0.f, 0.f);
+								glBegin(GL_LINES);
+								glVertex2f(PosE1.x, PosE1.y);
+								glVertex2f(PosE2.x, PosE2.y);
+								glEnd();
+								
+								glColor3f(1.f, 0.f, 0.f);
+								glBegin(GL_LINES);
+								glVertex2f(vxGetPosition(Info.V).x, vxGetPosition(Info.V).y);
+								glVertex2f(vxGetPosition(Info.V).x + Info.Normal.x, vxGetPosition(Info.V).y + Info.Normal.y);
+								glEnd();
+								
+								glBegin(GL_TRIANGLE_FAN);
+								glVertex2f(vxGetPosition(Info.V).x, vxGetPosition(Info.V).y);
+								for (int i=0; i<=16; i++)
+								{
+									glVertex2f(1*5.0*cos((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition(Info.V).x,
+											   1*5.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition(Info.V).y);
+								}
+								glEnd();
+							}
+								
+								
 								/* Correction des positions
-								Du vertex */
+								 Du vertex */
 								vxCorrectPosition(Info.V, vec2Prod(CollisionVector, 0.5f));
 								/* De la face */
 								vxCorrectPosition(rdGetV1(Info.Edge), vec2Prod(CollisionVector,
-								CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
+																			   CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
 								vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
-								CorrectionFactor*PositionOnEdge*0.5f));
+																			   CorrectionFactor*PositionOnEdge*0.5f));
+							
 						}
 					}
 					it2 = nodeGetNext(it2);

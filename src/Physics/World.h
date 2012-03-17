@@ -89,7 +89,7 @@ void wdResolveRigid(World* W);
  * Gère les collision Polygon/Polygon
  * @param W World
 **/
-void wdHandleCollision(World* W);
+void wdHandleCollision(World* W, Bool DebugDraw);
 
 /** @brief Libère la mémoire occupée
  *

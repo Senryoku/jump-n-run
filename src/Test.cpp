@@ -53,6 +53,22 @@ int main(int argc, char** argv)
 	wdAddPolygon(W, Rectangle2);
 
 	wdAddPolygon(W, Poly);
+	
+	
+	//Un rectangle fixe
+	Vertex* VF1 = newVertex();
+	vxSetPosition(VF1, vec2(300.f, 400.f));
+	Vertex* VF2 = newVertex();
+	vxSetPosition(VF2, vec2(550.f, 400.f));
+	Vertex* VF3 = newVertex();
+	vxSetPosition(VF3, vec2(550.f, 500.f));
+	Vertex* VF4 = newVertex();
+	vxSetPosition(VF4, vec2(300.f, 500.f));
+	
+	wdAddVertex(W, VF1);wdAddVertex(W, VF2);wdAddVertex(W, VF3);wdAddVertex(W, VF4);
+	Polygon* FixeRect = polyRectangle(VF1, VF2, VF3, VF4);
+	polySetFixe(FixeRect, 1);
+	wdAddPolygon(W, FixeRect);
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "window");
 	window.setFramerateLimit(60.f);
@@ -92,22 +108,26 @@ int main(int argc, char** argv)
 		
 		if (grab!=NULL)
 			vxSetPosition(grab, vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
-
-		wdApplyForce(W, vec2(0.f, 9.f));
-		wdResolveVextex(W);
-		for(i=0; i<10; i++)
-		{
-			wdResolveRigid(W);
-			wdHandleCollision(W);
-		}
-
+		
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
-										   //glClear(GL_DEPTH_BUFFER_BIT);
-
+		//glClear(GL_DEPTH_BUFFER_BIT);
+		
 		//On prepare la projection
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+
+		wdApplyForce(W, vec2(0.f, 9.f));
+		
+		wdResolveVextex(W);
+		wdResolveRigid(W);
+		for(i=0; i<10; i++)
+		{
+			wdResolveRigid(W);
+			wdHandleCollision(W, i==0);
+		}
+
+		
 
 		glDrawWorld(W);
 
@@ -136,13 +156,13 @@ void glDrawPolygon(Polygon* P)
 {
 	unsigned int i;
 
-	glColor3f(1.f, 1.f, 1.f);
+	glColor4f(1.f, 1.f, 1.f, 0.3f);
 	glBegin(GL_POLYGON);
 	for(i = 0; i<daGetSize(&P->Vertices); i++)
 		glVertex2f(vxGetPosition((Vertex*)daGet(&P->Vertices, i)).x, vxGetPosition((Vertex*)daGet(&P->Vertices, i)).y);
 	glEnd();
 
-	glColor3f(1.f, 0.f, 0.f);
+	glColor4f(0.f, 1.f, 0.f, 0.5f);
 	glBegin(GL_LINES);
 	for(i = 0; i < daGetSize(&P->Rigids); i++)
 	{
@@ -174,7 +194,7 @@ void glDrawPolygon(Polygon* P)
 void glDrawWorld(World* W)
 {
 	Node* it = lstFirst(&W->Vertices);
-	glColor3f(0.f, 1.f, 0.f);
+	glColor4f(0.f, 1.f, 0.f, 0.2f);
 	while(!nodeEnd(it))
 	{
 		glBegin(GL_TRIANGLE_FAN);

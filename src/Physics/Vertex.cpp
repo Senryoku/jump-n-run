@@ -44,6 +44,7 @@ void vxSetPosition(Vertex* V, Vec2 newPos)
 
 void vxCorrectPosition(Vertex* V, Vec2 addPos)
 {
+	if(V->Fixe) return;
 	V->Position = vec2Add(V->Position, addPos);
 }
 
@@ -73,12 +74,20 @@ void vxResolve(Vertex* V, float prevdt, float dt)
 {
 	if(vxIsFixe(V)) return;
 	Vec2 tmp = V->Position;
-	V->Position = vec2Add(vec2Add(
+	// position = (position + ( (position - oldposition)*(0.99f*(dt/prevdt))
+	/*
+	 myPosition += 0.99f*((myPosition - myOldPosition)*(dt/prevdt)) // Inertie
+	 + myAcceleration*dt*dt; // Accélération
+	 */
+	Vec2 mvtAdd = vec2Add(vec2Prod(vec2Prod(vec2Sub(V->Position, V->OldPos), (dt/prevdt)), 0.99f), vec2Prod(V->Acceleration, dt*dt));
+	V->Position = vec2Add(V->Position, mvtAdd);
+	/*V->Position = vec2Add(vec2Add(
 				V->Position,
 				vec2Prod(vec2Sub(V->Position,
 								V->OldPos),
 							0.99f*(dt/prevdt))),
 		vec2Prod(V->Acceleration, dt*dt));
+	 */
 	V->OldPos = tmp;
 	vxSetAcceleration(V, vec2(0.f, 0.f));
 }

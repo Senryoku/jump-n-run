@@ -1,16 +1,19 @@
 #ifndef _GRID_H
 #define _GRID_H
 
-#include <Core/DynArr.h>
+#include <Core/List.h>
 
 /**
  * @defgroup Grid
  * 
- * Grille qui permet de filtrer la détection de
+ * Grille qui permet de filtrer la détection de collisions
  */
 
 
 typedef struct sGrid {
+	List** Table;
+	unsigned int HCells, VCells;
+	float Width, Height, CellWidth, CellHeight;
 	
 } Grid;
 
