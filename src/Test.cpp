@@ -10,11 +10,11 @@ int main(int argc, char** argv)
 {
 	unsigned int i;
 
-	vec2TestRegression();
+	//vec2TestRegression();
 
-	vxTestRegression();
+	//vxTestRegression();
 
-	polyTestRegression();
+	//polyTestRegression();
 
 	World* W = newWorld(800.f, 600.f);
 
@@ -41,8 +41,8 @@ int main(int argc, char** argv)
 	//Polygon* Poly = newPolygon(3, V1, V2, V3);
 	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle);
-	 
-	 
+
+
 
 	V10 = newVertex();
 	vxSetPosition(V10, vec2(50.f, 400.f));
@@ -58,8 +58,8 @@ int main(int argc, char** argv)
 
 	//wdAddPolygon(W, Poly);
 
-	
-	
+
+
 	//Un rectangle fixe
 	Vertex* VF1 = newVertex();
 	vxSetPosition(VF1, vec2(300.f, 400.f));
@@ -69,12 +69,12 @@ int main(int argc, char** argv)
 	vxSetPosition(VF3, vec2(550.f, 500.f));
 	Vertex* VF4 = newVertex();
 	vxSetPosition(VF4, vec2(300.f, 500.f));
-	
+
 	wdAddVertex(W, VF1);wdAddVertex(W, VF2);wdAddVertex(W, VF3);wdAddVertex(W, VF4);
 	Polygon* FixeRect = polyRectangle(VF1, VF2, VF3, VF4);
 	polySetFixe(FixeRect, 1);
 	wdAddPolygon(W, FixeRect);
-	 
+
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "window");
 	window.setFramerateLimit(60.f);
@@ -102,50 +102,50 @@ int main(int argc, char** argv)
 			// Escape pressed : exit
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 				window.close();
-			
+
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G)
 			{
 				grab=GetNearest(W, window);
 			}
-			
+
 			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::G)
 				grab=NULL;
-			
+
 		}
-		
+
 		if (grab!=NULL)
 			//grab->Position=vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 			vxSetPosition(grab, vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
-		
+
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		//glClear(GL_DEPTH_BUFFER_BIT);
-		
+
 		//On prepare la projection
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
-		
+
 		wdApplyForce(W, vec2(0.f, 1.f));
-		
+
 		wdResolveVextex(W);
-		
+
 		for(i=0; i<10; i++)
 		{
 			wdResolveRigid(W);
 			wdHandleCollision(W, i==0);
 		}
-		
+
 
 		glDrawWorld(W);
-		
+
 		//Une regle
 		glColor3f(0.f, 0.f, 1.f);
 		glBegin(GL_LINES);
 		glVertex2f(0.f, sf::Mouse::getPosition(window).y);
 		glVertex2f(800.f, sf::Mouse::getPosition(window).y);
 		glEnd();
-		
+
 		glBegin(GL_LINES);
 		for (float i=0.f; i<800.f; i+=10.f)
 		{
@@ -158,12 +158,12 @@ int main(int argc, char** argv)
 				glVertex2f(i, sf::Mouse::getPosition(window).y-2.5f);
 		}
 		glEnd();
-		
+
 		glBegin(GL_LINES);
 		glVertex2f(sf::Mouse::getPosition(window).x, 0.f);
 		glVertex2f(sf::Mouse::getPosition(window).x, 600.f);
 		glEnd();
-		
+
 		glBegin(GL_LINES);
 		for (float i=0.f; i<600.f; i+=10.f)
 		{
@@ -268,7 +268,7 @@ Vertex* GetNearest(World* W, const sf::Window &win)
 	if (lstEmpty(&W->Vertices)) return NULL;
 	float dist = 9999999.f;
 	Vertex* grab=NULL;
-	
+
 	Node* it = lstFirst(&W->Vertices);
 	while(!nodeEnd(it))
 	{
@@ -279,10 +279,10 @@ Vertex* GetNearest(World* W, const sf::Window &win)
 			dist=vec2Length(v);
 			grab=(Vertex*)nodeGetData(it);
 		}
-		
+
 		it = nodeGetNext(it);
 	}
-	
+
 	return grab;
-	
+
 }

@@ -140,12 +140,17 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 	{
 		/* On récupère la face à tester */
 		if(i < daGetSize(&P1->Rigids))
+		{
 			Edge = (Rigid*) daGet(&P1->Rigids, i);
-		else
-			Edge = (Rigid*) daGet(&P2->Rigids, i - daGetSize(&P1->Rigids)),
-			Info.P1 = P2, /* On s'assure que Info.P1 est toujours bien celui
+			Info.P1 = P1; /* On s'assure que Info.P1 est toujours bien celui
+			dont on test une face */
+			Info.P2 = P2;
+		} else {
+			Edge = (Rigid*) daGet(&P2->Rigids, i - daGetSize(&P1->Rigids));
+			Info.P1 = P2; /* On s'assure que Info.P1 est toujours bien celui
 			dont on test une face */
 			Info.P2 = P1;
+		}
 
 		/* On ne teste surtout pas une face nulle... */
 		if(vec2Equal(rdVector(Edge), vec2(0.f, 0.f))) continue;
