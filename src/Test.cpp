@@ -73,6 +73,7 @@ int main(int argc, char** argv)
 	sf::RenderWindow window(sf::VideoMode(800, 600), "window");
 	window.setFramerateLimit(60.f);
 	window.setKeyRepeatEnabled(0);
+	window.setMouseCursorVisible(0);
 
 	glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
 	glLoadIdentity();
@@ -148,6 +149,24 @@ int main(int argc, char** argv)
 				glVertex2f(i, sf::Mouse::getPosition(window).y-3.5f);
 			else
 				glVertex2f(i, sf::Mouse::getPosition(window).y-2.5f);
+		}
+		glEnd();
+		
+		glBegin(GL_LINES);
+		glVertex2f(sf::Mouse::getPosition(window).x, 0.f);
+		glVertex2f(sf::Mouse::getPosition(window).x, 600.f);
+		glEnd();
+		
+		glBegin(GL_LINES);
+		for (float i=0.f; i<600.f; i+=10.f)
+		{
+			glVertex2f(sf::Mouse::getPosition(window).x, i);
+			if (static_cast<int>(i)%100 == 0)
+				glVertex2f(sf::Mouse::getPosition(window).x+5.f, i);
+			else if (static_cast<int>(i)%50 == 0)
+				glVertex2f(sf::Mouse::getPosition(window).x+3.5f, i);
+			else
+				glVertex2f(sf::Mouse::getPosition(window).x+2.5f, i);
 		}
 		glEnd();
 
