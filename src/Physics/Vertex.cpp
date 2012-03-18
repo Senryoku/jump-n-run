@@ -66,7 +66,7 @@ void vxSetFixe(Vertex* V, Bool B)
 
 void vxApplyForce(Vertex* V, Vec2 addForce)
 {
-	if(vxIsFixe(V)) return;
+	if(vxIsFixe(V) || vec2Length(addForce) < 0.0001f) return;
 	V->Acceleration = vec2Add(V->Acceleration, addForce);
 }
 
@@ -75,7 +75,7 @@ void vxResolve(Vertex* V, float prevdt, float dt)
 	if(vxIsFixe(V)) return;
 	Vec2 tmp = V->Position;
 
-	V->Position = vec2Add(V->Position, vec2Add(vec2Prod(vec2Sub(V->Position, V->OldPos), ((dt/prevdt)*0.99f)), vec2Prod(V->Acceleration, dt*dt)));
+	V->Position = vec2Add(V->Position, vec2Add(vec2Prod(vec2Sub(V->Position, V->OldPos), ((dt/prevdt)*0.975f)), vec2Prod(V->Acceleration, dt*dt)));
 
 	V->OldPos = tmp;
 	vxSetAcceleration(V, vec2(0.f, 0.f));

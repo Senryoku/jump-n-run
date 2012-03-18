@@ -60,6 +60,12 @@ void wdAddVertex(World* W, Vertex* V);
 **/
 void wdAddPolygon(World* W, Polygon* P);
 
+/** @brief Ajoute un Rigid au monde
+ *
+ *
+ **/
+void wdAddRigid(World* W, Rigid* R);
+
 /** @brief Applique une force à tout les vextices du monde
  *
  * Ne parcours que la liste Vertices, les vertices faisant partie d'un

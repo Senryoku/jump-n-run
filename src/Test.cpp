@@ -1,4 +1,6 @@
 #include <Physics/Physics.h>
+#include <Physics/Angular.h>
+#include <Physics/Lenght.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
@@ -18,7 +20,7 @@ int main(int argc, char** argv)
 
 	World* W = newWorld(800.f, 600.f);
 
-	/*
+	
 	Vertex* V1 = newVertex();
 	vxSetPosition(V1, vec2(0.f, 500.f));
 	Vertex* V2 = newVertex();
@@ -26,7 +28,20 @@ int main(int argc, char** argv)
 	Vertex* V3 = newVertex();
 	vxSetPosition(V3, vec2(0.f, 550.f));
 	wdAddVertex(W, V1); wdAddVertex(W, V2); wdAddVertex(W, V3);
-	 */
+	/*Rigid* R1 = newRigid(V1, V2, vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))));
+	Rigid* R2 = newRigid(V3, V2, vec2Length(vec2Sub(vxGetPosition(V3), vxGetPosition(V2))));
+	
+	wdAddRigid(W, R1); wdAddRigid(W, R2);*/
+	
+	Polygon* Pang1 = newPolygon(2, V1, V2);
+	Polygon* Pang2 = newPolygon(2, V3, V2);
+	wdAddPolygon(W, Pang1); wdAddPolygon(W, Pang2);
+	
+	//Angular A;
+	//angInit(&A, V2, V1, V3, (M_PI/180.f)*25.f, 110.f*(M_PI/180.f));
+	Lenght L;
+	lnInit(&L, V1, V3, 30.f, 50.f);
+	 
 	Vertex* V10 = newVertex();
 	vxSetPosition(V10, vec2(50.f, 500.f));
 	Vertex* V11 = newVertex();
@@ -39,6 +54,7 @@ int main(int argc, char** argv)
 	wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
 
 	//Polygon* Poly = newPolygon(3, V1, V2, V3);
+	//wdAddPolygon(W, Poly);
 	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle);
 
@@ -56,7 +72,6 @@ int main(int argc, char** argv)
 	Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
 	wdAddPolygon(W, Rectangle2);
 
-	//wdAddPolygon(W, Poly);
 
 
 
@@ -126,13 +141,14 @@ int main(int argc, char** argv)
 		glLoadIdentity();
 
 
-		wdApplyForce(W, vec2(0.f, 1.f));
+		wdApplyForce(W, vec2(0.f, 0.6f));
 
 		wdResolveVextex(W);
 
 		for(i=0; i<10; i++)
 		{
 			wdResolveRigid(W);
+			lnResolve(&L);
 			wdHandleCollision(W, i==0);
 		}
 

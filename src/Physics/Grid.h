@@ -10,7 +10,7 @@
  */
 
 
-typedef struct sGrid {
+typedef struct {
 	List** Table;
 	unsigned int HCells, VCells;
 	float Width, Height, CellWidth, CellHeight;

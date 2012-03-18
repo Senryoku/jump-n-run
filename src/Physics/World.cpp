@@ -1,5 +1,6 @@
 #include "World.h"
 #include <SFML/OpenGL.hpp>
+#include <SFML/Graphics.hpp>
 
 World* newWorld(float Width, float Height)
 {
@@ -30,6 +31,11 @@ void wdAddPolygon(World* W, Polygon* P)
 	lstAdd(&W->Polygons, P);
 }
 
+void wdAddRigid(World* W, Rigid* R)
+{
+	lstAdd(&W->Rigids, R);
+}
+
 void wdApplyForce(World* W, Vec2 Force)
 {
 	Node* it = lstFirst(&W->Vertices);
@@ -43,6 +49,9 @@ void wdResolveVextex(World* W)
 	Vec2 curPos;
 	Vec2 newPos;
 	Node* it = lstFirst(&W->Vertices);
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)) W->dt=0.2f; else W->dt=1.f;
+	
 	while(!nodeEnd(it))
 	{
 		vxResolve((Vertex*) nodeGetData(it), W->prevdt, W->dt);
@@ -180,6 +189,8 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 																		   CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
 							vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
 																		   CorrectionFactor*PositionOnEdge*0.5f));
+							//polySetSpeed(Info.P1, vec2Prod(polyGetSpeed(Info.P1), 0.5f));
+						
 
 						}
 					}

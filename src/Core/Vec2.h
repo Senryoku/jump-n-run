@@ -77,6 +77,13 @@ Bool vec2Equal(Vec2 V1, Vec2 V2);
 **/
 void vec2Cp(Vec2* V1, Vec2 V2);
 
+/** @brief Fait une rotation sur le point V
+ *
+ * @param V vecteur à modifier
+ * @param R angle en radians
+ **/
+Vec2 vec2Rotate(Vec2 V, float R);
+
 /** @brief Test de régression de Vec2
 **/
 void vec2TestRegression(void);

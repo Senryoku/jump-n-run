@@ -151,6 +151,20 @@ void polySetFixe(Polygon* P, Bool B);
 **/
 void polyApplyForce(Polygon* P, Vec2 Force);
 
+/** @brief Change la vitesse de tous les points
+ *
+ * @param P Polygon
+ * @param Speed nouvelle vitesse
+ **/
+void polySetSpeed(Polygon* P, Vec2 Speed);
+
+/** @brief donne la vitesse du polygone
+ *
+ * @param P Polygon
+ * @return vitesse
+ **/
+Vec2 polyGetSpeed(Polygon* P);
+
 /** @brief Test de régression
  *
  * Fait des tests...

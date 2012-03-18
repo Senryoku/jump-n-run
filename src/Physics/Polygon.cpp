@@ -278,6 +278,20 @@ void polyApplyForce(Polygon* P, Vec2 Force)
 	}
 }
 
+void polySetSpeed(Polygon* P, Vec2 Speed)
+{
+	unsigned int i;
+	for (i = 0; i < daGetSize(&P->Vertices); i++)
+	{
+		((Vertex*)daGet(&P->Vertices, i))->OldPos=vec2Sub(((Vertex*)daGet(&P->Vertices, i))->Position, Speed);
+	}
+}
+
+Vec2 polyGetSpeed(Polygon* P)
+{
+	return vec2Sub(((Vertex*)daGet(&P->Vertices, 0))->Position, ((Vertex*)daGet(&P->Vertices, 0))->OldPos);
+}
+
 void polyTestRegression()
 {
 	printf("\n === Debut du test de regression de Polygon === \n\n");
