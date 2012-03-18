@@ -1,14 +1,18 @@
 #include <Physics/Physics.h>
+#include <Physics/Angular.h>
+#include <Physics/Lenght.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
 void glDrawPolygon(Polygon *P);
 void glDrawWorld(World* W);
-Vertex* GetNearest(World* W, const sf::Window &win);
+Vertex* GetNearest(World* W, float MouseX, float MouseY);
 
 int main(int argc, char** argv)
 {
-	unsigned int i;
+	unsigned int i, ViewPort;
+	float ViewX = 0.f, ViewY = 0.f, ViewSpeed = 5.f,
+		WindowWidth = 800.f, WindowHeight = 600.f, MouseX, MouseY;
 
 	//vec2TestRegression();
 
@@ -16,7 +20,7 @@ int main(int argc, char** argv)
 
 	//polyTestRegression();
 
-	World* W = newWorld(800.f, 600.f);
+	World* W = newWorld(3200.f, 1200.f);
 
 
 	Vertex* V1 = newVertex();
@@ -35,8 +39,8 @@ int main(int argc, char** argv)
 	Polygon* Pang2 = newPolygon(2, V3, V2);
 	wdAddPolygon(W, Pang1); wdAddPolygon(W, Pang2);
 
-	//Angular A;
-	//angInit(&A, V2, V1, V3, (M_PI/180.f)*25.f, 110.f*(M_PI/180.f));
+	Angular A;
+	angInit(&A, V2, V1, V3, (M_PI/180.f)*25.f, 110.f*(M_PI/180.f));
 	Lenght L;
 	lnInit(&L, V1, V3, 30.f, 50.f);
 
@@ -94,9 +98,9 @@ int main(int argc, char** argv)
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
 
-	glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
-	glLoadIdentity();
-	glOrtho(0.0, 800.0, 600.0, 0.0, 0.0, 100.0);
+//	glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
+//	glLoadIdentity();
+//	glOrtho(0.0, 800.0, 600.0, 0.0, 0.0, 100.0);
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
 
@@ -108,6 +112,8 @@ int main(int argc, char** argv)
 	// Start the game loop
 	while (window.isOpen())
 	{
+		MouseX = sf::Mouse::getPosition(window).x + ViewX;
+		MouseY = sf::Mouse::getPosition(window).y + ViewY;
 		// Process events
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -122,7 +128,7 @@ int main(int argc, char** argv)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G)
 			{
-				grab=GetNearest(W, window);
+				grab=GetNearest(W, MouseX, MouseY);
 			}
 
 			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::G)
@@ -130,39 +136,30 @@ int main(int argc, char** argv)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
 			{
-				grabEl = GetNearest(W, window);
+				grabEl = GetNearest(W, MouseX, MouseY);
 				Elastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
 			}
 
 			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E)
 				grabEl=NULL,
 				delElastic(Elastic), Elastic = NULL;
-
-
 		}
 
 		if (grab!=NULL)
-			//grab->Position=vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
-			vxSetPosition(grab, vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
-
-
-
-		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
-		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
-		//glClear(GL_DEPTH_BUFFER_BIT);
-
-		//On prepare la projection
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
+			vxSetPosition(grab, vec2(MouseX,MouseY));
 		if(grabEl != NULL)
-		{
-			vxSetPosition(Mouse, vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
-			glBegin(GL_LINES);
-				glVertex2f(vxGetPosition(elasticGetV1(Elastic)).x, vxGetPosition(elasticGetV1(Elastic)).y);
-				glVertex2f(vxGetPosition(elasticGetV2(Elastic)).x, vxGetPosition(elasticGetV2(Elastic)).y);
-			glEnd();
-		}
+		vxSetPosition(Mouse, vec2(MouseX,MouseY));
+
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			ViewY-=ViewSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+			ViewY+=ViewSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+			ViewX-=ViewSpeed;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+			ViewX+=ViewSpeed;
+
 
 		wdApplyForce(W, vec2(0.f, 0.6f));
 		if(Elastic != NULL) elasticResolve(Elastic);
@@ -176,45 +173,91 @@ int main(int argc, char** argv)
 			wdHandleCollision(W, i==0);
 		}
 
+		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
+		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
+		//glClear(GL_DEPTH_BUFFER_BIT);
+
+		//On prepare la projection
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		// Test Viewport : Minimap !
+		glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
+		glLoadIdentity();
+		glOrtho(0.0, WindowWidth, WindowHeight, 0.0, 0.0, 100.0);
+		for(ViewPort = 0; ViewPort < 2; ViewPort++) {
+		if(ViewPort == 0)
+		{
+			glViewport(0.f, 0.f, WindowWidth, WindowHeight);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0.f+ViewX, WindowWidth+ViewX, WindowHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
+		} else if(ViewPort == 1) {
+			glViewport(650.f, 500.f, 100.f, 75.f);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0.0, W->Width, W->Height, 0.0, 0.0, 100.0);
+			glColor3f(0.5f, 0.5f, 0.5f);
+			glLineStipple(1, 0xCCCC);
+			glEnable(GL_LINE_STIPPLE);
+			glBegin(GL_LINE_LOOP);
+				glVertex2f(ViewX, ViewY);
+				glVertex2f(ViewX + WindowWidth, ViewY);
+				glVertex2f(ViewX + WindowWidth, ViewY + WindowHeight);
+				glVertex2f(ViewX, ViewY + WindowHeight);
+			glEnd();
+			glDisable(GL_LINE_STIPPLE);
+		}
+
+		if(grabEl != NULL)
+		{
+			glBegin(GL_LINES);
+				glVertex2f(vxGetPosition(elasticGetV1(Elastic)).x, vxGetPosition(elasticGetV1(Elastic)).y);
+				glVertex2f(vxGetPosition(elasticGetV2(Elastic)).x, vxGetPosition(elasticGetV2(Elastic)).y);
+			glEnd();
+		}
+
 		glDrawWorld(W);
 
 		//Une regle
 		glColor3f(0.f, 0.f, 1.f);
 		glBegin(GL_LINES);
-		glVertex2f(0.f, sf::Mouse::getPosition(window).y);
-		glVertex2f(800.f, sf::Mouse::getPosition(window).y);
+		glVertex2f(0.f,MouseY);
+		glVertex2f(W->Width,MouseY);
 		glEnd();
 
 		glBegin(GL_LINES);
-		for (float i=0.f; i<800.f; i+=10.f)
+		for (float i=0.f; i<W->Width; i+=10.f)
 		{
-			glVertex2f(i, sf::Mouse::getPosition(window).y);
+			glVertex2f(i,MouseY);
 			if (static_cast<int>(i)%100 == 0)
-				glVertex2f(i, sf::Mouse::getPosition(window).y-5.f);
+				glVertex2f(i,MouseY-5.f);
 			else if (static_cast<int>(i)%50 == 0)
-				glVertex2f(i, sf::Mouse::getPosition(window).y-3.5f);
+				glVertex2f(i,MouseY-3.5f);
 			else
-				glVertex2f(i, sf::Mouse::getPosition(window).y-2.5f);
+				glVertex2f(i,MouseY-2.5f);
 		}
 		glEnd();
 
 		glBegin(GL_LINES);
-		glVertex2f(sf::Mouse::getPosition(window).x, 0.f);
-		glVertex2f(sf::Mouse::getPosition(window).x, 600.f);
+		glVertex2f(MouseX, 0.f);
+		glVertex2f(MouseX, W->Height);
 		glEnd();
 
 		glBegin(GL_LINES);
-		for (float i=0.f; i<600.f; i+=10.f)
+		for (float i=0.f; i<W->Height; i+=10.f)
 		{
-			glVertex2f(sf::Mouse::getPosition(window).x, i);
+			glVertex2f(MouseX, i);
 			if (static_cast<int>(i)%100 == 0)
-				glVertex2f(sf::Mouse::getPosition(window).x+5.f, i);
+				glVertex2f(MouseX+5.f, i);
 			else if (static_cast<int>(i)%50 == 0)
-				glVertex2f(sf::Mouse::getPosition(window).x+3.5f, i);
+				glVertex2f(MouseX+3.5f, i);
 			else
-				glVertex2f(sf::Mouse::getPosition(window).x+2.5f, i);
+				glVertex2f(MouseX+2.5f, i);
 		}
 		glEnd();
+
+		}
 
 		// Update the window
 		window.display();
@@ -302,17 +345,17 @@ void glDrawWorld(World* W)
 }
 
 
-Vertex* GetNearest(World* W, const sf::Window &win)
+Vertex* GetNearest(World* W, float MouseX, float MouseY)
 {
 	if (lstEmpty(&W->Vertices)) return NULL;
-	float dist = 9999999.f;
+	float dist = INFINITY;
 	Vertex* grab=NULL;
 
 	Node* it = lstFirst(&W->Vertices);
 	while(!nodeEnd(it))
 	{
 		Vec2 vertex=vxGetPosition((Vertex*)nodeGetData(it));
-		Vec2 v=vec2(sf::Mouse::getPosition(win).x - vertex.x, sf::Mouse::getPosition(win).y - vertex.y);
+		Vec2 v=vec2(MouseX - vertex.x, MouseY - vertex.y);
 		if (vec2Length(v)<dist)
 		{
 			dist=vec2Length(v);
