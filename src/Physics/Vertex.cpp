@@ -66,7 +66,7 @@ void vxSetFixe(Vertex* V, Bool B)
 
 void vxApplyForce(Vertex* V, Vec2 addForce)
 {
-	if(vxIsFixe(V) || vec2Length(addForce) < 0.0001f) return;
+	if(vxIsFixe(V) || vec2SqLength(addForce) < 0.00001f) return;
 	V->Acceleration = vec2Add(V->Acceleration, addForce);
 }
 

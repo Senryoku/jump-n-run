@@ -62,3 +62,8 @@ Vertex* rdGetV2(Rigid* R)
 {
 	return R->V2;
 }
+
+void rdSetLength(Rigid* R, float newLength)
+{
+	R->Length = newLength;
+}

@@ -7,7 +7,7 @@ POINTCPP = $(wildcard $(SRC)*/*.cpp) $(wildcard $(SRC)*.cpp)
 POINTOP := $(POINTC:.c=.o) $(POINTCPP:.cpp=.o)
 POINTO = $(patsubst src/%,$(OBJ)%,$(POINTOP)) #$(POINTOP:src=obj)
 
-OPT := -Wall -pedantic -I$(SRC) 
+OPT := -Wall -pedantic -I "$(SRC)"
 
 
 ifeq ($(SHELL), sh.exe) 
@@ -26,7 +26,7 @@ LIBS := -framework sfml-system -framework sfml-window -framework sfml-graphics -
 endif
 ifeq ($(OS), Win)
 RM = del
-LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lopengl32
 endif
 
 default :
@@ -41,6 +41,7 @@ default :
 all : test dirs
 
 dirs : 
+ifeq ($(OS), Linux)
 	@if [ ! -e  $(BIN) ] ; \
 	then \
 	echo "Creating directory $(BIN)" ; \
@@ -61,6 +62,14 @@ dirs :
 	echo "Creating directory $(OBJ)Physics" ; \
 	mkdir $(OBJ)Physics ; \
 	fi ; 
+endif
+#A refaire mais là dessuite j'ai la flemme :D
+ifeq ($(OS), Win) 
+	mkdir bin\
+	mkdir obj\Core
+	mkdir obj\Audio
+	mkdir obj\Physics
+endif
 .PHONY : dirs
 
 $(OBJ)%.o : $(SRC)%.cpp

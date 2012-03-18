@@ -62,6 +62,11 @@ Vertex* rdGetV1(Rigid* R);
 **/
 Vertex* rdGetV2(Rigid* R);
 
+/** @brief Mutateur de Length
+ *
+**/
+void rdSetLength(Rigid* R, float newLength);
+
 /** @}
 **/
 

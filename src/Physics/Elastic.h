@@ -26,43 +26,59 @@ typedef struct
  * @param V1 Premier Vertex
  * @param V2 Deuxième Vertex
  * @param L Longueur à l'équilibre
+ * @param S Constante de Ressort
 **/
-Elastic* newElastic(Vertex* V1, Vertex* V2, float L);
+Elastic* newElastic(Vertex* V1, Vertex* V2, float L, float S);
 
 
-/** @brief Initialise R
+/** @brief Initialise E
  *
  * N'agit pas sur les Vertices, ils ne peuvent cependant
  * être passé en const (warnings)
+ * @param E Contrainte à initialiser
+ * @param V1 Premier Vertex
+ * @param V2 Deuxième Vertex
+ * @param L Longueur à l'équilibre
+ * @param S Constante de Ressort
 **/
-void elasticInit(Elastic* R, Vertex* V1, Vertex* V2, float L);
+void elasticInit(Elastic* E, Vertex* V1, Vertex* V2, float L, float S);
 
 /** @brief Destructeur
  *
  * Ne libère pas les Vertices
 **/
-void delElastic(Elastic* R);
+void delElastic(Elastic* E);
 
 /** @brief Résout la contrainte
  *
- * @param R Contrainte Elastice à résoudre
+ * @param E Contrainte Elastic à résoudre
 **/
-void elasticResolve(Elastic* R);
+void elasticResolve(Elastic* E);
 
 /** @brief Retourne le vecteur formé par les deux points de la contrainte
  *
 **/
-Vec2 elasticVector(Elastic* R);
+Vec2 elasticVector(Elastic* E);
 
 /** @brief Accesseur de V1
  *
 **/
-Vertex* elasticGetV1(Elastic* R);
+Vertex* elasticGetV1(Elastic* E);
 
 /** @brief Accesseur de V2
  *
 **/
-Vertex* elasticGetV2(Elastic* R);
+Vertex* elasticGetV2(Elastic* E);
+
+/** @brief Mutateur de Length
+ *
+**/
+void elasticSetLength(Elastic* E, float newLength);
+
+/** @brief Mutateur de Spring
+ *
+**/
+void elasticSetSpring(Elastic* E, float newSpring);
 
 /** @}
 **/

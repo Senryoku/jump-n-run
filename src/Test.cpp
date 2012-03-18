@@ -1,6 +1,6 @@
 #include <Physics/Physics.h>
-#include <Physics/Angular.h>
-#include <Physics/Lenght.h>
+//#include <Physics/Angular.h>
+//#include <Physics/Lenght.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 
 	World* W = newWorld(800.f, 600.f);
 
-	
+
 	Vertex* V1 = newVertex();
 	vxSetPosition(V1, vec2(0.f, 500.f));
 	Vertex* V2 = newVertex();
@@ -30,18 +30,18 @@ int main(int argc, char** argv)
 	wdAddVertex(W, V1); wdAddVertex(W, V2); wdAddVertex(W, V3);
 	/*Rigid* R1 = newRigid(V1, V2, vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))));
 	Rigid* R2 = newRigid(V3, V2, vec2Length(vec2Sub(vxGetPosition(V3), vxGetPosition(V2))));
-	
+
 	wdAddRigid(W, R1); wdAddRigid(W, R2);*/
-	
+
 	Polygon* Pang1 = newPolygon(2, V1, V2);
 	Polygon* Pang2 = newPolygon(2, V3, V2);
 	wdAddPolygon(W, Pang1); wdAddPolygon(W, Pang2);
-	
+
 	//Angular A;
 	//angInit(&A, V2, V1, V3, (M_PI/180.f)*25.f, 110.f*(M_PI/180.f));
-	Lenght L;
-	lnInit(&L, V1, V3, 30.f, 50.f);
-	 
+//	Lenght L;
+//	lnInit(&L, V1, V3, 30.f, 50.f);
+
 	Vertex* V10 = newVertex();
 	vxSetPosition(V10, vec2(50.f, 500.f));
 	Vertex* V11 = newVertex();
@@ -100,8 +100,12 @@ int main(int argc, char** argv)
 	glLoadIdentity();
 	glOrtho(0.0, 800.0, 600.0, 0.0, 0.0, 100.0);
 	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
 
 	Vertex *grab=NULL;
+	Vertex *grabEl=NULL;
+	Elastic* Elastic = NULL;
+	Vertex* Mouse = newVertex();
 
 	// Start the game loop
 	while (window.isOpen())
@@ -126,11 +130,24 @@ int main(int argc, char** argv)
 			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::G)
 				grab=NULL;
 
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
+			{
+				grabEl = GetNearest(W, window);
+				Elastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
+			}
+
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E)
+				grabEl=NULL,
+				delElastic(Elastic), Elastic = NULL;
+
+
 		}
 
 		if (grab!=NULL)
 			//grab->Position=vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 			vxSetPosition(grab, vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
+
+
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
@@ -140,18 +157,26 @@ int main(int argc, char** argv)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
+		if(grabEl != NULL)
+		{
+			vxSetPosition(Mouse, vec2(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
+			glBegin(GL_LINES);
+				glVertex2f(vxGetPosition(elasticGetV1(Elastic)).x, vxGetPosition(elasticGetV1(Elastic)).y);
+				glVertex2f(vxGetPosition(elasticGetV2(Elastic)).x, vxGetPosition(elasticGetV2(Elastic)).y);
+			glEnd();
+		}
 
 		wdApplyForce(W, vec2(0.f, 0.6f));
+		if(Elastic != NULL) elasticResolve(Elastic);
 
 		wdResolveVextex(W);
 
 		for(i=0; i<10; i++)
 		{
 			wdResolveRigid(W);
-			lnResolve(&L);
+//			lnResolve(&L);
 			wdHandleCollision(W, i==0);
 		}
-
 
 		glDrawWorld(W);
 

@@ -1,17 +1,18 @@
 #include "Elastic.h"
 
-Elastic* newElastic(Vertex* V1, Vertex* V2, float L)
+Elastic* newElastic(Vertex* V1, Vertex* V2, float L, float S)
 {
 	Elastic* E = (Elastic*) malloc(sizeof(Elastic));
-	elasticInit(E, V1, V2, L);
+	elasticInit(E, V1, V2, L, S);
 	return E;
 }
 
-void elasticInit(Elastic* E, Vertex* V1, Vertex* V2, float L)
+void elasticInit(Elastic* E, Vertex* V1, Vertex* V2, float L, float S)
 {
 	E->V1 = V1;
 	E->V2 = V2;
 	E->Length = L;
+	E->Spring = S;
 }
 
 void delElastic(Elastic* E)
@@ -57,4 +58,14 @@ Vertex* elasticGetV1(Elastic* E)
 Vertex* elasticGetV2(Elastic* E)
 {
 	return E->V2;
+}
+
+void elasticSetLength(Elastic* E, float newLength)
+{
+	E->Length = newLength;
+}
+
+void elasticSetSpring(Elastic* E, float newSpring)
+{
+	E->Spring = newSpring;
 }
