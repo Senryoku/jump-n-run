@@ -90,6 +90,10 @@ run : all
 	./$(BIN)test
 .PHONY : run
 
+valgrind : all
+	valgrind --leak-check=full --show-reachable=yes --tool=memcheck ./$(BIN)test
+:PHONY valgrind
+
 clean:
 	@$(RM) -vf $(OBJ)*.o $(BIN)test $(POINTO)
 .PHONY : clean

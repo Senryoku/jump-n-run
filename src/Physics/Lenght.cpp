@@ -24,7 +24,7 @@ void lnResolve(Lenght* R)
 		factor = (acLength - R->MaxLenght);
 	else return;
 	
-	printf("Lenght: %f \n", factor);
+	//printf("Lenght: %f \n", factor);
 	
 	/* Normalisation du vecteur (pas besoin de vec2Normalized(),
 	 on a déjà acLength) */

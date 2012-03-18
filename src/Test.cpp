@@ -1,6 +1,4 @@
 #include <Physics/Physics.h>
-//#include <Physics/Angular.h>
-//#include <Physics/Lenght.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
@@ -39,8 +37,8 @@ int main(int argc, char** argv)
 
 	//Angular A;
 	//angInit(&A, V2, V1, V3, (M_PI/180.f)*25.f, 110.f*(M_PI/180.f));
-//	Lenght L;
-//	lnInit(&L, V1, V3, 30.f, 50.f);
+	Lenght L;
+	lnInit(&L, V1, V3, 30.f, 50.f);
 
 	Vertex* V10 = newVertex();
 	vxSetPosition(V10, vec2(50.f, 500.f));
@@ -174,7 +172,7 @@ int main(int argc, char** argv)
 		for(i=0; i<10; i++)
 		{
 			wdResolveRigid(W);
-//			lnResolve(&L);
+			lnResolve(&L);
 			wdHandleCollision(W, i==0);
 		}
 

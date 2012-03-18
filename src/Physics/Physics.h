@@ -4,6 +4,8 @@
 #include "Vertex.h"
 #include "Elastic.h"
 #include "Rigid.h"
+#include "Lenght.h"
+#include "Angular.h"
 #include "Polygon.h"
 #include "World.h"
 
