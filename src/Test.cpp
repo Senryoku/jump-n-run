@@ -11,7 +11,7 @@ Vertex* GetNearest(World* W, float MouseX, float MouseY);
 int main(int argc, char** argv)
 {
 	unsigned int i, ViewPort;
-	float ViewX = 0.f, ViewY = 0.f, ViewSpeed = 5.f,
+	float ViewX = 0.f, ViewY = 0.f, ViewSpeed = 15.f,
 		WindowWidth = 800.f, WindowHeight = 600.f, MouseX, MouseY;
 
 	//vec2TestRegression();
@@ -41,8 +41,8 @@ int main(int argc, char** argv)
 
 	Angular A;
 	angInit(&A, V2, V1, V3, (M_PI/180.f)*25.f, 110.f*(M_PI/180.f));
-	Lenght L;
-	lnInit(&L, V1, V3, 30.f, 50.f);
+	//Lenght L;
+	//lnInit(&L, V1, V3, 30.f, 50.f);
 
 	Vertex* V10 = newVertex();
 	vxSetPosition(V10, vec2(50.f, 500.f));
@@ -102,7 +102,7 @@ int main(int argc, char** argv)
 //	glLoadIdentity();
 //	glOrtho(0.0, 800.0, 600.0, 0.0, 0.0, 100.0);
 	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
+	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
 
 	Vertex *grab=NULL;
 	Vertex *grabEl=NULL;
@@ -160,102 +160,109 @@ int main(int argc, char** argv)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			ViewX+=ViewSpeed;
 
-
-		wdApplyForce(W, vec2(0.f, 0.6f));
-		if(Elastic != NULL) elasticResolve(Elastic);
-
-		wdResolveVextex(W);
-
-		for(i=0; i<10; i++)
-		{
-			wdResolveRigid(W);
-			lnResolve(&L);
-			wdHandleCollision(W, i==0);
-		}
-
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		//glClear(GL_DEPTH_BUFFER_BIT);
-
+		
 		//On prepare la projection
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-
+		
 		// Test Viewport : Minimap !
 		glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
 		glLoadIdentity();
 		glOrtho(0.0, WindowWidth, WindowHeight, 0.0, 0.0, 100.0);
-		for(ViewPort = 0; ViewPort < 2; ViewPort++) {
-		if(ViewPort == 0)
+
+		
+
+		
+		for(ViewPort = 0; ViewPort < 2; ViewPort++)
 		{
-			glViewport(0.f, 0.f, WindowWidth, WindowHeight);
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(0.f+ViewX, WindowWidth+ViewX, WindowHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
-		} else if(ViewPort == 1) {
-			glViewport(650.f, 500.f, 100.f, 75.f);
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(0.0, W->Width, W->Height, 0.0, 0.0, 100.0);
-			glColor3f(0.5f, 0.5f, 0.5f);
-			glLineStipple(1, 0xCCCC);
-			glEnable(GL_LINE_STIPPLE);
-			glBegin(GL_LINE_LOOP);
+			if(ViewPort == 0)
+			{
+				glViewport(0.f, 0.f, WindowWidth, WindowHeight);
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				glOrtho(0.f+ViewX, WindowWidth+ViewX, WindowHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
+				
+				wdApplyForce(W, vec2(0.f, 0.6f));
+				if(Elastic != NULL) elasticResolve(Elastic);
+				
+				wdResolveVextex(W);
+				angResolve(&A);
+				
+				for(i=0; i<10; i++)
+				{
+					wdResolveRigid(W);
+					//lnResolve(&L);
+					wdHandleCollision(W, i==0);
+				}
+			}
+			else if(ViewPort == 1)
+			{
+				glViewport(650.f, 500.f, 100.f, 75.f);
+				glMatrixMode(GL_PROJECTION);
+				glLoadIdentity();
+				glOrtho(0.0, W->Width, W->Height, 0.0, 0.0, 100.0);
+				glColor3f(0.5f, 0.5f, 0.5f);
+				glLineStipple(1, 0xCCCC);
+				glEnable(GL_LINE_STIPPLE);
+				glBegin(GL_LINE_LOOP);
 				glVertex2f(ViewX, ViewY);
 				glVertex2f(ViewX + WindowWidth, ViewY);
 				glVertex2f(ViewX + WindowWidth, ViewY + WindowHeight);
 				glVertex2f(ViewX, ViewY + WindowHeight);
-			glEnd();
-			glDisable(GL_LINE_STIPPLE);
-		}
-
-		if(grabEl != NULL)
-		{
-			glBegin(GL_LINES);
+				glEnd();
+				glDisable(GL_LINE_STIPPLE);
+			}
+			
+			if(grabEl != NULL)
+			{
+				glBegin(GL_LINES);
 				glVertex2f(vxGetPosition(elasticGetV1(Elastic)).x, vxGetPosition(elasticGetV1(Elastic)).y);
 				glVertex2f(vxGetPosition(elasticGetV2(Elastic)).x, vxGetPosition(elasticGetV2(Elastic)).y);
+				glEnd();
+			}
+			
+			glDrawWorld(W);
+			
+			//Une regle
+			glColor3f(0.f, 0.f, 1.f);
+			glBegin(GL_LINES);
+			glVertex2f(0.f,MouseY);
+			glVertex2f(W->Width,MouseY);
 			glEnd();
-		}
-
-		glDrawWorld(W);
-
-		//Une regle
-		glColor3f(0.f, 0.f, 1.f);
-		glBegin(GL_LINES);
-		glVertex2f(0.f,MouseY);
-		glVertex2f(W->Width,MouseY);
-		glEnd();
-
-		glBegin(GL_LINES);
-		for (float i=0.f; i<W->Width; i+=10.f)
-		{
-			glVertex2f(i,MouseY);
-			if (static_cast<int>(i)%100 == 0)
-				glVertex2f(i,MouseY-5.f);
-			else if (static_cast<int>(i)%50 == 0)
-				glVertex2f(i,MouseY-3.5f);
-			else
-				glVertex2f(i,MouseY-2.5f);
-		}
-		glEnd();
-
-		glBegin(GL_LINES);
-		glVertex2f(MouseX, 0.f);
-		glVertex2f(MouseX, W->Height);
-		glEnd();
-
-		glBegin(GL_LINES);
-		for (float i=0.f; i<W->Height; i+=10.f)
-		{
-			glVertex2f(MouseX, i);
-			if (static_cast<int>(i)%100 == 0)
-				glVertex2f(MouseX+5.f, i);
-			else if (static_cast<int>(i)%50 == 0)
-				glVertex2f(MouseX+3.5f, i);
-			else
-				glVertex2f(MouseX+2.5f, i);
-		}
-		glEnd();
+			
+			glBegin(GL_LINES);
+			for (float i=0.f; i<W->Width; i+=10.f)
+			{
+				glVertex2f(i,MouseY);
+				if (static_cast<int>(i)%100 == 0)
+					glVertex2f(i,MouseY-5.f);
+				else if (static_cast<int>(i)%50 == 0)
+					glVertex2f(i,MouseY-3.5f);
+				else
+					glVertex2f(i,MouseY-2.5f);
+			}
+			glEnd();
+			
+			glBegin(GL_LINES);
+			glVertex2f(MouseX, 0.f);
+			glVertex2f(MouseX, W->Height);
+			glEnd();
+			
+			glBegin(GL_LINES);
+			for (float i=0.f; i<W->Height; i+=10.f)
+			{
+				glVertex2f(MouseX, i);
+				if (static_cast<int>(i)%100 == 0)
+					glVertex2f(MouseX+5.f, i);
+				else if (static_cast<int>(i)%50 == 0)
+					glVertex2f(MouseX+3.5f, i);
+				else
+					glVertex2f(MouseX+2.5f, i);
+			}
+			glEnd();
 
 		}
 

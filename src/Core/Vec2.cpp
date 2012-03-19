@@ -76,10 +76,11 @@ void vec2Cp(Vec2* V1, Vec2 V2)
 	V1->y = V2.y;
 }
 
-Vec2 vec2Rotate(Vec2 V, float R)
+Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R)
 {
 	float cosR=cosf(R), sinR=sinf(R);
-	return vec2(cosR*V.x-sinR*V.y, sinR*V.x+cosR*V.y);
+	V.x-=Origin.x; V.y-=Origin.y;
+	return vec2(cosR*V.x-sinR*V.y + Origin.x, sinR*V.x+cosR*V.y + Origin.y);
 }
 
 void vec2TestRegression(void)

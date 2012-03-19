@@ -82,7 +82,7 @@ void vec2Cp(Vec2* V1, Vec2 V2);
  * @param V vecteur à modifier
  * @param R angle en radians
  **/
-Vec2 vec2Rotate(Vec2 V, float R);
+Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R);
 
 /** @brief Test de régression de Vec2
 **/

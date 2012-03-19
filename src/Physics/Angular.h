@@ -12,6 +12,7 @@ typedef struct
 	float Lenghts; /**< produit des longueurs de CS et CM **/
 	Vec2 CS;
 	Vec2 CM;
+	Vec2 MinPos, MaxPos;
 	float MinAng; /**< Angle minimal **/
 	float MaxAng; /**< Angle maximal **/
 } Angular;

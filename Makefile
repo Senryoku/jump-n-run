@@ -2,6 +2,7 @@ CXX = g++
 OBJ = obj/
 SRC = src/
 BIN = bin/
+TESTS = tests/
 POINTC = $(wildcard $(SRC)*/*.c) $(wildcard $(SRC)*.c) 
 POINTCPP = $(wildcard $(SRC)*/*.cpp) $(wildcard $(SRC)*.cpp) 
 POINTOP := $(POINTC:.c=.o) $(POINTCPP:.cpp=.o)
@@ -95,7 +96,7 @@ valgrind : all
 :PHONY valgrind
 
 clean:
-	@$(RM) -vf $(OBJ)*.o $(BIN)test $(POINTO)
+	@$(RM) -vf $(OBJ)*.o $(OBJ)*/*.o $(BIN)test $(BIN)testvec2
 .PHONY : clean
 
 doc:
@@ -112,6 +113,19 @@ info:
 .PHONY : info
 #find -E src/ -regex "(.+)\.(h|cpp|c|hpp)" -exec cat {} \; | wc -l | (read A ; echo "Lignes dans le projet: $A")
 #find -E src/ -regex "(.+)\.(h|cpp|c|hpp)" -exec cat {} \; | wc | (read L W B ; echo "Le projet a $L lignes, $W mots et pèse $B octets")
+
+
+#Tests de regression
+
+MODULES = "Core/Vec2 Physics/Vertex Physics/Polygon"
+#À compléter encore avec une règle génerale selon cette liste de modules
+
+testvec2 : $(OBJ)Core/Vec2.o $(OBJ)testvec2.o
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind --leak-check=full --show-reachable=yes --tool=memcheck ./$(BIN)testvec2
+	
+$(OBJ)testvec2.o :
+	$(CXX) $(OPT) $(TESTS)TestVec2.cpp -c -o $@
 
 
  

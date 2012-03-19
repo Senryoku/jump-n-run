@@ -18,9 +18,9 @@ void lnResolve(Lenght* R)
 	/* Précalcul de la distance V1V2 */
 	float acLength = vec2Length(Vect), factor;
 	
-	if (acLength < R->MinLenght)
+	if (acLength <= R->MinLenght-5.f)
 		factor = (acLength - R->MinLenght);
-	else if (acLength > R->MaxLenght)
+	else if (acLength >= R->MaxLenght-5.f)
 		factor = (acLength - R->MaxLenght);
 	else return;
 	
