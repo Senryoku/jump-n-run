@@ -257,6 +257,56 @@ void wdHandleCollision(World* W)
         }
 }
 
+Vertex* wdGetNearest(World* W, float X, float Y)
+{
+	if (lstEmpty(&W->Vertices)) return NULL;
+	float Dist = INFINITY, tmpDist;
+	Vertex* Nearest = NULL;
+
+	Node* it = lstFirst(&W->Vertices);
+	while(!nodeEnd(it))
+	{
+		Vec2 VPos = vxGetPosition((Vertex*) nodeGetData(it));
+		Vec2 V = vec2(X - VPos.x, Y - VPos.y);
+		tmpDist = vec2SqLength(V);
+		if (tmpDist < Dist)
+		{
+			Dist = tmpDist;
+			Nearest = (Vertex*) nodeGetData(it);
+		}
+
+		it = nodeGetNext(it);
+	}
+
+	return Nearest;
+}
+
+Polygon* wdGetNearestPoly(World* W, float X, float Y)
+{
+	unsigned int i;
+	float Dist = INFINITY, tmpDist;
+	Polygon *Nearest = NULL, *tmpPoly;
+	Node* it = lstFirst(&W->Polygons);
+	while(!nodeEnd(it))
+	{
+		tmpPoly = (Polygon*) nodeGetData(it);
+		for(i = 0; i < daGetSize(&tmpPoly->Vertices); i++)
+		{
+			Vec2 VPos = vxGetPosition((Vertex*) daGet(&tmpPoly->Vertices, i));
+			Vec2 V = vec2(X - VPos.x, Y - VPos.y);
+			tmpDist = vec2SqLength(V);
+			if (tmpDist < Dist)
+			{
+				Dist = tmpDist;
+				Nearest = tmpPoly;
+			}
+		}
+		it = nodeGetNext(it);
+	}
+
+	return Nearest;
+}
+
 void wdFree(World *W)
 {
 	while (!lstEmpty(&W->Polygons))

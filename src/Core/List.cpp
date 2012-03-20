@@ -43,7 +43,7 @@ void lstAdd(List* L, Elem Data)
 void lstDel(List* L, Elem E)
 {
 	Node* tmpNode = L->First;
-	while(nodeEnd(tmpNode) && nodeGetData(tmpNode) != E)
+	while(!nodeEnd(tmpNode) && nodeGetData(tmpNode) != E)
 	{
 		tmpNode = nodeGetNext(tmpNode);
 	}

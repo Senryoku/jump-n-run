@@ -162,6 +162,24 @@ void wdResolveElastic(World* W);
 **/
 void wdHandleCollision(World* W);
 
+/** @brief Retourne le Vertex le plus proche des coordonnées
+ * passées en paramètre.
+ *
+ * @param W World
+ * @param X Coordonnée X
+ * @param Y Coordonnée Y
+**/
+Vertex* wdGetNearest(World* W, float X, float Y);
+
+/** @brief Retourne le Polygon le plus proche des coordonnées
+ * passées en paramètre.
+ *
+ * @param W World
+ * @param X Coordonnée X
+ * @param Y Coordonnée Y
+**/
+Polygon* wdGetNearestPoly(World* W, float X, float Y);
+
 /** @brief Libère la mémoire occupée
  *
  * Détruit tout les objets contenu en vidant les liste
