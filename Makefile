@@ -92,7 +92,7 @@ run : all
 .PHONY : run
 
 valgrind : all
-	valgrind --leak-check=full --show-reachable=yes --tool=memcheck ./$(BIN)test
+	valgrind --leak-check=full --tool=memcheck ./$(BIN)test
 :PHONY valgrind
 
 clean:
