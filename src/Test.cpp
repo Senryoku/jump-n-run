@@ -339,17 +339,6 @@ int main(int argc, char** argv)
 		window.display();
 	}
 
-	/*delPolygon(Rectangle);
-	delPolygon(Poly);
-
-	delVertex(V13);
-	delVertex(V12);
-	delVertex(V11);
-	delVertex(V10);
-
-	delVertex(V3);
-	delVertex(V2);
-	delVertex(V1);*/
 	delWorld(W);
 
 	return 0;

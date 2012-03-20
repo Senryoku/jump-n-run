@@ -41,21 +41,27 @@ void lstAdd(List* L, Elem Data)
 
 void lstDel(List* L, Elem E)
 {
-	Node* prevNode = NULL;
 	Node* tmpNode = L->First;
 	while(nodeEnd(tmpNode) && nodeGetData(tmpNode) != E)
 	{
 		tmpNode = nodeGetNext(tmpNode);
-		prevNode = nodeGetNext(prevNode);
 	}
 	if(!nodeEnd(tmpNode))
 	{
-		if(prevNode == NULL)
+		if(nodeGetPrev(tmpNode) == NULL)
 		{
 			L->First = nodeGetNext(tmpNode);
 		} else {
-			nodeSetNext(prevNode, nodeGetNext(tmpNode));
+			nodeSetNext(nodeGetPrev(tmpNode), nodeGetNext(tmpNode));
 		}
+
+		if(nodeGetNext(tmpNode) == NULL)
+		{
+			L->Last = nodeGetPrev(tmpNode);
+		} else {
+			nodeSetPrev(nodeGetNext(tmpNode), nodeGetPrev(tmpNode));
+		}
+
 		delNode(tmpNode);
 		L->Count--;
 	}
