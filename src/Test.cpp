@@ -148,12 +148,12 @@ int main(int argc, char** argv)
 				grabEl=NULL,
 				wdDelElastic(W, Elastic);
 
-			if(event.type == sf::Event::MouseButtonPressed && event.mouseButton == sf::Mouse::Left
-				&& sf::Keyboard::isKeyPressed(sf::Keyboard::P)
+			if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left
+				&& sf::Keyboard::isKeyPressed(sf::Keyboard::P) )
 			{
 				tmpVertex = newVertex();
-				vxSetPosition(tmp, vec2(MouseX, Mouse Y));
-				vxSetFixe(tmpVertex);
+				vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
+				vxSetFixe(tmpVertex, 1);
 				lstAdd(&L, newVertex());
 			}
 
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
 				{
 					wdAddVxFromList(W, L);
 					tmpPoly = newPolygonL(L);
-					polySetFixe(tmpPoly);
+					polySetFixe(tmpPoly, 1);
 					wdAddPolygon(W, tmpPoly);
 				}
 				lstFree(&L);

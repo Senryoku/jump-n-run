@@ -6,6 +6,7 @@
 
 #include "Core/Tools.h"
 #include "Core/DynArr.h"
+#include <Core/List.h>
 #include "Physics/Rigid.h"
 
 /** @defgroup Polygon

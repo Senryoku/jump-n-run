@@ -46,7 +46,7 @@ void wdAddVxFromPoly(World* W, Polygon* P)
 	unsigned int i;
 	for(i = 0; i < daGetSize(&P->Vertices); i++)
 	{
-		wdAddVertex(W, daGet(&P->Vertices, i));
+		wdAddVertex(W, (Vertex*) daGet(&P->Vertices, i));
 	}
 }
 

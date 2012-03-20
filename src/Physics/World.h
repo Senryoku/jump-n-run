@@ -91,7 +91,7 @@ void wdAddVxFromPoly(World* W, Polygon* P);
  * @param W World
  * @param L List de Vertices
 **/
-void wdAddVxFromList(World* W, List L)
+void wdAddVxFromList(World* W, List L);
 
 /** @brief Retire le Vertex de la simulation (du monde)
  *

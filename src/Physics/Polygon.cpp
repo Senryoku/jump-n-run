@@ -37,7 +37,7 @@ Polygon* newPolygonL(List L)
 	Polygon* newPoly = (Polygon*) malloc(sizeof(Polygon));
 	Node* it = lstFirst(&L);
 
-	Initialisation des Dynamic Arrays */
+	/*Initialisation des Dynamic Arrays */
 	newPoly->Rigids = da();
 	newPoly->Vertices = da();
 	newPoly->InternalRigids = da();
