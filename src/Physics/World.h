@@ -160,7 +160,7 @@ void wdResolveElastic(World* W);
  * Gère les collision Polygon/Polygon
  * @param W World
 **/
-void wdHandleCollision(World* W, Bool DebugDraw);
+void wdHandleCollision(World* W);
 
 /** @brief Libère la mémoire occupée
  *

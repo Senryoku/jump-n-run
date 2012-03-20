@@ -12,6 +12,7 @@ World* newWorld(float Width, float Height)
 void wdInit(World* W, float Width, float Height)
 {
 	lstInit(&W->Vertices);
+	lstInit(&W->Elastics);
 	lstInit(&W->Rigids);
 	lstInit(&W->Polygons);
 
@@ -159,17 +160,16 @@ void wdResolveRigid(World* W)
 
 void wdResolveElastic(World* W)
 {
-        unsigned int i;
-        Node* it = lstFirst(&W->Elastics);
+	Node* it = lstFirst(&W->Elastics);
 
-        while(!nodeEnd(it))
-        {
-                elasticResolve((Elastic*) nodeGetData(it));
-                it = nodeGetNext(it);
-        }
+	while(!nodeEnd(it))
+	{
+			elasticResolve((Elastic*) nodeGetData(it));
+			it = nodeGetNext(it);
+	}
 }
 
-void wdHandleCollision(World* W, Bool DebugDraw)
+void wdHandleCollision(World* W)
 {
 
         CollisionInfo Info;
@@ -204,13 +204,16 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 								PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
 							- PosE1.y)/(PosE2.y - PosE1.y);
 
-							/* Cas particulier ou la détection de collision n'est pas valide */
-							if(PositionOnEdge > 1.f || PositionOnEdge < 0.f) it2 = nodeGetNext(it2); continue;
+							/* Cas particulier où la détection de collision n'est pas valide */
+							if(PositionOnEdge > 1.f || PositionOnEdge < 0.f)
+							{
+								it2 = nodeGetNext(it2);
+								continue;
+							}
 
-							/* DEBUG ! */
+							/* DEBUG !
 							if (DebugDraw)
 							{
-								// DEBUG !
 								if(PositionOnEdge > 1.f || PositionOnEdge < 0.f)
 								{
 									if(fabs(PosE1.x - PosE2.x) > fabs(PosE1.y - PosE2.y))
@@ -218,10 +221,10 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 									else
 										printf("#ERROR#\n vxGetPosition(Info.V).y : %f \n CollisionVector.y : %f \n PosE1.y : %f \n PosE2.y : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).y, CollisionVector.y, PosE1.y, PosE2.y, PositionOnEdge);
 									it2 = nodeGetNext(it2); continue; /* Mesure temporaire, si la collision n'est pas valide,
-									on l'ignore, bien sur, il faudrait que ça ne puisse pas arriver... */
+									on l'ignore, bien sur, il faudrait que ça ne puisse pas arriver...
 								}
 
-								//On déssine un peu de Debug
+								//On dessine un peu de Debug
 								//le vertice en collision
 								glColor3f(1.f, 0.f, 0.f);
 								glBegin(GL_LINES);
@@ -240,6 +243,7 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 								}
 								glEnd();
 							}
+							*/
 
 							CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
 								+ (1.f - PositionOnEdge)*(1.f - PositionOnEdge));
@@ -252,9 +256,6 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 																		   CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
 							vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
 																		   CorrectionFactor*PositionOnEdge*0.5f));
-							//polySetSpeed(Info.P1, vec2Prod(polyGetSpeed(Info.P1), 0.5f));
-
-
 						}
 					}
 					it2 = nodeGetNext(it2);

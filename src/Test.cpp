@@ -219,13 +219,13 @@ int main(int argc, char** argv)
 			vxSetPosition(Mouse, vec2(MouseX,MouseY));
 
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 			ViewY-=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			ViewY+=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 			ViewX-=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			ViewX+=ViewSpeed;
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
@@ -241,9 +241,6 @@ int main(int argc, char** argv)
 		glLoadIdentity();
 		glOrtho(0.0, WindowWidth, WindowHeight, 0.0, 0.0, 100.0);
 
-
-
-
 		for(ViewPort = 0; ViewPort < 2; ViewPort++)
 		{
 			if(ViewPort == 0)
@@ -254,8 +251,6 @@ int main(int argc, char** argv)
 				glOrtho(0.f+ViewX, WindowWidth+ViewX, WindowHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
 				wdApplyForce(W, vec2(0.f, 0.6f));
-				//if(Elastic != NULL) elasticResolve(Elastic);
-
 				wdResolveVextex(W);
 				angResolve(&A);
 
@@ -264,7 +259,7 @@ int main(int argc, char** argv)
 					wdResolveRigid(W);
 					wdResolveElastic(W);
 					//lnResolve(&L);
-					wdHandleCollision(W, i==0);
+					wdHandleCollision(W);
 				}
 			}
 			else if(ViewPort == 1)
@@ -277,10 +272,10 @@ int main(int argc, char** argv)
 				glLineStipple(1, 0xCCCC);
 				glEnable(GL_LINE_STIPPLE);
 				glBegin(GL_LINE_LOOP);
-				glVertex2f(ViewX, ViewY);
-				glVertex2f(ViewX + WindowWidth, ViewY);
-				glVertex2f(ViewX + WindowWidth, ViewY + WindowHeight);
-				glVertex2f(ViewX, ViewY + WindowHeight);
+					glVertex2f(ViewX, ViewY);
+					glVertex2f(ViewX + WindowWidth, ViewY);
+					glVertex2f(ViewX + WindowWidth, ViewY + WindowHeight);
+					glVertex2f(ViewX, ViewY + WindowHeight);
 				glEnd();
 				glDisable(GL_LINE_STIPPLE);
 			}
@@ -294,6 +289,18 @@ int main(int argc, char** argv)
 			}
 
 			glDrawWorld(W);
+
+			/* Limites */
+			glColor3f(0.5f, 0.5f, 0.5f);
+			glLineStipple(1, 0xCCCC);
+			glEnable(GL_LINE_STIPPLE);
+			glBegin(GL_LINE_LOOP);
+				glVertex2f(0.f, 1.f);
+				glVertex2f(W->Width-1.f, 0.f);
+				glVertex2f(W->Width-1.f, W->Height);
+				glVertex2f(0.f, W->Height);
+			glEnd();
+			glDisable(GL_LINE_STIPPLE);
 
 			//Une regle
 			glColor3f(0.f, 0.f, 1.f);
@@ -349,7 +356,7 @@ void glDrawPolygon(Polygon* P)
 {
 	unsigned int i;
 
-	glColor4f(1.f, 1.f, 1.f, 0.3f);
+	glColor4f(1.f, 1.f, 1.f, 0.2f);
 	glBegin(GL_POLYGON);
 	for(i = 0; i<daGetSize(&P->Vertices); i++)
 		glVertex2f(vxGetPosition((Vertex*)daGet(&P->Vertices, i)).x, vxGetPosition((Vertex*)daGet(&P->Vertices, i)).y);
@@ -371,7 +378,7 @@ void glDrawPolygon(Polygon* P)
 	}
 	glEnd();
 
-	glColor3f(0.f, 0.f, 1.f);
+	if(polyIsFixe(P)) glColor3f(1.f, 0.f, 0.f); else glColor3f(0.f, 0.f, 1.f);
 	Vec2 Center = polyComputeCenter(P);
 		glBegin(GL_TRIANGLE_FAN);
 		glVertex2f(Center.x, Center.y);
@@ -387,9 +394,12 @@ void glDrawPolygon(Polygon* P)
 void glDrawWorld(World* W)
 {
 	Node* it = lstFirst(&W->Vertices);
-	glColor4f(0.f, 1.f, 0.f, 0.2f);
 	while(!nodeEnd(it))
 	{
+		if(vxIsFixe((Vertex*) nodeGetData(it)))
+			glColor4f(1.f, 0.f, 0.f, 0.3f);
+		else
+			glColor4f(0.f, 1.f, 0.f, 0.3f);
 		glBegin(GL_TRIANGLE_FAN);
 		glVertex2f(vxGetPosition((Vertex*) nodeGetData(it)).x, vxGetPosition((Vertex*) nodeGetData(it)).y);
 		for (int i=0; i<=16; i++)

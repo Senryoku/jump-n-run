@@ -10,6 +10,7 @@ List* newList()
 void lstInit(List* L)
 {
 	L->First = NULL;
+	L->Last = NULL;
 	L->Count = 0;
 }
 
