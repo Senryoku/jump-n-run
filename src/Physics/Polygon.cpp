@@ -46,7 +46,10 @@ Polygon* newPolygonL(List L)
 
 	/* Ajoute les Vertices */
 	while(!nodeEnd(it))
+	{
 		daAdd(&newPoly->Vertices, (Vertex*) nodeGetData(it));
+		it = nodeGetNext(it);
+	}
 	/* Construit les limites, i.e. Créé un nouveau Rigid à partir de
 	deux Vertices de la liste et la distance les séparant, puis l'ajoute
 	 à la liste */

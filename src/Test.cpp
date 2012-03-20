@@ -110,7 +110,7 @@ int main(int argc, char** argv)
 	Vertex* tmpVertex = NULL;
 	Polygon* tmpPoly = NULL;
 	Elastic* Elastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
-	List L;
+	List L, L2;
 
 	// Start the game loop
 	while (window.isOpen())
@@ -148,17 +148,18 @@ int main(int argc, char** argv)
 				grabEl=NULL,
 				wdDelElastic(W, Elastic);
 
+			/* Création de polygones statiques */
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
+				lstInit(&L);
+
 			if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left
 				&& sf::Keyboard::isKeyPressed(sf::Keyboard::P) )
 			{
 				tmpVertex = newVertex();
 				vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
 				vxSetFixe(tmpVertex, 1);
-				lstAdd(&L, newVertex());
+				lstAdd(&L, tmpVertex);
 			}
-
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
-				lstInit(&L);
 
 			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::P)
 			{
@@ -170,6 +171,32 @@ int main(int argc, char** argv)
 					wdAddPolygon(W, tmpPoly);
 				}
 				lstFree(&L);
+			}
+
+
+			/* Création de polygones dynamiques */
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::O)
+				lstInit(&L2);
+
+			if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left
+				&& sf::Keyboard::isKeyPressed(sf::Keyboard::O) )
+			{
+				tmpVertex = newVertex();
+				vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
+				vxSetFixe(tmpVertex, 1);
+				lstAdd(&L2, tmpVertex);
+			}
+
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::O)
+			{
+				if(lstCount(&L2) > 0)
+				{
+					wdAddVxFromList(W, L2);
+					tmpPoly = newPolygonL(L2);
+					polySetFixe(tmpPoly, 0);
+					wdAddPolygon(W, tmpPoly);
+				}
+				lstFree(&L2);
 			}
 		}
 
