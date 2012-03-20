@@ -193,7 +193,7 @@ int main(int argc, char** argv)
 				if(lstCount(&L2) > 0)
 				{
 					wdAddVxFromList(W, L2);
-					
+
 					if(lstCount(&L2) == 4)
 					{
 						tmpPoly = polyRectangleL(L2);
@@ -383,7 +383,7 @@ void glDrawPolygon(Polygon* P)
 	glEnd();
 
 	glColor3f(0.f, 0.f, 1.f);
-	Vec2 Center = polyGetCenter(P);
+	Vec2 Center = polyComputeCenter(P);
 		glBegin(GL_TRIANGLE_FAN);
 		glVertex2f(Center.x, Center.y);
 		for (int i=0; i<=16; i++)

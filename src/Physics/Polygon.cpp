@@ -51,7 +51,7 @@ Polygon* newPolygonL(List L)
 		daAdd(&newPoly->Vertices, (Vertex*) nodeGetData(it));
 		it = nodeGetNext(it);
 	}
-	
+
 	/* Construit les limites, i.e. Créé un nouveau Rigid à partir de
 	deux Vertices de la liste et la distance les séparant, puis l'ajoute
 	 à la liste */
@@ -143,7 +143,7 @@ Polygon* polyNGone(List L)
 	unsigned int i;
 	Polygon* newNGone = newPolygonL(L);
 	newNGone->Center = newVertex();
-	vxSetPosition(newNGone->Center, polyGetCenter(newNGone));
+	vxSetPosition(newNGone->Center, polyComputeCenter(newNGone));
 	for(i = 0; i < daGetSize(&newNGone->Vertices); i++)
 		daAdd(&newNGone->InternalRigids, newRigid((Vertex*)daGet(&newNGone->Vertices, i),
 										newNGone->Center, -1.f));
@@ -235,10 +235,10 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 	/* Cas extrème ou aucune face n'a été testée... */
 	if(Info.Edge == NULL) return nullCollisionInfo();
 
-	CenterP1 = polyGetCenter(Info.P1);
+	CenterP1 = polyComputeCenter(Info.P1);
 
 	/* On s'assure que la normale est dans le bon sens (pointe vers P2) */
-	if(vec2Dot(Info.Normal, vec2Sub(polyGetCenter(Info.P2), CenterP1)) < 0)
+	if(vec2Dot(Info.Normal, vec2Sub(polyComputeCenter(Info.P2), CenterP1)) < 0)
 		Info.Normal = vec2Prod(Info.Normal, -1.f);
 
 	/* Recherche du point de collision dans Info.P2
@@ -287,7 +287,7 @@ Bool polyIsInside(Polygon* P, Vertex* V)
 	return true;
 }
 
-Vec2 polyGetCenter(Polygon* P)
+Vec2 polyComputeCenter(Polygon* P)
 {
 	unsigned int i;
 	Vec2 Center = vxGetPosition((Vertex*)daGet(&P->Vertices, 0));
@@ -308,6 +308,11 @@ void polyResolve(Polygon* P)
 Bool polyIsFixe(Polygon* P)
 {
 	return P->Fixe;
+}
+
+Vertex* polyGetCenter(Polygon* P)
+{
+	return P->Center;
 }
 
 void polySetFixe(Polygon* P, Bool B)

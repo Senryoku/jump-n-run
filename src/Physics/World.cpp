@@ -29,6 +29,9 @@ void wdAddVertex(World* W, Vertex* V)
 void wdAddPolygon(World* W, Polygon* P)
 {
 	lstAdd(&W->Polygons, P);
+	/* Ajout du centre si nécessaire */
+	if(polyGetCenter(P) != NULL)
+		wdAddVertex(W, polyGetCenter(P));
 }
 
 void wdAddRigid(World* W, Rigid* R)
@@ -75,8 +78,10 @@ void wdDelElastic(World* W, Elastic* E)
 	lstDel(&W->Elastics, E);
 }
 
-void wdDelVertex(World* W, Polygon* P)
+void wdDelPolygon(World* W, Polygon* P)
 {
+	/* On retire le centre du polygon de la liste de vertices */
+	if(polyGetCenter(P) != NULL) lstDel(&W->Vertices, polyGetCenter(P));
 	lstDel(&W->Polygons, P);
 }
 
@@ -182,7 +187,7 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 						Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
 						if(Info.P1 != NULL) /* Il y a collision */
 						{
-							if (vec2Dot(Info.Normal, vec2Sub(polyGetCenter(Info.P2), polyGetCenter(Info.P1))) < 0.f)
+							if (vec2Dot(Info.Normal, vec2Sub(polyComputeCenter(Info.P2), polyComputeCenter(Info.P1))) < 0.f)
 								Info.Normal=vec2Prod(Info.Normal, -1.f);
 
 							CollisionVector = vec2Prod(Info.Normal, Info.Depth);
@@ -259,6 +264,9 @@ void wdFree(World *W)
 {
 	while (!lstEmpty(&W->Polygons))
 	{
+		/* On retire le centre du polygon de la liste de vertices */
+		if(polyGetCenter((Polygon*) nodeGetData(lstFirst(&W->Polygons))) != NULL)
+			lstDel(&W->Vertices, polyGetCenter((Polygon*) nodeGetData(lstFirst(&W->Polygons))));
 		delPolygon((Polygon*) nodeGetData(lstFirst(&W->Polygons)));
 		lstRem(&W->Polygons, lstFirst(&W->Polygons));
 	}

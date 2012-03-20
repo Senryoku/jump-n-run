@@ -123,7 +123,7 @@ void wdDelElastic(World* W, Elastic* E);
  * @param W World
  * @param P Polygon à retirer
 **/
-void wdDelVertex(World* W, Polygon* P);
+void wdDelPolygon(World* W, Polygon* P);
 
 /** @brief Applique une force à tout les vextices du monde
  *

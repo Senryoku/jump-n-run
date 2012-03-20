@@ -139,12 +139,12 @@ Bool polyIsInside(Polygon* P, Vertex* V);
 **/
 void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis);
 
-/** @brief Retourne le centre (non pondéré) des points de P
+/** @brief Calcul le centre (non pondéré) des points de P
  *
- * Isobarycentre
+ * Isobarycentre (Rien à voir avec P->Center qui lui sert aux contraintes internes)
  * @param P Polygon dont on cherche le centre
 **/
-Vec2 polyGetCenter(Polygon* P);
+Vec2 polyComputeCenter(Polygon* P);
 
 /** @brief Appelle rdResolve pour chaque contrainte du Polygon
  *
@@ -165,6 +165,10 @@ Bool polyIsFixe(Polygon* P);
  * @param B Nouvelle valeur pour Fixe
 **/
 void polySetFixe(Polygon* P, Bool B);
+
+/** @brief Accesseur de Center (Contraintes internes)
+**/
+Vertex* polyGetCenter(Polygon* P);
 
 /** @brief Applique une force à tous les vertices du Polygon
  *
