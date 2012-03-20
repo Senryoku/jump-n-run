@@ -53,26 +53,45 @@ void wdInit(World* W, float Width, float Height);
 
 /** @brief Ajoute un Vertex au monde
  *
- *
+ * @param W World
+ * @param V Vertex
 **/
 void wdAddVertex(World* W, Vertex* V);
 
 /** @brief Ajoute un Polygon au monde
  *
+ * @param W World
+ * @param P Polygon
 **/
 void wdAddPolygon(World* W, Polygon* P);
 
 /** @brief Ajoute un Elastic au monde
  *
- *
+ * @param W World
+ * @param E Elastic
  **/
 void wdAddElastic(World* W, Elastic* E);
 
 /** @brief Ajoute un Rigid au monde
  *
- *
+ * @param W World
+ * @param R Rigid
  **/
 void wdAddRigid(World* W, Rigid* R);
+
+/** @brief Ajoute tout les Vertex d'un polygon à la simulation
+ *
+ * @param W World
+ * @param P Polygon
+**/
+void wdAddVxFromPoly(World* W, Polygon* P);
+
+/** @brief Ajoute tout les Vertex d'une Liste à la simulation
+ *
+ * @param W World
+ * @param L List de Vertices
+**/
+void wdAddVxFromList(World* W, List L)
 
 /** @brief Retire le Vertex de la simulation (du monde)
  *

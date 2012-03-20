@@ -99,3 +99,7 @@ Node* lstEnd(List* L)
 	return L->Last;
 }
 
+unsigned int lstCount(List*)
+{
+	return L->Count;
+}

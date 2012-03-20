@@ -107,8 +107,10 @@ int main(int argc, char** argv)
 	Vertex *grab=NULL;
 	Vertex *grabEl=NULL;
 	Vertex* Mouse = newVertex();
+	Vertex* tmpVertex = NULL;
+	Polygon* tmpPoly = NULL;
 	Elastic* Elastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
-	
+	List L;
 
 	// Start the game loop
 	while (window.isOpen())
@@ -145,6 +147,30 @@ int main(int argc, char** argv)
 			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E)
 				grabEl=NULL,
 				wdDelElastic(W, Elastic);
+
+			if(event.type == sf::Event::MouseButtonPressed && event.mouseButton == sf::Mouse::Left
+				&& sf::Keyboard::isKeyPressed(sf::Keyboard::P)
+			{
+				tmpVertex = newVertex();
+				vxSetPosition(tmp, vec2(MouseX, Mouse Y));
+				vxSetFixe(tmpVertex);
+				lstAdd(&L, newVertex());
+			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
+				lstInit(&L);
+
+			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::P)
+			{
+				if(lstCount(&L) > 0)
+				{
+					wdAddVxFromList(W, L);
+					tmpPoly = newPolygonL(L);
+					polySetFixe(tmpPoly);
+					wdAddPolygon(W, tmpPoly);
+				}
+				lstFree(&L);
+			}
 		}
 
 		if (grab!=NULL)

@@ -72,6 +72,10 @@ Node* lstFirst(List*);
 **/
 Node* lstEnd(List*);
 
+/** @brief Accesseur de Count
+**/
+unsigned int lstCount(List*);
+
 typedef Node* Iterator;
 
 #endif

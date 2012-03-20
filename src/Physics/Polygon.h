@@ -39,6 +39,13 @@ typedef struct
 **/
 Polygon* newPolygon(unsigned int nbVx, ...);
 
+/** @brief Constructeur à partir d'une liste
+ *
+ * Ne créé pas de contraintes internes
+ * @param L Liste (List) de Vertex*
+**/
+Polygon* newPolygonL(List L);
+
 /** @brief Initialise P
  *
  * @param P Le Polygon à initialiser

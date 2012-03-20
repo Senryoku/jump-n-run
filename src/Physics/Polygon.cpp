@@ -31,6 +31,33 @@ Polygon* newPolygon(unsigned int nbVx, ...)
 	return newPoly;
 }
 
+Polygon* newPolygonL(List L)
+{
+	unsigned int i = 0, nbVx = lstCount(&L);
+	Polygon* newPoly = (Polygon*) malloc(sizeof(Polygon));
+	Node* it = lstFirst(&L);
+
+	Initialisation des Dynamic Arrays */
+	newPoly->Rigids = da();
+	newPoly->Vertices = da();
+	newPoly->InternalRigids = da();
+	daReserve(&newPoly->Rigids, nbVx);
+	daReserve(&newPoly->Vertices, nbVx);
+
+	/* Ajoute les Vertices */
+	while(!nodeEnd(it))
+		daAdd(&newPoly->Vertices, (Vertex*) nodeGetData(it));
+	/* Construit les limites, i.e. Créé un nouveau Rigid à partir de
+	deux Vertices de la liste et la distance les séparant, puis l'ajoute
+	 à la liste */
+	for(i = 0; i < nbVx; i++)
+		daAdd(&newPoly->Rigids, newRigid((Vertex*)daGet(&newPoly->Vertices, i),
+			(Vertex*)daGet(&newPoly->Vertices, (i+1)%nbVx),
+			vec2Length(vec2Sub(vxGetPosition((Vertex*)daGet(&newPoly->Vertices, i)),
+					vxGetPosition((Vertex*)daGet(&newPoly->Vertices, (i+1)%nbVx))))));
+	return newPoly;
+}
+
 void polyInit(Polygon* P, unsigned int nbVx, ...)
 {
 	unsigned int i;

@@ -41,6 +41,25 @@ void wdAddElastic(World* W, Elastic* E)
 	lstAdd(&W->Elastics, E);
 }
 
+void wdAddVxFromPoly(World* W, Polygon* P)
+{
+	unsigned int i;
+	for(i = 0; i < daGetSize(&P->Vertices); i++)
+	{
+		wdAddVertex(W, daGet(&P->Vertices, i));
+	}
+}
+
+void wdAddVxFromList(World* W, List L)
+{
+	Node* it = lstFirst(&L);
+	while(!nodeEnd(it))
+	{
+		wdAddVertex(W, (Vertex*) nodeGetData(it));
+		it = nodeGetNext(it);
+	}
+}
+
 void wdDelVertex(World* W, Vertex* V)
 {
 	lstDel(&W->Vertices, V);
