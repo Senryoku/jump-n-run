@@ -24,6 +24,8 @@ typedef struct
  	Polygon *tmpPoly;
 } Level;
 
+void lvledInit();
+
 // Fonctions de Manipulation/Vision
 void lvledGrab();
 void lvledRelease();
@@ -47,6 +49,8 @@ void lvledNewPolyFixeCreate();
 
 void lvledDelPoly(Polygon*);
 void lvledDelVertex(Vertex*); // Fait toute les vérifications avant de supprimer
+
+void lvledTestLevel(); // Lance le jeu sur le niveau en cours d'édition
 
 void lvledLoad(char**);
 void lvledSave(char**);

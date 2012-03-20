@@ -11,8 +11,9 @@ Vertex* GetNearest(World* W, float MouseX, float MouseY);
 int main(int argc, char** argv)
 {
 	unsigned int i, ViewPort;
-	float ViewX = 0.f, ViewY = 0.f, ViewSpeed,
-		WindowWidth = 800.f, WindowHeight = 600.f, OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY;
+	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, WindowWidth = 1600.f,
+		WindowHeight = 720.f, MapWidth = WindowWidth/10.f, MapHeight = WindowHeight/10.f,
+		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY;
 
 	//vec2RegressionTest();
 
@@ -93,10 +94,13 @@ int main(int argc, char** argv)
 	wdAddPolygon(W, FixeRect);
 
 
-	sf::RenderWindow window(sf::VideoMode(800, 600), "window");
+	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "window");
 	window.setFramerateLimit(60.f);
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
+
+	MapWidth = W->Width*(100.f / W->Height);
+	MapHeight = 100.f;
 
 //	glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
 //	glLoadIdentity();
@@ -128,6 +132,9 @@ int main(int argc, char** argv)
 			// Escape pressed : exit
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 				window.close();
+
+			if (event.type == sf::Event::Resized)
+				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
 
 			/* Prémices de ce que seront les fonctions de LevelEditor */
 
@@ -355,7 +362,7 @@ int main(int argc, char** argv)
 			}
 			else if(ViewPort == 1)
 			{
-				glViewport(650.f, 500.f, 100.f, 75.f);
+				glViewport(WindowWidth - MapWidth - 10.f, WindowHeight - MapHeight - 10.f, MapWidth, MapHeight);
 				glMatrixMode(GL_PROJECTION);
 				glLoadIdentity();
 				glOrtho(0.0, W->Width, W->Height, 0.0, 0.0, 100.0);
