@@ -14,11 +14,11 @@ int main(int argc, char** argv)
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed = 15.f,
 		WindowWidth = 800.f, WindowHeight = 600.f, MouseX, MouseY;
 
-	//vec2TestRegression();
+	//vec2RegressionTest();
 
-	//vxTestRegression();
+	//vxRegressionTest();
 
-	//polyTestRegression();
+	//polyRegressionTest();
 
 	World* W = newWorld(3200.f, 1200.f);
 
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
 
 	Vertex *grab=NULL;
 	Vertex *grabEl=NULL;
-	Elastic* Elastic = NULL;
+	Elastic* Elastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
 	Vertex* Mouse = newVertex();
 
 	// Start the game loop
@@ -137,18 +137,18 @@ int main(int argc, char** argv)
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
 			{
 				grabEl = GetNearest(W, MouseX, MouseY);
-				Elastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
+				wdAddElastic(W, Elastic);
 			}
 
 			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E)
 				grabEl=NULL,
-				delElastic(Elastic), Elastic = NULL;
+				wdDelElastic(W, Elastic);
 		}
 
 		if (grab!=NULL)
 			vxSetPosition(grab, vec2(MouseX,MouseY));
 		if(grabEl != NULL)
-		vxSetPosition(Mouse, vec2(MouseX,MouseY));
+			vxSetPosition(Mouse, vec2(MouseX,MouseY));
 
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
@@ -163,19 +163,19 @@ int main(int argc, char** argv)
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		//glClear(GL_DEPTH_BUFFER_BIT);
-		
+
 		//On prepare la projection
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		
+
 		// Test Viewport : Minimap !
 		glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
 		glLoadIdentity();
 		glOrtho(0.0, WindowWidth, WindowHeight, 0.0, 0.0, 100.0);
 
-		
 
-		
+
+
 		for(ViewPort = 0; ViewPort < 2; ViewPort++)
 		{
 			if(ViewPort == 0)
@@ -184,16 +184,17 @@ int main(int argc, char** argv)
 				glMatrixMode(GL_PROJECTION);
 				glLoadIdentity();
 				glOrtho(0.f+ViewX, WindowWidth+ViewX, WindowHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
-				
+
 				wdApplyForce(W, vec2(0.f, 0.6f));
-				if(Elastic != NULL) elasticResolve(Elastic);
-				
+				//if(Elastic != NULL) elasticResolve(Elastic);
+
 				wdResolveVextex(W);
 				angResolve(&A);
-				
+
 				for(i=0; i<10; i++)
 				{
 					wdResolveRigid(W);
+					wdResolveElastic(W);
 					//lnResolve(&L);
 					wdHandleCollision(W, i==0);
 				}
@@ -215,7 +216,7 @@ int main(int argc, char** argv)
 				glEnd();
 				glDisable(GL_LINE_STIPPLE);
 			}
-			
+
 			if(grabEl != NULL)
 			{
 				glBegin(GL_LINES);
@@ -223,16 +224,16 @@ int main(int argc, char** argv)
 				glVertex2f(vxGetPosition(elasticGetV2(Elastic)).x, vxGetPosition(elasticGetV2(Elastic)).y);
 				glEnd();
 			}
-			
+
 			glDrawWorld(W);
-			
+
 			//Une regle
 			glColor3f(0.f, 0.f, 1.f);
 			glBegin(GL_LINES);
 			glVertex2f(0.f,MouseY);
 			glVertex2f(W->Width,MouseY);
 			glEnd();
-			
+
 			glBegin(GL_LINES);
 			for (float i=0.f; i<W->Width; i+=10.f)
 			{
@@ -245,12 +246,12 @@ int main(int argc, char** argv)
 					glVertex2f(i,MouseY-2.5f);
 			}
 			glEnd();
-			
+
 			glBegin(GL_LINES);
 			glVertex2f(MouseX, 0.f);
 			glVertex2f(MouseX, W->Height);
 			glEnd();
-			
+
 			glBegin(GL_LINES);
 			for (float i=0.f; i<W->Height; i+=10.f)
 			{

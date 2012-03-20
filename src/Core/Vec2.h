@@ -86,7 +86,7 @@ Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R);
 
 /** @brief Test de régression de Vec2
 **/
-void vec2TestRegression(void);
+void vec2RegressionTest(void);
 
 /** @}
 **/

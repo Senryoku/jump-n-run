@@ -81,7 +81,7 @@ void vxResolve(Vertex* V, float prevdt, float dt)
 	vxSetAcceleration(V, vec2(0.f, 0.f));
 }
 
-void vxTestRegression(void)
+void vxRegressionTest(void)
 {
 	Vertex* V = newVertex();
 	int i;

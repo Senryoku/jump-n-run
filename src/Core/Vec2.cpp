@@ -83,7 +83,7 @@ Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R)
 	return vec2(cosR*V.x-sinR*V.y + Origin.x, sinR*V.x+cosR*V.y + Origin.y);
 }
 
-void vec2TestRegression(void)
+void vec2RegressionTest(void)
 {
 	Vec2 V1;
 	Vec2 V2;

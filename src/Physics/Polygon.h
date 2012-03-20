@@ -169,7 +169,7 @@ Vec2 polyGetSpeed(Polygon* P);
  *
  * Fait des tests...
 **/
-void polyTestRegression();
+void polyRegressionTest();
 
 /** @}
 **/

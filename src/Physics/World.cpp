@@ -36,6 +36,31 @@ void wdAddRigid(World* W, Rigid* R)
 	lstAdd(&W->Rigids, R);
 }
 
+void wdAddElastic(World* W, Elastic* E)
+{
+	lstAdd(&W->Elastics, E);
+}
+
+void wdDelVertex(World* W, Vertex* V)
+{
+	lstDel(&W->Vertices, V);
+}
+
+void wdDelRigid(World* W, Rigid* R)
+{
+	lstDel(&W->Rigids, R);
+}
+
+void wdDelElastic(World* W, Elastic* E)
+{
+	lstDel(&W->Elastics, E);
+}
+
+void wdDelVertex(World* W, Polygon* P)
+{
+	lstDel(&W->Polygons, P);
+}
+
 void wdApplyForce(World* W, Vec2 Force)
 {
 	Node* it = lstFirst(&W->Vertices);
@@ -49,9 +74,9 @@ void wdResolveVextex(World* W)
 	Vec2 curPos;
 	Vec2 newPos;
 	Node* it = lstFirst(&W->Vertices);
-	
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)) W->dt=0.2f; else W->dt=1.f;
-	
+
 	while(!nodeEnd(it))
 	{
 		vxResolve((Vertex*) nodeGetData(it), W->prevdt, W->dt);
@@ -108,6 +133,17 @@ void wdResolveRigid(World* W)
         }
 }
 
+void wdResolveElastic(World* W)
+{
+        unsigned int i;
+        Node* it = lstFirst(&W->Elastics);
+
+        while(!nodeEnd(it))
+        {
+                elasticResolve((Elastic*) nodeGetData(it));
+                it = nodeGetNext(it);
+        }
+}
 
 void wdHandleCollision(World* W, Bool DebugDraw)
 {
@@ -190,7 +226,7 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 							vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
 																		   CorrectionFactor*PositionOnEdge*0.5f));
 							//polySetSpeed(Info.P1, vec2Prod(polyGetSpeed(Info.P1), 0.5f));
-						
+
 
 						}
 					}
@@ -202,15 +238,15 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 
 void wdFree(World *W)
 {
-	/*while (!lstEmpty(&W->Circles))
-	{
-		delCircle((Circle*) nodeGetData(lstFirst(&W->Circles)));
-		lstRem(&W->Circles, lstFirst(&W->Circles));
-	}*/
 	while (!lstEmpty(&W->Polygons))
 	{
 		delPolygon((Polygon*) nodeGetData(lstFirst(&W->Polygons)));
 		lstRem(&W->Polygons, lstFirst(&W->Polygons));
+	}
+	while (!lstEmpty(&W->Elastics))
+	{
+		delElastic((Elastic*) nodeGetData(lstFirst(&W->Elastics)));
+		lstRem(&W->Elastics, lstFirst(&W->Elastics));
 	}
 	while (!lstEmpty(&W->Rigids))
 	{

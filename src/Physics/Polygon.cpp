@@ -292,7 +292,7 @@ Vec2 polyGetSpeed(Polygon* P)
 	return vec2Sub(((Vertex*)daGet(&P->Vertices, 0))->Position, ((Vertex*)daGet(&P->Vertices, 0))->OldPos);
 }
 
-void polyTestRegression()
+void polyRegressionTest()
 {
 	printf("\n === Debut du test de regression de Polygon === \n\n");
 	unsigned int i;
