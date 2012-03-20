@@ -2,9 +2,10 @@
 #define _WORLD_H_
 
 #include "Core/List.h"
-#include "Physics/Vertex.h"
-#include "Physics/Rigid.h"
-#include "Physics/Polygon.h"
+#include "Vertex.h"
+#include "Rigid.h"
+#include "Polygon.h"
+#include "Elastic.h"
 
 /** @defgroup World
  *

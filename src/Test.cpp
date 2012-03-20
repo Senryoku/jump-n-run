@@ -1,6 +1,6 @@
 #include <Physics/Physics.h>
 #include <Physics/Angular.h>
-#include <Physics/Lenght.h>
+#include <Physics/Length.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
@@ -106,8 +106,9 @@ int main(int argc, char** argv)
 
 	Vertex *grab=NULL;
 	Vertex *grabEl=NULL;
-	Elastic* Elastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
 	Vertex* Mouse = newVertex();
+	Elastic* Elastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
+	
 
 	// Start the game loop
 	while (window.isOpen())
@@ -137,6 +138,7 @@ int main(int argc, char** argv)
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
 			{
 				grabEl = GetNearest(W, MouseX, MouseY);
+				Elastic->V1=grabEl;
 				wdAddElastic(W, Elastic);
 			}
 
@@ -191,7 +193,7 @@ int main(int argc, char** argv)
 				wdResolveVextex(W);
 				angResolve(&A);
 
-				for(i=0; i<10; i++)
+				for(i=0; i<1; i++)
 				{
 					wdResolveRigid(W);
 					wdResolveElastic(W);
