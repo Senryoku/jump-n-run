@@ -76,7 +76,7 @@ Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4);
  *
  * @param L Liste de Vertices
 **/
-Polygon* polyRectangle(L);
+Polygon* polyRectangleL(List L);
 
 /** @brief Ajoute une contrainte interne au polygone
  *

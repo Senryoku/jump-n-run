@@ -157,6 +157,7 @@ int main(int argc, char** argv)
 			{
 				tmpVertex = newVertex();
 				vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
+				printf("vx pos: %f, %f \n", vxGetPosition(tmpVertex).x, vxGetPosition(tmpVertex).y);
 				vxSetFixe(tmpVertex, 1);
 				lstAdd(&L, tmpVertex);
 			}
@@ -192,11 +193,18 @@ int main(int argc, char** argv)
 				if(lstCount(&L2) > 0)
 				{
 					wdAddVxFromList(W, L2);
+					
 					if(lstCount(&L2) == 4)
 					{
-						tmpPoly = newRectangleL(L2);
-					} else {
+						tmpPoly = polyRectangleL(L2);
+					}
+					else if (lstCount(&L2) <= 3)
+					{
 						tmpPoly = newPolygonL(L2);
+					}
+					else
+					{
+						tmpPoly = polyNGone(L2);
 					}
 					polySetFixe(tmpPoly, 0);
 					wdAddPolygon(W, tmpPoly);
@@ -251,7 +259,7 @@ int main(int argc, char** argv)
 				wdResolveVextex(W);
 				angResolve(&A);
 
-				for(i=0; i<1; i++)
+				for(i=0; i<4; i++)
 				{
 					wdResolveRigid(W);
 					wdResolveElastic(W);

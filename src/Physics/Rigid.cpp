@@ -11,6 +11,9 @@ void rdInit(Rigid* R, Vertex* V1, Vertex* V2, float L)
 {
 	R->V1 = V1;
 	R->V2 = V2;
+	/* Si la longueur n'est pas valide, on la calcule */
+	if(L <= 0.f)
+		L = vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 	R->Length = L;
 }
 

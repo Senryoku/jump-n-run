@@ -37,7 +37,6 @@ Polygon* newPolygonL(List L)
 	unsigned int i = 0, nbVx = lstCount(&L);
 	Polygon* newPoly = (Polygon*) malloc(sizeof(Polygon));
 	Node* it = lstFirst(&L);
-
 	/*Initialisation des Dynamic Arrays */
 	newPoly->Rigids = da();
 	newPoly->Vertices = da();
@@ -52,6 +51,7 @@ Polygon* newPolygonL(List L)
 		daAdd(&newPoly->Vertices, (Vertex*) nodeGetData(it));
 		it = nodeGetNext(it);
 	}
+	
 	/* Construit les limites, i.e. Créé un nouveau Rigid à partir de
 	deux Vertices de la liste et la distance les séparant, puis l'ajoute
 	 à la liste */
@@ -74,7 +74,7 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 	P->InternalRigids = da();
 	daReserve(&P->Rigids, nbVx);
 	daReserve(&P->Vertices, nbVx);
-	newPoly->Center = NULL;
+	P->Center = NULL;
 
 	va_start(ap, nbVx);
 	/* Ajoute les Vertices */
@@ -117,10 +117,6 @@ void delPolygon(Polygon* P)
 
 void polyAddInternal(Polygon* P, unsigned int V1, unsigned int V2, float Length)
 {
-	/* Si la longueur n'est pas valide, on la calcule */
-	if(Length <= 0)
-		Length = vec2Length(vec2Sub(vxGetPosition((Vertex*)daGet(&P->Vertices, V1)),
-									vxGetPosition((Vertex*)daGet(&P->Vertices, V2))));
 	daAdd(&P->InternalRigids, newRigid((Vertex*)daGet(&P->Vertices, V1),
 										(Vertex*)daGet(&P->Vertices, V2),
 										Length));
@@ -149,9 +145,8 @@ Polygon* polyNGone(List L)
 	newNGone->Center = newVertex();
 	vxSetPosition(newNGone->Center, polyGetCenter(newNGone));
 	for(i = 0; i < daGetSize(&newNGone->Vertices); i++)
-		daAdd(&P->InternalRigids, newRigid((Vertex*)daGet(&P->Vertices, i),
-										Center,
-										-1));
+		daAdd(&newNGone->InternalRigids, newRigid((Vertex*)daGet(&newNGone->Vertices, i),
+										newNGone->Center, -1.f));
 	return newNGone;
 }
 
