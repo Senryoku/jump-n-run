@@ -11,8 +11,8 @@ Vertex* GetNearest(World* W, float MouseX, float MouseY);
 int main(int argc, char** argv)
 {
 	unsigned int i, ViewPort;
-	float ViewX = 0.f, ViewY = 0.f, ViewSpeed = 15.f,
-		WindowWidth = 800.f, WindowHeight = 600.f, MouseX, MouseY;
+	float ViewX = 0.f, ViewY = 0.f, ViewSpeed,
+		WindowWidth = 800.f, WindowHeight = 600.f, OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY;
 
 	//vec2RegressionTest();
 
@@ -142,8 +142,11 @@ int main(int argc, char** argv)
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
 			{
 				grabEl = wdGetNearest(W, MouseX, MouseY);
-				GrabElastic->V1=grabEl;
-				wdAddElastic(W, GrabElastic);
+				if(grabEl != NULL)
+				{
+					GrabElastic->V1=grabEl;
+					wdAddElastic(W, GrabElastic);
+				}
 			}
 
 			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E)
@@ -175,8 +178,11 @@ int main(int argc, char** argv)
 			if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
 			{
 				grabEl = wdGetNearest(W, MouseX, MouseY);
-				GrabElastic->V1=grabEl;
-				wdAddElastic(W, GrabElastic);
+				if(grabEl != NULL)
+				{
+					GrabElastic->V1 = grabEl;
+					wdAddElastic(W, GrabElastic);
+				}
 			}
 
 			if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
@@ -295,7 +301,9 @@ int main(int argc, char** argv)
 		if(grabEl != NULL)
 			vxSetPosition(Mouse, vec2(MouseX,MouseY));
 
+		/* Déplacement de la vue */
 
+		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 			ViewY-=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -304,6 +312,12 @@ int main(int argc, char** argv)
 			ViewX-=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			ViewX+=ViewSpeed;
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+		{
+			ViewX += roundf(OldMouseX - MouseX)*((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? 1.5f : 1);
+			ViewY += roundf(OldMouseY - MouseY)*((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? 1.5f : 1);
+		}
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
@@ -418,6 +432,9 @@ int main(int argc, char** argv)
 			glEnd();
 
 		}
+
+		OldMouseX = MouseX;
+		OldMouseY = MouseY;
 
 		// Update the window
 		window.display();
