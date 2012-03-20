@@ -14,6 +14,7 @@ Polygon* newPolygon(unsigned int nbVx, ...)
 	newPoly->InternalRigids = da();
 	daReserve(&newPoly->Rigids, nbVx);
 	daReserve(&newPoly->Vertices, nbVx);
+	newPoly->Center = NULL;
 
 	va_start(ap, nbVx);
 	/* Ajoute les Vertices */
@@ -43,6 +44,7 @@ Polygon* newPolygonL(List L)
 	newPoly->InternalRigids = da();
 	daReserve(&newPoly->Rigids, nbVx);
 	daReserve(&newPoly->Vertices, nbVx);
+	newPoly->Center = NULL;
 
 	/* Ajoute les Vertices */
 	while(!nodeEnd(it))
@@ -72,6 +74,7 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 	P->InternalRigids = da();
 	daReserve(&P->Rigids, nbVx);
 	daReserve(&P->Vertices, nbVx);
+	newPoly->Center = NULL;
 
 	va_start(ap, nbVx);
 	/* Ajoute les Vertices */
@@ -107,6 +110,8 @@ void delPolygon(Polygon* P)
 	daFree(&P->Vertices);
 	daFree(&P->InternalRigids);
 
+	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL;
+
 	free(P);
 }
 
@@ -135,6 +140,19 @@ Polygon* polyRectangleL(List L)
 	polyAddInternal(newRectangle, 0, 2, -1);
 	polyAddInternal(newRectangle, 1, 3, -1);
 	return newRectangle;
+}
+
+Polygon* polyNGone(List L)
+{
+	unsigned int i;
+	Polygon* newNGone = newPolygonL(L);
+	newNGone->Center = newVertex();
+	vxSetPosition(newNGone->Center, polyGetCenter(newNGone));
+	for(i = 0; i < daGetSize(&newNGone->Vertices); i++)
+		daAdd(&P->InternalRigids, newRigid((Vertex*)daGet(&P->Vertices, i),
+										Center,
+										-1));
+	return newNGone;
 }
 
 void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis)

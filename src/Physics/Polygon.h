@@ -30,6 +30,7 @@ typedef struct
 	DynArr Rigids; /**< Limites du polygon, générées automatiquement **/
 	DynArr InternalRigids; /**< Contraintes internes **/
 	Bool Fixe; /**< Indique que tout les Vertices sont fixes **/
+	Vertex* Center; /**< Centre, utile pour les polygones de plus de 4 côtés **/
 } Polygon;
 
 /** @brief Constructeur
@@ -85,6 +86,13 @@ Polygon* polyRectangle(L);
  * @param Length Longueur de la contrainte, <= 0 pour une longueur automatique
 **/
 void polyAddInternal(Polygon* P, unsigned int V1, unsigned int V2, float Length);
+
+/** @brief Créé un nouveau N-Gone avec des contraintes internes
+ *
+ * Seul type de polygon à posséder un "centre"
+ * @param L List de Vertices
+**/
+Polygon* polyNGone(List L);
 
 /** @brief Structure décrivant une collision
  *
