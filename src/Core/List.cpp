@@ -48,22 +48,7 @@ void lstDel(List* L, Elem E)
 	}
 	if(!nodeEnd(tmpNode))
 	{
-		if(nodeGetPrev(tmpNode) == NULL)
-		{
-			L->First = nodeGetNext(tmpNode);
-		} else {
-			nodeSetNext(nodeGetPrev(tmpNode), nodeGetNext(tmpNode));
-		}
-
-		if(nodeGetNext(tmpNode) == NULL)
-		{
-			L->Last = nodeGetPrev(tmpNode);
-		} else {
-			nodeSetPrev(nodeGetNext(tmpNode), nodeGetPrev(tmpNode));
-		}
-
-		delNode(tmpNode);
-		L->Count--;
+		lstRem(L, tmpNode);
 	}
 }
 

@@ -204,6 +204,9 @@ void wdHandleCollision(World* W, Bool DebugDraw)
 								PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
 							- PosE1.y)/(PosE2.y - PosE1.y);
 
+							/* Cas particulier ou la détection de collision n'est pas valide */
+							if(PositionOnEdge > 1.f || PositionOnEdge < 0.f) it2 = nodeGetNext(it2); continue;
+
 							/* DEBUG ! */
 							if (DebugDraw)
 							{
