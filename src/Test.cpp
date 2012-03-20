@@ -192,7 +192,12 @@ int main(int argc, char** argv)
 				if(lstCount(&L2) > 0)
 				{
 					wdAddVxFromList(W, L2);
-					tmpPoly = newPolygonL(L2);
+					if(lstCount(&L2) == 4)
+					{
+						tmpPoly = newRectangleL(L2);
+					} else {
+						tmpPoly = newPolygonL(L2);
+					}
 					polySetFixe(tmpPoly, 0);
 					wdAddPolygon(W, tmpPoly);
 				}

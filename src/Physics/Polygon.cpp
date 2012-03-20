@@ -129,6 +129,14 @@ Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4)
 	return newRectangle;
 }
 
+Polygon* polyRectangleL(List L)
+{
+	Polygon* newRectangle = newPolygonL(L);
+	polyAddInternal(newRectangle, 0, 2, -1);
+	polyAddInternal(newRectangle, 1, 3, -1);
+	return newRectangle;
+}
+
 void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis)
 {
 	unsigned int i;

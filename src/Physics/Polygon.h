@@ -71,6 +71,12 @@ void delPolygon(Polygon* P);
 **/
 Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4);
 
+/** @brief Construit un rectangle, contraintes internes comprises à partir d'une liste
+ *
+ * @param L Liste de Vertices
+**/
+Polygon* polyRectangle(L);
+
 /** @brief Ajoute une contrainte interne au polygone
  *
  * @param P Polygon à modifier
