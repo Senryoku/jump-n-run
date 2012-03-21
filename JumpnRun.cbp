@@ -52,8 +52,6 @@
 		<Unit filename="src\Core\Tools.h" />
 		<Unit filename="src\Core\Vec2.cpp" />
 		<Unit filename="src\Core\Vec2.h" />
-		<Unit filename="src\LevelEditor\Level.h" />
-		<Unit filename="src\LevelEditor\LevelEditor.h" />
 		<Unit filename="src\Level\Level.cpp" />
 		<Unit filename="src\Level\Level.h" />
 		<Unit filename="src\Level\LevelEditor.cpp" />
