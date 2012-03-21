@@ -112,6 +112,7 @@ int main(int argc, char** argv)
 	Vertex *grabEl=NULL;
 	Vertex* Mouse = newVertex();
 	Vertex* tmpVertex = NULL;
+	Vertex *tmpElastic1 = NULL, *tmpElastic2 = NULL, *tmpRigid1 = NULL, *tmpRigid2 = NULL;
 	Polygon* tmpPoly = NULL;
 	Elastic* GrabElastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
 	List L, L2;
@@ -177,6 +178,25 @@ int main(int argc, char** argv)
 					vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
 					vxSetFixe(tmpVertex, 1);
 					lstAdd(&L2, tmpVertex);
+				} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+					if(tmpElastic1 == NULL)
+						tmpElastic1 = wdGetNearest(W, MouseX, MouseY);
+					else if(tmpElastic2 == NULL)
+						tmpElastic2 = wdGetNearest(W, MouseX, MouseY);
+					else {
+						wdAddElastic(W, newElastic(tmpElastic1, tmpElastic2,
+													-1.f, 0.5f));
+						tmpElastic1 = tmpElastic2 = NULL;
+					}
+				} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
+					if(tmpRigid1 == NULL)
+						tmpRigid1 = wdGetNearest(W, MouseX, MouseY);
+					else if(tmpRigid2 == NULL)
+						tmpRigid2 = wdGetNearest(W, MouseX, MouseY);
+					else {
+						wdAddRigid(W, newRigid(tmpRigid1, tmpRigid2, -1.f));
+						tmpRigid1 = tmpRigid2 = NULL;
+					}
 				} else {
 					grab = wdGetNearest(W, MouseX, MouseY);
 				}
@@ -511,6 +531,26 @@ void glDrawWorld(World* W)
 		it = nodeGetNext(it);
 		glEnd();
 	}
+
+	glBegin(GL_LINES);
+
+	glColor3f(1.f, 0.f, 0.f);
+	lstFirst(&W->Elastics);
+	while(!nodeEnd(it))
+	{
+		glVertex2f(vxGetPosition(elasticGetV1((Elastic*) nodeGetData(it))).x, vxGetPosition(elasticGetV1((Elastic*) nodeGetData(it))).y);
+		glVertex2f(vxGetPosition(elasticGetV2((Elastic*) nodeGetData(it))).x, vxGetPosition(elasticGetV2((Elastic*) nodeGetData(it))).y);
+	}
+
+	glColor3f(0.f, 1.f, 0.f);
+	lstFirst(&W->Rigids);
+	while(!nodeEnd(it))
+	{
+		glVertex2f(vxGetPosition(rdGetV1((Rigid*) nodeGetData(it))).x, vxGetPosition(rdGetV1((Rigid*) nodeGetData(it))).y);
+		glVertex2f(vxGetPosition(rdGetV2((Rigid*) nodeGetData(it))).x, vxGetPosition(rdGetV2((Rigid*) nodeGetData(it))).y);
+	}
+
+	glEnd();
 
 	it = lstFirst(&W->Polygons);
 	while(!nodeEnd(it))

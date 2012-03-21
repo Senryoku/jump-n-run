@@ -11,6 +11,8 @@ void elasticInit(Elastic* E, Vertex* V1, Vertex* V2, float L, float S)
 {
 	E->V1 = V1;
 	E->V2 = V2;
+	if(L <= 0.f)
+		L = vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 	E->Length = L;
 	E->Spring = S;
 }
