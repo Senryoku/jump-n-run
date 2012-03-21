@@ -139,186 +139,213 @@ int main(int argc, char** argv)
 
 			/* Prémices de ce que seront les fonctions de LevelEditor */
 
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G)
+			if(event.type == sf::Event::MouseButtonPressed)
 			{
-				grab=wdGetNearest(W, MouseX, MouseY);
-			}
-
-			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::G)
-				grab=NULL;
-
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::E)
-			{
-				grabEl = wdGetNearest(W, MouseX, MouseY);
-				if(grabEl != NULL)
+				switch (event.mouseButton.button)
 				{
-					GrabElastic->V1=grabEl;
-					wdAddElastic(W, GrabElastic);
-				}
-			}
-
-			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E)
-				grabEl=NULL,
-				wdDelElastic(W, GrabElastic);
-
-			/* Création de polygones statiques */
-			if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::P || event.key.code == sf::Keyboard::Num1))
-				lstInit(&L);
-
-			if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-			{
-				if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
-				{
-					tmpVertex = newVertex();
-					vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
-					vxSetFixe(tmpVertex, 1);
-					lstAdd(&L, tmpVertex);
-				} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
-					tmpVertex = newVertex();
-					vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
-					vxSetFixe(tmpVertex, 1);
-					lstAdd(&L2, tmpVertex);
-				} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
-					if(tmpElastic1 == NULL)
-						tmpElastic1 = wdGetNearest(W, MouseX, MouseY);
-					else if(tmpElastic2 == NULL)
-						tmpElastic2 = wdGetNearest(W, MouseX, MouseY);
-					else {
-						wdAddElastic(W, newElastic(tmpElastic1, tmpElastic2,
-													-1.f, 0.5f));
-						tmpElastic1 = tmpElastic2 = NULL;
-					}
-				} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
-					if(tmpRigid1 == NULL)
-						tmpRigid1 = wdGetNearest(W, MouseX, MouseY);
-					else if(tmpRigid2 == NULL)
-						tmpRigid2 = wdGetNearest(W, MouseX, MouseY);
-					else {
-						wdAddRigid(W, newRigid(tmpRigid1, tmpRigid2, -1.f));
-						tmpRigid1 = tmpRigid2 = NULL;
-					}
-				} else {
-					grab = wdGetNearest(W, MouseX, MouseY);
-				}
-			}
-
-			if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
-			{
-				grabEl = wdGetNearest(W, MouseX, MouseY);
-				if(grabEl != NULL)
-				{
-					GrabElastic->V1 = grabEl;
-					wdAddElastic(W, GrabElastic);
-				}
-			}
-
-			if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-			{
-				grab = NULL;
-			}
-
-			if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Right)
-			{
-				grabEl = NULL;
-				wdDelElastic(W, GrabElastic);
-			}
-
-			if (event.type == sf::Event::KeyReleased && (event.key.code == sf::Keyboard::P || event.key.code == sf::Keyboard::Num1))
-			{
-				if(lstCount(&L) > 0)
-				{
-					wdAddVxFromList(W, L);
-					tmpPoly = newPolygonL(L);
-					polySetFixe(tmpPoly, 1);
-					wdAddPolygon(W, tmpPoly);
-				}
-				lstFree(&L);
-			}
-
-
-			/* Création de polygones dynamiques */
-			if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::O || event.key.code == sf::Keyboard::Num2))
-				lstInit(&L2);
-
-			if (event.type == sf::Event::KeyReleased && (event.key.code == sf::Keyboard::O || event.key.code == sf::Keyboard::Num2))
-			{
-				if(lstCount(&L2) > 0)
-				{
-					wdAddVxFromList(W, L2);
-
-					if(lstCount(&L2) == 4)
-					{
-						tmpPoly = polyRectangleL(L2);
-					}
-					else if (lstCount(&L2) <= 3)
-					{
-						tmpPoly = newPolygonL(L2);
-					}
-					else
-					{
-						tmpPoly = polyNGone(L2);
-					}
-					polySetFixe(tmpPoly, 0);
-					wdAddPolygon(W, tmpPoly);
-				}
-				lstFree(&L2);
-			}
-
-			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F)
-				tmpVertex = wdGetNearest(W, MouseX, MouseY),
-				vxSetFixe(tmpVertex, !vxIsFixe(tmpVertex));
-
-			if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::C)
-				tmpPoly = wdGetNearestPoly(W, MouseX, MouseY),
-				polySetFixe(tmpPoly, !polyIsFixe(tmpPoly));
-
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Delete && !event.key.shift)
-			{
-				/* lvledDelPoly() */
-				tmpPoly = wdGetNearestPoly(W, MouseX, MouseY);
-				if(tmpPoly != NULL)
-				{
-					wdDelPolygon(W, tmpPoly);
-					delPolygon(tmpPoly);
-				}
-			}
-
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Delete && event.key.shift)
-			{
-				/* lvledDelVertex() */
-				Bool IsLonely = 1;
-				tmpVertex = wdGetNearest(W, MouseX, MouseY);
-				if(tmpVertex != NULL)
-				{
-					/* On s'assure que le Vertex ne fait partie d'aucune structure plus grande */
-					Node* it = lstFirst(&W->Rigids);
-					while(!nodeEnd(it))
-					{
-						if(rdGetV1((Rigid*) nodeGetData(it)) == tmpVertex || rdGetV2((Rigid*) nodeGetData(it)) == tmpVertex)
-							IsLonely = 0;
-						it = nodeGetNext(it);
-					}
-					it = lstFirst(&W->Elastics);
-					while(!nodeEnd(it))
-					{
-						if(elasticGetV1((Elastic*) nodeGetData(it)) == tmpVertex || elasticGetV2((Elastic*) nodeGetData(it)) == tmpVertex)
-							IsLonely = 0;
-						it = nodeGetNext(it);
-					}
-					it = lstFirst(&W->Polygons);
-					while(!nodeEnd(it))
-					{
-						for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->Vertices); i++)
-						{
-							if(daGet(&((Polygon*) nodeGetData(it))->Vertices, i) == tmpVertex)
-								IsLonely = 0;
+					case sf::Mouse::Left :
+						/* Création d'un polygone Fixe */
+						if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+							tmpVertex = newVertex();
+							vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
+							vxSetFixe(tmpVertex, 1);
+							lstAdd(&L, tmpVertex);
+						/* Création d'un polygone Dynamique */
+						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+							tmpVertex = newVertex();
+							vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
+							vxSetFixe(tmpVertex, 1);
+							lstAdd(&L2, tmpVertex);
+						/* Ajout d'Elastic */
+						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+							if(tmpElastic1 == NULL) {
+								tmpElastic1 = wdGetNearest(W, MouseX, MouseY);
+							} else if(tmpElastic2 == NULL) {
+								tmpElastic2 = wdGetNearest(W, MouseX, MouseY);
+							}
+						/* Ajout de Rigid */
+						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
+							if(tmpRigid1 == NULL)
+								tmpRigid1 = wdGetNearest(W, MouseX, MouseY);
+							else if(tmpRigid2 == NULL)
+								tmpRigid2 = wdGetNearest(W, MouseX, MouseY);
+						} else {
+							grab = wdGetNearest(W, MouseX, MouseY);
 						}
-						it = nodeGetNext(it);
-					}
+						break;
+					case sf::Mouse::Right :
+						grabEl = wdGetNearest(W, MouseX, MouseY);
+						if(grabEl != NULL)
+						{
+							GrabElastic->V1 = grabEl;
+							wdAddElastic(W, GrabElastic);
+						}
+						break;
+					default :
+						break;
+				}
+			}
 
-					if(IsLonely)
-						wdDelVertex(W, tmpVertex),
-						delVertex(tmpVertex);
+			if(event.type == sf::Event::MouseButtonReleased)
+			{
+				switch (event.mouseButton.button)
+				{
+					case sf::Mouse::Left :
+						grab = NULL;
+						break;
+					case sf::Mouse::Right :
+						grabEl = NULL;
+						wdDelElastic(W, GrabElastic);
+						break;
+					default :
+						break;
+				}
+			}
+
+			if (event.type == sf::Event::KeyPressed)
+			{
+				switch(event.key.code)
+				{
+					case sf::Keyboard::G :
+						grab = wdGetNearest(W, MouseX, MouseY);
+						break;
+					case sf::Keyboard::E :
+						grabEl = wdGetNearest(W, MouseX, MouseY);
+						if(grabEl != NULL)
+						{
+							GrabElastic->V1=grabEl;
+							wdAddElastic(W, GrabElastic);
+						}
+						break;
+					case sf::Keyboard::Delete :
+						if(!event.key.shift)
+						{
+							/* lvledDelPoly() */
+							tmpPoly = wdGetNearestPoly(W, MouseX, MouseY);
+							if(tmpPoly != NULL)
+							{
+								wdDelPolygon(W, tmpPoly);
+								delPolygon(tmpPoly);
+							}
+						} else {
+							/* lvledDelVertex() */
+							Bool IsLonely = 1;
+							tmpVertex = wdGetNearest(W, MouseX, MouseY);
+							if(tmpVertex != NULL)
+							{
+								/* On s'assure que le Vertex ne fait partie d'aucune structure plus grande */
+								Node* it = lstFirst(&W->Rigids);
+								while(!nodeEnd(it))
+								{
+									if(rdGetV1((Rigid*) nodeGetData(it)) == tmpVertex || rdGetV2((Rigid*) nodeGetData(it)) == tmpVertex)
+										IsLonely = 0;
+									it = nodeGetNext(it);
+								}
+								it = lstFirst(&W->Elastics);
+								while(!nodeEnd(it))
+								{
+									if(elasticGetV1((Elastic*) nodeGetData(it)) == tmpVertex || elasticGetV2((Elastic*) nodeGetData(it)) == tmpVertex)
+										IsLonely = 0;
+									it = nodeGetNext(it);
+								}
+								it = lstFirst(&W->Polygons);
+								while(!nodeEnd(it))
+								{
+									for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->Vertices); i++)
+									{
+										if(daGet(&((Polygon*) nodeGetData(it))->Vertices, i) == tmpVertex)
+											IsLonely = 0;
+									}
+									it = nodeGetNext(it);
+								}
+
+								if(IsLonely)
+									wdDelVertex(W, tmpVertex),
+									delVertex(tmpVertex);
+							}
+						}
+						break;
+					case sf::Keyboard::P :
+					case sf::Keyboard::Num1 :
+						lstInit(&L);
+						break;
+					case sf::Keyboard::O :
+					case sf::Keyboard::Num2 :
+						lstInit(&L2);
+						break;
+					default:
+						break;
+				}
+			}
+
+			if (event.type == sf::Event::KeyReleased)
+			{
+				switch(event.key.code)
+				{
+					case sf::Keyboard::G :
+						grab = NULL;
+						break;
+					case sf::Keyboard::E :
+						grabEl=NULL;
+						wdDelElastic(W, GrabElastic);
+						break;
+					case sf::Keyboard::F :
+						/* lvledSetFixe */
+						tmpVertex = wdGetNearest(W, MouseX, MouseY);
+						vxSetFixe(tmpVertex, !vxIsFixe(tmpVertex));
+						break;
+					case sf::Keyboard::C :
+						/* lvledSetFixePoly */
+						tmpPoly = wdGetNearestPoly(W, MouseX, MouseY),
+						polySetFixe(tmpPoly, !polyIsFixe(tmpPoly));
+						break;
+					case sf::Keyboard::O :
+					case sf::Keyboard::Num2 :
+						if(lstCount(&L2) > 0)
+						{
+							wdAddVxFromList(W, L2);
+
+							if(lstCount(&L2) == 4)
+							{
+								tmpPoly = polyRectangleL(L2);
+							}
+							else if (lstCount(&L2) <= 3)
+							{
+								tmpPoly = newPolygonL(L2);
+							}
+							else
+							{
+								tmpPoly = polyNGone(L2);
+							}
+							polySetFixe(tmpPoly, 0);
+							wdAddPolygon(W, tmpPoly);
+						}
+						lstFree(&L2);
+						break;
+					case sf::Keyboard::P :
+					case sf::Keyboard::Num1 :
+						if(lstCount(&L) > 0)
+						{
+							wdAddVxFromList(W, L);
+							tmpPoly = newPolygonL(L);
+							polySetFixe(tmpPoly, 1);
+							wdAddPolygon(W, tmpPoly);
+						}
+						lstFree(&L);
+						break;
+					case sf::Keyboard::Num3 :
+							if(tmpElastic1 != NULL && tmpElastic2 != NULL && tmpElastic1 != tmpElastic2)
+								wdAddElastic(W, newElastic(tmpElastic1, tmpElastic2,
+														-1.f, 0.1f));
+							tmpElastic1 = tmpElastic2 = NULL;
+						break;
+					case sf::Keyboard::Num4 :
+						if(tmpRigid1 != NULL && tmpRigid2 != NULL)
+							wdAddRigid(W, newRigid(tmpRigid1, tmpRigid2, -1.f)),
+							tmpRigid1 = tmpRigid2 = NULL;
+						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -535,19 +562,21 @@ void glDrawWorld(World* W)
 	glBegin(GL_LINES);
 
 	glColor3f(1.f, 0.f, 0.f);
-	lstFirst(&W->Elastics);
+	it = lstFirst(&W->Elastics);
 	while(!nodeEnd(it))
 	{
 		glVertex2f(vxGetPosition(elasticGetV1((Elastic*) nodeGetData(it))).x, vxGetPosition(elasticGetV1((Elastic*) nodeGetData(it))).y);
 		glVertex2f(vxGetPosition(elasticGetV2((Elastic*) nodeGetData(it))).x, vxGetPosition(elasticGetV2((Elastic*) nodeGetData(it))).y);
+		it = nodeGetNext(it);
 	}
 
 	glColor3f(0.f, 1.f, 0.f);
-	lstFirst(&W->Rigids);
+	it = lstFirst(&W->Rigids);
 	while(!nodeEnd(it))
 	{
 		glVertex2f(vxGetPosition(rdGetV1((Rigid*) nodeGetData(it))).x, vxGetPosition(rdGetV1((Rigid*) nodeGetData(it))).y);
 		glVertex2f(vxGetPosition(rdGetV2((Rigid*) nodeGetData(it))).x, vxGetPosition(rdGetV2((Rigid*) nodeGetData(it))).y);
+		it = nodeGetNext(it);
 	}
 
 	glEnd();
