@@ -42,7 +42,7 @@ default :
 all : test dirs
 
 dirs : 
-ifeq ($(OS), Linux)
+ifeq ($(OS), Darwin)
 	@if [ ! -e  $(BIN) ] ; \
 	then \
 	echo "Creating directory $(BIN)" ; \
@@ -57,6 +57,11 @@ ifeq ($(OS), Linux)
 	then \
 	echo "Creating directory $(OBJ)Audio" ; \
 	mkdir $(OBJ)Audio ; \
+	fi ; \
+	if [ ! -e  $(OBJ)Level ] ; \
+	then \
+	echo "Creating directory $(OBJ)Level" ; \
+	mkdir $(OBJ)Level ; \
 	fi ; \
 	if [ ! -e  $(OBJ)Physics ] ; \
 	then \
@@ -120,12 +125,19 @@ info:
 MODULES = "Core/Vec2 Physics/Vertex Physics/Polygon"
 #À compléter encore avec une règle génerale selon cette liste de modules
 
-testvec2 : $(OBJ)Core/Vec2.o $(OBJ)testvec2.o
+testVec2 : $(OBJ)Core/Vec2.o $(OBJ)testVec2.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	valgrind --leak-check=full --show-reachable=yes --tool=memcheck ./$(BIN)testvec2
+	valgrind --leak-check=full --show-reachable=yes --tool=memcheck ./$(BIN)testVec2
 	
-$(OBJ)testvec2.o :
+$(OBJ)testVec2.o :
 	$(CXX) $(OPT) $(TESTS)TestVec2.cpp -c -o $@
+	
+testGrid : $(OBJ)Physics/Grid.o $(OBJ)testGrid.o $(OBJ)Core/List.o $(OBJ)Core/Node.o $(OBJ)Core/DynArr.o $(OBJ)Physics/Polygon.o $(OBJ)Physics/Rigid.o $(OBJ)Physics/Vertex.o $(OBJ)Core/Vec2.o
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind --leak-check=full --tool=memcheck ./$(BIN)testGrid
+	
+$(OBJ)testGrid.o :
+	$(CXX) $(OPT) $(TESTS)TestGrid.cpp -c -o $@
 
 
  

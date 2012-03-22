@@ -15,7 +15,7 @@ typedef struct
 
 } LevelEditor;
 
-void lvledInit();
+void lvledInit(LevelEditor *Led, float Width, float Height);
 
 // Fonctions de Manipulation/Vision
 void lvledGrab(LevelEditor *Led);

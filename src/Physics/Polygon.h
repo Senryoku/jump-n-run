@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "Core/Tools.h"
-#include "Core/DynArr.h"
+#include <Core/Tools.h>
+#include <Core/DynArr.h>
 #include <Core/List.h>
-#include "Physics/Rigid.h"
+#include "Rigid.h"
 
 /** @defgroup Polygon
  *

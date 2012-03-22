@@ -110,7 +110,7 @@ void delPolygon(Polygon* P)
 	daFree(&P->Vertices);
 	daFree(&P->InternalRigids);
 
-	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL;
+	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL, printf("Éliminéee!\n");
 
 	free(P);
 }
