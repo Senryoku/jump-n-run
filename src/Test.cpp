@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	lvledInit(&LvlEd, 3200.f, 1600.f);
 
 	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "window");
-	window.setFramerateLimit(60.f);
+	window.setFramerateLimit(30.f);
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
 
@@ -239,6 +239,7 @@ int main(int argc, char** argv)
 
 				wdApplyForce(lvlGetWorld(LvlEd.Lvl), vec2(0.f, 0.6f));
 				wdResolveVextex(lvlGetWorld(LvlEd.Lvl));
+				
 
 				for(i=0; i<4; i++)
 				{

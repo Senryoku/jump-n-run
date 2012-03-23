@@ -50,7 +50,7 @@ void sndmFree(SoundManager* SM);
  * @param File Adrsse du fichier
  * @return faux s'il y a eu une erreur
  */
-bool sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::string &File);
+bool sndmLoadSoundFile(SoundManager* SM, const char *Key, const char *File);
 
 /**
  * @brief Charge une musique en mémoire et l'ajoute avec une clé
@@ -59,7 +59,7 @@ bool sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::stri
  * @param File Adrsse du fichier
  * @return faux s'il y a eu une erreur
  */
-bool sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::string &File);
+bool sndmLoadMusicFile(SoundManager* SM, const char *Key, const char *File);
 
 /**
  * @brief Joue un son à une position donnée
@@ -67,14 +67,14 @@ bool sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::stri
  * @param Key Clé pour accéder au son
  * @param Position position où se trouve le son
  */
-void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position, float MinDist=200.f, float Attenuation=1.f);
+void sndmPlay(SoundManager* SM, const char *Key, const Vec2 &Position, float MinDist=200.f, float Attenuation=1.f);
 
 /**
  * @brief Joue un son sans position (non relatif au Listener)
  * @param SM SoundManager où s'effectue la fonction
  * @param Key Clé pour accéder au son
  */
-void sndmPlay(SoundManager* SM, const std::string &Key);
+void sndmPlay(SoundManager* SM, const char *Key);
 
 /**
  * @brief Joue une musique
@@ -82,7 +82,7 @@ void sndmPlay(SoundManager* SM, const std::string &Key);
  * @param Key Clé pour accéder au son
  * @param Loop looper la chanson ou pas
  */
-void sndmPlayMusic(SoundManager* SM, const std::string &Key, bool Loop=1);
+void sndmPlayMusic(SoundManager* SM, const char *Key, bool Loop=1);
 
 /**
  * @brief Change le volume d'une musique
@@ -90,7 +90,7 @@ void sndmPlayMusic(SoundManager* SM, const std::string &Key, bool Loop=1);
  * @param Key Clé pour accéder au son
  * @param Volume nouvel volume [0..100]
  */
-void sndmMusicSetVolume(SoundManager* SM, const std::string &Key, float Volume);
+void sndmMusicSetVolume(SoundManager* SM, const char *Key, float Volume);
 
 /**
  * @brief Change le pitch d'une musique
@@ -98,7 +98,7 @@ void sndmMusicSetVolume(SoundManager* SM, const std::string &Key, float Volume);
  * @param Key Clé pour accéder au son
  * @param pitch nouvel pitch normal = 1.f
  */
-void sndmMusicSetPitch(SoundManager* SM, const std::string &Key, float Pitch);
+void sndmMusicSetPitch(SoundManager* SM, const char *Key, float Pitch);
 
 /**
  * @brief Donne le volume d'une musique
@@ -106,7 +106,7 @@ void sndmMusicSetPitch(SoundManager* SM, const std::string &Key, float Pitch);
  * @param Key Clé pour accéder au son
  * @return Volume [0..100]
  */
-float sndmMusicGetVolume(SoundManager* SM, const std::string &Key);
+float sndmMusicGetVolume(SoundManager* SM, const char *Key);
 
 /**
  * @brief Donne le pitch d'une musique
@@ -114,7 +114,7 @@ float sndmMusicGetVolume(SoundManager* SM, const std::string &Key);
  * @param Key Clé pour accéder au son
  * @return pitch normal = 1.f
  */
-float sndmMusicGetPitch(SoundManager* SM, const std::string &Key);
+float sndmMusicGetPitch(SoundManager* SM, const char *Key);
 
 /**
  * @brief Fait un effet de Fade entre deux musiques
@@ -122,7 +122,7 @@ float sndmMusicGetPitch(SoundManager* SM, const std::string &Key);
  * @param NextKey Clé pour accéder au son
  * @param FadeSpeed vitesse du fading 100 = tout le volume d'un coup
  */
-void sndmMusicFade(SoundManager* SM, const std::string &NextKey, float FadeSpeed, bool Loop=1);
+void sndmMusicFade(SoundManager* SM, const char *NextKey, float FadeSpeed, bool Loop=1);
 
 /**
  * @brief Fait un effet de Fade et stoppe la musique à la fin
@@ -180,7 +180,7 @@ void sndmStopAllMusic(SoundManager* SM);
  * @param SM SoundManager où s'effectue la fonction
  * @param Key Clé de la musique
  */
-void sndmStopMusic(SoundManager* SM, const std::string &Key);
+void sndmStopMusic(SoundManager* SM, const char *Key);
 
 /**
  * @brief Change la position du Listener

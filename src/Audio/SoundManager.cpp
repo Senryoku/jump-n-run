@@ -29,7 +29,7 @@ void sndmFree(SoundManager* SM)
 	SM->Musics.clear();
 }
 
-bool sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::string &File)
+bool sndmLoadSoundFile(SoundManager* SM, const char *Key, const char *File)
 {
 	//On vérifie que la clé n'existe pas déjà
 	assert(SM->SoundBuffers.count(Key)==0);
@@ -47,7 +47,7 @@ bool sndmLoadSoundFile(SoundManager* SM, const std::string &Key, const std::stri
 	return 1;
 }
 
-bool sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::string &File)
+bool sndmLoadMusicFile(SoundManager* SM, const char *Key, const char *File)
 {
 	//On vérifie que la clé n'existe pas déjà
 	assert(SM->Musics.count(Key)==0);
@@ -66,7 +66,7 @@ bool sndmLoadMusicFile(SoundManager* SM, const std::string &Key, const std::stri
 	return 1;
 }
 
-void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position, float MinDist, float Attenuation)
+void sndmPlay(SoundManager* SM, const char *Key, const Vec2 &Position, float MinDist, float Attenuation)
 {
 	std::map<std::string, sf::SoundBuffer*>::iterator it = SM->SoundBuffers.find(Key);
 	assert(it != SM->SoundBuffers.end());
@@ -81,7 +81,7 @@ void sndmPlay(SoundManager* SM, const std::string &Key, const Vec2 &Position, fl
 	snd->play();
 }
 
-void sndmPlay(SoundManager* SM, const std::string &Key)
+void sndmPlay(SoundManager* SM, const char *Key)
 {
 	std::map<std::string, sf::SoundBuffer*>::iterator it = SM->SoundBuffers.find(Key);
 	assert(it != SM->SoundBuffers.end());
@@ -95,7 +95,7 @@ void sndmPlay(SoundManager* SM, const std::string &Key)
 	
 }
 
-void sndmPlayMusic(SoundManager* SM, const std::string &Key, bool Loop)
+void sndmPlayMusic(SoundManager* SM, const char *Key, bool Loop)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
@@ -104,7 +104,7 @@ void sndmPlayMusic(SoundManager* SM, const std::string &Key, bool Loop)
 	it->second->play();
 }
 
-void sndmMusicSetVolume(SoundManager* SM, const std::string &Key, float Volume)
+void sndmMusicSetVolume(SoundManager* SM, const char *Key, float Volume)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
@@ -112,7 +112,7 @@ void sndmMusicSetVolume(SoundManager* SM, const std::string &Key, float Volume)
 	it->second->setVolume(Volume);
 }
 
-void sndmMusicSetPitch(SoundManager* SM, const std::string &Key, float Pitch)
+void sndmMusicSetPitch(SoundManager* SM, const char *Key, float Pitch)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
@@ -120,7 +120,7 @@ void sndmMusicSetPitch(SoundManager* SM, const std::string &Key, float Pitch)
 	it->second->setPitch(Pitch);
 }
 
-float sndmMusicGetVolume(SoundManager* SM, const std::string &Key)
+float sndmMusicGetVolume(SoundManager* SM, const char *Key)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
@@ -128,7 +128,7 @@ float sndmMusicGetVolume(SoundManager* SM, const std::string &Key)
 	return it->second->getVolume();
 }
 
-float sndmMusicGetPitch(SoundManager* SM, const std::string &Key)
+float sndmMusicGetPitch(SoundManager* SM, const char *Key)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
@@ -136,7 +136,7 @@ float sndmMusicGetPitch(SoundManager* SM, const std::string &Key)
 	return it->second->getPitch();
 }
 
-void sndmMusicFade(SoundManager* SM, const std::string &NextKey, float FadeSpeed, bool Loop)
+void sndmMusicFade(SoundManager* SM, const char *NextKey, float FadeSpeed, bool Loop)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(NextKey);
 	assert(it != SM->Musics.end());
@@ -300,7 +300,7 @@ void sndmStopAll(SoundManager* SM)
 
 }
 
-void sndmStopMusic(SoundManager* SM, const std::string &Key)
+void sndmStopMusic(SoundManager* SM, const char *Key)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());

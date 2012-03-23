@@ -74,7 +74,7 @@ void lvledDelVertex(LevelEditor *Led);
 
 void lvledTestLevel(LevelEditor *Led); // Lance le jeu sur le niveau en cours d'édition
 
-void lvledLoad(LevelEditor *Led, char**);
-void lvledSave(LevelEditor *Led, char**);
+void lvledLoad(LevelEditor *Led, const char* File);
+void lvledSave(LevelEditor *Led, const char* File);
 
 #endif
