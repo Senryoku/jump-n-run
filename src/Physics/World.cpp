@@ -174,7 +174,7 @@ void wdResolveElastic(World* W)
 
 void wdHandleCollision(World* W)
 {
-	wdUpdateGrid(W);
+		wdUpdateGrid(W);
         CollisionInfo Info;
         Node* it = lstFirst(&W->Polygons);
         Node* it2;
@@ -401,6 +401,7 @@ void delWorld(World *W)
 
 void wdUpdateGrid(World *W)
 {
+	//printf("Size before deleting: %u\n", lstCount(W->CollisionGri))
 	gridRemovePolygons(&W->CollisionGrid);
 	
 	Node* it = lstFirst(&W->Polygons);

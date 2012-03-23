@@ -112,7 +112,9 @@ int main(int argc, char** argv)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::B :
-					{V10 = newVertex();
+					{
+						/*Vertex *V10, *V11, *V12, *V13;
+						V10 = newVertex();
 						vxSetPosition(V10, vec2(MouseX, MouseY));
 						V11 = newVertex();
 						vxSetPosition(V11, vec2(MouseX+50.f, MouseY));
@@ -120,9 +122,10 @@ int main(int argc, char** argv)
 						vxSetPosition(V12, vec2(MouseX+50.f, MouseY+50.f));
 						V13 = newVertex();
 						vxSetPosition(V13, vec2(MouseX, MouseY+50.f));
-						wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
+						wdAddVertex(lvlGetWorld(LvlEd.Lvl), V10); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V11); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V12); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V13);
 						Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
-						wdAddPolygon(W, Rectangle2);
+						wdAddPolygon(lvlGetWorld(LvlEd.Lvl), Rectangle2);
+						 */
 					}
 						break;
 					case sf::Keyboard::G :
