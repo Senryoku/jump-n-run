@@ -67,6 +67,14 @@ void daAdd(DynArr* DA, void* ptr);
 **/
 void daDel(DynArr* DA, unsigned int Pos);
 
+/** @brief Supprime l'élément à la position P
+ *
+ * Ne conserve pas l'ordre des objets
+ * @param DA Le DynArr à modifier
+ * @param Pos Position de l'entrée à supprimer (0 - Size-1)
+**/
+void daFastDel(DynArr* DA, unsigned int Pos);
+
 /** @brief Retourne l'élément en position Pos
  *
  * @param DA Le DynArr ) accéder

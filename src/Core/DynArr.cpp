@@ -67,6 +67,12 @@ void daDel(DynArr* DA, unsigned int Pos)
 	DA->Size--;
 }
 
+void daFastDel(DynArr* DA, unsigned int Pos)
+{
+	DA->Size--;
+	DA->First[Pos] = DA->First[DA->Size];
+}
+
 void* daGet(const DynArr* DA, unsigned int Pos)
 {
 	return DA->First[Pos];
