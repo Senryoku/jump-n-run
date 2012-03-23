@@ -14,6 +14,7 @@ typedef struct
  	// char* Foreground
 } Level;
 
+Level* newLevel(float Width, float Height);
 void lvlInit(Level* Lvl, float Width, float Height);
 
 World* lvlGetWorld(Level* Lvl);

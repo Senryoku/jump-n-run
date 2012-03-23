@@ -22,7 +22,7 @@ void lvledGrab(LevelEditor *Led);
 void lvledGrabUpdate(LevelEditor *Led);
 void lvledRelease(LevelEditor *Led);
 
-void lvledGradEl(LevelEditor *Led);
+void lvledGrabEl(LevelEditor *Led);
 void lvledReleaseEl(LevelEditor *Led);
 
 void lvledToogleNearestFixe(LevelEditor *Led);
@@ -32,7 +32,7 @@ void lvledSetMousePosition(LevelEditor *Led, float, float); // Déplace le Verte
 
 // Fonctions d'éditions
 void lvledNewPolyInit(LevelEditor *Led);
-void lvledNewPolyAddV(LevelEditor *Led, Vertex*);
+void lvledNewPolyAddV(LevelEditor *Led);
 void lvledNewPolyCreate(LevelEditor *Led);
 
 void lvledNewPolyFixeInit(LevelEditor *Led);

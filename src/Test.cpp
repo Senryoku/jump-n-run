@@ -1,6 +1,7 @@
 #include <Physics/Physics.h>
 #include <Physics/Angular.h>
 #include <Physics/Length.h>
+#include <Level/LevelEditor.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
@@ -22,85 +23,15 @@ int main(int argc, char** argv)
 
 	//polyRegressionTest();
 
-	World* W = newWorld(3200.f, 1200.f);
-
-
-	Vertex* V1 = newVertex();
-	vxSetPosition(V1, vec2(0.f, 500.f));
-	Vertex* V2 = newVertex();
-	vxSetPosition(V2, vec2(30.f, 500.f));
-	Vertex* V3 = newVertex();
-	vxSetPosition(V3, vec2(0.f, 550.f));
-	wdAddVertex(W, V1); wdAddVertex(W, V2); wdAddVertex(W, V3);
-	/*Rigid* R1 = newRigid(V1, V2, vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))));
-	Rigid* R2 = newRigid(V3, V2, vec2Length(vec2Sub(vxGetPosition(V3), vxGetPosition(V2))));
-
-	wdAddRigid(W, R1); wdAddRigid(W, R2);*/
-
-	Polygon* Pang1 = newPolygon(2, V1, V2);
-	Polygon* Pang2 = newPolygon(2, V3, V2);
-	wdAddPolygon(W, Pang1); wdAddPolygon(W, Pang2);
-
-	Angular A;
-	angInit(&A, V2, V1, V3, (M_PI/180.f)*25.f, 110.f*(M_PI/180.f));
-	//Lenght L;
-	//lnInit(&L, V1, V3, 30.f, 50.f);
-
-	Vertex* V10 = newVertex();
-	vxSetPosition(V10, vec2(50.f, 500.f));
-	Vertex* V11 = newVertex();
-	vxSetPosition(V11, vec2(100.f, 500.f));
-	Vertex* V12 = newVertex();
-	vxSetPosition(V12, vec2(100.f, 550.f));
-	Vertex* V13 = newVertex();
-	vxSetPosition(V13, vec2(50.f, 550.f));
-	wdAddVertex(W, V10);
-	wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
-
-	//Polygon* Poly = newPolygon(3, V1, V2, V3);
-	//wdAddPolygon(W, Poly);
-	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
-	wdAddPolygon(W, Rectangle);
-
-
-
-	V10 = newVertex();
-	vxSetPosition(V10, vec2(50.f, 400.f));
-	V11 = newVertex();
-	vxSetPosition(V11, vec2(100.f, 400.f));
-	V12 = newVertex();
-	vxSetPosition(V12, vec2(100.f, 450.f));
-	V13 = newVertex();
-	vxSetPosition(V13, vec2(50.f, 450.f));
-	wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
-	Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
-	wdAddPolygon(W, Rectangle2);
-
-
-
-
-	//Un rectangle fixe
-	Vertex* VF1 = newVertex();
-	vxSetPosition(VF1, vec2(300.f, 400.f));
-	Vertex* VF2 = newVertex();
-	vxSetPosition(VF2, vec2(550.f, 400.f));
-	Vertex* VF3 = newVertex();
-	vxSetPosition(VF3, vec2(550.f, 500.f));
-	Vertex* VF4 = newVertex();
-	vxSetPosition(VF4, vec2(300.f, 500.f));
-
-	wdAddVertex(W, VF1);wdAddVertex(W, VF2);wdAddVertex(W, VF3);wdAddVertex(W, VF4);
-	Polygon* FixeRect = polyRectangle(VF1, VF2, VF3, VF4);
-	polySetFixe(FixeRect, 1);
-	wdAddPolygon(W, FixeRect);
-
+	LevelEditor LvlEd;
+	lvledInit(&LvlEd, 3200.f, 1600.f);
 
 	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "window");
 	window.setFramerateLimit(60.f);
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
 
-	MapWidth = W->Width*(100.f / W->Height);
+	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
 
 //	glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
@@ -109,15 +40,6 @@ int main(int argc, char** argv)
 	glDisable(GL_DEPTH_TEST);
 
 	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
-
-	Vertex *grab=NULL;
-	Vertex *grabEl=NULL;
-	Vertex* Mouse = newVertex();
-	Vertex* tmpVertex = NULL;
-	Vertex *tmpElastic1 = NULL, *tmpElastic2 = NULL, *tmpRigid1 = NULL, *tmpRigid2 = NULL;
-	Polygon* tmpPoly = NULL;
-	Elastic* GrabElastic = newElastic(grabEl, Mouse, 30.f, 0.2f);
-	List L, L2;
 
 	// Start the game loop
 	while (window.isOpen())
@@ -148,40 +70,22 @@ int main(int argc, char** argv)
 					case sf::Mouse::Left :
 						/* Création d'un polygone Fixe */
 						if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
-							tmpVertex = newVertex();
-							vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
-							vxSetFixe(tmpVertex, 1);
-							lstAdd(&L, tmpVertex);
+							lvledNewPolyFixeAddV(&LvlEd);
 						/* Création d'un polygone Dynamique */
 						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
-							tmpVertex = newVertex();
-							vxSetPosition(tmpVertex, vec2(MouseX, MouseY));
-							vxSetFixe(tmpVertex, 1);
-							lstAdd(&L2, tmpVertex);
+							lvledNewPolyAddV(&LvlEd);
 						/* Ajout d'Elastic */
 						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
-							if(tmpElastic1 == NULL) {
-								tmpElastic1 = wdGetNearest(W, MouseX, MouseY);
-							} else if(tmpElastic2 == NULL) {
-								tmpElastic2 = wdGetNearest(W, MouseX, MouseY);
-							}
+							lvledNewElasticAddV(&LvlEd);
 						/* Ajout de Rigid */
 						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
-							if(tmpRigid1 == NULL)
-								tmpRigid1 = wdGetNearest(W, MouseX, MouseY);
-							else if(tmpRigid2 == NULL)
-								tmpRigid2 = wdGetNearest(W, MouseX, MouseY);
+							lvledNewRigidAddV(&LvlEd);
 						} else {
-							grab = wdGetNearest(W, MouseX, MouseY);
+							lvledGrab(&LvlEd);
 						}
 						break;
 					case sf::Mouse::Right :
-						grabEl = wdGetNearest(W, MouseX, MouseY);
-						if(grabEl != NULL)
-						{
-							GrabElastic->V1 = grabEl;
-							wdAddElastic(W, GrabElastic);
-						}
+						lvledGrabEl(&LvlEd);
 						break;
 					default :
 						break;
@@ -193,11 +97,10 @@ int main(int argc, char** argv)
 				switch (event.mouseButton.button)
 				{
 					case sf::Mouse::Left :
-						grab = NULL;
+						lvledRelease(&LvlEd);
 						break;
 					case sf::Mouse::Right :
-						grabEl = NULL;
-						wdDelElastic(W, GrabElastic);
+						lvledReleaseEl(&LvlEd);
 						break;
 					default :
 						break;
@@ -209,71 +112,26 @@ int main(int argc, char** argv)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::G :
-						grab = wdGetNearest(W, MouseX, MouseY);
+						lvledGrab(&LvlEd);
 						break;
 					case sf::Keyboard::E :
-						grabEl = wdGetNearest(W, MouseX, MouseY);
-						if(grabEl != NULL)
-						{
-							GrabElastic->V1=grabEl;
-							wdAddElastic(W, GrabElastic);
-						}
+						lvledGrabEl(&LvlEd);
 						break;
 					case sf::Keyboard::Delete :
 						if(!event.key.shift)
 						{
-							/* lvledDelPoly() */
-							tmpPoly = wdGetNearestPoly(W, MouseX, MouseY);
-							if(tmpPoly != NULL)
-							{
-								wdDelPolygon(W, tmpPoly);
-								delPolygon(tmpPoly);
-							}
+							lvledDelPoly(&LvlEd);
 						} else {
-							/* lvledDelVertex() */
-							Bool IsLonely = 1;
-							tmpVertex = wdGetNearest(W, MouseX, MouseY);
-							if(tmpVertex != NULL)
-							{
-								/* On s'assure que le Vertex ne fait partie d'aucune structure plus grande */
-								Node* it = lstFirst(&W->Rigids);
-								while(!nodeEnd(it))
-								{
-									if(rdGetV1((Rigid*) nodeGetData(it)) == tmpVertex || rdGetV2((Rigid*) nodeGetData(it)) == tmpVertex)
-										IsLonely = 0;
-									it = nodeGetNext(it);
-								}
-								it = lstFirst(&W->Elastics);
-								while(!nodeEnd(it))
-								{
-									if(elasticGetV1((Elastic*) nodeGetData(it)) == tmpVertex || elasticGetV2((Elastic*) nodeGetData(it)) == tmpVertex)
-										IsLonely = 0;
-									it = nodeGetNext(it);
-								}
-								it = lstFirst(&W->Polygons);
-								while(!nodeEnd(it))
-								{
-									for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->Vertices); i++)
-									{
-										if(daGet(&((Polygon*) nodeGetData(it))->Vertices, i) == tmpVertex)
-											IsLonely = 0;
-									}
-									it = nodeGetNext(it);
-								}
-
-								if(IsLonely)
-									wdDelVertex(W, tmpVertex),
-									delVertex(tmpVertex);
-							}
+							lvledDelVertex(&LvlEd);
 						}
 						break;
 					case sf::Keyboard::P :
 					case sf::Keyboard::Num1 :
-						lstInit(&L);
+						lvledNewPolyFixeInit(&LvlEd);
 						break;
 					case sf::Keyboard::O :
 					case sf::Keyboard::Num2 :
-						lstInit(&L2);
+						lvledNewPolyInit(&LvlEd);
 						break;
 					default:
 						break;
@@ -285,66 +143,30 @@ int main(int argc, char** argv)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::G :
-						grab = NULL;
+						lvledRelease(&LvlEd);
 						break;
 					case sf::Keyboard::E :
-						grabEl=NULL;
-						wdDelElastic(W, GrabElastic);
+						lvledReleaseEl(&LvlEd);
 						break;
 					case sf::Keyboard::F :
-						/* lvledSetFixe */
-						tmpVertex = wdGetNearest(W, MouseX, MouseY);
-						vxSetFixe(tmpVertex, !vxIsFixe(tmpVertex));
+						lvledToogleNearestFixe(&LvlEd);
 						break;
 					case sf::Keyboard::C :
-						/* lvledSetFixePoly */
-						tmpPoly = wdGetNearestPoly(W, MouseX, MouseY),
-						polySetFixe(tmpPoly, !polyIsFixe(tmpPoly));
+						lvledToogleNearestPolyFixe(&LvlEd);
 						break;
 					case sf::Keyboard::O :
 					case sf::Keyboard::Num2 :
-						if(lstCount(&L2) > 0)
-						{
-							wdAddVxFromList(W, L2);
-
-							if(lstCount(&L2) == 4)
-							{
-								tmpPoly = polyRectangleL(L2);
-							}
-							else if (lstCount(&L2) <= 3)
-							{
-								tmpPoly = newPolygonL(L2);
-							}
-							else
-							{
-								tmpPoly = polyNGone(L2);
-							}
-							polySetFixe(tmpPoly, 0);
-							wdAddPolygon(W, tmpPoly);
-						}
-						lstFree(&L2);
+						lvledNewPolyCreate(&LvlEd);
 						break;
 					case sf::Keyboard::P :
 					case sf::Keyboard::Num1 :
-						if(lstCount(&L) > 0)
-						{
-							wdAddVxFromList(W, L);
-							tmpPoly = newPolygonL(L);
-							polySetFixe(tmpPoly, 1);
-							wdAddPolygon(W, tmpPoly);
-						}
-						lstFree(&L);
+						lvledNewPolyFixeCreate(&LvlEd);
 						break;
 					case sf::Keyboard::Num3 :
-							if(tmpElastic1 != NULL && tmpElastic2 != NULL && tmpElastic1 != tmpElastic2)
-								wdAddElastic(W, newElastic(tmpElastic1, tmpElastic2,
-														-1.f, 0.1f));
-							tmpElastic1 = tmpElastic2 = NULL;
+						lvledNewElasticCreate(&LvlEd);
 						break;
 					case sf::Keyboard::Num4 :
-						if(tmpRigid1 != NULL && tmpRigid2 != NULL)
-							wdAddRigid(W, newRigid(tmpRigid1, tmpRigid2, -1.f));
-						tmpRigid1 = tmpRigid2 = NULL;
+						lvledNewRigidCreate(&LvlEd);
 						break;
 					default:
 						break;
@@ -352,10 +174,8 @@ int main(int argc, char** argv)
 			}
 		}
 
-		if (grab!=NULL)
-			vxSetPosition(grab, vec2(MouseX,MouseY));
-		if(grabEl != NULL)
-			vxSetPosition(Mouse, vec2(MouseX,MouseY));
+		lvledSetMousePosition(&LvlEd, MouseX, MouseY);
+		lvledGrabUpdate(&LvlEd);
 
 		/* Déplacement de la vue */
 
@@ -400,16 +220,15 @@ int main(int argc, char** argv)
 				glLoadIdentity();
 				glOrtho(0.f+ViewX, WindowWidth+ViewX, WindowHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
-				wdApplyForce(W, vec2(0.f, 0.6f));
-				wdResolveVextex(W);
-				angResolve(&A);
+				wdApplyForce(lvlGetWorld(LvlEd.Lvl), vec2(0.f, 0.6f));
+				wdResolveVextex(lvlGetWorld(LvlEd.Lvl));
 
 				for(i=0; i<4; i++)
 				{
-					wdResolveRigid(W);
-					wdResolveElastic(W);
+					wdResolveRigid(lvlGetWorld(LvlEd.Lvl));
+					wdResolveElastic(lvlGetWorld(LvlEd.Lvl));
 					//lnResolve(&L);
-					wdHandleCollision(W);
+					wdHandleCollision(lvlGetWorld(LvlEd.Lvl));
 				}
 			}
 			else if(ViewPort == 1)
@@ -417,7 +236,7 @@ int main(int argc, char** argv)
 				glViewport(WindowWidth - MapWidth - 10.f, WindowHeight - MapHeight - 10.f, MapWidth, MapHeight);
 				glMatrixMode(GL_PROJECTION);
 				glLoadIdentity();
-				glOrtho(0.0, W->Width, W->Height, 0.0, 0.0, 100.0);
+				glOrtho(0.0, lvlGetWorld(LvlEd.Lvl)->Width, lvlGetWorld(LvlEd.Lvl)->Height, 0.0, 0.0, 100.0);
 				glColor3f(0.5f, 0.5f, 0.5f);
 				glLineStipple(1, 0xCCCC);
 				glEnable(GL_LINE_STIPPLE);
@@ -430,15 +249,7 @@ int main(int argc, char** argv)
 				glDisable(GL_LINE_STIPPLE);
 			}
 
-			if(grabEl != NULL)
-			{
-				glBegin(GL_LINES);
-				glVertex2f(vxGetPosition(elasticGetV1(GrabElastic)).x, vxGetPosition(elasticGetV1(GrabElastic)).y);
-				glVertex2f(vxGetPosition(elasticGetV2(GrabElastic)).x, vxGetPosition(elasticGetV2(GrabElastic)).y);
-				glEnd();
-			}
-
-			glDrawWorld(W);
+			glDrawWorld(lvlGetWorld(LvlEd.Lvl));
 
 			/* Limites */
 			glColor3f(0.5f, 0.5f, 0.5f);
@@ -446,9 +257,9 @@ int main(int argc, char** argv)
 			glEnable(GL_LINE_STIPPLE);
 			glBegin(GL_LINE_LOOP);
 				glVertex2f(0.f, 1.f);
-				glVertex2f(W->Width-1.f, 0.f);
-				glVertex2f(W->Width-1.f, W->Height);
-				glVertex2f(0.f, W->Height);
+				glVertex2f(lvlGetWorld(LvlEd.Lvl)->Width-1.f, 0.f);
+				glVertex2f(lvlGetWorld(LvlEd.Lvl)->Width-1.f, lvlGetWorld(LvlEd.Lvl)->Height);
+				glVertex2f(0.f, lvlGetWorld(LvlEd.Lvl)->Height);
 			glEnd();
 			glDisable(GL_LINE_STIPPLE);
 
@@ -456,11 +267,11 @@ int main(int argc, char** argv)
 			glColor3f(0.f, 0.f, 1.f);
 			glBegin(GL_LINES);
 			glVertex2f(0.f,MouseY);
-			glVertex2f(W->Width,MouseY);
+			glVertex2f(lvlGetWorld(LvlEd.Lvl)->Width,MouseY);
 			glEnd();
 
 			glBegin(GL_LINES);
-			for (float i=0.f; i<W->Width; i+=10.f)
+			for (float i=0.f; i<lvlGetWorld(LvlEd.Lvl)->Width; i+=10.f)
 			{
 				glVertex2f(i,MouseY);
 				if (static_cast<int>(i)%100 == 0)
@@ -474,11 +285,11 @@ int main(int argc, char** argv)
 
 			glBegin(GL_LINES);
 			glVertex2f(MouseX, 0.f);
-			glVertex2f(MouseX, W->Height);
+			glVertex2f(MouseX, lvlGetWorld(LvlEd.Lvl)->Height);
 			glEnd();
 
 			glBegin(GL_LINES);
-			for (float i=0.f; i<W->Height; i+=10.f)
+			for (float i=0.f; i<lvlGetWorld(LvlEd.Lvl)->Height; i+=10.f)
 			{
 				glVertex2f(MouseX, i);
 				if (static_cast<int>(i)%100 == 0)
@@ -499,7 +310,7 @@ int main(int argc, char** argv)
 		window.display();
 	}
 
-	delWorld(W);
+	delWorld(lvlGetWorld(LvlEd.Lvl));
 
 	return 0;
 }

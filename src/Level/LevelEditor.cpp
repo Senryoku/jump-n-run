@@ -2,17 +2,18 @@
 
 void lvledInit(LevelEditor *Led, float Width, float Height)
 {
-	lvlInit(Led->Lvl, Width, Height);
+	Led->Lvl = newLevel(Width, Height);
 	/* Pas besoin d'initialiser les listes */
  	Led->Grab = NULL;
  	Led->GrabEl = NULL;
  	Led->Mouse = newVertex();
  	Led->GrabElastic = newElastic(Led->Mouse, NULL, 30.f, 0.2f);
+	Led->tmpElastic1 = Led->tmpElastic2 = Led->tmpRigid1 = Led->tmpRigid2 = NULL;
 }
 
 void lvledGrabUpdate(LevelEditor *Led)
 {
-	vxSetPosition(Led->Grab, vxGetPosition(Led->Mouse));
+	if(Led->Grab != NULL) vxSetPosition(Led->Grab, vxGetPosition(Led->Mouse));
 }
 
 void lvledGrab(LevelEditor *Led)
@@ -25,7 +26,7 @@ void lvledRelease(LevelEditor *Led)
 	Led->Grab = NULL;
 }
 
-void lvledGradEl(LevelEditor *Led)
+void lvledGrabEl(LevelEditor *Led)
 {
 	Led->GrabEl = wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
 	if(Led->GrabEl != NULL)
@@ -192,7 +193,7 @@ void lvledNewPolyFixeInit(LevelEditor *Led)
 	lstInit(&Led->tmpLstFixe);
 }
 
-void lvledNewPolyFixeAddV(LevelEditor *Led, Vertex* V)
+void lvledNewPolyFixeAddV(LevelEditor *Led)
 {
 	Vertex* tmpVertex = newVertex();
 	vxSetPosition(tmpVertex, vxGetPosition(Led->Mouse));
