@@ -107,6 +107,22 @@ typedef struct
 	float Depth; /**< Profondeur de la collision **/
 } CollisionInfo;
 
+/** @brief Structure décrivant une Bounding Box de position x, y, largeur w et hauteur h
+ *
+ **/
+typedef struct
+{
+	float Left; /**< x **/
+	float Top; /**< y **/
+	float Right; /**< x+w **/
+	float Bottom; /**< y+h **/
+} BBox;
+
+/** @brief Retourne une la bounding box du polygone
+ * @return BBox
+ **/
+BBox polyGetBBox(Polygon* P);
+
 /** @brief Retourne une struct CollisionInfo vide
  *
 **/

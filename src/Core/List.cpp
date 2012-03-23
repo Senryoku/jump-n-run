@@ -54,6 +54,17 @@ void lstDel(List* L, Elem E)
 	}
 }
 
+Bool lstHaveElem(List* L, Elem E)
+{
+	Node* tmpNode = L->First;
+	while(!nodeEnd(tmpNode) && nodeGetData(tmpNode) != E)
+		tmpNode = nodeGetNext(tmpNode);
+	
+	if(!nodeEnd(tmpNode))
+		return 1;
+	return 0;
+}
+
 void lstRem(List* L, Node* N)
 {
 	if(N == L->First)

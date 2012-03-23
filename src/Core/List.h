@@ -51,6 +51,14 @@ void lstAdd(List* L, Elem Data);
 **/
 void lstDel(List* L, Elem E);
 
+/** @brief Chercher l'existance d'un élément dans la liste
+ *
+ * Complexité en O(n)
+ * @param L Liste où chercher l'élément
+ * @param E Elément à supprimer
+ **/
+Bool lstHaveElem(List* L, Elem E);
+
 /** @brief Supprime le Node passé en paramètre
  *
  * Complexité en O(1)

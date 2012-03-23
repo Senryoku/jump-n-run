@@ -350,6 +350,24 @@ Vec2 polyGetSpeed(Polygon* P)
 	return vec2Sub(((Vertex*)daGet(&P->Vertices, 0))->Position, ((Vertex*)daGet(&P->Vertices, 0))->OldPos);
 }
 
+BBox polyGetBBox(Polygon* P)
+{
+	BBox B; int i;
+	B.Left = B.Right = vxGetPosition((Vertex*)daGet(&P->Vertices, 0)).x;
+	B.Top = B.Bottom = vxGetPosition((Vertex*)daGet(&P->Vertices, 0)).y;
+	
+	for(i = 1; i < daGetSize(&P->Vertices); i++)
+	{
+		Vertex* V = (Vertex*) daGet(&P->Vertices, i);
+		if (vxGetPosition(V).x < B.Left) B.Left=vxGetPosition(V).x;
+		if (vxGetPosition(V).y < B.Top) B.Top=vxGetPosition(V).y;
+		if (vxGetPosition(V).x > B.Right) B.Right=vxGetPosition(V).x;
+		if (vxGetPosition(V).y > B.Bottom) B.Bottom=vxGetPosition(V).y;
+	}
+	
+	return B;
+}
+
 void polyRegressionTest()
 {
 	printf("\n === Debut du test de regression de Polygon === \n\n");

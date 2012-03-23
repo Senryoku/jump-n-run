@@ -111,6 +111,20 @@ int main(int argc, char** argv)
 			{
 				switch(event.key.code)
 				{
+					case sf::Keyboard::B :
+					{V10 = newVertex();
+						vxSetPosition(V10, vec2(MouseX, MouseY));
+						V11 = newVertex();
+						vxSetPosition(V11, vec2(MouseX+50.f, MouseY));
+						V12 = newVertex();
+						vxSetPosition(V12, vec2(MouseX+50.f, MouseY+50.f));
+						V13 = newVertex();
+						vxSetPosition(V13, vec2(MouseX, MouseY+50.f));
+						wdAddVertex(W, V10); wdAddVertex(W, V11); wdAddVertex(W, V12); wdAddVertex(W, V13);
+						Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
+						wdAddPolygon(W, Rectangle2);
+					}
+						break;
 					case sf::Keyboard::G :
 						lvledGrab(&LvlEd);
 						break;
@@ -352,6 +366,16 @@ void glDrawPolygon(Polygon* P)
 					1*4.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + Center.y);
 		}
 		glEnd();
+	
+	//BBox
+	BBox B = polyGetBBox(P);
+	glColor3f(1.f, 0.f, 0.f);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(B.Left, B.Top);
+	glVertex2f(B.Right, B.Top);
+	glVertex2f(B.Right, B.Bottom);
+	glVertex2f(B.Left, B.Bottom);
+	glEnd();
 }
 
 

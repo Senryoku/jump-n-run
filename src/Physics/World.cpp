@@ -20,6 +20,9 @@ void wdInit(World* W, float Width, float Height)
 	W->Height = Height;
 	W->prevdt = 0.5f;
 	W->dt = 0.5f;
+	float CellSize=128.f;
+	gridInit(&W->CollisionGrid, Width/CellSize, Height/CellSize);
+	gridSetCellSize(&W->CollisionGrid, CellSize);
 }
 
 void wdAddVertex(World* W, Vertex* V)
@@ -171,7 +174,7 @@ void wdResolveElastic(World* W)
 
 void wdHandleCollision(World* W)
 {
-
+	wdUpdateGrid(W);
         CollisionInfo Info;
         Node* it = lstFirst(&W->Polygons);
         Node* it2;
@@ -179,7 +182,9 @@ void wdHandleCollision(World* W)
         float PositionOnEdge, CorrectionFactor;
         while(!nodeEnd(it))
         {
-                it2 = lstFirst(&W->Polygons);
+            List LExtracted = gridGetPolygonList(&W->CollisionGrid, (Polygon*) nodeGetData(it));    
+			//it2 = lstFirst(&W->Polygons);
+			it2 = lstFirst(&LExtracted);
                 while(!nodeEnd(it2))
                 {
 					if(it != it2)
@@ -253,7 +258,9 @@ void wdHandleCollision(World* W)
 					}
 					it2 = nodeGetNext(it2);
                 }
-                it = nodeGetNext(it);
+			
+			lstFree(&LExtracted);
+			it = nodeGetNext(it);
         }
 }
 
@@ -383,10 +390,26 @@ void wdFree(World *W)
 		delVertex((Vertex*) nodeGetData(lstFirst(&W->Vertices)));
 		lstRem(&W->Vertices, lstFirst(&W->Vertices));
 	}
+	gridFree(&W->CollisionGrid);
 }
 
 void delWorld(World *W)
 {
 	wdFree(W);
 	free(W);
+}
+
+void wdUpdateGrid(World *W)
+{
+	gridRemovePolygons(&W->CollisionGrid);
+	
+	Node* it = lstFirst(&W->Polygons);
+	while(!nodeEnd(it))
+	{
+		if (!polyIsFixe((Polygon*)nodeGetData(it)))
+			gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it));
+			
+		it=nodeGetNext(it);
+	}
+	
 }

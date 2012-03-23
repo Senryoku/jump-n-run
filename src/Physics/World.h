@@ -6,6 +6,7 @@
 #include "Rigid.h"
 #include "Polygon.h"
 #include "Elastic.h"
+#include "Grid.h"
 
 /** @defgroup World
  *
@@ -34,6 +35,7 @@ typedef struct
 
 	float prevdt; /**< Intervalle de temps précédent **/
 	float dt; /**< Intervalle de temps courant pour la simulation **/
+	Grid CollisionGrid;
 } World;
 
 /** @brief Constructeur
@@ -209,6 +211,8 @@ void wdFree(World *W);
  * Appelle wbFree avant de compléter la libération
 **/
 void delWorld(World *W);
+
+void wdUpdateGrid(World *W);
 
 /** @}
 **/

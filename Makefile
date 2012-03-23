@@ -134,7 +134,8 @@ $(OBJ)testVec2.o :
 	
 testGrid : $(OBJ)Physics/Grid.o $(OBJ)testGrid.o $(OBJ)Core/List.o $(OBJ)Core/Node.o $(OBJ)Core/DynArr.o $(OBJ)Physics/Polygon.o $(OBJ)Physics/Rigid.o $(OBJ)Physics/Vertex.o $(OBJ)Core/Vec2.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	valgrind --leak-check=full --tool=memcheck ./$(BIN)testGrid
+	#valgrind --leak-check=full --tool=memcheck ./$(BIN)testGrid
+	./$(BIN)testGrid
 	
 $(OBJ)testGrid.o :
 	$(CXX) $(OPT) $(TESTS)TestGrid.cpp -c -o $@
