@@ -52,14 +52,24 @@ Vec2 elasticVector(Elastic* E)
 	return vec2Sub(vxGetPosition(E->V2), vxGetPosition(E->V1));
 }
 
-Vertex* elasticGetV1(Elastic* E)
+Vertex* elasticGetV1(const Elastic* E)
 {
 	return E->V1;
 }
 
-Vertex* elasticGetV2(Elastic* E)
+Vertex* elasticGetV2(const Elastic* E)
 {
 	return E->V2;
+}
+
+void elasticSetV1(Elastic* E, Vertex* V)
+{
+	E->V1 = V;
+}
+
+void elasticSetV2(Elastic* E, Vertex* V)
+{
+	E->V2 = V;
 }
 
 void elasticSetLength(Elastic* E, float newLength)

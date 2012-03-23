@@ -63,12 +63,22 @@ Vec2 elasticVector(Elastic* E);
 /** @brief Accesseur de V1
  *
 **/
-Vertex* elasticGetV1(Elastic* E);
+Vertex* elasticGetV1(const Elastic* E);
 
 /** @brief Accesseur de V2
  *
 **/
-Vertex* elasticGetV2(Elastic* E);
+Vertex* elasticGetV2(const Elastic* E);
+
+/** @brief Mutateur de V1
+ *
+**/
+void elasticSetV1(Elastic* E, Vertex* V);
+
+/** @brief Mutateur de V2
+ *
+**/
+void elasticSetV2(Elastic* E, Vertex* V);
 
 /** @brief Mutateur de Length
  *

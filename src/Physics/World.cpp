@@ -281,6 +281,54 @@ Vertex* wdGetNearest(World* W, float X, float Y)
 	return Nearest;
 }
 
+Elastic* wdGetNearestElastic(World* W, float X, float Y)
+{
+	float Dist = INFINITY, tmpDist;
+	Elastic *Nearest = NULL, *tmpElastic;
+	Node* it = lstFirst(&W->Elastics);
+	while(!nodeEnd(it))
+	{
+		tmpElastic = (Elastic*) nodeGetData(it);
+		Vec2 V1Pos = vxGetPosition(elasticGetV1(tmpElastic));
+		Vec2 V1 = vec2(X - V1Pos.x, Y - V1Pos.y);
+		Vec2 V2Pos = vxGetPosition(elasticGetV2(tmpElastic));
+		Vec2 V2 = vec2(X - V2Pos.x, Y - V2Pos.y);
+		tmpDist = MIN(vec2SqLength(V1), vec2SqLength(V2));
+		if (tmpDist < Dist)
+		{
+			Dist = tmpDist;
+			Nearest = tmpElastic;
+		}
+		it = nodeGetNext(it);
+	}
+
+	return Nearest;
+}
+
+Rigid* wdGetNearestRigid(World* W, float X, float Y)
+{
+	float Dist = INFINITY, tmpDist;
+	Rigid *Nearest = NULL, *tmpRigid;
+	Node* it = lstFirst(&W->Rigids);
+	while(!nodeEnd(it))
+	{
+		tmpRigid = (Rigid*) nodeGetData(it);
+		Vec2 V1Pos = vxGetPosition(rdGetV1(tmpRigid));
+		Vec2 V1 = vec2(X - V1Pos.x, Y - V1Pos.y);
+		Vec2 V2Pos = vxGetPosition(rdGetV2(tmpRigid));
+		Vec2 V2 = vec2(X - V2Pos.x, Y - V2Pos.y);
+		tmpDist = MIN(vec2SqLength(V1), vec2SqLength(V2));
+		if (tmpDist < Dist)
+		{
+			Dist = tmpDist;
+			Nearest = tmpRigid;
+		}
+		it = nodeGetNext(it);
+	}
+
+	return Nearest;
+}
+
 Polygon* wdGetNearestPoly(World* W, float X, float Y)
 {
 	unsigned int i;
@@ -315,7 +363,7 @@ void wdFree(World *W)
 		if(polyGetCenter((Polygon*) nodeGetData(lstFirst(&W->Polygons))) != NULL)
 		{
 			lstDel(&W->Vertices, polyGetCenter((Polygon*) nodeGetData(lstFirst(&W->Polygons))));
-			
+
 		}
 		delPolygon((Polygon*) nodeGetData(lstFirst(&W->Polygons)));
 		lstRem(&W->Polygons, lstFirst(&W->Polygons));

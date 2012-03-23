@@ -13,7 +13,8 @@ int main(int argc, char** argv)
 	unsigned int i, ViewPort;
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, WindowWidth = 1600.f,
 		WindowHeight = 720.f, MapWidth = WindowWidth/10.f, MapHeight = WindowHeight/10.f,
-		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY;
+		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
+		ViewXSpeed = 0.f, ViewYSpeed = 0.f;
 
 	//vec2RegressionTest();
 
@@ -106,6 +107,7 @@ int main(int argc, char** argv)
 //	glLoadIdentity();
 //	glOrtho(0.0, 800.0, 600.0, 0.0, 0.0, 100.0);
 	glDisable(GL_DEPTH_TEST);
+
 	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
 
 	Vertex *grab=NULL;
@@ -341,8 +343,8 @@ int main(int argc, char** argv)
 						break;
 					case sf::Keyboard::Num4 :
 						if(tmpRigid1 != NULL && tmpRigid2 != NULL)
-							wdAddRigid(W, newRigid(tmpRigid1, tmpRigid2, -1.f)),
-							tmpRigid1 = tmpRigid2 = NULL;
+							wdAddRigid(W, newRigid(tmpRigid1, tmpRigid2, -1.f));
+						tmpRigid1 = tmpRigid2 = NULL;
 						break;
 					default:
 						break;
@@ -359,19 +361,22 @@ int main(int argc, char** argv)
 
 		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-			ViewY-=ViewSpeed;
+			toViewY-=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-			ViewY+=ViewSpeed;
+			toViewY+=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-			ViewX-=ViewSpeed;
+			toViewX-=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-			ViewX+=ViewSpeed;
+			toViewX+=ViewSpeed;
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
 		{
-			ViewX += roundf(OldMouseX - MouseX)*((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? 1.5f : 1);
-			ViewY += roundf(OldMouseY - MouseY)*((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? 1.5f : 1);
+			toViewX += roundf(OldMouseX - MouseX)*((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? 1.5f : 1);
+			toViewY += roundf(OldMouseY - MouseY)*((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? 1.5f : 1);
 		}
+
+		Wobble(&ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
+		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
