@@ -371,8 +371,8 @@ int main(int argc, char** argv)
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
 		{
-			toViewX += roundf(OldMouseX - MouseX)*((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? 1.5f : 1);
-			toViewY += roundf(OldMouseY - MouseY)*((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? 1.5f : 1);
+			toViewX += (OldMouseX - MouseX)*10.f;
+			toViewY += (OldMouseY - MouseY)*10.f;
 		}
 
 		Wobble(&ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
