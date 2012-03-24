@@ -39,5 +39,7 @@ void gridRemovePolygons(Grid* g);
 
 void gridRegressionTest(void);
 
+void gridDraw(Grid* g);
+
 
 #endif

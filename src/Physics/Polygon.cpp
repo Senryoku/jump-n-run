@@ -15,6 +15,7 @@ Polygon* newPolygon(unsigned int nbVx, ...)
 	daReserve(&newPoly->Rigids, nbVx);
 	daReserve(&newPoly->Vertices, nbVx);
 	newPoly->Center = NULL;
+	newPoly->Fixe = 0;
 
 	va_start(ap, nbVx);
 	/* Ajoute les Vertices */
@@ -44,6 +45,7 @@ Polygon* newPolygonL(List L)
 	daReserve(&newPoly->Rigids, nbVx);
 	daReserve(&newPoly->Vertices, nbVx);
 	newPoly->Center = NULL;
+	newPoly->Fixe = 0;
 
 	/* Ajoute les Vertices */
 	while(!nodeEnd(it))
@@ -75,6 +77,7 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 	daReserve(&P->Rigids, nbVx);
 	daReserve(&P->Vertices, nbVx);
 	P->Center = NULL;
+	P->Fixe = 0;
 
 	va_start(ap, nbVx);
 	/* Ajoute les Vertices */

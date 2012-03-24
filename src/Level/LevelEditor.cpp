@@ -31,7 +31,7 @@ void lvledGrabEl(LevelEditor *Led)
 	Led->GrabEl = wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
 	if(Led->GrabEl != NULL)
 	{
-		elasticSetV1(Led->GrabElastic, Led->GrabEl);
+		elasticSetV2(Led->GrabElastic, Led->GrabEl);
 		wdAddElastic(lvlGetWorld(Led->Lvl), Led->GrabElastic);
 	}
 }
@@ -210,6 +210,8 @@ void lvledNewPolyFixeCreate(LevelEditor *Led)
 		tmpPoly = newPolygonL(Led->tmpLstFixe);
 		polySetFixe(tmpPoly, 1);
 		wdAddPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
+		//TEMPOREL!!!
+		gridAddPolygonByBB(&lvlGetWorld(Led->Lvl)->CollisionGrid, tmpPoly);
 	}
 	lstFree(&Led->tmpLstFixe);
 }

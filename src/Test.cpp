@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	lvledInit(&LvlEd, 3200.f, 1600.f);
 
 	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "window");
-	window.setFramerateLimit(30.f);
+	window.setFramerateLimit(60.f);
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
 
@@ -113,23 +113,27 @@ int main(int argc, char** argv)
 				{
 					case sf::Keyboard::B :
 					{
-						/*Vertex *V10, *V11, *V12, *V13;
+						float boxSize=100.f;
+						Vertex *V10, *V11, *V12, *V13;
 						V10 = newVertex();
 						vxSetPosition(V10, vec2(MouseX, MouseY));
 						V11 = newVertex();
-						vxSetPosition(V11, vec2(MouseX+50.f, MouseY));
+						vxSetPosition(V11, vec2(MouseX+boxSize, MouseY));
 						V12 = newVertex();
-						vxSetPosition(V12, vec2(MouseX+50.f, MouseY+50.f));
+						vxSetPosition(V12, vec2(MouseX+boxSize, MouseY+boxSize));
 						V13 = newVertex();
-						vxSetPosition(V13, vec2(MouseX, MouseY+50.f));
+						vxSetPosition(V13, vec2(MouseX, MouseY+boxSize));
 						wdAddVertex(lvlGetWorld(LvlEd.Lvl), V10); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V11); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V12); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V13);
 						Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
 						wdAddPolygon(lvlGetWorld(LvlEd.Lvl), Rectangle2);
-						 */
+						
 					}
-						break;
+						break;	
 					case sf::Keyboard::G :
 						lvledGrab(&LvlEd);
+						break;
+					case sf::Keyboard::N :
+						printf("number of polys: %u\n", lstCount(&lvlGetWorld(LvlEd.Lvl)->Polygons));
 						break;
 					case sf::Keyboard::E :
 						lvledGrabEl(&LvlEd);
@@ -241,6 +245,7 @@ int main(int argc, char** argv)
 				wdResolveVextex(lvlGetWorld(LvlEd.Lvl));
 				
 
+				wdUpdateGrid(lvlGetWorld(LvlEd.Lvl));
 				for(i=0; i<4; i++)
 				{
 					wdResolveRigid(lvlGetWorld(LvlEd.Lvl));
@@ -248,6 +253,7 @@ int main(int argc, char** argv)
 					//lnResolve(&L);
 					wdHandleCollision(lvlGetWorld(LvlEd.Lvl));
 				}
+				gridDraw(&lvlGetWorld(LvlEd.Lvl)->CollisionGrid);
 			}
 			else if(ViewPort == 1)
 			{

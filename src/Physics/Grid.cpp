@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <SFML/OpenGL.hpp>
 
 void gridInit(Grid* g, unsigned int HCells, unsigned int VCells)
 {
@@ -40,6 +41,7 @@ void gridSetCellSize(Grid* g, float Size)
 List* gridGetCellList(Grid* g, unsigned int x, unsigned int y)
 {
 	assert(x < g->HCells && y < g->VCells);
+	//printf("Acces to %u, %u; max: %u, %u\n", x, y, g->HCells, g->VCells);
 	return &(g->Table[x][y]);
 }
 
@@ -161,7 +163,7 @@ List gridGetPolygonList(Grid* g, Polygon* p)
 
 void gridRemovePolygons(Grid* g)
 {
-	unsigned int i, j; List* L;
+	unsigned int i, j, countr=0, count=0; List* L;
 	for (i=0; i<g->HCells; i++)
 		for (j=0; j<g->VCells; j++)
 		{
@@ -170,10 +172,33 @@ void gridRemovePolygons(Grid* g)
 			while(!nodeEnd(it))
 			{
 				if (!polyIsFixe((Polygon*)nodeGetData(it)))
-					lstRem(L, it);
+					lstRem(L, it), countr++;
+				else
+					count++;
 				it = nodeGetNext(it);
 			}
 		}
+	//printf("%u removed, %u not removed\n", countr, count);
+}
+
+void gridDraw(Grid* g)
+{
+	unsigned int i, j;
+	glColor4f(1.f, 1.f, .1f, 0.5f);
+	glBegin(GL_LINES);
+	//for (i=0; i<g->VCells; i++)
+	for (j=0; j<g->HCells; j++)
+	{
+		glVertex2f(j*g->CellWidth, 0.f);
+		glVertex2f(j*g->CellWidth, 1600.f);
+	}
+	
+	for (i=0; i<g->VCells; i++)
+	{
+		glVertex2f(0.f, i*g->CellHeight);
+		glVertex2f(3200.f, i*g->CellHeight);
+	}
+	glEnd();
 }
 
 void gridRegressionTest(void)

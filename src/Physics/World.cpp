@@ -21,7 +21,7 @@ void wdInit(World* W, float Width, float Height)
 	W->prevdt = 0.5f;
 	W->dt = 0.5f;
 	float CellSize=128.f;
-	gridInit(&W->CollisionGrid, Width/CellSize, Height/CellSize);
+	gridInit(&W->CollisionGrid, Width/CellSize+1, Height/CellSize+1);
 	gridSetCellSize(&W->CollisionGrid, CellSize);
 }
 
@@ -174,7 +174,6 @@ void wdResolveElastic(World* W)
 
 void wdHandleCollision(World* W)
 {
-		wdUpdateGrid(W);
         CollisionInfo Info;
         Node* it = lstFirst(&W->Polygons);
         Node* it2;
@@ -187,7 +186,7 @@ void wdHandleCollision(World* W)
 			it2 = lstFirst(&LExtracted);
                 while(!nodeEnd(it2))
                 {
-					if(it != it2)
+					if(1)//it != it2)
 					{
 						Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
 						if(Info.P1 != NULL) /* Il y a collision */
@@ -404,13 +403,15 @@ void wdUpdateGrid(World *W)
 	//printf("Size before deleting: %u\n", lstCount(W->CollisionGri))
 	gridRemovePolygons(&W->CollisionGrid);
 	
+	unsigned int counta=0, countm=0;
 	Node* it = lstFirst(&W->Polygons);
 	while(!nodeEnd(it))
 	{
 		if (!polyIsFixe((Polygon*)nodeGetData(it)))
-			gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it));
+			gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it)), counta++;
+		else countm++;
 			
 		it=nodeGetNext(it);
 	}
-	
+	//printf("Missed : %u, added %u\n", countm, counta);
 }
