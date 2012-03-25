@@ -3,11 +3,11 @@
 Elastic* newElastic(Vertex* V1, Vertex* V2, float L, float S)
 {
 	Elastic* E = (Elastic*) malloc(sizeof(Elastic));
-	elasticInit(E, V1, V2, L, S);
+	elInit(E, V1, V2, L, S);
 	return E;
 }
 
-void elasticInit(Elastic* E, Vertex* V1, Vertex* V2, float L, float S)
+void elInit(Elastic* E, Vertex* V1, Vertex* V2, float L, float S)
 {
 	E->V1 = V1;
 	E->V2 = V2;
@@ -22,7 +22,7 @@ void delElastic(Elastic* E)
 	free(E);
 }
 
-void elasticResolve(Elastic* E)
+void elResolve(Elastic* E)
 {
 	/* Vecteur V1V2 */
 	Vec2 Vect = vec2Sub(vxGetPosition(E->V2), vxGetPosition(E->V1));
@@ -47,37 +47,37 @@ void elasticResolve(Elastic* E)
 	vxApplyForce(E->V1, vec2Prod(Vect, factor*(vxIsFixe(E->V2)?(1-MassFactor):1)));
 }
 
-Vec2 elasticVector(Elastic* E)
+Vec2 elVector(Elastic* E)
 {
 	return vec2Sub(vxGetPosition(E->V2), vxGetPosition(E->V1));
 }
 
-Vertex* elasticGetV1(const Elastic* E)
+Vertex* elGetV1(const Elastic* E)
 {
 	return E->V1;
 }
 
-Vertex* elasticGetV2(const Elastic* E)
+Vertex* elGetV2(const Elastic* E)
 {
 	return E->V2;
 }
 
-void elasticSetV1(Elastic* E, Vertex* V)
+void elSetV1(Elastic* E, Vertex* V)
 {
 	E->V1 = V;
 }
 
-void elasticSetV2(Elastic* E, Vertex* V)
+void elSetV2(Elastic* E, Vertex* V)
 {
 	E->V2 = V;
 }
 
-void elasticSetLength(Elastic* E, float newLength)
+void elSetLength(Elastic* E, float newLength)
 {
 	E->Length = newLength;
 }
 
-void elasticSetSpring(Elastic* E, float newSpring)
+void elSetSpring(Elastic* E, float newSpring)
 {
 	E->Spring = newSpring;
 }

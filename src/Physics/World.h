@@ -200,6 +200,19 @@ Rigid* wdGetNearestRigid(World* W, float X, float Y);
 **/
 Polygon* wdGetNearestPoly(World* W, float X, float Y);
 
+/** @brief Affichage de Debug de World
+ *
+ * @param W World
+ * @param vxDraw Fonction d'affichage d'un vertex
+ * @param elDraw Fonction d'affichage d'un Elastic
+ * @param rdDraw Fonction d'affichage d'un Rigid
+ * @param wdDraw Fonction d'affichage d'un Polygon
+**/
+void wdDraw(World* W, void (*vxDraw)(Vertex* V, float R, float G, float B, float A),
+	void (*elDraw)(Elastic* E),
+	void (*rdDraw)(Rigid* R),
+	void (*polyDraw) (Polygon* P));
+
 /** @brief Libère la mémoire occupée
  *
  * Détruit tout les objets contenu en vidant les liste

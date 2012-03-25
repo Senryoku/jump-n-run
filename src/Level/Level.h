@@ -3,6 +3,12 @@
 
 #include "Physics/Physics.h"
 
+/** @defgroup Level
+ *
+ * Décrit un niveau de jeu
+ * Préfixe des méthodes : lvl
+ **/
+
 typedef struct
 {
 	World* W;
@@ -16,8 +22,13 @@ typedef struct
 
 Level* newLevel(float Width, float Height);
 void lvlInit(Level* Lvl, float Width, float Height);
+void lvlFree(Level* Lvl);
+void delLevel(Level* lvl);
 
 World* lvlGetWorld(Level* Lvl);
+
+/** @}
+**/
 
 #endif
 

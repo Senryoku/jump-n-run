@@ -10,10 +10,106 @@ void lvledInit(LevelEditor *Led, float Width, float Height)
  	Led->GrabElastic = newElastic(Led->Mouse, NULL, 30.f, 0.2f);
 	Led->tmpElastic1 = Led->tmpElastic2 = Led->tmpRigid1 = Led->tmpRigid2 = NULL;
 	Led->vxDraw = NULL;
-	Led->elasticDraw = NULL;
+	Led->elDraw = NULL;
 	Led->rdDraw = NULL;
 	Led->polyDraw = NULL;
 	Led->Testing = 0;
+}
+
+void lvledFree(LevelEditor *Led)
+{
+	lvlFree(Led->Lvl);
+	delVertex(Led->Mouse);
+	delElastic(Led->GrabElastic);
+}
+
+void lvledSetLineDraw(LevelEditor* Led, void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A))
+{
+	Led->lineDraw = lineDraw;
+}
+
+void lvledSetVxDraw(LevelEditor* Led, void (*vxDraw)(Vertex* V, float R, float G, float B, float A))
+{
+	Led->vxDraw = vxDraw;
+}
+
+void lvledSetElDraw(LevelEditor* Led, void (*elDraw)(Elastic* E))
+{
+	Led->elDraw = elDraw;
+}
+
+void lvledSetRdDraw(LevelEditor* Led, void (*rdDraw)(Rigid* R))
+{
+	Led->rdDraw = rdDraw;
+}
+
+void lvledSetPolyDraw(LevelEditor* Led, void (*polyDraw)(Polygon* P))
+{
+	Led->polyDraw = polyDraw;
+}
+
+void lvledDraw(const LevelEditor* Led, char flag)
+{
+	wdDraw(lvlGetWorld(Led->Lvl), Led->vxDraw, Led->elDraw, Led->rdDraw, Led->polyDraw);
+
+	if((flag & LVLED_RULE) && (Led->lineDraw != NULL))
+	{
+		(*Led->lineDraw) (0.f , vxGetPosition(Led->Mouse).y,
+			lvlGetWorld(Led->Lvl)->Width , vxGetPosition(Led->Mouse).y,
+			0.f, 0.f, 1.f, 0.5f);
+
+		for (float i = 0.f; i < lvlGetWorld(Led->Lvl)->Width; i+=10.f)
+		{
+			if (static_cast<int>(i)%100 == 0)
+				(*Led->lineDraw) (i , vxGetPosition(Led->Mouse).y,
+					i, vxGetPosition(Led->Mouse).y - 5.f,
+					0.f, 0.f, 1.f, 0.5f);
+			else if (static_cast<int>(i)%50 == 0)
+				(*Led->lineDraw) (i , vxGetPosition(Led->Mouse).y,
+					i, vxGetPosition(Led->Mouse).y - 3.5f,
+					0.f, 0.f, 1.f, 0.5f);
+			else
+				(*Led->lineDraw) (i , vxGetPosition(Led->Mouse).y,
+					i, vxGetPosition(Led->Mouse).y - 2.5f,
+					0.f, 0.f, 1.f, 0.5f);
+		}
+
+		(*Led->lineDraw) (vxGetPosition(Led->Mouse).x, 0.f,
+			vxGetPosition(Led->Mouse).x, lvlGetWorld(Led->Lvl)->Height,
+			0.f, 0.f, 1.f, 0.5f);
+
+		for (float i = 0.f; i < lvlGetWorld(Led->Lvl)->Height; i+=10.f)
+		{
+			if (static_cast<int>(i)%100 == 0)
+				(*Led->lineDraw) (vxGetPosition(Led->Mouse).x, i,
+					vxGetPosition(Led->Mouse).x + 5.f, i,
+					0.f, 0.f, 1.f, 0.5f);
+			else if (static_cast<int>(i)%50 == 0)
+				(*Led->lineDraw) (vxGetPosition(Led->Mouse).x, i,
+					vxGetPosition(Led->Mouse).x + 3.5f, i,
+					0.f, 0.f, 1.f, 0.5f);
+			else
+				(*Led->lineDraw) (vxGetPosition(Led->Mouse).x, i,
+					vxGetPosition(Led->Mouse).x + 2.5f, i,
+					0.f, 0.f, 1.f, 0.5f);
+		}
+	}
+
+	if(flag & LVLED_LIMITS && (Led->lineDraw != NULL))
+	{
+		(*Led->lineDraw) (0.f, 1.f,
+			lvlGetWorld(Led->Lvl)->Width - 1.f, 0.f,
+			0.5f, 0.5f, 0.5f, 0.5f);
+		(*Led->lineDraw) (lvlGetWorld(Led->Lvl)->Width - 1.f, 0.f,
+			lvlGetWorld(Led->Lvl)->Width - 1.f, lvlGetWorld(Led->Lvl)->Height,
+			0.5f, 0.5f, 0.5f, 0.5f);
+		(*Led->lineDraw) (lvlGetWorld(Led->Lvl)->Width - 1.f, lvlGetWorld(Led->Lvl)->Height,
+			0.f, lvlGetWorld(Led->Lvl)->Height,
+			0.5f, 0.5f, 0.5f, 0.5f);
+		(*Led->lineDraw) (0.f, lvlGetWorld(Led->Lvl)->Height,
+			0.f, 1.f,
+			0.5f, 0.5f, 0.5f, 0.5f);
+	}
 }
 
 void lvledGrabUpdate(LevelEditor *Led)
@@ -36,7 +132,7 @@ void lvledGrabEl(LevelEditor *Led)
 	Led->GrabEl = wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
 	if(Led->GrabEl != NULL)
 	{
-		elasticSetV2(Led->GrabElastic, Led->GrabEl);
+		elSetV2(Led->GrabElastic, Led->GrabEl);
 		wdAddElastic(lvlGetWorld(Led->Lvl), Led->GrabElastic);
 	}
 }
@@ -133,8 +229,8 @@ void lvledDelVertex(LevelEditor *Led)
 		it = lstFirst(&lvlGetWorld(Led->Lvl)->Elastics);
 		while(!nodeEnd(it))
 		{
-			if(elasticGetV1((Elastic*) nodeGetData(it)) == tmpVertex ||
-				elasticGetV2((Elastic*) nodeGetData(it)) == tmpVertex)
+			if(elGetV1((Elastic*) nodeGetData(it)) == tmpVertex ||
+				elGetV2((Elastic*) nodeGetData(it)) == tmpVertex)
 				IsLonely = 0;
 			it = nodeGetNext(it);
 		}
@@ -215,7 +311,7 @@ void lvledNewPolyFixeCreate(LevelEditor *Led)
 		tmpPoly = newPolygonL(Led->tmpLstFixe);
 		polySetFixe(tmpPoly, 1);
 		wdAddPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
-		//TEMPOREL!!!
+		//TEMPORAIRE!!!
 		gridAddPolygonByBB(&lvlGetWorld(Led->Lvl)->CollisionGrid, tmpPoly);
 	}
 	lstFree(&Led->tmpLstFixe);
@@ -254,4 +350,9 @@ void lvledNewRigidCreate(LevelEditor *Led)
 		&& Led->tmpRigid1 != Led->tmpRigid2)
 		wdAddRigid(lvlGetWorld(Led->Lvl), newRigid(Led->tmpRigid1, Led->tmpRigid2, -1.f));
 	Led->tmpRigid1 = Led->tmpRigid2 = NULL;
+}
+
+void lvledTestLevel(LevelEditor *Led)
+{
+	printf("Boucle de Test !");
 }

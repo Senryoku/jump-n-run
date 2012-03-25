@@ -8,7 +8,7 @@
  * Liaison élastique entre deux Vertex, implémente la loi de Hooke
  * Attention ! Des liaisons de longueur nulle donneront des résultats
  * assez aléatoire (pas de plantage mais un comportement peu réaliste...)
- * Préfixe des méthodes : elastic
+ * Préfixe des méthodes : el
  * @todo Test de régression complet
  * @{
 **/
@@ -41,7 +41,7 @@ Elastic* newElastic(Vertex* V1, Vertex* V2, float L, float S);
  * @param L Longueur à l'équilibre
  * @param S Constante de Ressort
 **/
-void elasticInit(Elastic* E, Vertex* V1, Vertex* V2, float L, float S);
+void elInit(Elastic* E, Vertex* V1, Vertex* V2, float L, float S);
 
 /** @brief Destructeur
  *
@@ -53,42 +53,42 @@ void delElastic(Elastic* E);
  *
  * @param E Contrainte Elastic à résoudre
 **/
-void elasticResolve(Elastic* E);
+void elResolve(Elastic* E);
 
 /** @brief Retourne le vecteur formé par les deux points de la contrainte
  *
 **/
-Vec2 elasticVector(Elastic* E);
+Vec2 elVector(Elastic* E);
 
 /** @brief Accesseur de V1
  *
 **/
-Vertex* elasticGetV1(const Elastic* E);
+Vertex* elGetV1(const Elastic* E);
 
 /** @brief Accesseur de V2
  *
 **/
-Vertex* elasticGetV2(const Elastic* E);
+Vertex* elGetV2(const Elastic* E);
 
 /** @brief Mutateur de V1
  *
 **/
-void elasticSetV1(Elastic* E, Vertex* V);
+void elSetV1(Elastic* E, Vertex* V);
 
 /** @brief Mutateur de V2
  *
 **/
-void elasticSetV2(Elastic* E, Vertex* V);
+void elSetV2(Elastic* E, Vertex* V);
 
 /** @brief Mutateur de Length
  *
 **/
-void elasticSetLength(Elastic* E, float newLength);
+void elSetLength(Elastic* E, float newLength);
 
 /** @brief Mutateur de Spring
  *
 **/
-void elasticSetSpring(Elastic* E, float newSpring);
+void elSetSpring(Elastic* E, float newSpring);
 
 /** @}
 **/

@@ -19,6 +19,10 @@
  * @{
 **/
 
+#define LVLED_GRID		1
+#define LVLED_RULE		2
+#define LVLED_LIMITS	4
+
 typedef struct
 {
 	Level* Lvl;
@@ -32,13 +36,39 @@ typedef struct
 	Bool Testing;
 
 	/* Fonctions de Callback */
+	void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);
 	void (*vxDraw)(Vertex* V, float R, float G, float B, float A);
-	void (*elasticDraw)(Elastic* E);
+	void (*elDraw)(Elastic* E);
 	void (*rdDraw)(Rigid* R);
 	void (*polyDraw) (Polygon* P);
 } LevelEditor;
 
 void lvledInit(LevelEditor *Led, float Width, float Height);
+void lvledFree(LevelEditor *Led);
+
+/* Mutateurs */
+/** @brief Défini la fonction d'affichage d'une ligne (Aides à l'édition)
+**/
+void lvledSetLineDraw(LevelEditor* Led, void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A));
+/** @brief Défini la fonction d'affichage des Vertex
+**/
+void lvledSetVxDraw(LevelEditor* Led, void (*vxDraw)(Vertex* V, float R, float G, float B, float A));
+/** @brief Défini la fonction d'affichage des Elastic
+**/
+void lvledSetElDraw(LevelEditor* Led, void (*elDraw)(Elastic* E));
+/** @brief Défini la fonction d'affichage des Rigid
+**/
+void lvledSetRdDraw(LevelEditor* Led, void (*rdDraw)(Rigid* R));
+/** @brief Défini la fonction d'affichage des Polygon
+**/
+void lvledSetPolyDraw(LevelEditor* Led, void (*polyDraw)(Polygon* P));
+
+/** @brief Affichage du niveau en cours d'édition
+ *
+ * @param Led LevelEditor
+ * @param flag Flags possibles : LVLED_GRID, LVLED_RULE, LVLED_LIMITS
+**/
+void lvledDraw(const LevelEditor *Led, char flag);
 
 // Fonctions de Manipulation/Vision
 void lvledGrab(LevelEditor *Led);
@@ -95,7 +125,11 @@ void lvledDelRigid(LevelEditor *Led);
 **/
 void lvledDelVertex(LevelEditor *Led);
 
-void lvledTestLevel(LevelEditor *Led); // Lance le jeu sur le niveau en cours d'édition
+/** @brief Lance le jeu sur le niveau en cours d'édition
+ *
+ * @param Led LevelEditor
+**/
+void lvledTestLevel(LevelEditor *Led);
 
 void lvledLoad(LevelEditor *Led, const char* File);
 void lvledSave(LevelEditor *Led, const char* File);

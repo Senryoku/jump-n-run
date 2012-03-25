@@ -167,7 +167,7 @@ void wdResolveElastic(World* W)
 
 	while(!nodeEnd(it))
 	{
-			elasticResolve((Elastic*) nodeGetData(it));
+			elResolve((Elastic*) nodeGetData(it));
 			it = nodeGetNext(it);
 	}
 }
@@ -181,7 +181,7 @@ void wdHandleCollision(World* W)
         float PositionOnEdge, CorrectionFactor;
         while(!nodeEnd(it))
         {
-            List LExtracted = gridGetPolygonList(&W->CollisionGrid, (Polygon*) nodeGetData(it));    
+            List LExtracted = gridGetPolygonList(&W->CollisionGrid, (Polygon*) nodeGetData(it));
 			//it2 = lstFirst(&W->Polygons);
 			it2 = lstFirst(&LExtracted);
                 while(!nodeEnd(it2))
@@ -257,7 +257,7 @@ void wdHandleCollision(World* W)
 					}
 					it2 = nodeGetNext(it2);
                 }
-			
+
 			lstFree(&LExtracted);
 			it = nodeGetNext(it);
         }
@@ -295,9 +295,9 @@ Elastic* wdGetNearestElastic(World* W, float X, float Y)
 	while(!nodeEnd(it))
 	{
 		tmpElastic = (Elastic*) nodeGetData(it);
-		Vec2 V1Pos = vxGetPosition(elasticGetV1(tmpElastic));
+		Vec2 V1Pos = vxGetPosition(elGetV1(tmpElastic));
 		Vec2 V1 = vec2(X - V1Pos.x, Y - V1Pos.y);
-		Vec2 V2Pos = vxGetPosition(elasticGetV2(tmpElastic));
+		Vec2 V2Pos = vxGetPosition(elGetV2(tmpElastic));
 		Vec2 V2 = vec2(X - V2Pos.x, Y - V2Pos.y);
 		tmpDist = MIN(vec2SqLength(V1), vec2SqLength(V2));
 		if (tmpDist < Dist)
@@ -402,7 +402,7 @@ void wdUpdateGrid(World *W)
 {
 	//printf("Size before deleting: %u\n", lstCount(W->CollisionGri))
 	gridRemovePolygons(&W->CollisionGrid);
-	
+
 	unsigned int counta=0, countm=0;
 	Node* it = lstFirst(&W->Polygons);
 	while(!nodeEnd(it))
@@ -410,8 +410,60 @@ void wdUpdateGrid(World *W)
 		if (!polyIsFixe((Polygon*)nodeGetData(it)))
 			gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it)), counta++;
 		else countm++;
-			
+
 		it=nodeGetNext(it);
 	}
 	//printf("Missed : %u, added %u\n", countm, counta);
+}
+
+
+void wdDraw(World* W, void (*vxDraw)(Vertex* V, float R, float G, float B, float A),
+	void (*elDraw)(Elastic* E),
+	void (*rdDraw)(Rigid* R),
+	void (*polyDraw) (Polygon* P))
+{
+	Node* it;
+
+	if(vxDraw != NULL)
+	{
+		it = lstFirst(&W->Vertices);
+		while(!nodeEnd(it))
+		{
+			if(vxIsFixe((Vertex*) nodeGetData(it)))
+				(*vxDraw)((Vertex*) nodeGetData(it), 1.f, 0.f, 0.f, 0.3f);
+			else
+				(*vxDraw)((Vertex*) nodeGetData(it), 0.f, 1.f, 0.f, 0.3f);
+			it = nodeGetNext(it);
+		}
+	}
+
+	if(elDraw != NULL)
+	{
+		it = lstFirst(&W->Elastics);
+		while(!nodeEnd(it))
+		{
+			(*elDraw) ((Elastic*) nodeGetData(it));
+			it = nodeGetNext(it);
+		}
+	}
+
+	if(rdDraw != NULL)
+	{
+		it = lstFirst(&W->Rigids);
+		while(!nodeEnd(it))
+		{
+			(*rdDraw) ((Rigid*) nodeGetData(it));
+			it = nodeGetNext(it);
+		}
+	}
+
+	if(polyDraw != NULL)
+	{
+		it = lstFirst(&W->Polygons);
+		while(!nodeEnd(it))
+		{
+			(*polyDraw) ((Polygon*) nodeGetData(it));
+			it = nodeGetNext(it);
+		}
+	}
 }
