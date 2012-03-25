@@ -3,6 +3,22 @@
 
 #include "Level.h"
 
+/** @defgroup LevelEditor
+ *
+ * Permet la création/édition de Niveau
+ * Préfixe des méthodes : lvled
+ * @todo Ajouter des fonctions de Draw basées sur des callback
+ * de primitives d'affichage de :
+ * - Points basée sur un Vertex* et une couleur
+ * - Lignes basée un Rigid* (couleur prédéterminée)
+ * - Lignes basée un Elastic* (couleur déterminée par la contrainte)
+ * - Polygones basé sur un Polygon*
+ * Ces fonctions de Draw pourraient être ajoutées aux modules
+ * correspondant, cependant les fonctions de callback seraient stockées
+ * dans LevelEditor.
+ * @{
+**/
+
 typedef struct
 {
 	Level* Lvl;
@@ -13,6 +29,13 @@ typedef struct
  	Elastic* GrabElastic;
  	Vertex *Grab, *GrabEl, *Mouse, // Mouse devra être mis à jour par Game ?
 		*tmpElastic1, *tmpElastic2, *tmpRigid1, *tmpRigid2;
+	Bool Testing;
+
+	/* Fonctions de Callback */
+	void (*vxDraw)(Vertex* V, float R, float G, float B, float A);
+	void (*elasticDraw)(Elastic* E);
+	void (*rdDraw)(Rigid* R);
+	void (*polyDraw) (Polygon* P);
 } LevelEditor;
 
 void lvledInit(LevelEditor *Led, float Width, float Height);
@@ -76,5 +99,8 @@ void lvledTestLevel(LevelEditor *Led); // Lance le jeu sur le niveau en cours d'
 
 void lvledLoad(LevelEditor *Led, const char* File);
 void lvledSave(LevelEditor *Led, const char* File);
+
+/** @}
+**/
 
 #endif

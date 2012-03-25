@@ -12,8 +12,8 @@ Vertex* GetNearest(World* W, float MouseX, float MouseY);
 int main(int argc, char** argv)
 {
 	unsigned int i, ViewPort;
-	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, WindowWidth = 1600.f,
-		WindowHeight = 720.f, MapWidth = WindowWidth/10.f, MapHeight = WindowHeight/10.f,
+	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, WindowWidth = 1200.f,
+		WindowHeight = 600.f, MapWidth = WindowWidth/10.f, MapHeight = WindowHeight/10.f,
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f;
 
@@ -26,6 +26,20 @@ int main(int argc, char** argv)
 	LevelEditor LvlEd;
 	lvledInit(&LvlEd, 3200.f, 1600.f);
 
+	float playerSize = 150.f;
+	Vertex *VPlayer1, *VPlayer2, *VPlayer3, *VPlayer4;
+	VPlayer1 = newVertex();
+	vxSetPosition(VPlayer1, vec2(10.f, 10.f));
+	VPlayer2 = newVertex();
+	vxSetPosition(VPlayer2, vec2(10.f+playerSize/2, 10.f));
+	VPlayer3 = newVertex();
+	vxSetPosition(VPlayer3, vec2(10.f+playerSize/2, 10.f+playerSize));
+	VPlayer4 = newVertex();
+	vxSetPosition(VPlayer4, vec2(10.f, 10.f+playerSize));
+	wdAddVertex(lvlGetWorld(LvlEd.Lvl), VPlayer1); wdAddVertex(lvlGetWorld(LvlEd.Lvl), VPlayer2); wdAddVertex(lvlGetWorld(LvlEd.Lvl), VPlayer3); wdAddVertex(lvlGetWorld(LvlEd.Lvl), VPlayer4);
+	Polygon* Player = polyRectangle(VPlayer1, VPlayer2, VPlayer3, VPlayer4);
+	wdAddPolygon(lvlGetWorld(LvlEd.Lvl), Player);
+
 	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "window");
 	window.setFramerateLimit(60.f);
 	window.setKeyRepeatEnabled(0);
@@ -34,7 +48,7 @@ int main(int argc, char** argv)
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
 
-//	glMatrixMode(GL_PROJECTION); //On va ainsi dÃ©finir le viewport
+//	glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
 //	glLoadIdentity();
 //	glOrtho(0.0, 800.0, 600.0, 0.0, 0.0, 100.0);
 	glDisable(GL_DEPTH_TEST);
@@ -61,144 +75,183 @@ int main(int argc, char** argv)
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
 
-			/* PrÃ©mices de ce que seront les fonctions de LevelEditor */
-
-			if(event.type == sf::Event::MouseButtonPressed)
+			if(LvlEd.Testing)
 			{
-				switch (event.mouseButton.button)
+				/* Appeller l'Init de Game ici (enfin, pas dans la boucle d'événement mais... bref ! */
+				if (event.type == sf::Event::KeyPressed)
 				{
-					case sf::Mouse::Left :
-						/* CrÃ©ation d'un polygone Fixe */
-						if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
-							lvledNewPolyFixeAddV(&LvlEd);
-						/* CrÃ©ation d'un polygone Dynamique */
-						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
-							lvledNewPolyAddV(&LvlEd);
-						/* Ajout d'Elastic */
-						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
-							lvledNewElasticAddV(&LvlEd);
-						/* Ajout de Rigid */
-						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
-							lvledNewRigidAddV(&LvlEd);
-						} else {
-							lvledGrab(&LvlEd);
-						}
-						break;
-					case sf::Mouse::Right :
-						lvledGrabEl(&LvlEd);
-						break;
-					default :
-						break;
-				}
-			}
-
-			if(event.type == sf::Event::MouseButtonReleased)
-			{
-				switch (event.mouseButton.button)
-				{
-					case sf::Mouse::Left :
-						lvledRelease(&LvlEd);
-						break;
-					case sf::Mouse::Right :
-						lvledReleaseEl(&LvlEd);
-						break;
-					default :
-						break;
-				}
-			}
-
-			if (event.type == sf::Event::KeyPressed)
-			{
-				switch(event.key.code)
-				{
-					case sf::Keyboard::B :
+					switch(event.key.code)
 					{
-						float boxSize=100.f;
-						Vertex *V10, *V11, *V12, *V13;
-						V10 = newVertex();
-						vxSetPosition(V10, vec2(MouseX, MouseY));
-						V11 = newVertex();
-						vxSetPosition(V11, vec2(MouseX+boxSize, MouseY));
-						V12 = newVertex();
-						vxSetPosition(V12, vec2(MouseX+boxSize, MouseY+boxSize));
-						V13 = newVertex();
-						vxSetPosition(V13, vec2(MouseX, MouseY+boxSize));
-						wdAddVertex(lvlGetWorld(LvlEd.Lvl), V10); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V11); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V12); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V13);
-						Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
-						wdAddPolygon(lvlGetWorld(LvlEd.Lvl), Rectangle2);
-						
+						case sf::Keyboard::T :
+							LvlEd.Testing = 0;
+							printf("ToEditor\n");
+							break;
+						default:
+							break;
 					}
-						break;	
-					case sf::Keyboard::G :
-						lvledGrab(&LvlEd);
-						break;
-					case sf::Keyboard::N :
-						printf("number of polys: %u\n", lstCount(&lvlGetWorld(LvlEd.Lvl)->Polygons));
-						break;
-					case sf::Keyboard::E :
-						lvledGrabEl(&LvlEd);
-						break;
-					case sf::Keyboard::Delete :
-						if(!event.key.shift)
-						{
-							lvledDelPoly(&LvlEd);
-						} else {
-							lvledDelVertex(&LvlEd);
-						}
-						break;
-					case sf::Keyboard::P :
-					case sf::Keyboard::Num1 :
-						lvledNewPolyFixeInit(&LvlEd);
-						break;
-					case sf::Keyboard::O :
-					case sf::Keyboard::Num2 :
-						lvledNewPolyInit(&LvlEd);
-						break;
-					default:
-						break;
 				}
+
+			} else {
+
+				/* Prémices de ce que seront les fonctions de LevelEditor */
+
+				if(event.type == sf::Event::MouseButtonPressed)
+				{
+					switch (event.mouseButton.button)
+					{
+						case sf::Mouse::Left :
+							/* Création d'un polygone Fixe */
+							if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+								lvledNewPolyFixeAddV(&LvlEd);
+							/* Création d'un polygone Dynamique */
+							} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+								lvledNewPolyAddV(&LvlEd);
+							/* Ajout d'Elastic */
+							} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+								lvledNewElasticAddV(&LvlEd);
+							/* Ajout de Rigid */
+							} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
+								lvledNewRigidAddV(&LvlEd);
+							} else {
+								lvledGrab(&LvlEd);
+							}
+							break;
+						case sf::Mouse::Right :
+							lvledGrabEl(&LvlEd);
+							break;
+						default :
+							break;
+					}
+				}
+
+				if(event.type == sf::Event::MouseButtonReleased)
+				{
+					switch (event.mouseButton.button)
+					{
+						case sf::Mouse::Left :
+							lvledRelease(&LvlEd);
+							break;
+						case sf::Mouse::Right :
+							lvledReleaseEl(&LvlEd);
+							break;
+						default :
+							break;
+					}
+				}
+
+				if (event.type == sf::Event::KeyPressed)
+				{
+					switch(event.key.code)
+					{
+						case sf::Keyboard::T :
+							LvlEd.Testing = 1;
+							printf("ToPlay\n");
+							break;
+						case sf::Keyboard::B :
+						{
+							float boxSize=100.f;
+							Vertex *V10, *V11, *V12, *V13;
+							V10 = newVertex();
+							vxSetPosition(V10, vec2(MouseX, MouseY));
+							V11 = newVertex();
+							vxSetPosition(V11, vec2(MouseX+boxSize, MouseY));
+							V12 = newVertex();
+							vxSetPosition(V12, vec2(MouseX+boxSize, MouseY+boxSize));
+							V13 = newVertex();
+							vxSetPosition(V13, vec2(MouseX, MouseY+boxSize));
+							wdAddVertex(lvlGetWorld(LvlEd.Lvl), V10); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V11); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V12); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V13);
+							Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
+							wdAddPolygon(lvlGetWorld(LvlEd.Lvl), Rectangle2);
+
+						}
+							break;
+						case sf::Keyboard::G :
+							lvledGrab(&LvlEd);
+							break;
+						case sf::Keyboard::N :
+							printf("number of polys: %u\n", lstCount(&lvlGetWorld(LvlEd.Lvl)->Polygons));
+							break;
+						case sf::Keyboard::E :
+							lvledGrabEl(&LvlEd);
+							break;
+						case sf::Keyboard::Delete :
+							if(!event.key.shift)
+							{
+								lvledDelPoly(&LvlEd);
+							} else {
+								lvledDelVertex(&LvlEd);
+							}
+							break;
+						case sf::Keyboard::P :
+						case sf::Keyboard::Num1 :
+							lvledNewPolyFixeInit(&LvlEd);
+							break;
+						case sf::Keyboard::O :
+						case sf::Keyboard::Num2 :
+							lvledNewPolyInit(&LvlEd);
+							break;
+						default:
+							break;
+					}
+				}
+
+				if (event.type == sf::Event::KeyReleased)
+				{
+					switch(event.key.code)
+					{
+						case sf::Keyboard::G :
+							lvledRelease(&LvlEd);
+							break;
+						case sf::Keyboard::E :
+							lvledReleaseEl(&LvlEd);
+							break;
+						case sf::Keyboard::F :
+							lvledToogleNearestFixe(&LvlEd);
+							break;
+						case sf::Keyboard::C :
+							lvledToogleNearestPolyFixe(&LvlEd);
+							break;
+						case sf::Keyboard::O :
+						case sf::Keyboard::Num2 :
+							lvledNewPolyCreate(&LvlEd);
+							break;
+						case sf::Keyboard::P :
+						case sf::Keyboard::Num1 :
+							lvledNewPolyFixeCreate(&LvlEd);
+							break;
+						case sf::Keyboard::Num3 :
+							lvledNewElasticCreate(&LvlEd);
+							break;
+						case sf::Keyboard::Num4 :
+							lvledNewRigidCreate(&LvlEd);
+							break;
+						default:
+							break;
+					}
+				}
+
 			}
 
-			if (event.type == sf::Event::KeyReleased)
-			{
-				switch(event.key.code)
-				{
-					case sf::Keyboard::G :
-						lvledRelease(&LvlEd);
-						break;
-					case sf::Keyboard::E :
-						lvledReleaseEl(&LvlEd);
-						break;
-					case sf::Keyboard::F :
-						lvledToogleNearestFixe(&LvlEd);
-						break;
-					case sf::Keyboard::C :
-						lvledToogleNearestPolyFixe(&LvlEd);
-						break;
-					case sf::Keyboard::O :
-					case sf::Keyboard::Num2 :
-						lvledNewPolyCreate(&LvlEd);
-						break;
-					case sf::Keyboard::P :
-					case sf::Keyboard::Num1 :
-						lvledNewPolyFixeCreate(&LvlEd);
-						break;
-					case sf::Keyboard::Num3 :
-						lvledNewElasticCreate(&LvlEd);
-						break;
-					case sf::Keyboard::Num4 :
-						lvledNewRigidCreate(&LvlEd);
-						break;
-					default:
-						break;
-				}
-			}
 		}
 
 		lvledSetMousePosition(&LvlEd, MouseX, MouseY);
 		lvledGrabUpdate(&LvlEd);
 
-		/* DÃ©placement de la vue */
+		/* Déplacement de la vue */
+
+		if(LvlEd.Testing)
+		{
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+			polyApplyForce(Player, vec2(0.f, -10.f));
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			polyApplyForce(Player, vec2(0.f, 10.f));
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+			polyApplyForce(Player, vec2(-5.f, 0.f));
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			polyApplyForce(Player, vec2(5.f, 0.f));
+
+		} else {
 
 		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
@@ -216,11 +269,13 @@ int main(int argc, char** argv)
 			toViewY += (OldMouseY - MouseY)*10.f;
 		}
 
+		}
+
 		Wobble(&ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
-		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par dÃ©faut couleur est rouge
+		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		//glClear(GL_DEPTH_BUFFER_BIT);
 
 		//On prepare la projection
@@ -228,7 +283,7 @@ int main(int argc, char** argv)
 		glLoadIdentity();
 
 		// Test Viewport : Minimap !
-		glMatrixMode(GL_PROJECTION); //On va ainsi dÃ©finir le viewport
+		glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
 		glLoadIdentity();
 		glOrtho(0.0, WindowWidth, WindowHeight, 0.0, 0.0, 100.0);
 
@@ -243,7 +298,7 @@ int main(int argc, char** argv)
 
 				wdApplyForce(lvlGetWorld(LvlEd.Lvl), vec2(0.f, 0.6f));
 				wdResolveVextex(lvlGetWorld(LvlEd.Lvl));
-				
+
 
 				wdUpdateGrid(lvlGetWorld(LvlEd.Lvl));
 				for(i=0; i<4; i++)
@@ -358,7 +413,7 @@ void glDrawPolygon(Polygon* P)
 			glVertex2f(vxGetPosition(rdGetV2((Rigid*)daGet(&P->Rigids, i))).x, vxGetPosition(rdGetV2((Rigid*)daGet(&P->Rigids, i))).y);
 	}
 
-	glColor3f(0.f, 0.f, 1.f);
+	glColor4f(0.f, 0.f, 1.f, 1.f);
 	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
 	{
 			glVertex2f(vxGetPosition(rdGetV1((Rigid*)daGet(&P->InternalRigids, i))).x, vxGetPosition(rdGetV1((Rigid*)daGet(&P->InternalRigids, i))).y);
@@ -366,7 +421,7 @@ void glDrawPolygon(Polygon* P)
 	}
 	glEnd();
 
-	if(polyIsFixe(P)) glColor3f(1.f, 0.f, 0.f); else glColor3f(0.f, 0.f, 1.f);
+	if(polyIsFixe(P)) glColor4f(1.f, 0.f, 0.f, 1.f); else glColor4f(0.f, 0.f, 1.f, 1.f);
 	Vec2 Center = polyComputeCenter(P);
 		glBegin(GL_TRIANGLE_FAN);
 		glVertex2f(Center.x, Center.y);
@@ -376,10 +431,10 @@ void glDrawPolygon(Polygon* P)
 					1*4.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + Center.y);
 		}
 		glEnd();
-	
+
 	//BBox
 	BBox B = polyGetBBox(P);
-	glColor3f(1.f, 0.f, 0.f);
+	glColor4f(1.f, 0.f, 0.f, 1.f);
 	glBegin(GL_LINE_LOOP);
 	glVertex2f(B.Left, B.Top);
 	glVertex2f(B.Right, B.Top);

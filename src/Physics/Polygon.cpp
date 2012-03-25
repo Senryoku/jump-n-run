@@ -355,10 +355,10 @@ Vec2 polyGetSpeed(Polygon* P)
 
 BBox polyGetBBox(Polygon* P)
 {
-	BBox B; int i;
+	BBox B; unsigned int i;
 	B.Left = B.Right = vxGetPosition((Vertex*)daGet(&P->Vertices, 0)).x;
 	B.Top = B.Bottom = vxGetPosition((Vertex*)daGet(&P->Vertices, 0)).y;
-	
+
 	for(i = 1; i < daGetSize(&P->Vertices); i++)
 	{
 		Vertex* V = (Vertex*) daGet(&P->Vertices, i);
@@ -367,7 +367,7 @@ BBox polyGetBBox(Polygon* P)
 		if (vxGetPosition(V).x > B.Right) B.Right=vxGetPosition(V).x;
 		if (vxGetPosition(V).y > B.Bottom) B.Bottom=vxGetPosition(V).y;
 	}
-	
+
 	return B;
 }
 

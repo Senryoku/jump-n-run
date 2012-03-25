@@ -60,6 +60,8 @@
 		<Unit filename="src\Physics\Angular.h" />
 		<Unit filename="src\Physics\Elastic.cpp" />
 		<Unit filename="src\Physics\Elastic.h" />
+		<Unit filename="src\Physics\Grid.cpp" />
+		<Unit filename="src\Physics\Grid.h" />
 		<Unit filename="src\Physics\Length.cpp" />
 		<Unit filename="src\Physics\Length.h" />
 		<Unit filename="src\Physics\Physics.h" />

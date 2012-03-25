@@ -9,6 +9,11 @@ void lvledInit(LevelEditor *Led, float Width, float Height)
  	Led->Mouse = newVertex();
  	Led->GrabElastic = newElastic(Led->Mouse, NULL, 30.f, 0.2f);
 	Led->tmpElastic1 = Led->tmpElastic2 = Led->tmpRigid1 = Led->tmpRigid2 = NULL;
+	Led->vxDraw = NULL;
+	Led->elasticDraw = NULL;
+	Led->rdDraw = NULL;
+	Led->polyDraw = NULL;
+	Led->Testing = 0;
 }
 
 void lvledGrabUpdate(LevelEditor *Led)
