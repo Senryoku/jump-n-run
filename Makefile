@@ -127,7 +127,8 @@ MODULES = "Core/Vec2 Physics/Vertex Physics/Polygon"
 
 testVec2 : $(OBJ)Core/Vec2.o $(OBJ)testVec2.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	valgrind --leak-check=full --show-reachable=yes --tool=memcheck ./$(BIN)testVec2
+	#valgrind --leak-check=full --tool=memcheck ./$(BIN)testVec2
+	./$(BIN)testVec2
 	
 $(OBJ)testVec2.o :
 	$(CXX) $(OPT) $(TESTS)TestVec2.cpp -c -o $@

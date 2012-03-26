@@ -99,4 +99,14 @@ void vec2RegressionTest(void)
 	printf("Longueur de V1 : %f, Longueur de V2 : %f\n", vec2Length(V1), vec2Length(V2));
 	printf("Produit scalaire de V1 et V2 : %f\n", vec2Dot(V1, V2));
 	printf(" == Fin du test de Vec2 == \n\n");
+	
+	//quelques test pour les angles
+	Vec2 V1ortho=vec2Ortho(V1);
+	V2=vec2Rotate(V1, vec2(0.f, 0.f), DEG2RAD(-30.f));
+	printf("V1 rotated: %f, %f\n", V2.x,  V2.y);
+	V2=vec2Normalized(V2);
+	printf("V2 normalized: %f, %f\n", V2.x, V2.y);
+	printf("produit scalaire entre V1 et V2 vaut:%f\n", vec2Dot(V1, V2));
+	printf("produit scalaire entre V1ortho et V2 vaut:%f\n", vec2Dot(V1ortho, V2));
+	
 }

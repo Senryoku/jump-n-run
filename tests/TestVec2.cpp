@@ -2,6 +2,6 @@
 
 int main(int argc, char** argv)
 {
-	vec2TestRegression();
+	vec2RegressionTest();
 	return 0;
 }

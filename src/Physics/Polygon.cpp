@@ -15,7 +15,9 @@ Polygon* newPolygon(unsigned int nbVx, ...)
 	daReserve(&newPoly->Rigids, nbVx);
 	daReserve(&newPoly->Vertices, nbVx);
 	newPoly->Center = NULL;
-	newPoly->Fixe = 0;
+	newPoly->Fixe = FALSE;
+	newPoly->GridPos.Valid = FALSE;
+	newPoly->Collided = FALSE;
 
 	va_start(ap, nbVx);
 	/* Ajoute les Vertices */
@@ -45,7 +47,9 @@ Polygon* newPolygonL(List L)
 	daReserve(&newPoly->Rigids, nbVx);
 	daReserve(&newPoly->Vertices, nbVx);
 	newPoly->Center = NULL;
-	newPoly->Fixe = 0;
+	newPoly->Fixe = FALSE;
+	newPoly->GridPos.Valid = FALSE;
+	newPoly->Collided = FALSE;
 
 	/* Ajoute les Vertices */
 	while(!nodeEnd(it))
@@ -77,7 +81,9 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 	daReserve(&P->Rigids, nbVx);
 	daReserve(&P->Vertices, nbVx);
 	P->Center = NULL;
-	P->Fixe = 0;
+	P->Fixe = FALSE;
+	P->GridPos.Valid = FALSE;
+	P->Collided = FALSE;
 
 	va_start(ap, nbVx);
 	/* Ajoute les Vertices */
@@ -92,6 +98,7 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 			(Vertex*)daGet(&P->Vertices, (i+1)%nbVx),
 			vec2Length(vec2Sub(vxGetPosition((Vertex*)daGet(&P->Vertices, i)),
 					vxGetPosition((Vertex*)daGet(&P->Vertices, (i+1)%nbVx))))));
+	printf("Poly %i init\n", P);
 }
 
 void delPolygon(Polygon* P)
@@ -114,6 +121,8 @@ void delPolygon(Polygon* P)
 	daFree(&P->InternalRigids);
 
 	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL, printf("Éliminéee!\n");
+	
+	printf("Polygon %i deleted\n", P);
 
 	free(P);
 }
@@ -131,6 +140,15 @@ Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4)
 	polyAddInternal(newRectangle, 0, 2, -1);
 	polyAddInternal(newRectangle, 1, 3, -1);
 	return newRectangle;
+}
+
+void polyUpdateGridPosition(Polygon* P, unsigned int Left, unsigned int Top, unsigned int Right, unsigned int Bottom)
+{
+	P->GridPos.Left=Left;
+	P->GridPos.Right=Right;
+	P->GridPos.Top=Top;
+	P->GridPos.Bottom=Bottom;
+	P->GridPos.Valid=TRUE;
 }
 
 Polygon* polyRectangleL(List L)
@@ -306,6 +324,16 @@ void polyResolve(Polygon* P)
 		rdResolve((Rigid*)daGet(&P->Rigids, i));
 	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
 		rdResolve((Rigid*)daGet(&P->InternalRigids, i));
+}
+
+Bool polyHasCollided(const Polygon* P)
+{
+	return P->Collided;
+}
+
+void polySetCollided(Polygon* P, Bool Collided)
+{
+	P->Collided=Collided;
 }
 
 Bool polyIsFixe(Polygon* P)

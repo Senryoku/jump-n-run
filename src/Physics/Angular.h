@@ -9,12 +9,15 @@ typedef struct
 	Vertex* C; /**< Centre **/
 	Vertex* S; /**< Maître **/
 	Vertex* M; /**< Esclave (Slave) **/
-	float Lenghts; /**< produit des longueurs de CS et CM **/
 	Vec2 CS;
-	Vec2 CM;
+	Vec2 MC;
+	Vec2 MCOrtho;
 	Vec2 MinPos, MaxPos;
 	float MinAng; /**< Angle minimal **/
 	float MaxAng; /**< Angle maximal **/
+	float MinLenght, MaxLenght; /**< Longueur à l'équilibre **/
+	float MinOrthoDot, MaxOrthoDot; /**< Produit scalaire de CS avec l'orthogonal à MC **/
+	float MinDot, MaxDot;
 } Angular;
 
 /** @brief Initialise la contrai nte d'angle
@@ -24,10 +27,6 @@ typedef struct
  **/
 void angInit(Angular* A, Vertex* C, Vertex* M, Vertex* S, float MinAng, float MaxAng);
 
-/** @brief Fait une mise à jour des longueurs (utilisé pour le calcul de l'angle)
- *
- **/
-void angUpdateLenghts(Angular* A);
 
 void angResolve(Angular* A);
 

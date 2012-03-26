@@ -111,19 +111,46 @@ void gridAddPolygon(Grid* g, Polygon* p)
 void gridAddPolygonByBB(Grid* g, Polygon* p)
 {
 	BBox B = polyGetBBox(p);
-	unsigned int l, t, r, b, i, j;
+	unsigned int l, t, r, b, i, j, count=0;
 	l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
 	t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
 	for (i=l; i<=r; i++)
 		for (j=t; j<=b; j++)
-			gridAddPolygonToCell(g, p, i, j);
+			gridAddPolygonToCell(g, p, i, j), count++;
+	//printf("polygon %i added %u times\n", p, count);
+	polyUpdateGridPosition(p, l, t, r, b);
+}
+
+void gridUpdatePolygonPositionByBB(Grid* g, Polygon* p)
+{
+	BBox B = polyGetBBox(p);
+	unsigned int l, t, r, b;
+	l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
+	t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
+	if (!p->GridPos.Valid)
+		gridAddPolygonByBB(g, p);
+	else
+	{
+		int offsetTop, offsetLeft, offsetRight, offsetBottom;
+		offsetTop=t-p->GridPos.Top; offsetLeft=l-p->GridPos.Left; offsetRight=r-p->GridPos.Right; offsetBottom=b-p->GridPos.Bottom;
+		if (offsetTop==0 && offsetBottom==0 && offsetLeft==0 && offsetRight==0)
+		{
+			//printf("On a évite un insert!\n");
+			return;
+		}
+		else
+		{
+			gridRemovePolygon(g, p);
+			gridAddPolygonByBB(g, p);
+		}
+			
+	}
 }
 
 void gridAddPolygonToCell(Grid* g, Polygon* p, unsigned int x, unsigned int y)
 {
-	assert(x < g->HCells && y < g->VCells);
 	//on ajoute le polygone à la liste que s'il n'est pas déjà dedans
-	List* L=&g->Table[x][y];
+	List* L=gridGetCellList(g, x, y);
 
 	Node* it = lstFirst(L);
 	while(!nodeEnd(it))
@@ -134,6 +161,24 @@ void gridAddPolygonToCell(Grid* g, Polygon* p, unsigned int x, unsigned int y)
 	}
 
 	lstAdd(L, p);
+}
+
+void gridRemovePolygonFromCell(Grid* g, Polygon* p, unsigned int x, unsigned int y)
+{
+	List* L=gridGetCellList(g, x, y);
+	
+	Node* it = lstFirst(L);
+	while(!nodeEnd(it))
+	{
+		if (p==nodeGetData(it))
+		{
+			lstRem(L, it);
+			return;
+		}
+		it = nodeGetNext(it);
+	}
+	
+	printf("Polygone %i n'a pas été trouvé dans la liste ce la cellule %u, %u pour être supprimé\n", p, x, y);
 }
 
 List gridGetPolygonList(Grid* g, Polygon* p)
@@ -159,6 +204,37 @@ List gridGetPolygonList(Grid* g, Polygon* p)
 		}
 
 	return L;
+}
+
+void gridRemovePolygon(Grid* g, Polygon* p)
+{
+	BBox B = polyGetBBox(p);
+	unsigned int l, t, r, b, i, j;
+	l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
+	t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
+	for (i=l; i<=r; i++)
+		for (j=t; j<=b; j++)
+		{
+			lstDel(&g->Table[i][j], p);
+		}
+}
+
+void gridRemovePolygonByForce(Grid* g, Polygon* p)
+{
+	unsigned int i, j;
+	for (i=0; i<g->HCells; i++)
+		for (j=0; j<g->VCells; j++)
+		{
+			List* L = gridGetCellList(g, i, j);
+			Node* it = lstFirst(L);
+			
+			while(!nodeEnd(it))
+			{
+				if (nodeGetData(it)==p)
+					lstRem(L, it);
+				it=nodeGetNext(it);
+			}
+		}
 }
 
 void gridRemovePolygons(Grid* g)

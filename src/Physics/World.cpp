@@ -174,19 +174,35 @@ void wdResolveElastic(World* W)
 
 void wdHandleCollision(World* W)
 {
+	
         CollisionInfo Info;
         Node* it = lstFirst(&W->Polygons);
         Node* it2;
         Vec2 CollisionVector, PosE1, PosE2;
         float PositionOnEdge, CorrectionFactor;
+	//On met à FALSE tous les collide
+	while(!nodeEnd(it))
+	{
+		polySetCollided((Polygon*)nodeGetData(it), FALSE);
+		it=nodeGetNext(it);
+	}
+	
+	it = lstFirst(&W->Polygons);
+	
         while(!nodeEnd(it))
         {
+			if (polyIsFixe((Polygon*) nodeGetData(it))) //On saute les collisions si le polygone est fixe
+			{
+				it=nodeGetNext(it);
+				continue;
+			}
             List LExtracted = gridGetPolygonList(&W->CollisionGrid, (Polygon*) nodeGetData(it));
+			//printf("For polygon %i , list size is %u\n", nodeGetData(it), lstCount(&LExtracted));
 			//it2 = lstFirst(&W->Polygons);
 			it2 = lstFirst(&LExtracted);
                 while(!nodeEnd(it2))
                 {
-					if(1)//it != it2)
+					if(!polyHasCollided((Polygon*)nodeGetData(it2)))//it != it2)
 					{
 						Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
 						if(Info.P1 != NULL) /* Il y a collision */
@@ -253,12 +269,14 @@ void wdHandleCollision(World* W)
 																		   CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
 							vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
 																		   CorrectionFactor*PositionOnEdge*0.5f));
+							
 						}
 					}
 					it2 = nodeGetNext(it2);
                 }
 
 			lstFree(&LExtracted);
+			polySetCollided((Polygon*)nodeGetData(it), TRUE);
 			it = nodeGetNext(it);
         }
 }
@@ -400,15 +418,16 @@ void delWorld(World *W)
 
 void wdUpdateGrid(World *W)
 {
-	//printf("Size before deleting: %u\n", lstCount(W->CollisionGri))
-	gridRemovePolygons(&W->CollisionGrid);
+	//printf("Size before deleting: %u\n", lstCount(W->CollisionGrid))
+	//gridRemovePolygons(&W->CollisionGrid);
 
 	unsigned int counta=0, countm=0;
 	Node* it = lstFirst(&W->Polygons);
 	while(!nodeEnd(it))
 	{
 		if (!polyIsFixe((Polygon*)nodeGetData(it)))
-			gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it)), counta++;
+			gridUpdatePolygonPositionByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it));
+			//gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it)), counta++;
 		else countm++;
 
 		it=nodeGetNext(it);

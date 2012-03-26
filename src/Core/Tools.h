@@ -3,18 +3,20 @@
 
 typedef char Bool;
 
-/*
-typedef enum e_bool
+
+typedef enum enum_bool
 {
 	FALSE = 0x00,
 	TRUE = 0x01
-} bool;
-*/
+} e_bool;
+
 
 #define MIN( X, Y ) ( (X) < (Y) ? (X) : (Y) ) /* Deux macros qui déterminent le min et le max */
 #define MAX( X, Y ) ( (X) > (Y) ? (X) : (Y) )
 #define SGN( X ) ( (X) < 0 ? (-1) : (1) ) /* Signe de X */
 #define ABS( X ) ( (X) < 0 ? (-(X)) : (X) ) /* Valeur absolue de X */
+#define RAD2DEG( X ) ( (X) * (180.0/M_PI) ) /* Conversion de radians en degrès */
+#define DEG2RAD( X ) ( (X) * (M_PI/180.0) ) /* Conversion de degrès en radians */
 
 /**
  * @brief Fait une transition enre deux variables

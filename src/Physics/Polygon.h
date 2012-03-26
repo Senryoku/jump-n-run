@@ -17,6 +17,16 @@
  * @{
 **/
 
+typedef struct
+{
+	unsigned int Left; /**< x **/
+	unsigned int Top; /**< y **/
+	unsigned int Right; /**< x+w **/
+	unsigned int Bottom; /**< y+h **/
+	Bool Valid; /**< détermine si cette position est valide **/
+} GridBBox;
+
+
 /** @brief Structure décrivant un polygon
  *
  * Les liaisons internes ne sont pas construites par défaut
@@ -31,6 +41,8 @@ typedef struct
 	DynArr InternalRigids; /**< Contraintes internes **/
 	Bool Fixe; /**< Indique que tout les Vertices sont fixes **/
 	Vertex* Center; /**< Centre, utile pour les polygones de plus de 4 côtés **/
+	GridBBox GridPos; /**<dernier position du polygone dans la grille depuis la mise à jour **/
+	Bool Collided; /**<Détermine si le polygone a déjà collisioné et si on doit dont le fqire collisioner**/
 } Polygon;
 
 /** @brief Constructeur
@@ -72,6 +84,8 @@ void delPolygon(Polygon* P);
 **/
 Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4);
 
+void polyUpdateGridPosition(Polygon* P, unsigned int Left, unsigned int Top, unsigned int Right, unsigned int Bottom);
+
 /** @brief Construit un rectangle, contraintes internes comprises à partir d'une liste
  *
  * @param L Liste de Vertices
@@ -86,6 +100,16 @@ Polygon* polyRectangleL(List L);
  * @param Length Longueur de la contrainte, <= 0 pour une longueur automatique
 **/
 void polyAddInternal(Polygon* P, unsigned int V1, unsigned int V2, float Length);
+
+/** @brief Donne si le polygone a collisionné le step en cours ou pas
+ * @return collided
+ */
+Bool polyHasCollided(const Polygon* P);
+
+/** @brief dit si le polygone a collisionné le step en cours ou pas
+ * @param Collided[in] nouvelle valeur
+ */
+void polySetCollided(Polygon* P, Bool Collided);
 
 /** @brief Créé un nouveau N-Gone avec des contraintes internes
  *
