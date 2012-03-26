@@ -15,13 +15,6 @@
 					<Add option="-g" />
 					<Add directory="src" />
 				</Compiler>
-				<Linker>
-					<Add option="-lsfml-graphics" />
-					<Add option="-lsfml-audio" />
-					<Add option="-lsfml-window" />
-					<Add option="-lsfml-system" />
-					<Add option="-lopengl32" />
-				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin\Release\JumpnRun" prefix_auto="1" extension_auto="1" />
@@ -29,7 +22,10 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-march=core2" />
+					<Add option="-O3" />
 					<Add option="-O2" />
+					<Add option="-O1" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -38,7 +34,15 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add directory="src" />
 		</Compiler>
+		<Linker>
+			<Add option="-lsfml-graphics" />
+			<Add option="-lsfml-audio" />
+			<Add option="-lsfml-window" />
+			<Add option="-lsfml-system" />
+			<Add option="-lopengl32" />
+		</Linker>
 		<Unit filename="src\Audio\SoundImpl.h" />
 		<Unit filename="src\Audio\SoundManager.cpp" />
 		<Unit filename="src\Audio\SoundManager.h" />

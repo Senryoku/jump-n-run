@@ -8,7 +8,8 @@ void lvledInit(LevelEditor *Led, float Width, float Height)
  	Led->GrabEl = NULL;
  	Led->Mouse = newVertex();
  	Led->GrabElastic = newElastic(Led->Mouse, NULL, 30.f, 0.2f);
-	Led->tmpElastic1 = Led->tmpElastic2 = Led->tmpRigid1 = Led->tmpRigid2 = NULL;
+	Led->tmpElastic1 = Led->tmpElastic2 = Led->tmpRigid1 = Led->tmpRigid2 =
+		Led->tmpBox1 = Led->tmpBox2 = Led->tmpBox3 = Led->tmpBox4 = NULL;
 	Led->vxDraw = NULL;
 	Led->elDraw = NULL;
 	Led->rdDraw = NULL;
@@ -109,6 +110,22 @@ void lvledDraw(const LevelEditor* Led, char flag)
 		(*Led->lineDraw) (0.f, lvlGetWorld(Led->Lvl)->Height,
 			0.f, 1.f,
 			0.5f, 0.5f, 0.5f, 0.5f);
+	}
+
+	if(Led->tmpBox1 != NULL)
+	{
+		(*Led->lineDraw) (vxGetPosition(Led->tmpBox1).x, vxGetPosition(Led->tmpBox1).y,
+			vxGetPosition(Led->tmpBox2).x, vxGetPosition(Led->tmpBox2).y,
+			0.f, 1.f, 1.f, 1.f);
+		(*Led->lineDraw) (vxGetPosition(Led->tmpBox2).x, vxGetPosition(Led->tmpBox2).y,
+			vxGetPosition(Led->tmpBox3).x, vxGetPosition(Led->tmpBox3).y,
+			0.f, 1.f, 1.f, 1.f);
+		(*Led->lineDraw) (vxGetPosition(Led->tmpBox3).x, vxGetPosition(Led->tmpBox3).y,
+			vxGetPosition(Led->tmpBox2).x, vxGetPosition(Led->tmpBox2).y,
+			0.f, 1.f, 1.f, 1.f);
+		(*Led->lineDraw) (vxGetPosition(Led->tmpBox4).x, vxGetPosition(Led->tmpBox4).y,
+			vxGetPosition(Led->tmpBox1).x, vxGetPosition(Led->tmpBox1).y,
+			0.f, 1.f, 1.f, 1.f);
 	}
 }
 
@@ -352,7 +369,57 @@ void lvledNewRigidCreate(LevelEditor *Led)
 	Led->tmpRigid1 = Led->tmpRigid2 = NULL;
 }
 
+void lvledNewBoxInit(LevelEditor *Led)
+{
+	if(Led->tmpBox1 != NULL)
+	{
+		delVertex(Led->tmpBox1);
+		delVertex(Led->tmpBox2);
+		delVertex(Led->tmpBox3);
+		delVertex(Led->tmpBox4);
+		Led->tmpBox1 = Led->tmpBox2 = Led->tmpBox3 = Led->tmpBox4 = NULL;
+	}
+	Led->tmpBox1 = newVertex();
+	vxSetPosition(Led->tmpBox1, vxGetPosition(Led->Mouse));
+	Led->tmpBox2 = newVertex();
+	vxSetPosition(Led->tmpBox2, vxGetPosition(Led->Mouse));
+	Led->tmpBox3 = newVertex();
+	vxSetPosition(Led->tmpBox3, vxGetPosition(Led->Mouse));
+	Led->tmpBox4 = newVertex();
+	vxSetPosition(Led->tmpBox4, vxGetPosition(Led->Mouse));
+}
+
+void lvledNewBoxUpdate(LevelEditor *Led)
+{
+	if(Led->tmpBox1 == NULL) return;
+	Vec2 Pos1 = vxGetPosition(Led->tmpBox1);
+	Vec2 Mouse = vxGetPosition(Led->Mouse);
+	vxSetPosition(Led->tmpBox3, Mouse);
+	vxSetPosition(Led->tmpBox2, vec2(Mouse.x, Pos1.y));
+	vxSetPosition(Led->tmpBox4, vec2(Pos1.x, Mouse.y));
+}
+
+void lvledNewBoxCreate(LevelEditor *Led)
+{
+	wdAddVertex(lvlGetWorld(Led->Lvl), Led->tmpBox1); wdAddVertex(lvlGetWorld(Led->Lvl), Led->tmpBox2);
+	wdAddVertex(lvlGetWorld(Led->Lvl), Led->tmpBox3); wdAddVertex(lvlGetWorld(Led->Lvl), Led->tmpBox4);
+	Polygon* tmpRect = polyRectangle(Led->tmpBox1, Led->tmpBox2, Led->tmpBox3, Led->tmpBox4);
+	wdAddPolygon(lvlGetWorld(Led->Lvl), tmpRect);
+	Led->tmpBox1 = Led->tmpBox2 = Led->tmpBox3 = Led->tmpBox4 = NULL;
+}
+
 void lvledTestLevel(LevelEditor *Led)
 {
 	printf("Boucle de Test !");
 }
+
+void lvledLoad(LevelEditor *Led, const char* File)
+{
+	printf("Chargement...\n Pas encore implemente ! :p\n");
+}
+
+void lvledSave(LevelEditor *Led, const char* File)
+{
+	printf("Sauvegarde...\n Pas encore implemente ! :p\n");
+}
+

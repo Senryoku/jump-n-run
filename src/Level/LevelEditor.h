@@ -16,6 +16,7 @@
  * Ces fonctions de Draw pourraient être ajoutées aux modules
  * correspondant, cependant les fonctions de callback seraient stockées
  * dans LevelEditor.
+ * @todo Débuger NewBox
  * @{
 **/
 
@@ -31,8 +32,9 @@ typedef struct
 
 	// Servent à la manipulation des objets
  	Elastic* GrabElastic;
- 	Vertex *Grab, *GrabEl, *Mouse, // Mouse devra être mis à jour par Game ?
-		*tmpElastic1, *tmpElastic2, *tmpRigid1, *tmpRigid2;
+ 	Vertex *Grab, *GrabEl, *Mouse,
+		*tmpElastic1, *tmpElastic2, *tmpRigid1, *tmpRigid2,
+		*tmpBox1, *tmpBox2, *tmpBox3, *tmpBox4;
 	Bool Testing;
 
 	/* Fonctions de Callback */
@@ -66,7 +68,7 @@ void lvledSetPolyDraw(LevelEditor* Led, void (*polyDraw)(Polygon* P));
 /** @brief Affichage du niveau en cours d'édition
  *
  * @param Led LevelEditor
- * @param flag Flags possibles : LVLED_GRID, LVLED_RULE, LVLED_LIMITS
+ * @param flag Flags possibles : LVLED_RULE, LVLED_LIMITS
 **/
 void lvledDraw(const LevelEditor *Led, char flag);
 
@@ -97,6 +99,10 @@ void lvledNewElasticCreate(LevelEditor *Led);
 
 void lvledNewRigidAddV(LevelEditor *Led);
 void lvledNewRigidCreate(LevelEditor *Led);
+
+void lvledNewBoxInit(LevelEditor *Led);
+void lvledNewBoxUpdate(LevelEditor *Led);
+void lvledNewBoxCreate(LevelEditor *Led);
 
 /** @brief Supprime le polygone le plus proche de Mouse
  *

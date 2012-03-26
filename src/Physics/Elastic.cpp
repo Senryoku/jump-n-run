@@ -72,6 +72,11 @@ void elSetV2(Elastic* E, Vertex* V)
 	E->V2 = V;
 }
 
+float elGetLength(Elastic* E)
+{
+	return E->Length;
+}
+
 void elSetLength(Elastic* E, float newLength)
 {
 	E->Length = newLength;

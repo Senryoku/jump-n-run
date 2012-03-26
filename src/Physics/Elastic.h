@@ -70,6 +70,11 @@ Vertex* elGetV1(const Elastic* E);
 **/
 Vertex* elGetV2(const Elastic* E);
 
+/** @brief Accesseur de Length
+ *
+**/
+float elGetLength(Elastic* E);
+
 /** @brief Mutateur de V1
  *
 **/

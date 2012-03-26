@@ -10,7 +10,6 @@ void glDrawVertex(Vertex* V, float R, float G, float B, float A);
 void glDrawElastic(Elastic* E);
 void glDrawRigid(Rigid* E);
 void glDrawPolygon(Polygon *P);
-Vertex* GetNearest(World* W, float MouseX, float MouseY);
 
 int main(int argc, char** argv)
 {
@@ -18,7 +17,8 @@ int main(int argc, char** argv)
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, WindowWidth = 1200.f,
 		WindowHeight = 600.f, MapWidth = WindowWidth/10.f, MapHeight = WindowHeight/10.f,
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
-		ViewXSpeed = 0.f, ViewYSpeed = 0.f;
+		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = WindowWidth, ViewHeight = WindowHeight,
+		WindowRatio = WindowWidth/WindowHeight;
 
 	//vec2RegressionTest();
 
@@ -35,21 +35,7 @@ int main(int argc, char** argv)
 	lvledSetRdDraw(&LvlEd, &glDrawRigid);
 	lvledSetPolyDraw(&LvlEd, &glDrawPolygon);
 
-	float playerSize = 150.f;
-	Vertex *VPlayer1, *VPlayer2, *VPlayer3, *VPlayer4;
-	VPlayer1 = newVertex();
-	vxSetPosition(VPlayer1, vec2(10.f, 10.f));
-	VPlayer2 = newVertex();
-	vxSetPosition(VPlayer2, vec2(10.f+playerSize/2, 10.f));
-	VPlayer3 = newVertex();
-	vxSetPosition(VPlayer3, vec2(10.f+playerSize/2, 10.f+playerSize));
-	VPlayer4 = newVertex();
-	vxSetPosition(VPlayer4, vec2(10.f, 10.f+playerSize));
-	wdAddVertex(lvlGetWorld(LvlEd.Lvl), VPlayer1); wdAddVertex(lvlGetWorld(LvlEd.Lvl), VPlayer2); wdAddVertex(lvlGetWorld(LvlEd.Lvl), VPlayer3); wdAddVertex(lvlGetWorld(LvlEd.Lvl), VPlayer4);
-	Polygon* Player = polyRectangle(VPlayer1, VPlayer2, VPlayer3, VPlayer4);
-	wdAddPolygon(lvlGetWorld(LvlEd.Lvl), Player);
-
-	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "window");
+	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Jump'n'Run");
 	window.setFramerateLimit(60.f);
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
@@ -61,8 +47,8 @@ int main(int argc, char** argv)
 	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
 	while (window.isOpen())
 	{
-		MouseX = sf::Mouse::getPosition(window).x + ViewX;
-		MouseY = sf::Mouse::getPosition(window).y + ViewY;
+		MouseX = ViewWidth*sf::Mouse::getPosition(window).x/WindowWidth + ViewX;
+		MouseY = ViewHeight*sf::Mouse::getPosition(window).y/WindowHeight + ViewY;
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -95,6 +81,8 @@ int main(int argc, char** argv)
 						/* Ajout de Rigid */
 						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
 							lvledNewRigidAddV(&LvlEd);
+						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+							lvledNewBoxInit(&LvlEd);
 						} else {
 							lvledGrab(&LvlEd);
 						}
@@ -112,7 +100,11 @@ int main(int argc, char** argv)
 				switch (event.mouseButton.button)
 				{
 					case sf::Mouse::Left :
-						lvledRelease(&LvlEd);
+						if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+							lvledNewBoxCreate(&LvlEd);
+						} else {
+							lvledRelease(&LvlEd);
+						}
 						break;
 					case sf::Mouse::Right :
 						lvledReleaseEl(&LvlEd);
@@ -122,12 +114,22 @@ int main(int argc, char** argv)
 				}
 			}
 
+			if(event.type == sf::Event::MouseWheelMoved)
+			{
+				ViewWidth -= event.mouseWheel.delta*WindowRatio*20;
+				ViewHeight -= event.mouseWheel.delta*20;
+			}
+
 			if (event.type == sf::Event::KeyPressed)
 			{
 				switch(event.key.code)
 				{
 					case sf::Keyboard::T :
 						lvledTestLevel(&LvlEd);
+						break;
+					case sf::Keyboard::Space :
+						ViewWidth = WindowWidth;
+						ViewHeight = WindowHeight;
 						break;
 					case sf::Keyboard::B :
 					{
@@ -144,7 +146,6 @@ int main(int argc, char** argv)
 						wdAddVertex(lvlGetWorld(LvlEd.Lvl), V10); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V11); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V12); wdAddVertex(lvlGetWorld(LvlEd.Lvl), V13);
 						Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
 						wdAddPolygon(lvlGetWorld(LvlEd.Lvl), Rectangle2);
-
 					}
 						break;
 					case sf::Keyboard::G :
@@ -215,6 +216,7 @@ int main(int argc, char** argv)
 
 		lvledSetMousePosition(&LvlEd, MouseX, MouseY);
 		lvledGrabUpdate(&LvlEd);
+		lvledNewBoxUpdate(&LvlEd);
 
 		/* Déplacement de la vue */
 		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
@@ -254,12 +256,12 @@ int main(int argc, char** argv)
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		//glClear(GL_DEPTH_BUFFER_BIT);
 
-		//On prepare la projection
+		// On prepare la projection
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
 		// Test Viewport : Minimap !
-		glMatrixMode(GL_PROJECTION); //On va ainsi définir le viewport
+		glMatrixMode(GL_PROJECTION); // On va ainsi définir le viewport
 		glLoadIdentity();
 		glOrtho(0.0, WindowWidth, WindowHeight, 0.0, 0.0, 100.0);
 
@@ -270,7 +272,7 @@ int main(int argc, char** argv)
 				glViewport(0.f, 0.f, WindowWidth, WindowHeight);
 				glMatrixMode(GL_PROJECTION);
 				glLoadIdentity();
-				glOrtho(0.f+ViewX, WindowWidth+ViewX, WindowHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
+				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
 				/* Affichage de la Grille */
 				gridDraw(&lvlGetWorld(LvlEd.Lvl)->CollisionGrid);
@@ -290,9 +292,9 @@ int main(int argc, char** argv)
 				glEnable(GL_LINE_STIPPLE);
 				glBegin(GL_LINE_LOOP);
 					glVertex2f(ViewX, ViewY);
-					glVertex2f(ViewX + WindowWidth, ViewY);
-					glVertex2f(ViewX + WindowWidth, ViewY + WindowHeight);
-					glVertex2f(ViewX, ViewY + WindowHeight);
+					glVertex2f(ViewX + ViewWidth, ViewY);
+					glVertex2f(ViewX + ViewWidth, ViewY + ViewHeight);
+					glVertex2f(ViewX, ViewY + ViewHeight);
 				glEnd();
 				glDisable(GL_LINE_STIPPLE);
 			}
@@ -337,7 +339,7 @@ void glDrawVertex(Vertex* V, float R, float G, float B, float A)
 
 void glDrawElastic(Elastic* E)
 {
-	glColor4f(1.f, 0.f, 0.f, 1.f);
+	glColor4f(fabs(vec2SqLength(elVector(E)) - elGetLength(E)*elGetLength(E))/vec2SqLength(elVector(E)) + 0.2f, 0.f, 0.f, 1.f);
 	glBegin(GL_LINES);
 	glVertex2f(vxGetPosition(elGetV1(E)).x, vxGetPosition(elGetV1(E)).y);
 	glVertex2f(vxGetPosition(elGetV2(E)).x, vxGetPosition(elGetV2(E)).y);
@@ -346,7 +348,7 @@ void glDrawElastic(Elastic* E)
 
 void glDrawRigid(Rigid* R)
 {
-	glColor4f(0.f, 1.f, 0.f, 1.f);
+	glColor4f(0.f, 0.f, 1.f, 1.f);
 	glBegin(GL_LINES);
 	glVertex2f(vxGetPosition(rdGetV1(R)).x, vxGetPosition(rdGetV1(R)).y);
 	glVertex2f(vxGetPosition(rdGetV2(R)).x, vxGetPosition(rdGetV2(R)).y);
