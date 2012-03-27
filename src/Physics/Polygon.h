@@ -210,6 +210,10 @@ void polySetFixe(Polygon* P, Bool B);
 **/
 Vertex* polyGetCenter(Polygon* P);
 
+/** @brief Retourne le Vertex i
+**/
+Vertex* polyGetVertex(Polygon* P, unsigned int i);
+
 /** @brief Applique une force à tous les vertices du Polygon
  *
  * @param P Polygon

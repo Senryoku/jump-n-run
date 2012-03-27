@@ -28,6 +28,7 @@ int main(int argc, char** argv)
 
 	LevelEditor LvlEd;
 	lvledInit(&LvlEd, 3200.f, 1600.f);
+	lvlLoadedInit(LvlEd.Lvl);
 
 	lvledSetLineDraw(&LvlEd, &glDrawLine);
 	lvledSetVxDraw(&LvlEd, &glDrawVertex);
@@ -232,13 +233,13 @@ int main(int argc, char** argv)
 
 		/* Déplacement de la vue */
 		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 			toViewY-=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			toViewY+=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 			toViewX-=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			toViewX+=ViewSpeed;
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
@@ -250,18 +251,17 @@ int main(int argc, char** argv)
 		Wobble(&ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
-		/* == Mise à jour de la physique == */
-		wdApplyForce(lvlGetWorld(LvlEd.Lvl), vec2(0.f, 0.6f));
-		wdResolveVextex(lvlGetWorld(LvlEd.Lvl));
-		// angResolve(&Ang);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			plJump(LvlEd.Lvl->P1);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+			plJump(LvlEd.Lvl->P1);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+			plMoveL(LvlEd.Lvl->P1);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+			plMoveR(LvlEd.Lvl->P1);
 
-		wdUpdateGrid(lvlGetWorld(LvlEd.Lvl));
-		for(i=0; i<4; i++)
-		{
-			wdResolveRigid(lvlGetWorld(LvlEd.Lvl));
-			wdResolveElastic(lvlGetWorld(LvlEd.Lvl));
-			wdHandleCollision(lvlGetWorld(LvlEd.Lvl));
-		}
+		/* == Mise à jour du niveau == */
+		lvlUpdate(LvlEd.Lvl);
 
 		/* == Affichage == */
 
@@ -313,6 +313,8 @@ int main(int argc, char** argv)
 			}
 
 			lvledDraw(&LvlEd, LVLED_RULE | LVLED_LIMITS);
+			// Dessin du "joueur" : Temporaire
+			glDrawPolygon(LvlEd.Lvl->P1->Shape);
 		}
 
 		OldMouseX = MouseX;

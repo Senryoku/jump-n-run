@@ -150,14 +150,21 @@ void wdResolveRigid(World* W)
         it = lstFirst(&W->Polygons);
         while(!nodeEnd(it))
         {
-                /* Leurs faces */
-                for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->Rigids); i++)
-                        rdResolve( (Rigid*) daGet(&((Polygon*) nodeGetData(it))->Rigids, i));
-                /* Leurs contraintes internes */
-                for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->InternalRigids); i++)
-                        rdResolve( (Rigid*) daGet(&((Polygon*) nodeGetData(it))->InternalRigids, i));
+			/* Pas besoin si le polygon est fixe */
+			if(polyIsFixe(((Polygon*) nodeGetData(it))))
+			{
+				it = nodeGetNext(it);
+				continue;
+			}
 
-                it = nodeGetNext(it);
+			/* Leurs faces */
+			for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->Rigids); i++)
+					rdResolve( (Rigid*) daGet(&((Polygon*) nodeGetData(it))->Rigids, i));
+			/* Leurs contraintes internes */
+			for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->InternalRigids); i++)
+					rdResolve( (Rigid*) daGet(&((Polygon*) nodeGetData(it))->InternalRigids, i));
+
+			it = nodeGetNext(it);
         }
 }
 

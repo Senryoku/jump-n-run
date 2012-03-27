@@ -121,7 +121,7 @@ void delPolygon(Polygon* P)
 	daFree(&P->InternalRigids);
 
 	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL, printf("Éliminéee!\n");
-	
+
 	printf("Polygon %i deleted\n", P);
 
 	free(P);
@@ -344,6 +344,11 @@ Bool polyIsFixe(Polygon* P)
 Vertex* polyGetCenter(Polygon* P)
 {
 	return P->Center;
+}
+
+Vertex* polyGetVertex(Polygon* P, unsigned int i)
+{
+	return (Vertex*) daGet(&P->Vertices, i);
 }
 
 void polySetFixe(Polygon* P, Bool B)
