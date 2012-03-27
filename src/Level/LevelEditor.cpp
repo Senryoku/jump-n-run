@@ -7,14 +7,13 @@ void lvledInit(LevelEditor *Led, float Width, float Height)
  	Led->Grab = NULL;
  	Led->GrabEl = NULL;
  	Led->Mouse = newVertex();
- 	Led->GrabElastic = newElastic(Led->Mouse, NULL, 30.f, 0.2f);
+ 	Led->GrabElastic = newElastic(Led->Mouse, NULL, 30.f, 0.05f);
 	Led->tmpElastic1 = Led->tmpElastic2 = Led->tmpRigid1 = Led->tmpRigid2 =
 		Led->tmpBox1 = Led->tmpBox2 = Led->tmpBox3 = Led->tmpBox4 = NULL;
 	Led->vxDraw = NULL;
 	Led->elDraw = NULL;
 	Led->rdDraw = NULL;
 	Led->polyDraw = NULL;
-	Led->Testing = 0;
 }
 
 void lvledFree(LevelEditor *Led)
@@ -163,13 +162,13 @@ void lvledReleaseEl(LevelEditor *Led)
 void lvledToogleNearestFixe(LevelEditor *Led)
 {
 	Vertex* tmpVertex = wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
-	vxSetFixe(tmpVertex, !vxIsFixe(tmpVertex));
+	if(tmpVertex != NULL) vxSetFixe(tmpVertex, !vxIsFixe(tmpVertex));
 }
 
 void lvledToogleNearestPolyFixe(LevelEditor *Led)
 {
 	Polygon* tmpPoly = wdGetNearestPoly(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
-	polySetFixe(tmpPoly, !polyIsFixe(tmpPoly));
+	if(tmpPoly != NULL) polySetFixe(tmpPoly, !polyIsFixe(tmpPoly));
 }
 
 void lvledSetMousePosition(LevelEditor *Led, float x, float y)

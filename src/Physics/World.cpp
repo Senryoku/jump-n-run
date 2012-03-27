@@ -174,7 +174,7 @@ void wdResolveElastic(World* W)
 
 void wdHandleCollision(World* W)
 {
-	
+
         CollisionInfo Info;
         Node* it = lstFirst(&W->Polygons);
         Node* it2;
@@ -186,12 +186,12 @@ void wdHandleCollision(World* W)
 		polySetCollided((Polygon*)nodeGetData(it), FALSE);
 		it=nodeGetNext(it);
 	}
-	
+
 	it = lstFirst(&W->Polygons);
-	
+
         while(!nodeEnd(it))
         {
-			if (polyIsFixe((Polygon*) nodeGetData(it))) //On saute les collisions si le polygone est fixe
+			if(0)// (polyIsFixe((Polygon*) nodeGetData(it))) //On saute les collisions si le polygone est fixe
 			{
 				it=nodeGetNext(it);
 				continue;
@@ -269,7 +269,7 @@ void wdHandleCollision(World* W)
 																		   CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
 							vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
 																		   CorrectionFactor*PositionOnEdge*0.5f));
-							
+
 						}
 					}
 					it2 = nodeGetNext(it2);

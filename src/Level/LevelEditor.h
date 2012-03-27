@@ -35,7 +35,6 @@ typedef struct
  	Vertex *Grab, *GrabEl, *Mouse,
 		*tmpElastic1, *tmpElastic2, *tmpRigid1, *tmpRigid2,
 		*tmpBox1, *tmpBox2, *tmpBox3, *tmpBox4;
-	Bool Testing;
 
 	/* Fonctions de Callback */
 	void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);

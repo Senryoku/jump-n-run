@@ -44,6 +44,18 @@ int main(int argc, char** argv)
 	MapHeight = 100.f;
 	glDisable(GL_DEPTH_TEST);
 
+	/*
+	Vertex *C = newVertex(), *M = newVertex(), *S = newVertex();
+	vxSetPosition(M, vec2(50.f, 100.f)); vxSetPosition(C, vec2(100.f, 100.f)); vxSetPosition(S, vec2(150.f, 100.f));
+	wdAddRigid(lvlGetWorld(LvlEd.Lvl), newRigid(C, M, 50.f));
+	wdAddRigid(lvlGetWorld(LvlEd.Lvl), newRigid(C, S, 50.f));
+	vxSetFixe(C, 1);
+	vxSetFixe(M, 1);
+	wdAddVertex(lvlGetWorld(LvlEd.Lvl), C); wdAddVertex(lvlGetWorld(LvlEd.Lvl), M); wdAddVertex(lvlGetWorld(LvlEd.Lvl), S);
+	Angular Ang;
+	angInit(&Ang, C, M, S, -M_PI_4, M_PI_4);
+	*/
+
 	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
 	while (window.isOpen())
 	{
@@ -241,6 +253,7 @@ int main(int argc, char** argv)
 		/* == Mise à jour de la physique == */
 		wdApplyForce(lvlGetWorld(LvlEd.Lvl), vec2(0.f, 0.6f));
 		wdResolveVextex(lvlGetWorld(LvlEd.Lvl));
+		// angResolve(&Ang);
 
 		wdUpdateGrid(lvlGetWorld(LvlEd.Lvl));
 		for(i=0; i<4; i++)
