@@ -1,12 +1,5 @@
 #include "LevelEditor.h"
 
- typedef struct {
-	 Vertex* V;
-	 unsigned int ID;
-} ItemVertex ;
-
-Vertex* lstGetVertexFromID(List* L, unsigned int ID);
-
 void lvledInit(LevelEditor *Led, float Width, float Height)
 {
 	Led->Lvl = newLevel(Width, Height);
@@ -417,202 +410,18 @@ void lvledNewBoxCreate(LevelEditor *Led)
 
 void lvledTestLevel(LevelEditor *Led)
 {
-	printf("Boucle de Test !");
+	lvledSave(Led, "levels/TempTest.lvl");
+	Level* Test = newLevel(0.f, 0.f);
+	lvlLoad(Test, "levels/TempTest.lvl");
+	Game G;
+	gmInit(&G);
+	gmSetLvl(&G, Test);
+	gmPlay(&G);
 }
 
 Bool lvledLoad(LevelEditor *Led, const char* File)
 {
-	printf("Chargement...\n");
-	
-	FILE* f;
-	f=fopen(File, "r");
-	
-	if (f==NULL)
-	{
-		printf("Erreur de chargement du fichier %s\n", File);
-		return FALSE;
-	}
-	
-	char lvl[100], description[300], read[300];
-	if (fgets(lvl, 100, f)==NULL)
-	{
-		printf("Le fichier ne peut pas être lu\n");
-		return FALSE;
-	}
-	if (fgets(description, 300, f)==NULL)
-	{
-		printf("Le fichier ne peut pas être lu\n");
-		return FALSE;
-	}
-	
-	float width, height;
-	
-	if (fgets(read, 300, f)==NULL)
-	{
-		printf("Le fichier ne peut pas être lu\n");
-		return FALSE;
-	}
-	else
-		sscanf(read, "%f, %f", &width, &height);
-	
-	//On libere le monde et on le realloue
-	wdFree(lvlGetWorld(Led->Lvl));
-	wdInit(lvlGetWorld(Led->Lvl), width, height);
-	
-	unsigned int item, nVertex, i;
-	Bool polyFixed;
-	
-	//liste des vertex
-	List* vxL = newList();
-	
-	while (fgets(read, 300, f)!=NULL)
-	{
-		printf("Read: %s", read);
-		item=o_end;
-		sscanf(read, "%u %u %i#%.s\n", &item, &nVertex, &polyFixed);
-		
-		switch (item)
-		{
-			case o_poly:
-				printf("Polygon with %u vertex read\n", nVertex);
-				switch (nVertex)
-				{
-					case 0:
-					case 1:
-						break;
-					case 2:
-					case 3:
-					{
-					Vertex **V = (Vertex**)malloc(sizeof(Vertex)*nVertex);
-					unsigned int *ID = (unsigned int*)malloc(sizeof(unsigned int)*nVertex);
-					for (i=0; i<nVertex; i++)
-					{
-						fscanf(f, "%u\n", &ID[i]);
-						V[i]=lstGetVertexFromID(vxL, ID[i]);
-					}
-					Polygon* p;
-					if (nVertex==2)
-						p = newPolygon(2, V[0], V[1]);
-					else
-						p = newPolygon(3, V[0], V[1], V[2]);
-					if (polyFixed)
-						polySetFixe(p, TRUE);
-					
-					wdAddPolygon(lvlGetWorld(Led->Lvl), p);
-					free(V);
-					free(ID);
-					
-					break;
-				}
-					case 4:
-					{
-					Vertex *V1, *V2, *V3, *V4;
-					unsigned int ID1, ID2, ID3, ID4;
-					fscanf(f, "%u\n", &ID1);
-					fscanf(f, "%u\n", &ID2);
-					fscanf(f, "%u\n", &ID3);
-					fscanf(f, "%u\n", &ID4);
-					V1 = lstGetVertexFromID(vxL, ID1);
-					V2 = lstGetVertexFromID(vxL, ID2);
-					V3 = lstGetVertexFromID(vxL, ID3);
-					V4 = lstGetVertexFromID(vxL, ID4);
-					Polygon* p;
-					if (!polyFixed)
-						p = polyRectangle(V1, V2, V3, V4);
-					else
-						p = newPolygon(4, V1, V2, V3, V4), polySetFixe(p, TRUE);
-					wdAddPolygon(lvlGetWorld(Led->Lvl), p);
-					
-					break;
-				}
-					
-					default:
-					{
-					List* LPoly = newList();
-					for (i=0; i<nVertex; i++)
-					{
-						unsigned int ID;
-						fscanf(f, "%u\n", &ID);
-						lstAdd(LPoly, lstGetVertexFromID(vxL, ID));
-					}
-					Polygon* p;
-					if (!polyFixed)
-						p = polyNGone(*LPoly);
-					else
-						p = newPolygonL(*LPoly), polySetFixe(p, TRUE);
-					wdAddPolygon(lvlGetWorld(Led->Lvl), p);
-					
-					delList(LPoly);
-					break;
-				}
-				}
-			
-				break;
-			case o_rigid:
-			{
-				unsigned int ID1, ID2;
-				Vertex *V1, *V2;
-				float Lenght;
-				fscanf(f, "%u %u %f\n", &ID1, &ID2, &Lenght);
-				V1 = lstGetVertexFromID(vxL, ID1);
-				V2 = lstGetVertexFromID(vxL, ID2);
-				Rigid* r = newRigid(V1, V2, Lenght);
-				wdAddRigid(lvlGetWorld(Led->Lvl), r);
-				break;
-			}
-			case o_elastic:
-			{
-				unsigned int ID1, ID2;
-				Vertex *V1, *V2;
-				float Lenght, Spring;
-				fscanf(f, "%u %u %f %f\n", &ID1, &ID2, &Lenght, &Spring);
-				V1 = lstGetVertexFromID(vxL, ID1);
-				V2 = lstGetVertexFromID(vxL, ID2);
-				Elastic* e = newElastic(V1, V2, Lenght, Spring);
-				wdAddElastic(lvlGetWorld(Led->Lvl), e);
-				break;
-			}
-			case o_vertex:
-			{
-				printf("vertex\n");
-				unsigned int vxID;
-				float x, y, mass;
-				Bool fixe;
-				fscanf(f, "%u : %f, %f ; %f ; %i\n", &vxID, &x, &y, &mass, &fixe);
-				printf("données lues: %u ; %f, %f ; %f; %i\n", vxID, x, y, mass, fixe);
-				//on ajoute le vertex dans la liste
-				ItemVertex *iV = (ItemVertex*)malloc(sizeof(ItemVertex));
-				iV->ID=vxID;
-				iV->V = newVertex();
-				wdAddVertex(lvlGetWorld(Led->Lvl), iV->V);
-				vxSetPosition(iV->V, vec2(x, y));
-				vxSetMass(iV->V, mass);
-				vxSetFixe(iV->V, fixe);
-				lstAdd(vxL, iV);
-				
-				
-				break;
-			}
-			default:
-				break;
-		}
-	}
-	
-	printf("niveau chargé: %s%sw:%f h:%f\n", lvl, description, width, height);
-	fclose(f);
-	
-	//on libere la mémoire utilisée par la liste des vertex
-	Node* it = lstFirst(vxL);
-	
-	while (!nodeEnd(it))
-	{
-		free((ItemVertex*)nodeGetData(it));
-		it = nodeGetNext(it);
-	}
-	
-	delList(vxL);
-	
-	return TRUE;
+	return lvlLoad(Led->Lvl, File);
 }
 
 Bool lvledSave(LevelEditor *Led, const char* File)
@@ -620,97 +429,83 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	printf("Sauvegarde...\n");
 	FILE* f;
 	f=fopen(File, "w");
-	
+
 	if (f==NULL)
 	{
 		printf("Erreur de sauvegarde du fichier %s\n", File);
 		return FALSE;
 	}
-	
+
 	/* Entete du fichier*/
 	char lvl[100]="Niveau Test", description[300]="Ceci est la description du niveau";
 	fprintf(f, "%s\n%s\n%f, %f\n", lvl, description, lvlGetWorld(Led->Lvl)->Width, lvlGetWorld(Led->Lvl)->Height);
-	
+
 	//on écrit les vertex
 	List* L = &lvlGetWorld(Led->Lvl)->Vertices;
 	Node* it = lstFirst(L);
-	
+
 	while (!nodeEnd(it))
 	{
 		fprintf(f, "%u #Vertex\n", o_vertex);
 		Vertex* V =  (Vertex*)nodeGetData(it);
-		fprintf(f, "%u : %f, %f ; %f ; %i\n", V, vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), vxIsFixe(V));
-		
+		fprintf(f, "%u : %f, %f ; %f ; %i\n", (unsigned int) V, vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), (int) vxIsFixe(V));
+
 		it = nodeGetNext(it);
 	}
-	
+
 	L = &lvlGetWorld(Led->Lvl)->Polygons;
 	it = lstFirst(L);
-	
+
 	//on écrit les polygones
 	while (!nodeEnd(it))
 	{
 		Polygon* p = (Polygon*)nodeGetData(it);
 		unsigned int nVertex = daGetSize(&p->Vertices), i;
 		//on écrit un identifiant pour dire qu'on lit un polygone
-		fprintf(f, "%u %u %i#Polygon\n", o_poly, nVertex, polyIsFixe(p));
+		fprintf(f, "%u %u %i#Polygon\n", o_poly, nVertex, (int) polyIsFixe(p));
 		//On écrit les vertex du polygone
 		for (i=0; i<nVertex; i++)
 		{
 			Vertex* V =  (Vertex*)daGet(&p->Vertices, i);
-			fprintf(f, "%i\n", V);
+			fprintf(f, "%i\n", (int) V);
 		}
 		//fprintf(f, "%u ;End\n", o_end);
-		
+
 		it = nodeGetNext(it);
 	}
-	
+
 	L = &lvlGetWorld(Led->Lvl)->Rigids;
 	it = lstFirst(L);
-	
+
 	//on écrit les rigides
 	while (!nodeEnd(it))
 	{
 		Rigid* r = (Rigid*)nodeGetData(it);
 		fprintf(f, "%u #Rigid\n", o_rigid);
-		fprintf(f, "%i %i %f\n", rdGetV1(r), rdGetV2(r), rdGetLength(r));
+		fprintf(f, "%i %i %f\n", (int) rdGetV1(r), (int) rdGetV2(r), rdGetLength(r));
 		//fprintf(f, "%u ;End\n", o_end);
-		
+
 		it = nodeGetNext(it);
 	}
-	
+
 	L = &lvlGetWorld(Led->Lvl)->Elastics;
 	it = lstFirst(L);
-	
+
 	//on écrit les elastiques
 	while (!nodeEnd(it))
 	{
 		Elastic* e = (Elastic*)nodeGetData(it);
 		fprintf(f, "%u #Elastic\n", o_elastic);
-		fprintf(f, "%i %i %f %f\n", elGetV1(e), elGetV2(e), elGetLength(e), elGetSpring(e));
+		fprintf(f, "%i %i %f %f\n", (int) elGetV1(e), (int) elGetV2(e), elGetLength(e), elGetSpring(e));
 		//fprintf(f, "%u ;End\n", o_end);
-		
-		it = nodeGetNext(it);
-	}
-	
-	
-	
-	fclose(f);
-	
-	return TRUE;
-}
 
-Vertex* lstGetVertexFromID(List* L, unsigned int ID)
-{
-	Node* it = lstFirst(L);
-	
-	while (!nodeEnd(it))
-	{
-		if (((ItemVertex*)nodeGetData(it))->ID==ID)
-			return ((ItemVertex*)nodeGetData(it))->V;
 		it = nodeGetNext(it);
 	}
-	
-	return NULL;
+
+
+
+	fclose(f);
+
+	return TRUE;
 }
 

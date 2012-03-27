@@ -43,6 +43,7 @@ typedef struct
  * Appelle wbInit après l'allocation
  * @param W Largeur du monde
  * @param H Hauteur du monde
+ * @return World* initialisé
 **/
 World* newWorld(float Width, float Height);
 

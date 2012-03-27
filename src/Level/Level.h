@@ -22,15 +22,26 @@ typedef struct
  	Player* P1;
 } Level;
 
+/** @brief Constructeur
+**/
 Level* newLevel(float Width, float Height);
+
+/** @brief Initialise Lvl
+**/
 void lvlInit(Level* Lvl, float Width, float Height);
+
+/** @brief Libère les ressources utilisées par Lvl
+**/
 void lvlFree(Level* Lvl);
+
+/** @brief Destructeur
+**/
 void delLevel(Level* lvl);
 
-/** @brief Charge un niveau depuis un fichier
+/** @brief Charge un niveau à partir d'un fichier
  *
 **/
-void lvlLoad(Level* Lvl, char* Path);
+Bool lvlLoad(Level* Lvl, const char* File);
 
 /** @brief Initialise un niveau APRES son chargement complet
  *
@@ -48,7 +59,27 @@ void lvlLoadedInit(Level* Lvl);
 **/
 void lvlUpdate(Level* Lvl);
 
+/** @brief Accesseur de W
+**/
 World* lvlGetWorld(Level* Lvl);
+
+
+
+typedef enum enum_objets
+{
+	o_end,
+	o_poly,
+	o_vertex,
+	o_rigid,
+	o_elastic
+} e_led_objets;
+
+ typedef struct {
+	 Vertex* V;
+	 unsigned int ID;
+} ItemVertex ;
+
+Vertex* GetVertexFromID(List* L, unsigned int ID);
 
 /** @}
 **/

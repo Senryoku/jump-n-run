@@ -32,7 +32,6 @@ int main(int argc, char** argv)
 
 	LevelEditor LvlEd;
 	lvledInit(&LvlEd, 3200.f, 1600.f);
-	lvlLoadedInit(LvlEd.Lvl);
 
 	lvledSetLineDraw(&LvlEd, &glDrawLine);
 	lvledSetVxDraw(&LvlEd, &glDrawVertex);
@@ -293,6 +292,7 @@ int main(int argc, char** argv)
 
 		// Test Viewport : Minimap !
 		glMatrixMode(GL_PROJECTION); // On va ainsi définir le viewport
+		glViewport(0.f, 0.f, WindowWidth, WindowHeight);
 		glLoadIdentity();
 		glOrtho(0.0, WindowWidth, WindowHeight, 0.0, 0.0, 100.0);
 
@@ -331,8 +331,6 @@ int main(int argc, char** argv)
 			}
 
 			lvledDraw(&LvlEd, LVLED_RULE | LVLED_LIMITS);
-			// Dessin du "joueur" : Temporaire
-			glDrawPolygon(LvlEd.Lvl->P1->Shape);
 		}
 
 		OldMouseX = MouseX;

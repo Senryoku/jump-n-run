@@ -2,6 +2,7 @@
 #define _LEVELEDITOR_H_
 
 #include "Level.h"
+#include "Game/Game.h"
 #include <stdio.h>
 
 /** @defgroup LevelEditor
@@ -24,15 +25,6 @@
 #define LVLED_GRID		1
 #define LVLED_RULE		2
 #define LVLED_LIMITS	4
-
-typedef enum enum_objets
-{
-	o_end,
-	o_poly,
-	o_vertex,
-	o_rigid,
-	o_elastic
-} e_led_objets;
 
 typedef struct
 {

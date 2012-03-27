@@ -5,6 +5,14 @@
 
 #include "Core/Tools.h"
 
+/** @defgroup Node
+ *
+ * Elément d'une List (Liste doublement chaînée)
+ * Sert également l'itérateur sur ces listes.
+ * Préfixe des fonctions : node
+ * @{
+**/
+
 typedef void* Elem;
 
 typedef struct s_Node
@@ -61,5 +69,8 @@ void nodeSetPrev(Node* ptrNode, Node* prevNode);
 /** @brief Mutateur du suivant
 **/
 void nodeSetNext(Node* ptrNode, Node* nextNode);
+
+/** @}
+**/
 
 #endif

@@ -5,11 +5,15 @@
 
 #include "Core/Node.h"
 
-/** @brief List
+/** @defgroup List
  *
+ * Liste doublement chaînée de void*
  * Préfixe des fonctions : lst
+ * @{
 **/
 
+/** @brief List
+**/
 typedef struct
 {
 	Node* First;
@@ -51,7 +55,7 @@ void lstAdd(List* L, Elem Data);
 **/
 void lstDel(List* L, Elem E);
 
-/** @brief Chercher l'existance d'un élément dans la liste
+/** @brief Chercher l'existence d'un élément dans la liste
  *
  * Complexité en O(n)
  * @param L Liste où chercher l'élément
@@ -66,7 +70,12 @@ Bool lstHaveElem(List* L, Elem E);
  * @param L Liste contenant N
  * @param N Node à supprimer
 **/
-void lstRem(List* L, Node* N);
+void lstRem(List* L, Node* /** @defgroup List
+ *
+ * Liste doublement chaînée de void*
+ * Préfixe des fonctions : lst
+ * @{
+**/N);
 
 /** @brief Renvoi vrai si la file est vide
 **/
@@ -84,6 +93,7 @@ Node* lstEnd(List*);
 **/
 unsigned int lstCount(List*);
 
-typedef Node* Iterator;
+/** @}
+**/
 
 #endif

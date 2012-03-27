@@ -1,20 +1,37 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
+
+#include "Level/Level.h"
+
 /** @defgroup Game
  *
  * Structure du jeu
  * Préfixe des méthodes : gm
  **/
+typedef struct
+{
+	Level* Lvl;
+} Game;
 
-void gmMenu();
+void gmInit(Game*);
 
-void gmLaunch();
+void gmMenu(Game*);
 
-void gmLvlEd();
+void gmPlay(Game*);
+
+void gmSetLvl(Game*, Level*);
 
 /** @}
 **/
+
+void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);
+void glDrawVertex(Vertex* V, float R, float G, float B, float A);
+void glDrawElastic(Elastic* E);
+void glDrawRigid(Rigid* E);
+void glDrawPolygon(Polygon *P);
 
 #endif
 
