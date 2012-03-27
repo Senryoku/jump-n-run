@@ -244,11 +244,11 @@ int main(int argc, char** argv)
 
 		/* Déplacement de la vue */
 		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			toViewY-=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 			toViewY+=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 			toViewX-=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 			toViewX+=ViewSpeed;

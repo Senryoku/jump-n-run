@@ -282,13 +282,13 @@ void gridDraw(const Grid* g)
 	for (j=0; j<g->HCells; j++)
 	{
 		glVertex2f(j*g->CellWidth, 0.f);
-		glVertex2f(j*g->CellWidth, 1600.f);
+		glVertex2f(j*g->CellWidth, g->CellHeight*g->VCells);
 	}
 
 	for (i=0; i<g->VCells; i++)
 	{
 		glVertex2f(0.f, i*g->CellHeight);
-		glVertex2f(3200.f, i*g->CellHeight);
+		glVertex2f(g->CellWidth*g->HCells, i*g->CellHeight);
 	}
 	glEnd();
 }

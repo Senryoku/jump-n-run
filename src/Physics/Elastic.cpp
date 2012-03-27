@@ -86,3 +86,8 @@ void elSetSpring(Elastic* E, float newSpring)
 {
 	E->Spring = newSpring;
 }
+
+float elGetSpring(const Elastic* E)
+{
+	return E->Spring;
+}

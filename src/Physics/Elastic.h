@@ -95,6 +95,11 @@ void elSetLength(Elastic* E, float newLength);
 **/
 void elSetSpring(Elastic* E, float newSpring);
 
+/** @brief Accesseur de Spring
+ *
+ **/
+float elGetSpring(const Elastic* E);
+
 /** @}
 **/
 

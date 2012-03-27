@@ -67,6 +67,11 @@ Vertex* rdGetV2(Rigid* R);
 **/
 void rdSetLength(Rigid* R, float newLength);
 
+/** @brief Accesseur de Length
+ *
+ **/
+float rdGetLength(const Rigid* R);
+
 /** @}
 **/
 

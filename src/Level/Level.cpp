@@ -10,7 +10,7 @@ Level* newLevel(float Width, float Height)
 void lvlInit(Level* Lvl, float Width, float Height)
 {
 	Lvl->W = newWorld(Width, Height);
-	Lvl->P1 = newPlayer();
+	//Lvl->P1 = newPlayer();
 }
 
 void lvlFree(Level* Lvl)

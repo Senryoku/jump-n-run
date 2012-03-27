@@ -70,3 +70,8 @@ void rdSetLength(Rigid* R, float newLength)
 {
 	R->Length = newLength;
 }
+
+float rdGetLength(const Rigid* R)
+{
+	return R->Length;
+}
