@@ -51,9 +51,9 @@ void wdAddElastic(World* W, Elastic* E)
 void wdAddVxFromPoly(World* W, Polygon* P)
 {
 	unsigned int i;
-	for(i = 0; i < daGetSize(&P->Vertices); i++)
+	for(i = 0; i < polyGetVxCount(P); i++)
 	{
-		wdAddVertex(W, (Vertex*) daGet(&P->Vertices, i));
+		wdAddVertex(W, polyGetVertex(P, i));
 	}
 }
 
@@ -150,20 +150,7 @@ void wdResolveRigid(World* W)
         it = lstFirst(&W->Polygons);
         while(!nodeEnd(it))
         {
-			/* Pas besoin si le polygon est fixe */
-			if(polyIsFixe(((Polygon*) nodeGetData(it))))
-			{
-				it = nodeGetNext(it);
-				continue;
-			}
-
-			/* Leurs faces */
-			for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->Rigids); i++)
-					rdResolve( (Rigid*) daGet(&((Polygon*) nodeGetData(it))->Rigids, i));
-			/* Leurs contraintes internes */
-			for(i = 0; i < daGetSize(&((Polygon*) nodeGetData(it))->InternalRigids); i++)
-					rdResolve( (Rigid*) daGet(&((Polygon*) nodeGetData(it))->InternalRigids, i));
-
+			polyResolve((Polygon*) nodeGetData(it));
 			it = nodeGetNext(it);
         }
 }
@@ -182,11 +169,9 @@ void wdResolveElastic(World* W)
 void wdHandleCollision(World* W)
 {
 
-        CollisionInfo Info;
-        Node* it = lstFirst(&W->Polygons);
-        Node* it2;
-        Vec2 CollisionVector, PosE1, PosE2;
-        float PositionOnEdge, CorrectionFactor;
+	CollisionInfo Info;
+	Node* it = lstFirst(&W->Polygons);
+	Node* it2;
 	//On met à FALSE tous les collide
 	while(!nodeEnd(it))
 	{
@@ -213,71 +198,7 @@ void wdHandleCollision(World* W)
 					{
 						Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
 						if(Info.P1 != NULL) /* Il y a collision */
-						{
-							if (vec2Dot(Info.Normal, vec2Sub(polyComputeCenter(Info.P2), polyComputeCenter(Info.P1))) < 0.f)
-								Info.Normal=vec2Prod(Info.Normal, -1.f);
-
-							CollisionVector = vec2Prod(Info.Normal, Info.Depth);
-
-							PosE1 = vxGetPosition(rdGetV1(Info.Edge));
-							PosE2 = vxGetPosition(rdGetV2(Info.Edge));
-
-							/* Position du point sur la face,
-							 On évite les divisions par 0 ! */
-							if(fabs(PosE1.x - PosE2.x) > fabs(PosE1.y - PosE2.y))
-								PositionOnEdge = (vxGetPosition(Info.V).x - CollisionVector.x
-							- PosE1.x)/(PosE2.x - PosE1.x);
-							else
-								PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
-							- PosE1.y)/(PosE2.y - PosE1.y);
-
-							/* DEBUG !
-							if (DebugDraw)
-							{
-								if(PositionOnEdge > 1.f || PositionOnEdge < 0.f)
-								{
-									if(fabs(PosE1.x - PosE2.x) > fabs(PosE1.y - PosE2.y))
-										printf("#ERROR#\n vxGetPosition(Info.V).x : %f \n CollisionVector.x : %f \n PosE1.x : %f \n PosE2.x : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).x, CollisionVector.x, PosE1.x, PosE2.x, PositionOnEdge);
-									else
-										printf("#ERROR#\n vxGetPosition(Info.V).y : %f \n CollisionVector.y : %f \n PosE1.y : %f \n PosE2.y : %f \n PositionOnEdge : %f \n", vxGetPosition(Info.V).y, CollisionVector.y, PosE1.y, PosE2.y, PositionOnEdge);
-							 it2 = nodeGetNext(it2); continue; // Mesure temporaire, si la collision n'est pas valide,
-									on l'ignore, bien sur, il faudrait que ça ne puisse pas arriver...
-								}
-
-								//On dessine un peu de Debug
-								//le vertice en collision
-								glColor3f(1.f, 0.f, 0.f);
-								glBegin(GL_LINES);
-								glVertex2f(PosE1.x, PosE1.y);
-								glVertex2f(PosE2.x, PosE2.y);
-								glEnd();
-
-
-								//Le vertex concerné
-								glBegin(GL_TRIANGLE_FAN);
-								glVertex2f(vxGetPosition(Info.V).x, vxGetPosition(Info.V).y);
-								for (int i=0; i<=16; i++)
-								{
-									glVertex2f(1*5.0*cos((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition(Info.V).x,
-											   1*5.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition(Info.V).y);
-								}
-								glEnd();
-							}
-							*/
-
-							CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
-								+ (1.f - PositionOnEdge)*(1.f - PositionOnEdge));
-
-							/* Correction des positions
-							 Du vertex */
-							vxCorrectPosition(Info.V, vec2Prod(CollisionVector, 0.5f));
-							/* De la face */
-							vxCorrectPosition(rdGetV1(Info.Edge), vec2Prod(CollisionVector,
-																		   CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
-							vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
-																		   CorrectionFactor*PositionOnEdge*0.5f));
-
-						}
+							polyHandleCollision(Info);
 					}
 					it2 = nodeGetNext(it2);
                 }
@@ -286,6 +207,46 @@ void wdHandleCollision(World* W)
 			polySetCollided((Polygon*)nodeGetData(it), TRUE);
 			it = nodeGetNext(it);
         }
+}
+
+unsigned int wdGetVxCount(World* W)
+{
+	return lstCount(&W->Vertices);
+}
+
+unsigned int wdGetElCount(World* W)
+{
+	return lstCount(&W->Elastics);
+}
+
+unsigned int wdGetRdCount(World* W)
+{
+	return lstCount(&W->Rigids);
+}
+
+unsigned int wdGetPolyCount(World* W)
+{
+	return lstCount(&W->Polygons);
+}
+
+Node* wdGetVxIt(World* W)
+{
+	return lstFirst(&W->Vertices);
+}
+
+Node* wdGetElIt(World* W)
+{
+	return lstFirst(&W->Elastics);
+}
+
+Node* wdGetRdIt(World* W)
+{
+	return lstFirst(&W->Rigids);
+}
+
+Node* wdGetPolyIt(World* W)
+{
+	return lstFirst(&W->Polygons);
 }
 
 Vertex* wdGetNearest(World* W, float X, float Y)

@@ -24,6 +24,72 @@ void delPlayer(Player* P)
 	free(P);
 }
 
+Bool plGetOnGround(Player* P)
+{
+	return P->OnGround;
+}
+
+Vec2 plGetGroundNormal(Player* P)
+{
+	return P->GroundNormal;
+}
+
+Polygon* plGetShape(Player* P)
+{
+	return P->Shape;
+}
+
+Vertex* plGetVxUL(Player* P)
+{
+	return polyGetVertex(P->Shape, 0);
+}
+
+Vertex* plGetVxUR(Player* P)
+{
+	return polyGetVertex(P->Shape, 1);
+}
+
+Vertex* plGetVxDR(Player* P)
+{
+	return polyGetVertex(P->Shape, 2);
+}
+
+Vertex* plGetVxDL(Player* P)
+{
+	return polyGetVertex(P->Shape, 3);
+}
+
+Rigid* plGetRdU(Player* P)
+{
+	return polyGetRigid(P->Shape, 0);
+}
+
+Rigid* plGetRdR(Player* P)
+{
+	return polyGetRigid(P->Shape, 1);
+}
+
+Rigid* plGetRdD(Player* P)
+{
+	return polyGetRigid(P->Shape, 2);
+}
+
+Rigid* plGetRdL(Player* P)
+{
+	return polyGetRigid(P->Shape, 3);
+}
+
+void plSetOnGround(Player* P, Bool B)
+{
+	P->OnGround = B;
+}
+
+
+void plSetGroundNormal(Player* P, Vec2 N)
+{
+	P->GroundNormal = N;
+}
+
 void plSetPosition(Player* Pl, Vec2 Pos)
 {
 	if(Pl->Shape != NULL)
@@ -35,22 +101,31 @@ void plSetShape(Player* P, Polygon* Shape)
 	P->Shape = Shape;
 }
 
-void plUpdate(Player* P)
-{
-	/* polyCollision, rdResolve */
-}
-
 void plMoveR(Player* P)
 {
-	polyApplyForce(P->Shape, vec2(5.f, 0.f));
+	if(P->OnGround) polyApplyForce(P->Shape, vec2(5.f, 0.f));
+	else polyApplyForce(P->Shape, vec2(2.f, 0.f));
 }
 
 void plMoveL(Player* P)
 {
-	polyApplyForce(P->Shape, vec2(-5.f, 0.f));
+	if(P->OnGround) polyApplyForce(P->Shape, vec2(-5.f, 0.f));
+	else polyApplyForce(P->Shape, vec2(-2.f, 0.f));
 }
 
 void plJump(Player* P)
 {
-	polyApplyForce(P->Shape, vec2(0.f, -10.f));
+	if(P->OnGround) polyApplyForce(P->Shape, vec2Prod(P->GroundNormal, 10.f));
+}
+
+void plGetUp(Player* P)
+{
+	if(vxGetPosition(plGetVxUL(P)).y <= vxGetPosition(plGetVxDR(P)).y)
+	{
+		vxSetPosition(plGetVxDL(P), vxGetPosition(plGetVxUL(P)));
+	}
+	if(vxGetPosition(plGetVxUR(P)).y <= vxGetPosition(plGetVxDL(P)).y)
+	{
+		vxSetPosition(plGetVxDR(P), vxGetPosition(plGetVxUR(P)));
+	}
 }

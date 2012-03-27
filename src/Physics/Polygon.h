@@ -162,6 +162,12 @@ CollisionInfo nullCollisionInfo();
 **/
 CollisionInfo polyCollide(Polygon* P1, Polygon* P2);
 
+/** @brief Réaction à une collision entre deux polygones
+ *
+ * @param Info CollisionInfo retournée par polyCollide
+**/
+void polyHandleCollision(CollisionInfo Info);
+
 /** @brief Test si un Vextex est à l'intérieur d'un Polygon
  *
  * @return Vrai si le Vertex est dans le Polygon
@@ -210,9 +216,22 @@ void polySetFixe(Polygon* P, Bool B);
 **/
 Vertex* polyGetCenter(Polygon* P);
 
+/** @brief Retourne le nombre de Vertices composants le polygone
+**/
+unsigned int polyGetVxCount(Polygon* P);
+
 /** @brief Retourne le Vertex i
 **/
 Vertex* polyGetVertex(Polygon* P, unsigned int i);
+
+/** @brief Retourne le nombre de Rigids composants le contour du polygone
+**/
+unsigned int polyGetRdCount(Polygon* P);
+
+/** @brief Retourne le Rigid i
+**/
+Rigid* polyGetRigid(Polygon* P, unsigned int i);
+
 
 /** @brief Applique une force à tous les vertices du Polygon
  *

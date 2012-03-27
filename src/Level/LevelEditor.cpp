@@ -407,6 +407,7 @@ void lvledNewBoxUpdate(LevelEditor *Led)
 
 void lvledNewBoxCreate(LevelEditor *Led)
 {
+	if(Led->tmpBox1 == NULL) return;
 	wdAddVertex(lvlGetWorld(Led->Lvl), Led->tmpBox1); wdAddVertex(lvlGetWorld(Led->Lvl), Led->tmpBox2);
 	wdAddVertex(lvlGetWorld(Led->Lvl), Led->tmpBox3); wdAddVertex(lvlGetWorld(Led->Lvl), Led->tmpBox4);
 	Polygon* tmpRect = polyRectangle(Led->tmpBox1, Led->tmpBox2, Led->tmpBox3, Led->tmpBox4);

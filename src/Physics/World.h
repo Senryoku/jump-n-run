@@ -164,6 +164,38 @@ void wdResolveElastic(World* W);
 **/
 void wdHandleCollision(World* W);
 
+/** @brief Retourne le nombre de Vertex dans le monde
+**/
+unsigned int wdGetVxCount(World* W);
+
+/** @brief Retourne le nombre de Rigids orphelins dans le monde
+**/
+unsigned int wdGetElCount(World* W);
+
+/** @brief Retourne le nombre d'Elastics dans le monde
+**/
+unsigned int wdGetRdCount(World* W);
+
+/** @brief Retourne le nombre de Polygons dans le monde
+**/
+unsigned int wdGetPolyCount(World* W);
+
+/** @brief Retourne un itérateur sur les Vertices de World
+**/
+Node* wdGetVertexIt(World* W);
+
+/** @brief Retourne un itérateur sur les Elastics de World
+**/
+Node* wdGetElasticIt(World* W);
+
+/** @brief Retourne un itérateur sur les Rigids de World
+**/
+Node* wdGetRigidIt(World* W);
+
+/** @brief Retourne un itérateur sur les Polygons de World
+**/
+Node* wdGetPolyIt(World* W);
+
 /** @brief Retourne le Vertex le plus proche des coordonnées
  * passées en paramètre.
  *

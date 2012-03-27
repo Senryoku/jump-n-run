@@ -10,7 +10,8 @@ Level* newLevel(float Width, float Height)
 void lvlInit(Level* Lvl, float Width, float Height)
 {
 	Lvl->W = newWorld(Width, Height);
-	//Lvl->P1 = newPlayer();
+	Lvl->P1 = NULL;
+	Lvl->Spawn = Lvl->Goal = vec2(0.f, 0.f);
 }
 
 void lvlFree(Level* Lvl)
@@ -46,19 +47,40 @@ void lvlLoadedInit(Level* Lvl)
 void lvlUpdate(Level* Lvl)
 {
 	unsigned int i;
+	CollisionInfo Info;
+	Node* it;
+
+	/* Mise à jour spécifique de Player */
+	plSetOnGround(Lvl->P1, 0);
+
+	/* Mise à jour du World */
 
 	wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
 	wdResolveVextex(lvlGetWorld(Lvl));
 
-	if(Lvl->P1 != NULL)
-		plUpdate(Lvl->P1);
-
 	wdUpdateGrid(lvlGetWorld(Lvl));
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
 	{
 		wdResolveRigid(lvlGetWorld(Lvl));
 		wdResolveElastic(lvlGetWorld(Lvl));
 		wdHandleCollision(lvlGetWorld(Lvl));
+
+		/* Mise à jour spécifique de Player */
+		polyResolve(plGetShape(Lvl->P1));
+		it = wdGetPolyIt(Lvl->W);
+		while(!nodeEnd(it))
+		{
+			Info = polyCollide(plGetShape(Lvl->P1), (Polygon*) nodeGetData(it));
+			if(Info.P1 != NULL)
+			{
+				/* Test des propriétés de la collision */
+				if(Info.Edge == plGetRdD(Lvl->P1) || Info.V == plGetVxDL(Lvl->P1) || Info.V == plGetVxDR(Lvl->P1))
+					plSetOnGround(Lvl->P1, 1),
+					plSetGroundNormal(Lvl->P1, Info.Normal);
+				polyHandleCollision(Info);
+			}
+			it = nodeGetNext(it);
+		}
 	}
 }
 

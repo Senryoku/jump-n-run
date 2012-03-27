@@ -98,7 +98,6 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 			(Vertex*)daGet(&P->Vertices, (i+1)%nbVx),
 			vec2Length(vec2Sub(vxGetPosition((Vertex*)daGet(&P->Vertices, i)),
 					vxGetPosition((Vertex*)daGet(&P->Vertices, (i+1)%nbVx))))));
-	//printf("Poly %i init\n", P);
 }
 
 void delPolygon(Polygon* P)
@@ -120,7 +119,7 @@ void delPolygon(Polygon* P)
 	daFree(&P->Vertices);
 	daFree(&P->InternalRigids);
 
-	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL, printf("Éliminéee!\n");
+	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL;
 
 	//printf("Polygon %i deleted\n", P);
 
@@ -280,6 +279,38 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 	return Info;
 }
 
+void polyHandleCollision(CollisionInfo Info)
+{
+	Vec2 CollisionVector, PosE1, PosE2;
+	float PositionOnEdge, CorrectionFactor;
+
+	CollisionVector = vec2Prod(Info.Normal, Info.Depth);
+
+	PosE1 = vxGetPosition(rdGetV1(Info.Edge));
+	PosE2 = vxGetPosition(rdGetV2(Info.Edge));
+
+	/* Position du point sur la face,
+	 On évite les divisions par 0 ! */
+	if(fabs(PosE1.x - PosE2.x) > fabs(PosE1.y - PosE2.y))
+		PositionOnEdge = (vxGetPosition(Info.V).x - CollisionVector.x
+	- PosE1.x)/(PosE2.x - PosE1.x);
+	else
+		PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
+	- PosE1.y)/(PosE2.y - PosE1.y);
+
+	CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
+		+ (1.f - PositionOnEdge)*(1.f - PositionOnEdge));
+
+	/* Correction des positions
+	 Du vertex */
+	vxCorrectPosition(Info.V, vec2Prod(CollisionVector, 0.5f));
+	/* De la face */
+	vxCorrectPosition(rdGetV1(Info.Edge), vec2Prod(CollisionVector,
+												   CorrectionFactor*(1.f-PositionOnEdge)*0.5f));
+	vxCorrectPosition(rdGetV2(Info.Edge), vec2Prod(CollisionVector,
+												   CorrectionFactor*PositionOnEdge*0.5f));
+}
+
 Bool polyIsInside(Polygon* P, Vertex* V)
 {
 	unsigned int i;
@@ -320,6 +351,8 @@ Vec2 polyComputeCenter(Polygon* P)
 void polyResolve(Polygon* P)
 {
 	unsigned int i;
+	/* Pas besoin si le polygon est fixe */
+	if(polyIsFixe(P)) return;
 	for(i = 0; i < daGetSize(&P->Rigids); i++)
 		rdResolve((Rigid*)daGet(&P->Rigids, i));
 	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
@@ -346,9 +379,24 @@ Vertex* polyGetCenter(Polygon* P)
 	return P->Center;
 }
 
+unsigned int polyGetVxCount(Polygon* P)
+{
+	return daGetSize(&P->Vertices);
+}
+
 Vertex* polyGetVertex(Polygon* P, unsigned int i)
 {
 	return (Vertex*) daGet(&P->Vertices, i);
+}
+
+unsigned int polyGetRdCount(Polygon* P)
+{
+	return daGetSize(&P->Rigids);
+}
+
+Rigid* polyGetRigid(Polygon* P, unsigned int i)
+{
+	return (Rigid*) daGet(&P->Rigids, i);
 }
 
 void polySetFixe(Polygon* P, Bool B)

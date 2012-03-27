@@ -38,6 +38,14 @@ void lvlLoad(Level* Lvl, char* Path);
 **/
 void lvlLoadedInit(Level* Lvl);
 
+/** @brief Avance d'une frame.
+ *
+ * Met à jour la simulation physique.
+ * Le(s) joueur(s) pouvant avoir des réactions spécifiques,
+ * notament aux collisions, ils ne sont pas ajoutés directement à la
+ * simulation, il faut donc effectuer certaines vérification manuellement.
+ * @param Lvl Level à mettre à jour
+**/
 void lvlUpdate(Level* Lvl);
 
 World* lvlGetWorld(Level* Lvl);

@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 	//vxRegressionTest();
 
 	//polyRegressionTest();
-	
+
 	//Ë faire qqpart d'autre xDD
 	if (!DirectoryExists("levels"))
 		CreateDirectory("levels");
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
 	glDisable(GL_DEPTH_TEST);
-	
+
 	//lvledSave(&LvlEd, "levels/Test.txt");
 	lvledLoad(&LvlEd, "levels/Test.txt");
 
@@ -172,7 +172,7 @@ int main(int argc, char** argv)
 						lvledGrab(&LvlEd);
 						break;
 					case sf::Keyboard::N :
-						printf("Number of polys: %u\n", lstCount(&lvlGetWorld(LvlEd.Lvl)->Polygons));
+						printf("Number of Vertices: %u\nNumber of Polygons: %u\n", lstCount(&lvlGetWorld(LvlEd.Lvl)->Vertices), lstCount(&lvlGetWorld(LvlEd.Lvl)->Polygons));
 						break;
 					case sf::Keyboard::E :
 						lvledGrabEl(&LvlEd);
@@ -200,6 +200,9 @@ int main(int argc, char** argv)
 					case sf::Keyboard::L :
 						if (event.key.control)
 							lvledLoad(&LvlEd, "levels/Test.txt");
+						break;
+					case sf::Keyboard::X :
+						plGetUp(LvlEd.Lvl->P1);
 						break;
 					default:
 						break;
