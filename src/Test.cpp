@@ -25,6 +25,10 @@ int main(int argc, char** argv)
 	//vxRegressionTest();
 
 	//polyRegressionTest();
+	
+	//Ë faire qqpart d'autre xDD
+	if (!DirectoryExists("levels"))
+		CreateDirectory("levels");
 
 	LevelEditor LvlEd;
 	lvledInit(&LvlEd, 3200.f, 1600.f);

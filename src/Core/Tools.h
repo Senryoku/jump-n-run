@@ -28,4 +28,7 @@ typedef enum enum_bool
  */
 void Wobble(float *CurrentPosition, float TargetPosition, float Force,float Friction, float *Spd);
 
+Bool DirectoryExists(const char* Dir);
+Bool CreateDirectory(const char* Dir);
+
 #endif
