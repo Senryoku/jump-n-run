@@ -8,37 +8,108 @@
 /**
  * @defgroup Grid
  * 
- * Grille qui permet de filtrer la détection de collisions
+ * Grille qui permet de filtrer la détection de collisions. Les collisions étant faites avec le SAT il faut faire le plus petit nombre de collisions possibles. On fixe la taille de la case de la grille et les polygones sont ajoutés par world dans la grille. Celui-ci récupere la liste des polygones qui sont dans les cases d'un autre polygone pour pouvoir effectuer les collisions.
+ * @{
  */
 
+/** @brief Structure donnant une grille de collision
+ */
 
 typedef struct {
-	List** Table;
-	unsigned int HCells, VCells;
-	float Width, Height, CellWidth, CellHeight;
+	List** Table; /**<Tableau 2D de liste (Ce sont les cellules) **/
+	unsigned int HCells /**<Nombre de cellules en horizontal (colonnes) **/,
+	VCells; /**<Nombre de cellules en vertical (lignes) **/
+	float CellWidth /**<Largeur d'une cellule **/,
+	CellHeight; /**<Longueur d'une cellule **/
 	
 } Grid;
 
+/** @brief Initialise la grille
+ *
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ * @param HCells[in] Colonnes
+ * @param VCells[in] Lignes
+ */
 void gridInit(Grid* g, unsigned int HCells, unsigned int VCells);
 
+/** @brief Libère la grille
+ *
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ */
 void gridFree(Grid* g);
 
+/** @brief Change la taille de la cellule
+ *
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ * @param Size[in] nouvelle taille de la cellule
+ */
 void gridSetCellSize(Grid* g, float Size);
 
-List* gridGetCellList(Grid* g, unsigned int x, unsigned int y);
+/** @brief Donne accès à la liste d'une cellule de la grille
+ *
+ * @param g[in] grille à laquelle appliquer la fonction
+ * @param x[in] position x dans le tableau [0..HCells]
+ * @param y[in] position y dans le tableau [0..VCells]
+ * @return Un pointeur vers la liste qui est dans la cellule
+ */
+List* gridGetCellList(const Grid* g, unsigned int x, unsigned int y);
 
-List gridGetPolygonList(Grid* g, Polygon* p);
+/** @brief Donne accès à la liste contenant tous les polygones qui sont dans des cellule où se trouve un polygone
+ * 
+ * Cette fonction crée une liste, elle l'initialise, elle doit donc être libérée après l'appel à la fonction. 
+ * @param g[in] grille à laquelle appliquer la fonction
+ * @param p[in] polygone duquel on doit récupérer la liste
+ * @return Une liste qui contient tous les polygones (sauf p) qui sont sensibles d'être en intersection avec p
+ */
+List gridGetPolygonList(const Grid* g, Polygon* p);
 
+/** @brief Donne accès à la liste d'une cellule de la grille
+ *
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ * @param x[in] position x dans le tableau [0..HCells]
+ * @param y[in] position y dans le tableau [0..VCells]
+ * @return Un pointeur vers la liste qui est dans la cellule
+ */
 void gridAddPolygon(Grid* g, Polygon* p);
 
+/** @brief Ajoute un polygone à la grille selon sa BoundingBox
+ *
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ * @param p[in, out] polygone à ajouter
+ */
 void gridAddPolygonByBB(Grid* g, Polygon* p);
 
+/** @brief Fait une mise à jour de laposition du polygone dans la grille selon sa BoundingBox et selon la position antérieure de celui-ci dans la grille
+ *
+ * La différence avec @see gridAddPolygonByBB est que ici on vérifie si on a besoin de mettre à jour sa position dans la grille et si c'est le cas on l'élimine des cases ou il était avant et on l'ajoute dans les nouvelles cases
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ * @param p[in] polygone à ajouter
+ */
 void gridUpdatePolygonPositionByBB(Grid* g, Polygon* p);
 
+/** @brief Ajoute un polygone à une cellule de la grille
+ *
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ * @param p[in] polygone à ajouter
+ * @param x[in] position x dans le tableau [0..HCells]
+ * @param y[in] position y dans le tableau [0..VCells]
+ */
 void gridAddPolygonToCell(Grid* g, Polygon* p, unsigned int x, unsigned int y);
 
+/** @brief Supprime un polygone  d'une cellule de la grille
+ *
+ * On va rechercher dans la cellule indiquée le polygone et on le supprime.
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ * @param p[in] polygone à supprimer
+ * @param x[in] position x dans le tableau [0..HCells]
+ * @param y[in] position y dans le tableau [0..VCells]
+ */
 void gridRemovePolygonFromCell(Grid* g, Polygon* p, unsigned int x, unsigned int y);
 
+/** @brief Supprime tous les polygones nos fixes de la grille
+ *
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ */
 void gridRemovePolygons(Grid* g);
 
 /** @brief Supprime un polygone de la grille selon sa position
@@ -49,11 +120,24 @@ void gridRemovePolygons(Grid* g);
  */
 void gridRemovePolygon(Grid* g, Polygon* p);
 
+/** @brief Supprime un polygone de la grille
+ *
+ * Cette fonction recherche dans toutes les listes de la grille le polygone p et il l'élimine de la grille
+ * @param g[in, out] grille à laquelle appliquer la fonction
+ * @param p[in] polygone à supprimer
+ */
 void gridRemovePolygonByForce(Grid* g, Polygon* p);
 
+/** @brief Test e regression de la grille
+ */
 void gridRegressionTest(void);
 
-void gridDraw(Grid* g);
+/** @brief Dessine la grille en Debug avec OpenGL
+ *
+ * @param g[in] grille à laquelle appliquer la fonction
+ */
+void gridDraw(const Grid* g);
 
+/**@}*/
 
 #endif

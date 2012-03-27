@@ -58,6 +58,16 @@ ifeq ($(OS), Darwin)
 	echo "Creating directory $(OBJ)Audio" ; \
 	mkdir $(OBJ)Audio ; \
 	fi ; \
+	if [ ! -e  $(OBJ)Game ] ; \
+	then \
+	echo "Creating directory $(OBJ)Game" ; \
+	mkdir $(OBJ)Game ; \
+	fi ; \
+	if [ ! -e  $(OBJ)Objects ] ; \
+	then \
+	echo "Creating directory $(OBJ)Objects" ; \
+	mkdir $(OBJ)Objects ; \
+	fi ; \
 	if [ ! -e  $(OBJ)Level ] ; \
 	then \
 	echo "Creating directory $(OBJ)Level" ; \

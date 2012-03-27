@@ -2,6 +2,7 @@
 #define _LEVELEDITOR_H_
 
 #include "Level.h"
+#include <stdio.h>
 
 /** @defgroup LevelEditor
  *
@@ -23,6 +24,15 @@
 #define LVLED_GRID		1
 #define LVLED_RULE		2
 #define LVLED_LIMITS	4
+
+typedef enum enum_objets
+{
+	o_end,
+	o_poly,
+	o_vertex,
+	o_rigid,
+	o_elastic
+} e_led_objets;
 
 typedef struct
 {
@@ -136,8 +146,21 @@ void lvledDelVertex(LevelEditor *Led);
 **/
 void lvledTestLevel(LevelEditor *Led);
 
-void lvledLoad(LevelEditor *Led, const char* File);
-void lvledSave(LevelEditor *Led, const char* File);
+/** @brief Charge un fichier dans l'éditeur
+ *
+ * @param Led LevelEditor
+ * @param File nom du fichier
+ * @return Vrai si chargement est bon
+ **/
+Bool lvledLoad(LevelEditor *Led, const char* File);
+
+/** @brief Sauvegarde le niveau de l'éditeur dans un fichier
+ *
+ * @param Led LevelEditor
+ * @param File nom du fichier
+ * @return Vrai si la sauvegarde est bonne
+ **/
+Bool lvledSave(LevelEditor *Led, const char* File);
 
 /** @}
 **/

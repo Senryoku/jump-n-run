@@ -425,21 +425,14 @@ void delWorld(World *W)
 
 void wdUpdateGrid(World *W)
 {
-	//printf("Size before deleting: %u\n", lstCount(W->CollisionGrid))
-	//gridRemovePolygons(&W->CollisionGrid);
-
-	unsigned int counta=0, countm=0;
 	Node* it = lstFirst(&W->Polygons);
 	while(!nodeEnd(it))
 	{
 		if (!polyIsFixe((Polygon*)nodeGetData(it)))
 			gridUpdatePolygonPositionByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it));
-			//gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it)), counta++;
-		else countm++;
 
 		it=nodeGetNext(it);
 	}
-	//printf("Missed : %u, added %u\n", countm, counta);
 }
 
 

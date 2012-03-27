@@ -38,14 +38,14 @@ void gridSetCellSize(Grid* g, float Size)
 	g->CellHeight=Size;
 }
 
-List* gridGetCellList(Grid* g, unsigned int x, unsigned int y)
+List* gridGetCellList(const Grid* g, unsigned int x, unsigned int y)
 {
 	assert(x < g->HCells && y < g->VCells);
 	//printf("Acces to %u, %u; max: %u, %u\n", x, y, g->HCells, g->VCells);
 	return &(g->Table[x][y]);
 }
 
-void gridAddPolygon(Grid* g, Polygon* p)
+void gridAddPolygon(Grid* g, Polygon* p) //Non fonctionnelle
 {
 	unsigned int i, j, k;
 	int x1, y1, x2, y2, stepX, stepY; //Les int permetten de savoir si ça passe en dessous de 0 et de corriger ça
@@ -124,11 +124,20 @@ void gridAddPolygonByBB(Grid* g, Polygon* p)
 void gridUpdatePolygonPositionByBB(Grid* g, Polygon* p)
 {
 	BBox B = polyGetBBox(p);
-	unsigned int l, t, r, b;
+	unsigned int l, t, r, b, i, j;
 	l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
 	t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
 	if (!p->GridPos.Valid)
-		gridAddPolygonByBB(g, p);
+	{
+		l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
+		t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
+		for (i=l; i<=r; i++)
+			for (j=t; j<=b; j++)
+				gridAddPolygonToCell(g, p, i, j);
+		
+		polyUpdateGridPosition(p, l, t, r, b);
+
+	}
 	else
 	{
 		int offsetTop, offsetLeft, offsetRight, offsetBottom;
@@ -141,7 +150,14 @@ void gridUpdatePolygonPositionByBB(Grid* g, Polygon* p)
 		else
 		{
 			gridRemovePolygon(g, p);
-			gridAddPolygonByBB(g, p);
+			l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
+			t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
+			for (i=l; i<=r; i++)
+				for (j=t; j<=b; j++)
+					gridAddPolygonToCell(g, p, i, j);
+			
+			polyUpdateGridPosition(p, l, t, r, b);
+
 		}
 			
 	}
@@ -178,10 +194,10 @@ void gridRemovePolygonFromCell(Grid* g, Polygon* p, unsigned int x, unsigned int
 		it = nodeGetNext(it);
 	}
 	
-	printf("Polygone %i n'a pas été trouvé dans la liste ce la cellule %u, %u pour être supprimé\n", p, x, y);
+	printf("Polygone %p n'a pas été trouvé dans la liste ce la cellule %u, %u pour être supprimé\n", p, x, y);
 }
 
-List gridGetPolygonList(Grid* g, Polygon* p)
+List gridGetPolygonList(const Grid* g, Polygon* p)
 {
 	List L, *LExtract;
 	lstInit(&L);
@@ -257,10 +273,10 @@ void gridRemovePolygons(Grid* g)
 	//printf("%u removed, %u not removed\n", countr, count);
 }
 
-void gridDraw(Grid* g)
+void gridDraw(const Grid* g)
 {
 	unsigned int i, j;
-	glColor4f(1.f, 1.f, .1f, 0.1f);
+	glColor4f(1.f, 1.f, .1f, 0.2f);
 	glBegin(GL_LINES);
 	//for (i=0; i<g->VCells; i++)
 	for (j=0; j<g->HCells; j++)

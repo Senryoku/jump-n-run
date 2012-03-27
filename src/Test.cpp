@@ -44,6 +44,9 @@ int main(int argc, char** argv)
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
 	glDisable(GL_DEPTH_TEST);
+	
+	//lvledSave(&LvlEd, "levels/Test.txt");
+	lvledLoad(&LvlEd, "levels/Test.txt");
 
 	/*
 	Vertex *C = newVertex(), *M = newVertex(), *S = newVertex();
@@ -185,6 +188,14 @@ int main(int argc, char** argv)
 					case sf::Keyboard::O :
 					case sf::Keyboard::Num2 :
 						lvledNewPolyInit(&LvlEd);
+						break;
+					case sf::Keyboard::S :
+						if (event.key.control)
+							lvledSave(&LvlEd, "levels/Test.txt");
+						break;
+					case sf::Keyboard::L :
+						if (event.key.control)
+							lvledLoad(&LvlEd, "levels/Test.txt");
 						break;
 					default:
 						break;

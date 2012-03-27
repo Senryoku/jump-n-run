@@ -98,7 +98,7 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 			(Vertex*)daGet(&P->Vertices, (i+1)%nbVx),
 			vec2Length(vec2Sub(vxGetPosition((Vertex*)daGet(&P->Vertices, i)),
 					vxGetPosition((Vertex*)daGet(&P->Vertices, (i+1)%nbVx))))));
-	printf("Poly %i init\n", P);
+	//printf("Poly %i init\n", P);
 }
 
 void delPolygon(Polygon* P)
@@ -122,7 +122,7 @@ void delPolygon(Polygon* P)
 
 	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL, printf("Éliminéee!\n");
 
-	printf("Polygon %i deleted\n", P);
+	//printf("Polygon %i deleted\n", P);
 
 	free(P);
 }
