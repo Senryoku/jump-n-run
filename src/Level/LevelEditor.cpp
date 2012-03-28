@@ -297,6 +297,7 @@ void lvledNewPolyCreate(LevelEditor *Led)
 		}
 		else
 		{
+			printf("list size is %u\n", lstCount(&Led->tmpLstDyn));
 			tmpPoly = polyNGone(Led->tmpLstDyn);
 		}
 		polySetFixe(tmpPoly, 0);
@@ -440,15 +441,38 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	char lvl[100]="Niveau Test", description[300]="Ceci est la description du niveau";
 	fprintf(f, "%s\n%s\n%f, %f\n", lvl, description, lvlGetWorld(Led->Lvl)->Width, lvlGetWorld(Led->Lvl)->Height);
 
+	List* L;
+	Node* it;
+	
+	//On stocke les vertex qui representent le centre des polygones de plus de 4 cotes pour eviter de les mettre dans le fichier
+	L = &lvlGetWorld(Led->Lvl)->Polygons;
+	it = lstFirst(L);
+	
+	List* LCenter = newList();
+	
+	//on écrit les polygones
+	while (!nodeEnd(it))
+	{
+		Polygon* p = (Polygon*)nodeGetData(it);
+		if (daGetSize(&p->Vertices)>4 && polyGetCenter(p)!=NULL)
+			lstAdd(LCenter, polyGetCenter(p)), printf("vertex ignored: %i\n", polyGetCenter(p));
+		
+		it = nodeGetNext(it);
+	}
+	
 	//on écrit les vertex
-	List* L = &lvlGetWorld(Led->Lvl)->Vertices;
-	Node* it = lstFirst(L);
+	L  = &lvlGetWorld(Led->Lvl)->Vertices;
+	it = lstFirst(L);
 
 	while (!nodeEnd(it))
 	{
-		fprintf(f, "%u #Vertex\n", o_vertex);
 		Vertex* V =  (Vertex*)nodeGetData(it);
-		fprintf(f, "%u : %f, %f ; %f ; %i\n", (unsigned int) V, vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), (int) vxIsFixe(V));
+		if (!lstHaveElem(LCenter, V))
+		{
+			fprintf(f, "%u #Vertex\n", o_vertex);
+			fprintf(f, "%u : %f, %f ; %f ; %i\n", V, vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), (int) vxIsFixe(V));
+		}
+			
 
 		it = nodeGetNext(it);
 	}
@@ -462,12 +486,12 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		Polygon* p = (Polygon*)nodeGetData(it);
 		unsigned int nVertex = daGetSize(&p->Vertices), i;
 		//on écrit un identifiant pour dire qu'on lit un polygone
-		fprintf(f, "%u %u %i#Polygon\n", o_poly, nVertex, (int) polyIsFixe(p));
+		fprintf(f, "%u %u %i #Polygon\n", o_poly, nVertex, (int) polyIsFixe(p));
 		//On écrit les vertex du polygone
 		for (i=0; i<nVertex; i++)
 		{
 			Vertex* V =  (Vertex*)daGet(&p->Vertices, i);
-			fprintf(f, "%i\n", (int) V);
+			fprintf(f, "%i\n", V);
 		}
 		//fprintf(f, "%u ;End\n", o_end);
 
@@ -482,7 +506,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	{
 		Rigid* r = (Rigid*)nodeGetData(it);
 		fprintf(f, "%u #Rigid\n", o_rigid);
-		fprintf(f, "%i %i %f\n", (int) rdGetV1(r), (int) rdGetV2(r), rdGetLength(r));
+		fprintf(f, "%i %i %f\n", rdGetV1(r), rdGetV2(r), rdGetLength(r));
 		//fprintf(f, "%u ;End\n", o_end);
 
 		it = nodeGetNext(it);
@@ -496,7 +520,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	{
 		Elastic* e = (Elastic*)nodeGetData(it);
 		fprintf(f, "%u #Elastic\n", o_elastic);
-		fprintf(f, "%i %i %f %f\n", (int) elGetV1(e), (int) elGetV2(e), elGetLength(e), elGetSpring(e));
+		fprintf(f, "%i %i %f %f\n", elGetV1(e), elGetV2(e), elGetLength(e), elGetSpring(e));
 		//fprintf(f, "%u ;End\n", o_end);
 
 		it = nodeGetNext(it);
@@ -506,6 +530,8 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 	fclose(f);
 
+	delList(LCenter);
+	
 	return TRUE;
 }
 
