@@ -1,5 +1,6 @@
 #include <Physics/Physics.h>
 #include <Physics/Angular.h>
+#include <Physics/Joint.h>
 #include <Physics/Length.h>
 #include <Level/LevelEditor.h>
 #include <SFML/Graphics.hpp>
@@ -52,6 +53,20 @@ int main(int argc, char** argv)
 
 	//lvledSave(&LvlEd, "levels/Test.txt");
 	lvledLoad(&LvlEd, "levels/Test.txt");
+	
+	Joint J; Vec2 off = vec2(150.f, 150.f);
+	Vertex *C = newVertex(), *M = newVertex(), *S = newVertex();
+	wdAddVertex(lvlGetWorld(LvlEd.Lvl), C);
+	wdAddVertex(lvlGetWorld(LvlEd.Lvl), S);
+	wdAddVertex(lvlGetWorld(LvlEd.Lvl), M);
+	vxSetPosition(C, off);
+	vxSetPosition(M, vec2(off.x, off.y-20.f));
+	vxSetPosition(S, vec2(off.x, off.y+35.f));
+	vxSetFixe(C, 1); vxSetFixe(M, 1); vxSetFixe(S, 1);
+	Rigid *R1 = newRigid(C, M, -1.f), *R2 = newRigid(C, S, -1.f);
+	wdAddRigid(lvlGetWorld(LvlEd.Lvl), R1);
+	wdAddRigid(lvlGetWorld(LvlEd.Lvl), R2);
+	jnInit(&J, C, M, S);
 
 	/*
 	Vertex *C = newVertex(), *M = newVertex(), *S = newVertex();
@@ -280,6 +295,7 @@ int main(int argc, char** argv)
 			plMoveR(LvlEd.Lvl->P1);
 
 		/* == Mise à jour du niveau == */
+		jnResolve(&J);
 		lvlUpdate(LvlEd.Lvl);
 
 		/* == Affichage == */
