@@ -41,15 +41,15 @@ Bool DirectoryExists(const char* Dir)
 Bool CreateDirectory(const char* Dir)
 {
 	Bool success = FALSE;
-	
+
 #ifdef SYS_WINDOWS
 	success = _mkdir(Dir) == 0;
 #elif defined(SYS_LINUX) || defined(SYS_MACOS)
 	success = mkdir(Dir, 0755) == 0;
 #endif
-	
+
 	if (!success)
 		printf("Pas possible de créer le dossier %s\n", Dir);
-	
+
 	return success;
 }

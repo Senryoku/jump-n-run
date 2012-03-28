@@ -27,6 +27,7 @@ void gmSetLvl(Game*, Level*);
 /** @}
 **/
 
+/* Temporaire : Game n'a pas besoin des fonctions de debug */
 void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);
 void glDrawVertex(Vertex* V, float R, float G, float B, float A);
 void glDrawElastic(Elastic* E);

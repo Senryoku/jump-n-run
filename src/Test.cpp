@@ -19,8 +19,7 @@ int main(int argc, char** argv)
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = WindowWidth, ViewHeight = WindowHeight,
 		WindowRatio = WindowWidth/WindowHeight;
-	
-	
+
 	//vec2RegressionTest();
 
 	//vxRegressionTest();
@@ -48,6 +47,8 @@ int main(int argc, char** argv)
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
 	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND) ;
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
 
 	//lvledSave(&LvlEd, "levels/Test.txt");
 	lvledLoad(&LvlEd, "levels/Test.txt");
