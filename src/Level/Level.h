@@ -76,10 +76,10 @@ typedef enum enum_objets
 
  typedef struct {
 	 Vertex* V;
-	 unsigned int ID;
+	 unsigned long long ID;
 } ItemVertex ;
 
-Vertex* GetVertexFromID(List* L, unsigned int ID);
+Vertex* GetVertexFromID(List* L, unsigned long long ID);
 
 /** @}
 **/

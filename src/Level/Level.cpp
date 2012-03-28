@@ -92,10 +92,10 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					case 3:
 					{
 					Vertex **V = (Vertex**)malloc(sizeof(Vertex)*nVertex);
-					unsigned int *ID = (unsigned int*)malloc(sizeof(unsigned int)*nVertex);
+					unsigned long long *ID = (unsigned long long*)malloc(sizeof(unsigned long long)*nVertex);
 					for (i=0; i<nVertex; i++)
 					{
-						fscanf(f, "%u\n", &ID[i]);
+						fscanf(f, "%llu\n", &ID[i]);
 						V[i]=GetVertexFromID(vxL, ID[i]);
 					}
 					Polygon* p;
@@ -115,11 +115,11 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					case 4:
 					{
 					Vertex *V1, *V2, *V3, *V4;
-					unsigned int ID1, ID2, ID3, ID4;
-					fscanf(f, "%u\n", &ID1);
-					fscanf(f, "%u\n", &ID2);
-					fscanf(f, "%u\n", &ID3);
-					fscanf(f, "%u\n", &ID4);
+					unsigned long long ID1, ID2, ID3, ID4;
+					fscanf(f, "%llu\n", &ID1);
+					fscanf(f, "%llu\n", &ID2);
+					fscanf(f, "%llu\n", &ID3);
+					fscanf(f, "%llu\n", &ID4);
 					V1 = GetVertexFromID(vxL, ID1);
 					V2 = GetVertexFromID(vxL, ID2);
 					V3 = GetVertexFromID(vxL, ID3);
@@ -139,8 +139,8 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					List* LPoly = newList();
 					for (i=0; i<nVertex; i++)
 					{
-						unsigned int ID;
-						fscanf(f, "%u\n", &ID);
+						unsigned long long ID;
+						fscanf(f, "%llu\n", &ID);
 						lstAdd(LPoly, GetVertexFromID(vxL, ID));
 					}
 					Polygon* p;
@@ -158,10 +158,10 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				break;
 			case o_rigid:
 			{
-				unsigned int ID1, ID2;
+				unsigned long long ID1, ID2;
 				Vertex *V1, *V2;
 				float Lenght;
-				fscanf(f, "%u %u %f\n", &ID1, &ID2, &Lenght);
+				fscanf(f, "%llu %llu %f\n", &ID1, &ID2, &Lenght);
 				V1 = GetVertexFromID(vxL, ID1);
 				V2 = GetVertexFromID(vxL, ID2);
 				Rigid* r = newRigid(V1, V2, Lenght);
@@ -170,10 +170,10 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			}
 			case o_elastic:
 			{
-				unsigned int ID1, ID2;
+				unsigned long long ID1, ID2;
 				Vertex *V1, *V2;
 				float Lenght, Spring;
-				fscanf(f, "%u %u %f %f\n", &ID1, &ID2, &Lenght, &Spring);
+				fscanf(f, "%llu %llu %f %f\n", &ID1, &ID2, &Lenght, &Spring);
 				V1 = GetVertexFromID(vxL, ID1);
 				V2 = GetVertexFromID(vxL, ID2);
 				Elastic* e = newElastic(V1, V2, Lenght, Spring);
@@ -183,11 +183,11 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			case o_vertex:
 			{
 				printf("vertex\n");
-				unsigned int vxID;
+				unsigned long long vxID;
 				float x, y, mass;
 				Bool fixe;
-				fscanf(f, "%u : %f, %f ; %f ; %i\n", &vxID, &x, &y, &mass, &fixe);
-				printf("données lues: %u ; %f, %f ; %f; %i\n", vxID, x, y, mass, fixe);
+				fscanf(f, "%llu : %f, %f ; %f ; %i\n", &vxID, &x, &y, &mass, &fixe);
+				printf("données lues: %llu; %f, %f ; %f; %i\n", vxID, x, y, mass, fixe);
 				//on ajoute le vertex dans la liste
 				ItemVertex *iV = (ItemVertex*)malloc(sizeof(ItemVertex));
 				iV->ID=vxID;
@@ -290,7 +290,7 @@ World* lvlGetWorld(Level* Lvl)
 }
 
 
-Vertex* GetVertexFromID(List* L, unsigned int ID)
+Vertex* GetVertexFromID(List* L, unsigned long long ID)
 {
 	Node* it = lstFirst(L);
 

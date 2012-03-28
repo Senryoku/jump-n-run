@@ -19,7 +19,8 @@ int main(int argc, char** argv)
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = WindowWidth, ViewHeight = WindowHeight,
 		WindowRatio = WindowWidth/WindowHeight;
-
+	
+	
 	//vec2RegressionTest();
 
 	//vxRegressionTest();
