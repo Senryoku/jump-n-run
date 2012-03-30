@@ -49,14 +49,24 @@ void gmPlay(Game* G)
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
 		}
+
 		lvlUpdate(G->Lvl);
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            plJump(G->Lvl->P1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            plJump(G->Lvl->P1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            plMoveL(G->Lvl->P1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            plMoveR(G->Lvl->P1);
 
 		Center = polyComputeCenter(G->Lvl->P1->Shape);
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glOrtho(Center.x - ViewWidth/2, Center.x + ViewWidth/2, Center.y - ViewHeight/2, Center.y + ViewHeight/2, 0.0, 100.0);
+		glOrtho(Center.x - ViewWidth/2, Center.x + ViewWidth/2, Center.y + ViewHeight/2, Center.y - ViewHeight/2, 0.0, 100.0);
 
 		/* Temporaire ! :) */
 		glDrawPolygon(G->Lvl->P1->Shape);

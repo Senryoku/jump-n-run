@@ -115,7 +115,7 @@ void plMoveL(Player* P)
 
 void plJump(Player* P)
 {
-	if(P->OnGround) polyApplyForce(P->Shape, vec2Prod(P->GroundNormal, 10.f));
+	if(P->OnGround) polyApplyForce(P->Shape, vec2Prod(P->GroundNormal, 50.f));
 }
 
 void plGetUp(Player* P)

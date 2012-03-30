@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 
 	//lvledSave(&LvlEd, "levels/Test.txt");
 	lvledLoad(&LvlEd, "levels/Test.txt");
-	
+
 	Joint J; Vec2 off = vec2(150.f, 150.f);
 	Vertex *C = newVertex(), *M = newVertex(), *S = newVertex();
 	wdAddVertex(lvlGetWorld(LvlEd.Lvl), C);
@@ -284,15 +284,6 @@ int main(int argc, char** argv)
 
 		Wobble(&ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-			plJump(LvlEd.Lvl->P1);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-			plJump(LvlEd.Lvl->P1);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-			plMoveL(LvlEd.Lvl->P1);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			plMoveR(LvlEd.Lvl->P1);
 
 		/* == Mise à jour du niveau == */
 		jnResolve(&J);
