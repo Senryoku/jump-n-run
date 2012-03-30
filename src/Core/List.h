@@ -70,12 +70,7 @@ Bool lstHaveElem(List* L, Elem E);
  * @param L Liste contenant N
  * @param N Node à supprimer
 **/
-void lstRem(List* L, Node* /** @defgroup List
- *
- * Liste doublement chaînée de void*
- * Préfixe des fonctions : lst
- * @{
-**/N);
+void lstRem(List* L, Node* N);
 
 /** @brief Renvoi vrai si la file est vide
 **/

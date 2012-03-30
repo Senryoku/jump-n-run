@@ -443,13 +443,13 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 	List* L;
 	Node* it;
-
+	
 	//On stocke les vertex qui representent le centre des polygones de plus de 4 cotes pour eviter de les mettre dans le fichier
 	L = &lvlGetWorld(Led->Lvl)->Polygons;
 	it = lstFirst(L);
-
+	
 	List* LCenter = newList();
-
+	
 	//on écrit les polygones
 	while (!nodeEnd(it))
 	{
@@ -457,10 +457,10 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		//c'est &lu pour les machines de x64 et %u pour les x86
 		if (daGetSize(&p->Vertices)>4 && polyGetCenter(p)!=NULL)
 			lstAdd(LCenter, polyGetCenter(p)), printf("vertex ignored: %lu\n", (size_t)polyGetCenter(p));
-
+		
 		it = nodeGetNext(it);
 	}
-
+	
 	//on écrit les vertex
 	L  = &lvlGetWorld(Led->Lvl)->Vertices;
 	it = lstFirst(L);
@@ -473,7 +473,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 			fprintf(f, "%u #Vertex\n", o_vertex);
 			fprintf(f, "%lu : %f, %f ; %f ; %i\n", (size_t)V, vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), (int) vxIsFixe(V));
 		}
-
+			
 
 		it = nodeGetNext(it);
 	}
@@ -532,7 +532,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	fclose(f);
 
 	delList(LCenter);
-
+	
 	return TRUE;
 }
 

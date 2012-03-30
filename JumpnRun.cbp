@@ -70,6 +70,8 @@
 		<Unit filename="src\Physics\Elastic.h" />
 		<Unit filename="src\Physics\Grid.cpp" />
 		<Unit filename="src\Physics\Grid.h" />
+		<Unit filename="src\Physics\Joint.cpp" />
+		<Unit filename="src\Physics\Joint.h" />
 		<Unit filename="src\Physics\Length.cpp" />
 		<Unit filename="src\Physics\Length.h" />
 		<Unit filename="src\Physics\Physics.h" />
