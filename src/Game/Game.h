@@ -14,9 +14,14 @@
 typedef struct
 {
 	Level* Lvl;
+	sf::RenderWindow* Window;
+	float WindowWidth;
+	float WindowHeight;
 } Game;
 
 void gmInit(Game*);
+
+void gmFree(Game*);
 
 void gmMenu(Game*);
 

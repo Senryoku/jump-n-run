@@ -136,7 +136,6 @@ void wdResolveVextex(World* W)
 
 void wdResolveRigid(World* W)
 {
-        unsigned int i;
         Node* it = lstFirst(&W->Rigids);
 
         /* Parcoure les contraintes orphelines */

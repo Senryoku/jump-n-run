@@ -14,7 +14,7 @@ void glDrawPolygon(Polygon *P);
 
 int main(int argc, char** argv)
 {
-	unsigned int i, ViewPort;
+	unsigned int ViewPort;
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, WindowWidth = 1200.f,
 		WindowHeight = 600.f, MapWidth = WindowWidth/10.f, MapHeight = WindowHeight/10.f,
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 
 	//polyRegressionTest();
 
-	//Ë faire qqpart d'autre xDD
+	//à faire qqpart d'autre xDD
 	if (!DirectoryExists("levels"))
 		CreateDirectory("levels");
 
@@ -162,6 +162,7 @@ int main(int argc, char** argv)
 				{
 					case sf::Keyboard::T :
 						lvledTestLevel(&LvlEd);
+						window.setActive(1);
 						break;
 					case sf::Keyboard::Space :
 						ViewWidth = WindowWidth;
@@ -349,7 +350,7 @@ int main(int argc, char** argv)
 		window.display();
 	}
 
-	delWorld(lvlGetWorld(LvlEd.Lvl));
+	lvledFree(&LvlEd);
 
 	return 0;
 }
