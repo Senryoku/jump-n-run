@@ -12,13 +12,18 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->W = newWorld(Width, Height);
 	Lvl->P1 = NULL;
 	Lvl->Spawn = Lvl->Goal = vec2(0.f, 0.f);
+	daInit(&Lvl->Textures);
+	daInit(&Lvl->Objects);
 }
 
 void lvlFree(Level* Lvl)
 {
+	unsigned int i;
 	if(Lvl->P1 != NULL) delPlayer(Lvl->P1);
 	(*Lvl->lvlTexFree)(Lvl->Background);
 	delWorld(Lvl->W);
+	for(i = 0; i < daGetSize(&Lvl->Textures); i++)
+		Lvl->lvlTexFree(*((Texture*) daGet(&Lvl->Textures, i)));
 }
 
 void delLevel(Level* lvl)
@@ -202,6 +207,20 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 				break;
 			}
+			case o_texture:
+			{
+				char path[255];
+				printf("Texture : \n");
+				fscanf(f, "%s", &path);
+				printf("Chargement de %s", path);
+				Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
+				*ptrTex = Lvl->lvlTexLoad(path);
+				daAdd(&Lvl->Textures, ptrTex);
+				break;
+			}
+			case o_object:
+				printf("Objet : \n");
+				break;
 			default:
 				break;
 		}

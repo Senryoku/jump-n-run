@@ -90,7 +90,9 @@ typedef enum enum_objets
 	o_poly,
 	o_vertex,
 	o_rigid,
-	o_elastic
+	o_elastic,
+	o_texture,
+	o_object
 } e_led_objets;
 
  typedef struct {
