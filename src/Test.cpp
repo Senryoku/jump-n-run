@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = WindowWidth, ViewHeight = WindowHeight,
 		WindowRatio = WindowWidth/WindowHeight;
-	Bool BG = 0;
+	Bool L1 = 0;
 
 	//vec2RegressionTest();
 
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 	LvlEd.Lvl->lvlTexLoad = &glTexLoad;
 	LvlEd.Lvl->lvlTexFree = &glTexFree;
 	LvlEd.Lvl->lvlDisplayTex = &glDisplayTex;
-	LvlEd.Lvl->Background = (*LvlEd.Lvl->lvlTexLoad)("Pano.jpg");
+	LvlEd.Lvl->Layer1 = (*LvlEd.Lvl->lvlTexLoad)("Pano.jpg");
 
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
@@ -226,7 +226,7 @@ int main(int argc, char** argv)
 						plGetUp(LvlEd.Lvl->P1);
 						break;
 					case sf::Keyboard::V :
-						BG = !BG;
+						L1 = !L1;
 						break;
 					default:
 						break;
@@ -322,7 +322,7 @@ int main(int argc, char** argv)
 				glLoadIdentity();
 				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
-				if(BG) lvlDisplayBG(LvlEd.Lvl);
+				if(L1) lvlDisplayL1(LvlEd.Lvl);
 				/* Affichage de la Grille */
 				gridDraw(&lvlGetWorld(LvlEd.Lvl)->CollisionGrid);
 			}

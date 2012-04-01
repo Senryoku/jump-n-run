@@ -84,6 +84,13 @@ void delPolygon(Polygon* P);
 **/
 Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4);
 
+/** @brief Teste la convexité (validité) du polygon
+ *
+ * @param P Polygon à tester
+ * @return Vrai (1) si P est convexe, 0 sinon
+**/
+Bool polyIsConvexe(Polygon* P);
+
 void polyUpdateGridPosition(Polygon* P, unsigned int Left, unsigned int Top, unsigned int Right, unsigned int Bottom);
 
 /** @brief Construit un rectangle, contraintes internes comprises à partir d'une liste

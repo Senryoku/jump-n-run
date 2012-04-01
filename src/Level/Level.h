@@ -71,6 +71,12 @@ World* lvlGetWorld(Level* Lvl);
 
 void lvlDisplayBG(Level* Lvl);
 
+void lvlDisplayL1(Level* Lvl);
+
+void lvlDisplayL2(Level* Lvl);
+
+void lvlDisplayFG(Level* Lvl);
+
 typedef enum enum_objets
 {
 	o_end,

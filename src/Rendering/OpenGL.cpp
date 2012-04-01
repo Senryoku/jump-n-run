@@ -45,7 +45,8 @@ void glDrawPolygon(Polygon* P)
 {
 	unsigned int i;
 
-	glColor4f(1.f, 1.f, 1.f, 0.2f);
+	if(polyIsConvexe(P)) glColor4f(1.f, 1.f, 1.f, 0.2f);
+		else glColor4f(1.f, 0.f, 0.f, 0.2f);
 	glBegin(GL_POLYGON);
 	for(i = 0; i < daGetSize(&P->Vertices); i++)
 		glVertex2f(vxGetPosition((Vertex*)daGet(&P->Vertices, i)).x, vxGetPosition((Vertex*)daGet(&P->Vertices, i)).y);

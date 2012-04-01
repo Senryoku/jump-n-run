@@ -38,7 +38,7 @@ void gmPlay(Game* G)
 	G->Lvl->lvlTexLoad = &glTexLoad;
 	G->Lvl->lvlTexFree = &glTexFree;
 	G->Lvl->lvlDisplayTex = &glDisplayTex;
-	G->Lvl->Background = (*G->Lvl->lvlTexLoad)("Pano.jpg");
+	G->Lvl->Layer1 = (*G->Lvl->lvlTexLoad)("Pano.jpg");
 
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, MapWidth = G->WindowWidth/10.f, MapHeight = G->WindowHeight/10.f,
 	OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
@@ -82,7 +82,7 @@ void gmPlay(Game* G)
 		glOrtho(Center.x - ViewWidth/2, Center.x + ViewWidth/2, Center.y + ViewHeight/2, Center.y - ViewHeight/2, 0.0, 100.0);
 
 		/* Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
-		lvlDisplayBG(G->Lvl);
+		lvlDisplayL1(G->Lvl);
 
 		glDrawPolygon(G->Lvl->P1->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);

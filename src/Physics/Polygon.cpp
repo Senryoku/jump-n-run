@@ -141,6 +141,24 @@ Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4)
 	return newRectangle;
 }
 
+Bool polyIsConvexe(Polygon* P)
+{
+	if(daGetSize(&P->Rigids) < 2) return 1;
+
+	Vec2 V1 = vec2Ortho(rdVector((Rigid*) daGet(&P->Rigids, 0)));
+	Vec2 V2 = rdVector((Rigid*) daGet(&P->Rigids, 1));
+	Bool First = (vec2Dot(V1, V2) > 0), Test;
+	unsigned int i;
+	for(i = 1; i < daGetSize(&P->Rigids); i++)
+	{
+		V1 = vec2Ortho(rdVector((Rigid*) daGet(&P->Rigids, i)));
+		V2 = rdVector((Rigid*) daGet(&P->Rigids, (i+1)%daGetSize(&P->Rigids)));
+		Test = (vec2Dot(V1, V2) > 0);
+		if(Test != First) return 0;
+	}
+	return 1;
+}
+
 void polyUpdateGridPosition(Polygon* P, unsigned int Left, unsigned int Top, unsigned int Right, unsigned int Bottom)
 {
 	P->GridPos.Left=Left;

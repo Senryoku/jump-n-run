@@ -290,9 +290,16 @@ World* lvlGetWorld(Level* Lvl)
 	return Lvl->W;
 }
 
-void lvlDisplayBG(Level* Lvl)
+void lvlDisplayL1(Level* Lvl)
 {
-	(*Lvl->lvlDisplayTex)(Lvl->Background, vec2(0, 0), vec2(1,0), vec2(1,1), vec2(0,1),
+	(*Lvl->lvlDisplayTex)(Lvl->Layer1, vec2(0, 0), vec2(1,0), vec2(1,1), vec2(0,1),
+						vec2(0, 0), vec2(wdGetWidth(lvlGetWorld(Lvl)), 0),
+						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));
+}
+
+void lvlDisplayL2(Level* Lvl)
+{
+	(*Lvl->lvlDisplayTex)(Lvl->Layer2, vec2(0, 0), vec2(1,0), vec2(1,1), vec2(0,1),
 						vec2(0, 0), vec2(wdGetWidth(lvlGetWorld(Lvl)), 0),
 						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));
 }

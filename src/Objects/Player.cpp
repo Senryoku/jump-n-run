@@ -103,29 +103,22 @@ void plSetShape(Player* P, Polygon* Shape)
 
 void plMoveR(Player* P)
 {
-	if(P->OnGround) polyApplyForce(P->Shape, vec2(5.f, 0.f));
-	else polyApplyForce(P->Shape, vec2(2.f, 0.f));
+	if(P->OnGround) polyApplyForce(P->Shape, vec2(1.f, 0.f));
+	else polyApplyForce(P->Shape, vec2(0.5f, 0.f));
 }
 
 void plMoveL(Player* P)
 {
-	if(P->OnGround) polyApplyForce(P->Shape, vec2(-5.f, 0.f));
-	else polyApplyForce(P->Shape, vec2(-2.f, 0.f));
+	if(P->OnGround) polyApplyForce(P->Shape, vec2(-1.f, 0.f));
+	else polyApplyForce(P->Shape, vec2(-0.5f, 0.f));
 }
 
 void plJump(Player* P)
 {
-	if(P->OnGround) polyApplyForce(P->Shape, vec2Prod(P->GroundNormal, 50.f));
+	if(P->OnGround) polyApplyForce(P->Shape, vec2Prod(P->GroundNormal, 20.f));
 }
 
 void plGetUp(Player* P)
 {
-	if(vxGetPosition(plGetVxUL(P)).y <= vxGetPosition(plGetVxDR(P)).y)
-	{
-		vxSetPosition(plGetVxDL(P), vxGetPosition(plGetVxUL(P)));
-	}
-	if(vxGetPosition(plGetVxUR(P)).y <= vxGetPosition(plGetVxDL(P)).y)
-	{
-		vxSetPosition(plGetVxDR(P), vxGetPosition(plGetVxUR(P)));
-	}
+
 }
