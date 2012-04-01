@@ -42,6 +42,7 @@
 			<Add option="-lsfml-window" />
 			<Add option="-lsfml-system" />
 			<Add option="-lopengl32" />
+			<Add option="-lglu32" />
 		</Linker>
 		<Unit filename="src\Audio\SoundImpl.h" />
 		<Unit filename="src\Audio\SoundManager.cpp" />
@@ -62,6 +63,8 @@
 		<Unit filename="src\Level\Level.h" />
 		<Unit filename="src\Level\LevelEditor.cpp" />
 		<Unit filename="src\Level\LevelEditor.h" />
+		<Unit filename="src\Objects\Object.cpp" />
+		<Unit filename="src\Objects\Object.h" />
 		<Unit filename="src\Objects\Player.cpp" />
 		<Unit filename="src\Objects\Player.h" />
 		<Unit filename="src\Physics\Angular.cpp" />
@@ -83,6 +86,8 @@
 		<Unit filename="src\Physics\Vertex.h" />
 		<Unit filename="src\Physics\World.cpp" />
 		<Unit filename="src\Physics\World.h" />
+		<Unit filename="src\Rendering\OpenGL.cpp" />
+		<Unit filename="src\Rendering\OpenGL.h" />
 		<Unit filename="src\Test.cpp" />
 		<Extensions>
 			<code_completion />
