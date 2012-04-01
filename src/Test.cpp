@@ -5,12 +5,7 @@
 #include <Level/LevelEditor.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
-
-void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);
-void glDrawVertex(Vertex* V, float R, float G, float B, float A);
-void glDrawElastic(Elastic* E);
-void glDrawRigid(Rigid* E);
-void glDrawPolygon(Polygon *P);
+#include <Rendering/OpenGL.h>
 
 int main(int argc, char** argv)
 {
@@ -20,6 +15,7 @@ int main(int argc, char** argv)
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = WindowWidth, ViewHeight = WindowHeight,
 		WindowRatio = WindowWidth/WindowHeight;
+	Bool BG = 0;
 
 	//vec2RegressionTest();
 
@@ -31,8 +27,19 @@ int main(int argc, char** argv)
 	if (!DirectoryExists("levels"))
 		CreateDirectory("levels");
 
+	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Jump'n'Run");
+	window.setFramerateLimit(60.f);
+	window.setKeyRepeatEnabled(0);
+	window.setMouseCursorVisible(0);
+
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND) ;
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
+	//glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_TEXTURE_2D);
+
 	LevelEditor LvlEd;
-	lvledInit(&LvlEd, 3200.f, 1600.f);
+	lvledInit(&LvlEd, 4000.f, 1480.f);
 
 	lvledSetLineDraw(&LvlEd, &glDrawLine);
 	lvledSetVxDraw(&LvlEd, &glDrawVertex);
@@ -40,16 +47,13 @@ int main(int argc, char** argv)
 	lvledSetRdDraw(&LvlEd, &glDrawRigid);
 	lvledSetPolyDraw(&LvlEd, &glDrawPolygon);
 
-	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Jump'n'Run");
-	window.setFramerateLimit(60.f);
-	window.setKeyRepeatEnabled(0);
-	window.setMouseCursorVisible(0);
+	LvlEd.Lvl->lvlTexLoad = &glTexLoad;
+	LvlEd.Lvl->lvlTexFree = &glTexFree;
+	LvlEd.Lvl->lvlDisplayTex = &glDisplayTex;
+	LvlEd.Lvl->Background = (*LvlEd.Lvl->lvlTexLoad)("Pano.jpg");
 
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND) ;
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
 
 	//lvledSave(&LvlEd, "levels/Test.txt");
 	lvledLoad(&LvlEd, "levels/Test.txt");
@@ -221,6 +225,9 @@ int main(int argc, char** argv)
 					case sf::Keyboard::X :
 						plGetUp(LvlEd.Lvl->P1);
 						break;
+					case sf::Keyboard::V :
+						BG = !BG;
+						break;
 					default:
 						break;
 				}
@@ -293,7 +300,7 @@ int main(int argc, char** argv)
 		/* == Affichage == */
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
-		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
+		//glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		//glClear(GL_DEPTH_BUFFER_BIT);
 
 		// On prepare la projection
@@ -315,6 +322,7 @@ int main(int argc, char** argv)
 				glLoadIdentity();
 				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
+				if(BG) lvlDisplayBG(LvlEd.Lvl);
 				/* Affichage de la Grille */
 				gridDraw(&lvlGetWorld(LvlEd.Lvl)->CollisionGrid);
 			}
@@ -354,89 +362,5 @@ int main(int argc, char** argv)
 
 	return 0;
 }
-
-void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A)
-{
-	glColor4f(R, G, B, A);
-	glBegin(GL_LINES);
-	glVertex2f(X1, Y1);
-	glVertex2f(X2, Y2);
-	glEnd();
-}
-
-void glDrawVertex(Vertex* V, float R, float G, float B, float A)
-{
-	unsigned int i;
-	glBegin(GL_TRIANGLE_FAN);
-	glColor4f(R, G, B, A);
-	glVertex2f(vxGetPosition(V).x, vxGetPosition(V).y);
-	for (i = 0; i <= 16; i++)
-	{
-		glVertex2f(1*4.0*cos((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition(V).x,
-				1*4.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition(V).y);
-	}
-	glEnd();
-}
-
-void glDrawElastic(Elastic* E)
-{
-	glColor4f(fabs(vec2SqLength(elVector(E)) - elGetLength(E)*elGetLength(E))/vec2SqLength(elVector(E)) + 0.2f, 0.f, 0.f, 1.f);
-	glBegin(GL_LINES);
-	glVertex2f(vxGetPosition(elGetV1(E)).x, vxGetPosition(elGetV1(E)).y);
-	glVertex2f(vxGetPosition(elGetV2(E)).x, vxGetPosition(elGetV2(E)).y);
-	glEnd();
-}
-
-void glDrawRigid(Rigid* R)
-{
-	glColor4f(0.f, 0.f, 1.f, 1.f);
-	glBegin(GL_LINES);
-	glVertex2f(vxGetPosition(rdGetV1(R)).x, vxGetPosition(rdGetV1(R)).y);
-	glVertex2f(vxGetPosition(rdGetV2(R)).x, vxGetPosition(rdGetV2(R)).y);
-	glEnd();
-}
-
-void glDrawPolygon(Polygon* P)
-{
-	unsigned int i;
-
-	glColor4f(1.f, 1.f, 1.f, 0.2f);
-	glBegin(GL_POLYGON);
-	for(i = 0; i < daGetSize(&P->Vertices); i++)
-		glVertex2f(vxGetPosition((Vertex*)daGet(&P->Vertices, i)).x, vxGetPosition((Vertex*)daGet(&P->Vertices, i)).y);
-	glEnd();
-
-	for(i = 0; i < daGetSize(&P->Rigids); i++)
-	{
-		glDrawRigid((Rigid*)daGet(&P->Rigids, i));
-	}
-
-	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
-	{
-		glDrawRigid((Rigid*)daGet(&P->InternalRigids, i));
-	}
-
-	if(polyIsFixe(P)) glColor4f(1.f, 0.f, 0.f, 1.f); else glColor4f(0.f, 0.f, 1.f, 1.f);
-	Vec2 Center = polyComputeCenter(P);
-	glBegin(GL_TRIANGLE_FAN);
-	glVertex2f(Center.x, Center.y);
-	for (i = 0; i <= 16; i++)
-	{
-		glVertex2f(1*4.0*cos((2.0*M_PI)*(i/static_cast<double>(16))) + Center.x,
-				1*4.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + Center.y);
-	}
-	glEnd();
-
-	/* BBox
-	BBox B = polyGetBBox(P);
-	glColor4f(1.f, 0.f, 0.f, 0.5f);
-	glBegin(GL_LINE_LOOP);
-		glVertex2f(B.Left, B.Top);
-		glVertex2f(B.Right, B.Top);
-		glVertex2f(B.Right, B.Bottom);
-		glVertex2f(B.Left, B.Bottom);
-	glEnd(); */
-}
-
 
 

@@ -17,6 +17,7 @@ void lvlInit(Level* Lvl, float Width, float Height)
 void lvlFree(Level* Lvl)
 {
 	if(Lvl->P1 != NULL) delPlayer(Lvl->P1);
+	(*Lvl->lvlTexFree)(Lvl->Background);
 	delWorld(Lvl->W);
 }
 
@@ -289,6 +290,12 @@ World* lvlGetWorld(Level* Lvl)
 	return Lvl->W;
 }
 
+void lvlDisplayBG(Level* Lvl)
+{
+	(*Lvl->lvlDisplayTex)(Lvl->Background, vec2(0, 0), vec2(1,0), vec2(1,1), vec2(0,1),
+						vec2(0, 0), vec2(wdGetWidth(lvlGetWorld(Lvl)), 0),
+						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));
+}
 
 Vertex* GetVertexFromID(List* L, unsigned long long ID)
 {

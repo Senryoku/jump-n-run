@@ -1,6 +1,7 @@
 #ifndef _LEVEL_H_
 #define _LEVEL_H_
 
+#include "Rendering/OpenGL.h" // Pour les types
 #include "Physics/Physics.h"
 #include "Objects/Player.h"
 
@@ -15,11 +16,16 @@ typedef struct
 	World* W;
 	Vec2 Spawn;
 	Vec2 Goal;
-	// char* Background;
-	// char* Layer 1 // Juste derrière les objets
-	// char* Layer 2 // Juste devant les objets
- 	// char* Foreground
+	Texture Background;
+	Texture Layer1; // Juste derrière les objets
+	Texture Layer2; // Juste devant les objets
+ 	Texture Foreground;
  	Player* P1;
+
+	Texture (*lvlTexLoad)(char* Path);
+	void (*lvlTexFree)(Texture Img);
+	void (*lvlDisplayTex)(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
+				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL);
 } Level;
 
 /** @brief Constructeur
@@ -63,7 +69,7 @@ void lvlUpdate(Level* Lvl);
 **/
 World* lvlGetWorld(Level* Lvl);
 
-
+void lvlDisplayBG(Level* Lvl);
 
 typedef enum enum_objets
 {

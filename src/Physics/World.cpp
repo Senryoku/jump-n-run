@@ -208,6 +208,17 @@ void wdHandleCollision(World* W)
         }
 }
 
+
+float wdGetWidth(World* W)
+{
+	return W->Width;
+}
+
+float wdGetHeight(World* W)
+{
+	return W->Height;
+}
+
 unsigned int wdGetVxCount(World* W)
 {
 	return lstCount(&W->Vertices);

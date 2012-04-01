@@ -165,6 +165,14 @@ void wdResolveElastic(World* W);
 **/
 void wdHandleCollision(World* W);
 
+/** @brief Accesseur de Width
+**/
+float wdGetWidth(World* W);
+
+/** @brief Accesseur de Height
+**/
+float wdGetHeight(World* W);
+
 /** @brief Retourne le nombre de Vertex dans le monde
 **/
 unsigned int wdGetVxCount(World* W);
