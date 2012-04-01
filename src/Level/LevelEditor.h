@@ -9,22 +9,15 @@
  *
  * Permet la création/édition de Niveau
  * Préfixe des méthodes : lvled
- * @todo Ajouter des fonctions de Draw basées sur des callback
- * de primitives d'affichage de :
- * - Points basée sur un Vertex* et une couleur
- * - Lignes basée un Rigid* (couleur prédéterminée)
- * - Lignes basée un Elastic* (couleur déterminée par la contrainte)
- * - Polygones basé sur un Polygon*
- * Ces fonctions de Draw pourraient être ajoutées aux modules
- * correspondant, cependant les fonctions de callback seraient stockées
- * dans LevelEditor.
- * @todo Débuger NewBox
+ * @todo Ajouter des fonctions pour ajouter des Textures (chemins ?)
+ * @todo Ajouter des fonctions de manipulation internes des objets (changement de
+ * spring pour les elastics, ajout de contraintes internes pour les polygones... etc)
+ * @todo Documentation :]
  * @{
 **/
 
-#define LVLED_GRID		1
-#define LVLED_RULE		2
-#define LVLED_LIMITS	4
+#define LVLED_RULE		1
+#define LVLED_LIMITS	2
 
 typedef struct
 {

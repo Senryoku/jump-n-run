@@ -1,7 +1,7 @@
 #ifndef _LEVEL_H_
 #define _LEVEL_H_
 
-#include "Rendering/OpenGL.h" // Pour les types
+#include "Rendering/OpenGL.h" // Pour le type Texture (adapté à l'API)
 #include "Physics/Physics.h"
 #include "Objects/Player.h"
 
@@ -9,23 +9,30 @@
  *
  * Décrit un niveau de jeu
  * Préfixe des méthodes : lvl
+ * @todo Chargement des Textures depuis le fichier de description du niveau
  **/
 
+/** @brief Structure définissant un niveau de jeu
+ *
+ * Les fonctions de callback dépendent de l'API graphique
+**/
 typedef struct
 {
-	World* W;
-	Vec2 Spawn;
-	Vec2 Goal;
-	Texture Background;
-	Texture Layer1; // Juste derrière les objets
-	Texture Layer2; // Juste devant les objets
- 	Texture Foreground;
- 	Player* P1;
+	World* W; /**< Monde physique **/
+	Vec2 Spawn; /**< Point d'apparition du joueur **/
+	Vec2 Goal; /**< Objectif **/
+	Texture Background; /**< Texture de fond **/
+	Texture Layer1; /**< Texture située immédiatement derrière les objets dynamiques **/
+	Texture Layer2; /**< Texture située immédiatement devant les objets dynamiques **/
+ 	Texture Foreground; /**< Texture servant de premier plan **/
+ 	DynArr Textures; /**< Liste de textures utilisables par les objets **/
+ 	DynArr Objects; /**< Liste d'objets texturés **/
+ 	Player* P1; /** Joueur 1 **/
 
-	Texture (*lvlTexLoad)(char* Path);
-	void (*lvlTexFree)(Texture Img);
+	Texture (*lvlTexLoad)(char* Path); /** Pointeur de fonction servant à charger en mémoire une texture **/
+	void (*lvlTexFree)(Texture Img); /** Pointeur de fonction libèrant une texture **/
 	void (*lvlDisplayTex)(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
-				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL);
+				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL); /** Pointeur de fonction affichant une texture **/
 } Level;
 
 /** @brief Constructeur

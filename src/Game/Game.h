@@ -20,14 +20,35 @@ typedef struct
 	float WindowHeight;
 } Game;
 
+/** @brief Initialise le jeu
+ *
+ * Création de la fenêtre, etc...
+ * @param G Game
+**/
 void gmInit(Game*);
 
+/** @brief Libération des ressources utilisées par Game
+ *
+ * @param G Game
+**/
 void gmFree(Game*);
 
+/** @brief Boucle de menu
+ *
+ * @param G Game
+**/
 void gmMenu(Game*);
 
+/** @brief Lance le jeu sur le niveau portée par Game
+ *
+ * @param G Game
+**/
 void gmPlay(Game*);
 
+/** @brief Mutateur du niveau
+ *
+ * @param G Game
+**/
 void gmSetLvl(Game*, Level*);
 
 /** @}
