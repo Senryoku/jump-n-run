@@ -107,11 +107,14 @@ Texture glTexLoad(const char* Path)
 		image.loadFromFile(Path);
 		#endif
 
+		glEnable(GL_TEXTURE_2D);
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getWidth(), image.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getWidth(), image.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr()); /* Dépréciée apparement... */
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr()); /* Pourquoi celle là marche pas O_o */
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glDisable(GL_TEXTURE_2D);
 	}
 	return texture;
 }
@@ -124,7 +127,8 @@ void glTexFree(Texture T)
 void glDisplayTex(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
 				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL)
 {
-	glColor4f(1.f, 1.f, 1.f, 1.f);
+	glColor4f(1.f, 1.f, 1.f, 1.f); /* Chaque pixel de la texture est multiplié par cette couleur */
+	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, T);
 	glBegin(GL_QUADS);
 	glTexCoord2d(TexUL.x, TexUL.y);  glVertex2f(UL.x, UL.y);
@@ -132,4 +136,5 @@ void glDisplayTex(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
 	glTexCoord2d(TexDR.x, TexDR.y);  glVertex2f(DR.x, DR.y);
 	glTexCoord2d(TexDL.x, TexDL.y);  glVertex2f(DL.x, DL.y);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
 }

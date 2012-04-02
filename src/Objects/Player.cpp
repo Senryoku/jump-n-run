@@ -10,12 +10,15 @@ Player* newPlayer()
 void plInit(Player* P)
 {
 	P->Shape = NULL;
+	P->Grab = NULL;
 }
 
 void plFree(Player* P)
 {
 	if(P->Shape != NULL) delPolygon(P->Shape);
 	P->Shape = NULL;
+	if(P->Grab != NULL) delElastic(P->Grab);
+	P->Grab = NULL;
 }
 
 void delPlayer(Player* P)
@@ -121,4 +124,22 @@ void plJump(Player* P)
 void plGetUp(Player* P)
 {
 
+}
+
+void plGrab(Player* P, World* W, float MouseX, float MouseY)
+{
+	Vertex* tmpVx = wdGetNearest(W, MouseX, MouseY);
+	if(vec2Length(vec2Sub(vxGetPosition(tmpVx), vxGetPosition(plGetVxUR(P)))) < 400.f)
+	{
+		P->Grab = newElastic(plGetVxUR(P), tmpVx, 40.f, 0.1f);
+		wdAddElastic(W, P->Grab);
+	}
+}
+
+void plRelease(Player* P, World* W)
+{
+	if(P->Grab == NULL) return;
+	wdDelElastic(W, P->Grab);
+	delElastic(P->Grab);
+	P->Grab = NULL;
 }

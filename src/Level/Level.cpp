@@ -21,9 +21,15 @@ void lvlFree(Level* Lvl)
 	unsigned int i;
 	if(Lvl->P1 != NULL) delPlayer(Lvl->P1);
 	(*Lvl->lvlTexFree)(Lvl->Background);
+	(*Lvl->lvlTexFree)(Lvl->Layer1);
+	(*Lvl->lvlTexFree)(Lvl->Layer2);
+	(*Lvl->lvlTexFree)(Lvl->Foreground);
 	delWorld(Lvl->W);
 	for(i = 0; i < daGetSize(&Lvl->Textures); i++)
-		Lvl->lvlTexFree(*((Texture*) daGet(&Lvl->Textures, i)));
+		Lvl->lvlTexFree(*((Texture*) daGet(&Lvl->Textures, i))),
+		free((Texture*) daGet(&Lvl->Textures, i));
+	daFree(&Lvl->Objects);
+	daFree(&Lvl->Textures);
 }
 
 void delLevel(Level* lvl)

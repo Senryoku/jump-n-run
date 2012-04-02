@@ -2,31 +2,32 @@
 
 void gmInit(Game* G)
 {
-	G->Lvl = NULL;
+	G->Lvl = newLevel(0.f, 0.f);
+
 	G->WindowWidth = 1200.f;
 	G->WindowHeight = 600.f;
 	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump'n'Run");
 	G->Window->setFramerateLimit(60.f);
 	G->Window->setKeyRepeatEnabled(0);
-	G->Window->setMouseCursorVisible(0);
+	G->Window->setMouseCursorVisible(1);
 	G->Window->setActive(1);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
 	glEnable(GL_LINE_SMOOTH);
-	glEnable(GL_TEXTURE_2D);
 }
 
 void gmFree(Game* G)
 {
+	if(G->Lvl != NULL) delLevel(G->Lvl);
 	G->Window->setActive(0);
 	delete G->Window;
 }
 
-void gmSetLvl(Game* G, Level* L)
+void gmLoadLvl(Game* G, char* Path)
 {
-	G->Lvl = L;
+	lvlLoad(G->Lvl, Path);
 }
 
 void gmPlay(Game* G)
@@ -41,10 +42,7 @@ void gmPlay(Game* G)
 	G->Lvl->lvlDisplayTex = &glDisplayTex;
 	G->Lvl->Layer1 = (*G->Lvl->lvlTexLoad)("Pano.jpg");
 
-	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, MapWidth = G->WindowWidth/10.f, MapHeight = G->WindowHeight/10.f,
-	OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
-	ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight,
-	WindowRatio = G->WindowWidth/G->WindowHeight;
+	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
 	while (G->Window->isOpen())
 	{
@@ -62,17 +60,43 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
+
+			if(event.type == sf::Event::MouseButtonPressed)
+			{
+				switch (event.mouseButton.button)
+				{
+					case sf::Mouse::Left :
+						plGrab(G->Lvl->P1, lvlGetWorld(G->Lvl), MouseX, MouseY);
+						break;
+					default :
+						break;
+				}
+			}
+
+			if(event.type == sf::Event::MouseButtonReleased)
+			{
+				switch (event.mouseButton.button)
+				{
+					case sf::Mouse::Left :
+						plRelease(G->Lvl->P1, lvlGetWorld(G->Lvl));
+						break;
+					default :
+						break;
+				}
+			}
+
+
 		}
 
 		lvlUpdate(G->Lvl);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
             plJump(G->Lvl->P1);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
             plJump(G->Lvl->P1);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             plMoveL(G->Lvl->P1);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             plMoveR(G->Lvl->P1);
 
 		Center = polyComputeCenter(G->Lvl->P1->Shape);
@@ -80,16 +104,15 @@ void gmPlay(Game* G)
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glOrtho(Center.x - ViewWidth/2, Center.x + ViewWidth/2, Center.y + ViewHeight/2, Center.y - ViewHeight/2, 0.0, 100.0);
+		ViewX = Center.x - ViewWidth/2;
+		ViewY = Center.y - ViewHeight/2;
+		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
 
 		/* Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
 		lvlDisplayL1(G->Lvl);
 
 		glDrawPolygon(G->Lvl->P1->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
-
-		OldMouseX = MouseX;
-		OldMouseY = MouseY;
 
 		G->Window->display();
 	}

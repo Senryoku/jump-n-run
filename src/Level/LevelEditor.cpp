@@ -18,7 +18,7 @@ void lvledInit(LevelEditor *Led, float Width, float Height)
 
 void lvledFree(LevelEditor *Led)
 {
-	lvlFree(Led->Lvl);
+	delLevel(Led->Lvl);
 	delVertex(Led->Mouse);
 	delElastic(Led->GrabElastic);
 }
@@ -411,12 +411,10 @@ void lvledNewBoxCreate(LevelEditor *Led)
 
 void lvledTestLevel(LevelEditor *Led)
 {
-	lvledSave(Led, "levels/TempTest.lvl");
-	Level* Test = newLevel(0.f, 0.f);
-	lvlLoad(Test, "levels/TempTest.lvl");
+	lvledSave(Led, "levels/TempTest.lvl~");
 	Game G;
 	gmInit(&G);
-	gmSetLvl(&G, Test);
+	gmLoadLvl(&G, "levels/TempTest.lvl~");
 	gmPlay(&G);
 	gmFree(&G);
 }

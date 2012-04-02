@@ -45,11 +45,11 @@ void gmMenu(Game*);
 **/
 void gmPlay(Game*);
 
-/** @brief Mutateur du niveau
+/** @brief Charge un niveau depuis un fichier
  *
  * @param G Game
 **/
-void gmSetLvl(Game*, Level*);
+void gmLoadLvl(Game*, char*);
 
 /** @}
 **/

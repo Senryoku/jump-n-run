@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
+#include <GL/glext.h>
 #include "Physics/Physics.h"
 
 typedef GLuint Texture;

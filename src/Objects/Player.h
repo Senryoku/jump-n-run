@@ -2,6 +2,7 @@
 #define _PLAYER_H_
 
 #include "Physics/Polygon.h"
+#include "Physics/World.h"
 
 /** @defgroup Player
  *
@@ -13,6 +14,8 @@ typedef struct
 {
 	Polygon* Shape;
 	/* char* Texture */
+
+	Elastic* Grab;
 
 	Bool OnGround;
 	Vec2 GroundNormal;
@@ -51,6 +54,9 @@ void plMoveR(Player* P);
 void plMoveL(Player* P);
 void plJump(Player* P);
 void plGetUp(Player* P);
+
+void plGrab(Player* P, World* W, float MouseX, float MouseY);
+void plRelease(Player* P, World* W);
 
 /** @}
 **/

@@ -121,8 +121,6 @@ void delPolygon(Polygon* P)
 
 	if(P->Center != NULL) delVertex(P->Center), P->Center = NULL;
 
-	//printf("Polygon %i deleted\n", P);
-
 	free(P);
 }
 

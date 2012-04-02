@@ -83,6 +83,7 @@ Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R)
 	return vec2(cosR*V.x-sinR*V.y + Origin.x, sinR*V.x+cosR*V.y + Origin.y);
 }
 
+#include <assert.h>
 void vec2RegressionTest(void)
 {
 	Vec2 V1;
@@ -98,8 +99,10 @@ void vec2RegressionTest(void)
 	printf("V1*2 : %f %f, V2/5 : %f %f\n", vec2Prod(V1, 2).x, vec2Prod(V1, 2).y, vec2Div(V2, 5).x, vec2Div(V2, 5).y);
 	printf("Longueur de V1 : %f, Longueur de V2 : %f\n", vec2Length(V1), vec2Length(V2));
 	printf("Produit scalaire de V1 et V2 : %f\n", vec2Dot(V1, V2));
+	/* Test d'égalité sur un float... Pas génial mais devrait tout de même marcher dans ce cas */
+	assert(vec2Dot(V1, vec2Ortho(V1)) == 0.f);
 	printf(" == Fin du test de Vec2 == \n\n");
-	
+
 	//quelques test pour les angles
 	Vec2 V1ortho=vec2Ortho(V1);
 	V2=vec2Rotate(V1, vec2(0.f, 0.f), DEG2RAD(-30.f));
@@ -108,5 +111,5 @@ void vec2RegressionTest(void)
 	printf("V2 normalized: %f, %f\n", V2.x, V2.y);
 	printf("produit scalaire entre V1 et V2 vaut:%f\n", vec2Dot(V1, V2));
 	printf("produit scalaire entre V1ortho et V2 vaut:%f\n", vec2Dot(V1ortho, V2));
-	
+
 }

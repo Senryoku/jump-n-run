@@ -38,6 +38,7 @@ int main(int argc, char** argv)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
 	//glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_TEXTURE_2D);
+	glColor4f(1.f, 1.f, 1.f, 1.f);
 
 	LevelEditor LvlEd;
 	lvledInit(&LvlEd, 4000.f, 1480.f);
@@ -74,7 +75,7 @@ int main(int argc, char** argv)
 	wdAddRigid(lvlGetWorld(LvlEd.Lvl), R2);
 	Vec2 CPos = vxGetPosition(C),  MPos = vxGetPosition(M), SPos = vxGetPosition(S);
 	printf("C: %f, %f; M: %f, %f; S: %f, %f\n",CPos.x, CPos.y, MPos.x, MPos.y, SPos.x, SPos.y);
-	
+
 	jnInit(&J, C, M, S);
 
 	/*
@@ -90,7 +91,7 @@ int main(int argc, char** argv)
 	*/
 
 	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
-	
+
 	Clock.restart(); unsigned int frames = 0;
 	while (window.isOpen())
 	{
@@ -309,7 +310,7 @@ int main(int argc, char** argv)
 		/* == Affichage == */
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
-		//glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
+		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		//glClear(GL_DEPTH_BUFFER_BIT);
 
 		// On prepare la projection
