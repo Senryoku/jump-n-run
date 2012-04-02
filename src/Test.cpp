@@ -14,8 +14,8 @@ int main(int argc, char** argv)
 		WindowHeight = 600.f, MapWidth = WindowWidth/10.f, MapHeight = WindowHeight/10.f,
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = WindowWidth, ViewHeight = WindowHeight,
-		WindowRatio = WindowWidth/WindowHeight;
-	sf::Clock Clock;
+		WindowRatio = WindowWidth/WindowHeight, FPS = 60.f;
+	sf::Clock Clock, ClockDt;
 	Bool L1 = FALSE;
 
 	//vec2RegressionTest();
@@ -37,8 +37,6 @@ int main(int argc, char** argv)
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
 	//glEnable(GL_LINE_SMOOTH);
-	glEnable(GL_TEXTURE_2D);
-	glColor4f(1.f, 1.f, 1.f, 1.f);
 
 	LevelEditor LvlEd;
 	lvledInit(&LvlEd, 4000.f, 1480.f);
@@ -92,6 +90,7 @@ int main(int argc, char** argv)
 
 	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
 
+	ClockDt.restart();
 	Clock.restart(); unsigned int frames = 0;
 	while (window.isOpen())
 	{
@@ -283,7 +282,7 @@ int main(int argc, char** argv)
 		lvledNewBoxUpdate(&LvlEd);
 
 		/* Déplacement de la vue */
-		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
+		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f*60.f/FPS : ViewSpeed = 15.f*60.f/FPS;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			toViewY-=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -370,10 +369,14 @@ int main(int argc, char** argv)
 		frames++;
 		if (Clock.getElapsedTime().asSeconds()>=1.f)
 		{
-			printf("FPS: %.1f\n", round(frames/Clock.getElapsedTime().asSeconds()));
-			Clock.restart();
+			FPS = frames/Clock.getElapsedTime().asSeconds();
+			printf("FPS: %.1f\n", round(FPS));
 			frames = 0;
+			Clock.restart();
 		}
+		if(FPS > 15)
+			lvlGetWorld(LvlEd.Lvl)->dt = ClockDt.getElapsedTime().asMilliseconds()/15.f;
+		ClockDt.restart();
 	}
 
 	lvledFree(&LvlEd);

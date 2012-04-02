@@ -103,8 +103,6 @@ void wdResolveVextex(World* W)
 	Vec2 newPos;
 	Node* it = lstFirst(&W->Vertices);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)) W->dt=0.2f; else W->dt=1.f;
-
 	while(!nodeEnd(it))
 	{
 		vxResolve((Vertex*) nodeGetData(it), W->prevdt, W->dt);
