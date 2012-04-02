@@ -20,6 +20,7 @@ void gmInit(Game* G)
 
 void gmFree(Game* G)
 {
+	G->Window->setActive(0);
 	delete G->Window;
 }
 

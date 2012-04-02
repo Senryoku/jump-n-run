@@ -9,13 +9,14 @@
 
 int main(int argc, char** argv)
 {
-	unsigned int ViewPort;
+	unsigned int ViewPort, i;
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, WindowWidth = 1200.f,
 		WindowHeight = 600.f, MapWidth = WindowWidth/10.f, MapHeight = WindowHeight/10.f,
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = WindowWidth, ViewHeight = WindowHeight,
 		WindowRatio = WindowWidth/WindowHeight;
-	Bool L1 = 0;
+	sf::Clock Clock;
+	Bool L1 = FALSE;
 
 	//vec2RegressionTest();
 
@@ -27,8 +28,8 @@ int main(int argc, char** argv)
 	if (!DirectoryExists("levels"))
 		CreateDirectory("levels");
 
-	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Jump'n'Run");
-	window.setFramerateLimit(60.f);
+	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Jump n'Run");
+	window.setFramerateLimit(6000.f);
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
 
@@ -46,6 +47,7 @@ int main(int argc, char** argv)
 	lvledSetElDraw(&LvlEd, &glDrawElastic);
 	lvledSetRdDraw(&LvlEd, &glDrawRigid);
 	lvledSetPolyDraw(&LvlEd, &glDrawPolygon);
+
 
 	LvlEd.Lvl->lvlTexLoad = &glTexLoad;
 	LvlEd.Lvl->lvlTexFree = &glTexFree;
@@ -70,6 +72,9 @@ int main(int argc, char** argv)
 	Rigid *R1 = newRigid(C, M, -1.f), *R2 = newRigid(C, S, -1.f);
 	wdAddRigid(lvlGetWorld(LvlEd.Lvl), R1);
 	wdAddRigid(lvlGetWorld(LvlEd.Lvl), R2);
+	Vec2 CPos = vxGetPosition(C),  MPos = vxGetPosition(M), SPos = vxGetPosition(S);
+	printf("C: %f, %f; M: %f, %f; S: %f, %f\n",CPos.x, CPos.y, MPos.x, MPos.y, SPos.x, SPos.y);
+	
 	jnInit(&J, C, M, S);
 
 	/*
@@ -85,6 +90,8 @@ int main(int argc, char** argv)
 	*/
 
 	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
+	
+	Clock.restart(); unsigned int frames = 0;
 	while (window.isOpen())
 	{
 		MouseX = ViewWidth*sf::Mouse::getPosition(window).x/WindowWidth + ViewX;
@@ -165,6 +172,7 @@ int main(int argc, char** argv)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::T :
+						window.setActive(0);
 						lvledTestLevel(&LvlEd);
 						window.setActive(1);
 						break;
@@ -294,6 +302,7 @@ int main(int argc, char** argv)
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
+		for (i=0; i<4; i++)
 		jnResolve(&J);
 		lvlUpdate(LvlEd.Lvl);
 
@@ -323,6 +332,7 @@ int main(int argc, char** argv)
 				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
 				if(L1) lvlDisplayL1(LvlEd.Lvl);
+
 				/* Affichage de la Grille */
 				gridDraw(&lvlGetWorld(LvlEd.Lvl)->CollisionGrid);
 			}
@@ -356,11 +366,96 @@ int main(int argc, char** argv)
 
 		// Update the window
 		window.display();
+		frames++;
+		if (Clock.getElapsedTime().asSeconds()>=1.f)
+		{
+			printf("FPS: %.1f\n", round(frames/Clock.getElapsedTime().asSeconds()));
+			Clock.restart();
+			frames = 0;
+		}
 	}
 
 	lvledFree(&LvlEd);
 
 	return 0;
 }
+
+/*
+void glDrawVertex(Vertex* V, float R, float G, float B, float A)
+{
+	unsigned int i;
+	glBegin(GL_TRIANGLE_FAN);
+	glColor4f(R, G, B, A);
+	glVertex2f(vxGetPosition(V).x, vxGetPosition(V).y);
+	for (i = 0; i <= 16; i++)
+	{
+		glVertex2f(1*4.0*cos((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition(V).x,
+				1*4.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + vxGetPosition(V).y);
+	}
+	glEnd();
+}
+ 
+
+void glDrawElastic(Elastic* E)
+{
+	glColor4f(fabs(vec2SqLength(elVector(E)) - elGetLength(E)*elGetLength(E))/vec2SqLength(elVector(E)) + 0.2f, 0.f, 0.f, 1.f);
+	glBegin(GL_LINES);
+	glVertex2f(vxGetPosition(elGetV1(E)).x, vxGetPosition(elGetV1(E)).y);
+	glVertex2f(vxGetPosition(elGetV2(E)).x, vxGetPosition(elGetV2(E)).y);
+	glEnd();
+}
+
+void glDrawRigid(Rigid* R)
+{
+	glColor4f(0.f, 0.f, 1.f, 1.f);
+	glBegin(GL_LINES);
+	glVertex2f(vxGetPosition(rdGetV1(R)).x, vxGetPosition(rdGetV1(R)).y);
+	glVertex2f(vxGetPosition(rdGetV2(R)).x, vxGetPosition(rdGetV2(R)).y);
+	glEnd();
+}
+
+void glDrawPolygon(Polygon* P)
+{
+	unsigned int i;
+
+	glColor4f(1.f, 1.f, 1.f, 0.2f);
+	glBegin(GL_POLYGON);
+	for(i = 0; i < daGetSize(&P->Vertices); i++)
+		glVertex2f(vxGetPosition((Vertex*)daGet(&P->Vertices, i)).x, vxGetPosition((Vertex*)daGet(&P->Vertices, i)).y);
+	glEnd();
+
+	for(i = 0; i < daGetSize(&P->Rigids); i++)
+	{
+		glDrawRigid((Rigid*)daGet(&P->Rigids, i));
+	}
+
+	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
+	{
+		glDrawRigid((Rigid*)daGet(&P->InternalRigids, i));
+	}
+
+	if(polyIsFixe(P)) glColor4f(1.f, 0.f, 0.f, 1.f); else glColor4f(0.f, 0.f, 1.f, 1.f);
+	Vec2 Center = polyComputeCenter(P);
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2f(Center.x, Center.y);
+	for (i = 0; i <= 16; i++)
+	{
+		glVertex2f(1*4.0*cos((2.0*M_PI)*(i/static_cast<double>(16))) + Center.x,
+				1*4.0*sin((2.0*M_PI)*(i/static_cast<double>(16))) + Center.y);
+	}
+	glEnd();
+
+	 //BBox
+	BBox B = polyGetBBox(P);
+	glColor4f(1.f, 0.f, 0.f, 0.5f);
+	glBegin(GL_LINE_LOOP);
+		glVertex2f(B.Left, B.Top);
+		glVertex2f(B.Right, B.Top);
+		glVertex2f(B.Right, B.Bottom);
+		glVertex2f(B.Left, B.Bottom);
+	glEnd(); 
+}
+ */
+
 
 

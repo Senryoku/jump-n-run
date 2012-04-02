@@ -17,7 +17,7 @@ void glDrawPolygon(Polygon *P);
  *
  * @param Path Chemin du fichier image
 **/
-Texture glTexLoad(char* Path);
+Texture glTexLoad(const char* Path);
 
 /** @brief Libère la texture OpenGL
  *

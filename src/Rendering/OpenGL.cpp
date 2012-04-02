@@ -84,13 +84,13 @@ void glDrawPolygon(Polygon* P)
 	glEnd(); */
 }
 
-Texture glTexLoad(char* Path)
+Texture glTexLoad(const char* Path)
 {
 	GLuint texture;
 	{
 		sf::Image image;
 		#ifdef SFML_SYSTEM_MACOS
-		image.loadFromFile(ResourcePath() + Path);
+		image.loadFromFile(Path); //À rajouter ResourcePath selon compilation 
 		#else
 		image.loadFromFile(Path);
 		#endif

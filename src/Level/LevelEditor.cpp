@@ -488,7 +488,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		Polygon* p = (Polygon*)nodeGetData(it);
 		unsigned int nVertex = daGetSize(&p->Vertices), i;
 		//on écrit un identifiant pour dire qu'on lit un polygone
-		fprintf(f, "%u %u %c #Polygon\n", o_poly, nVertex, (int) polyIsFixe(p));
+		fprintf(f, "%u %u %i #Polygon\n", o_poly, nVertex, (int) polyIsFixe(p));
 		//On écrit les vertex du polygone
 		for (i=0; i<nVertex; i++)
 		{

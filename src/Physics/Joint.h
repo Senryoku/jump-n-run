@@ -19,12 +19,11 @@ typedef struct
 	Vec2 MC;
 	Vec2 MCOrtho;
 	Vec2 MinPos, MaxPos;
-	float Length;
+	float Length, Factor, MaxDot;
 	float MinAng; /**< Angle minimal **/
 	float MaxAng; /**< Angle maximal **/
 	float MinLenght, MaxLenght; /**< Longueur à l'équilibre **/
 	float MinOrthoDot, MaxOrthoDot; /**< Produit scalaire de CS avec l'orthogonal à MC **/
-	float MinDot, MaxDot;
 } Joint;
 
 /** @brief InitiJoint

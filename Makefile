@@ -8,7 +8,7 @@ POINTCPP = $(wildcard $(SRC)*/*.cpp) $(wildcard $(SRC)*.cpp)
 POINTOP := $(POINTC:.c=.o) $(POINTCPP:.cpp=.o)
 POINTO = $(patsubst src/%,$(OBJ)%,$(POINTOP)) #$(POINTOP:src=obj)
 
-OPT := -Wall -pedantic -Wno-long-long -I "$(SRC)"
+OPT := -Wall -pedantic -Wno-long-long -O2 -I "$(SRC)"
 
 
 ifeq ($(SHELL), sh.exe) 
@@ -72,6 +72,11 @@ ifeq ($(OS), Darwin)
 	then \
 	echo "Creating directory $(OBJ)Level" ; \
 	mkdir $(OBJ)Level ; \
+	fi ; \
+	if [ ! -e  $(OBJ)Rendering ] ; \
+	then \
+	echo "Creating directory $(OBJ)Rendering" ; \
+	mkdir $(OBJ)Rendering ; \
 	fi ; \
 	if [ ! -e  $(OBJ)Physics ] ; \
 	then \
