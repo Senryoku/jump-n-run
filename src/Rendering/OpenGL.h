@@ -12,6 +12,7 @@ void glDrawVertex(Vertex* V, float R, float G, float B, float A);
 void glDrawElastic(Elastic* E);
 void glDrawRigid(Rigid* E);
 void glDrawPolygon(Polygon *P);
+void glDrawCircle(float x, float y, float radius);
 
 /** @brief Charge une texture en mémoire
  *

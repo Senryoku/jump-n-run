@@ -84,6 +84,18 @@ void glDrawPolygon(Polygon* P)
 	glEnd(); */
 }
 
+void glDrawCircle(float x, float y, float radius)
+{
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2f(x, y);
+	for (int i=0; i<=16; i++)
+	{
+		glVertex2f(radius*cos((2.0*M_PI)*(i/static_cast<double>(16))) + x,
+				   radius*sin((2.0*M_PI)*(i/static_cast<double>(16))) + y);
+	}
+	glEnd();
+}
+
 Texture glTexLoad(const char* Path)
 {
 	GLuint texture;

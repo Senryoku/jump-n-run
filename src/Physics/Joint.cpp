@@ -1,18 +1,7 @@
 #include "Joint.h"
 #include <SFML/OpenGL.hpp>
 
-void glDrawCircle(float x, float y, float radius);
-void glDrawCircle(float x, float y, float radius)
-{
-	glBegin(GL_TRIANGLE_FAN);
-	glVertex2f(x, y);
-	for (int i=0; i<=16; i++)
-	{
-		glVertex2f(radius*cos((2.0*M_PI)*(i/static_cast<double>(16))) + x,
-				   radius*sin((2.0*M_PI)*(i/static_cast<double>(16))) + y);
-	}
-	glEnd();
-}
+
 
 void jnInit(Joint* J, Vertex* C, Vertex* M, Vertex* S)
 {
@@ -87,8 +76,7 @@ void jnResolve(Joint* J)
 			vxSetPosition(J->S, pos);
 			//Vec2 pos = vec2Prod(vec2Rotate(vxGetPosition(J->M), vxGetPosition(J->C), DEG2RAD(-10.f)), J->Factor);
 			//printf("M pos :%f, %f, M rotated by 10º : %f, %f\n", vxGetPosition(J->M).x, vxGetPosition(J->M).y, pos.x, pos.y);
-			glColor3f(1.f, 1.f, 0.f);
-			glDrawCircle(pos.x, pos.y, 10.f);
+			
 			//printf("pos: %f, %f\n", pos.x, pos.y);
 		}
 		else
