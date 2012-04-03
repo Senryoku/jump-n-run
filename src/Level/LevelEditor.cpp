@@ -14,6 +14,11 @@ void lvledInit(LevelEditor *Led, float Width, float Height)
 	Led->elDraw = NULL;
 	Led->rdDraw = NULL;
 	Led->polyDraw = NULL;
+	
+	Led->backPath[0]='\0';
+	Led->layer1Path[0]='\0';
+	Led->layer2Path[0]='\0';
+	Led->forePath[0]='\0';
 }
 
 void lvledFree(LevelEditor *Led)
@@ -421,6 +426,31 @@ void lvledTestLevel(LevelEditor *Led)
 
 Bool lvledLoad(LevelEditor *Led, const char* File)
 {
+	//on lit les paths des images fixes
+	FILE* f;
+	f=fopen(File, "r");
+	
+	if (f==NULL)
+	{
+		printf("Erreur de lecture du fichier %s\n", File);
+		return FALSE;
+	}
+	//on ignore les premieres lignes
+	char read[300];
+	unsigned int i;
+	for (i=0; i<3; i++)
+		fgets(read, 300, f);
+	fgets(Led->backPath, 255, f);
+	fgets(Led->layer1Path, 255, f);
+	fgets(Led->layer2Path, 255, f);
+	fgets(Led->forePath, 255, f);
+	*strstr(Led->backPath, "\n") = '\0';
+	*strstr(Led->layer1Path, "\n") = '\0';
+	*strstr(Led->layer2Path, "\n") = '\0';
+	*strstr(Led->forePath, "\n") = '\0';
+	
+	fclose(f);
+	
 	return lvlLoad(Led->Lvl, File);
 }
 
@@ -441,6 +471,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	/* Entete du fichier*/
 	char lvl[100]="Niveau Test", description[300]="Ceci est la description du niveau";
 	fprintf(f, "%s\n%s\n%f, %f\n", lvl, description, lvlGetWorld(Led->Lvl)->Width, lvlGetWorld(Led->Lvl)->Height);
+	fprintf(f, "%s\n%s\n%s\n%s\n", Led->backPath, Led->layer1Path, Led->layer2Path, Led->forePath);
 
 	List* L;
 	Node* it;

@@ -73,13 +73,18 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	}
 	else
 		sscanf(read, "%f, %f", &width, &height);
+	
+	//on ignore 4 lignes pour des images car elles sont lues dans leveleditor
+	unsigned int item, nVertex, i;
+	Bool polyFixed; int booly;
+	for (i=0; i<4; i++)
+		fgets(read, 255, f);
 
 	//On libere le monde et on le realloue
 	wdFree(Lvl->W);
 	wdInit(Lvl->W, width, height);
 
-	unsigned int item, nVertex, i;
-	Bool polyFixed; int booly;
+	
 
 	//liste des vertex
 	DynArr* Vx = newDynArr();

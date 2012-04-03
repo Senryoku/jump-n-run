@@ -1,6 +1,10 @@
 Niveau Test
 Ceci est la description du niveau
 4000.000000, 1480.000000
+
+
+
+
 2 #Vertex
 150.000000, 150.000000 ; 1.000000 ; 1
 2 #Vertex
