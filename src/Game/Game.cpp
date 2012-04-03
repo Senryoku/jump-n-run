@@ -10,7 +10,8 @@ void gmInit(Game* G)
 	float WindowWidth = 800.f;
 	float WindowHeight = 600.f;
 	float FPSLimit = 60.f;
-	float AA = 1.f;
+	float AntiAliasing = 1.f;
+	float VerticalSync = 0.f;
 
 	G->Lvl = newLevel(0.f, 0.f);
 
@@ -25,7 +26,8 @@ void gmInit(Game* G)
 			if(strcmp(id, "WindowWidth") == 0) WindowWidth = value;
 			if(strcmp(id, "WindowHeigth") == 0) WindowHeight = value;
 			if(strcmp(id, "FPSLimit") == 0) FPSLimit = value;
-			if(strcmp(id, "AA") == 0) AA = value;
+			if(strcmp(id, "AntiAliasing") == 0) AntiAliasing = value;
+			if(strcmp(id, "VerticalSync") == 0) VerticalSync = value;
 		}
 		fclose(f);
 	}
@@ -36,13 +38,14 @@ void gmInit(Game* G)
 	G->Window->setFramerateLimit(FPSLimit);
 	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
-	if (G->Window->setActive(1))
-		printf("G->windows activated\n");
+	if(VerticalSync) G->Window->setVerticalSyncEnabled(1);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
-	if(AA) glEnable(GL_LINE_SMOOTH);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if(AntiAliasing) glEnable(GL_LINE_SMOOTH);
+
+	//lvlGetWorld(G->Lvl)->prevdt = lvlGetWorld(G->Lvl)->dt = 0.5f*60.f/FPSLimit;
 }
 
 void gmFree(Game* G)

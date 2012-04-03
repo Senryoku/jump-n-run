@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = WindowWidth, ViewHeight = WindowHeight,
 		WindowRatio = WindowWidth/WindowHeight, FPS = 60.f;
-	sf::Clock Clock, ClockDt;
+	sf::Clock Clock;
 	Bool L1 = FALSE;
 
 	//vec2RegressionTest();
@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 		CreateDirectory("levels");
 
 	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Jump n'Run");
-	window.setFramerateLimit(100.f);
+	window.setFramerateLimit(60.f);
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
 
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 	lvledSetElDraw(&LvlEd, &glDrawElastic);
 	lvledSetRdDraw(&LvlEd, &glDrawRigid);
 	lvledSetPolyDraw(&LvlEd, &glDrawPolygon);
-	
+
 
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
@@ -90,7 +90,6 @@ int main(int argc, char** argv)
 
 	//glEnable(GL_LINE_SMOOTH); // Anti-Alliasing pour les lignes
 
-	ClockDt.restart();
 	Clock.restart(); unsigned int frames = 0;
 	while (window.isOpen())
 	{
@@ -282,7 +281,7 @@ int main(int argc, char** argv)
 		lvledNewBoxUpdate(&LvlEd);
 
 		/* Déplacement de la vue */
-		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f*60.f/FPS : ViewSpeed = 15.f*60.f/FPS;
+		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 			toViewY-=ViewSpeed;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -374,9 +373,6 @@ int main(int argc, char** argv)
 			frames = 0;
 			Clock.restart();
 		}
-		if(FPS > 15)
-			lvlGetWorld(LvlEd.Lvl)->dt = ClockDt.getElapsedTime().asMilliseconds()/15.f;
-		ClockDt.restart();
 	}
 
 	lvledFree(&LvlEd);
