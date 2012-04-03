@@ -102,5 +102,9 @@ unsigned int daGetCapacity(const DynArr* DA);
  **/
 unsigned int daGetID(DynArr* D,const void* ptr);
 
+/** @brief Test de Regression
+**/
+void daRegressionTest();
+
 #endif
 

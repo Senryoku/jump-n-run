@@ -2,20 +2,45 @@
 
 void gmInit(Game* G)
 {
+	char line[255];
+	char id[255];
+	float value;
+
+	/* Options par défaut */
+	float WindowWidth = 800.f;
+	float WindowHeight = 600.f;
+	float FPSLimit = 60.f;
+	float AA = 1.f;
+
 	G->Lvl = newLevel(0.f, 0.f);
 
-	G->WindowWidth = 1200.f;
-	G->WindowHeight = 600.f;
+	FILE* f;
+	f = fopen("Config.cfg", "r");
+	if(f != NULL)
+	{
+		while (fgets(line, 255, f) != NULL)
+		{
+			sscanf(line, "%s %f\n", id, &value);
+			printf("Lu : %s, %f\n", id, value);
+			if(strcmp(id, "WindowWidth") == 0) WindowWidth = value;
+			if(strcmp(id, "WindowHeigth") == 0) WindowHeight = value;
+			if(strcmp(id, "FPSLimit") == 0) FPSLimit = value;
+			if(strcmp(id, "AA") == 0) AA = value;
+		}
+		fclose(f);
+	}
+
+	G->WindowWidth = WindowWidth;
+	G->WindowHeight = WindowHeight;
 	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump'n'Run");
-	G->Window->setFramerateLimit(60.f);
+	G->Window->setFramerateLimit(FPSLimit);
 	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
-	G->Window->setActive(1);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
-	glEnable(GL_LINE_SMOOTH);
+	if(AA) glEnable(GL_LINE_SMOOTH);
 }
 
 void gmFree(Game* G)

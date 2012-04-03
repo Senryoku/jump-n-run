@@ -6,6 +6,7 @@
 
 #include "Rendering/OpenGL.h"
 #include "Level/Level.h"
+#include <string.h>
 
 /** @defgroup Game
  *

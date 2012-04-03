@@ -88,13 +88,47 @@ unsigned int daGetCapacity(const DynArr* DA)
 	return DA->Capacity;
 }
 
-unsigned int daGetID(DynArr* D,const void* ptr)
+unsigned int daGetID(DynArr* D, const void* ptr)
 {
 	unsigned int i = 0;
-	
+
 	while (i<daGetSize(D) && daGet(D, i)!=ptr)
 		i++;
-	
+
 	return i;
-	
+
+}
+
+#include <assert.h>
+void daRegressionTest()
+{
+	DynArr* DA = newDynArr();
+	unsigned int i;
+	for(i = 0; i < 100; i++)
+	{
+		daAdd(DA, (void*) i);
+		assert(daGet(DA, i) == (void*) i);
+		assert(daGetSize(DA) <= daGetCapacity(DA));
+	}
+	i = daGetSize(DA);
+	daDel(DA, 50);
+	assert(daGet(DA, 50) == (void*) 51);
+	assert(daGetSize(DA) == i - 1);
+	daFastDel(DA, 50);
+	assert(daGet(DA, 50) == (void*) 99);
+	assert(daGetSize(DA) == i - 2);
+	delDynArr(DA);
+	assert(daGetSize(DA) == 0);
+
+	DA = newDynArr();
+	daReserve(DA, 21);
+	assert(daGetCapacity(DA) == 21);
+	for(i = 0; i < 21; i++)
+	{
+		daAdd(DA, (void*) i);
+		assert(daGet(DA, i) == (void*) i);
+		assert(daGetSize(DA) <= daGetCapacity(DA));
+	}
+	assert(daGetCapacity(DA) == 21);
+	delDynArr(DA);
 }

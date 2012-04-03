@@ -59,7 +59,7 @@ Bool lstHaveElem(List* L, Elem E)
 	Node* tmpNode = L->First;
 	while(!nodeEnd(tmpNode) && nodeGetData(tmpNode) != E)
 		tmpNode = nodeGetNext(tmpNode);
-	
+
 	if(!nodeEnd(tmpNode))
 		return 1;
 	return 0;
@@ -106,4 +106,27 @@ Node* lstEnd(List* L)
 unsigned int lstCount(List* L)
 {
 	return L->Count;
+}
+
+#include <assert.h>
+void lstRegressionTest()
+{
+	unsigned int i;
+	List* L = newList();
+	assert(lstEmpty(L));
+	for(i = 0; i < 500; i++)
+	{
+		lstAdd(L, (void*) i);
+		assert(lstHaveElem(L, (void*) i));
+		assert(!lstHaveElem(L, (void*) (i + 1)));
+		assert(!lstEmpty(L));
+		assert(lstCount(L) == i + 1);
+	}
+	for(i = 0; i < 500; i++)
+	{
+		assert(lstCount(L) == 500 - i);
+		lstDel(L, (void*) i);
+	}
+	assert(lstEmpty(L));
+	delList(L);
 }

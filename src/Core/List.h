@@ -88,6 +88,10 @@ Node* lstEnd(List*);
 **/
 unsigned int lstCount(List*);
 
+/** @brief Test de Regression
+**/
+void lstRegressionTest();
+
 /** @}
 **/
 
