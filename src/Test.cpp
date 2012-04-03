@@ -176,6 +176,8 @@ int main(int argc, char** argv)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::T :
+						if (window.setActive(0))
+							printf("G->windows deactivated\n");
 						lvledTestLevel(&LvlEd);
 						break;
 					case sf::Keyboard::Space :

@@ -2,7 +2,7 @@ Niveau Test
 Ceci est la description du niveau
 4000.000000, 1480.000000
 
-
+Pano.jpg
 
 
 2 #Vertex
@@ -94,3 +94,4 @@ Ceci est la description du niveau
 0 2 20.000000
 3 #Rigid
 0 1 35.000000
+

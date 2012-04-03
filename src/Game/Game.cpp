@@ -36,6 +36,8 @@ void gmInit(Game* G)
 	G->Window->setFramerateLimit(FPSLimit);
 	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
+	if (G->Window->setActive(1))
+		printf("G->windows activated\n");
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
@@ -62,10 +64,6 @@ void gmPlay(Game* G)
 
 	lvlLoadedInit(G->Lvl);
 
-	G->Lvl->lvlTexLoad = &glTexLoad;
-	G->Lvl->lvlTexFree = &glTexFree;
-	G->Lvl->lvlDisplayTex = &glDisplayTex;
-	G->Lvl->Layer1 = (*G->Lvl->lvlTexLoad)("Pano.jpg");
 
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
@@ -125,6 +123,8 @@ void gmPlay(Game* G)
             plMoveR(G->Lvl->P1);
 
 		Center = polyComputeCenter(G->Lvl->P1->Shape);
+		
+		G->Window->setActive();
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);

@@ -14,6 +14,9 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->Spawn = Lvl->Goal = vec2(0.f, 0.f);
 	daInit(&Lvl->Textures);
 	daInit(&Lvl->Objects);
+	Lvl->lvlTexLoad = &glTexLoad;
+	Lvl->lvlTexFree = &glTexFree;
+	Lvl->lvlDisplayTex = &glDisplayTex;
 }
 
 void lvlFree(Level* Lvl)
@@ -77,8 +80,31 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	//on ignore 4 lignes pour des images car elles sont lues dans leveleditor
 	unsigned int item, nVertex, i;
 	Bool polyFixed; int booly;
-	for (i=0; i<4; i++)
-		fgets(read, 255, f);
+	
+	//back
+	fgets(read, 255, f);
+	*strstr(read, "\n") = '\0';
+	if (strcmp(read, "")==0)
+		Lvl->Background = (*Lvl->lvlTexLoad)(read);
+	
+	//layer
+	fgets(read, 255, f);
+	*strstr(read, "\n") = '\0';
+	if (strcmp(read, "")==0)
+		Lvl->Layer1 = (*Lvl->lvlTexLoad)(read);
+	//layer
+	fgets(read, 255, f);
+	*strstr(read, "\n") = '\0';
+	if (strcmp(read, "")==0)
+		Lvl->Layer2 = (*Lvl->lvlTexLoad)(read);
+	
+	//foreground
+	fgets(read, 255, f);
+	*strstr(read, "\n") = '\0';
+	if (strcmp(read, "")==0)
+		Lvl->Foreground = (*Lvl->lvlTexLoad)(read);
+
+		
 
 	//On libere le monde et on le realloue
 	wdFree(Lvl->W);
@@ -91,7 +117,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 	while (fgets(read, 300, f)!=NULL)
 	{
-		printf("Read: %s", read);
+		//printf("Read: %s", read);
 		item=o_end;
 		polyFixed=FALSE;
 		sscanf(read, "%u %u %i #%.s\n", &item, &nVertex, &booly);
@@ -100,7 +126,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		switch (item)
 		{
 			case o_poly:
-				printf("Polygon with %u vertex read\n", nVertex);
+				//printf("Polygon with %u vertex read\n", nVertex);
 				switch (nVertex)
 				{
 					case 0:
@@ -209,13 +235,13 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			}
 			case o_vertex:
 			{
-				printf("vertex\n");
+				//printf("vertex\n");
 				float x, y, mass;
 				int booly;
 				Bool fixe;
 				fscanf(f, "%f, %f ; %f ; %i\n", &x, &y, &mass, &booly);
 				fixe=(Bool)booly;
-				printf("données lues: %f, %f ; %f; %i\n", x, y, mass, booly);
+				//printf("données lues: %f, %f ; %f; %i\n", x, y, mass, booly);
 				//on ajoute le vertex dans la liste
 				Vertex* V = newVertex();
 				wdAddVertex(lvlGetWorld(Lvl), V);
@@ -231,7 +257,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			{
 				char path[255];
 				printf("Texture : \n");
-				fscanf(f, "%s", &path);
+				fscanf(f, "%s\n", &path);
 				printf("Chargement de %s", path);
 				Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
 				*ptrTex = Lvl->lvlTexLoad(path);

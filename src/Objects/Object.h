@@ -5,7 +5,7 @@
 
 /** @defgroup Object
  *
- * Préfixe des méthodes : ??
+ * Préfixe des méthodes : obj
  **/
 
 /** @brief Objet dynamique afichable (texturé)
