@@ -50,6 +50,7 @@ int main(int argc, char** argv)
 	lvledSetElDraw(&LvlEd, &glDrawElastic);
 	lvledSetRdDraw(&LvlEd, &glDrawRigid);
 	lvledSetPolyDraw(&LvlEd, &glDrawPolygon);
+	
 
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
@@ -57,7 +58,7 @@ int main(int argc, char** argv)
 	//lvledSave(&LvlEd, "levels/Test.txt");
 	lvledLoad(&LvlEd, "levels/Test.txt");
 
-	Joint J; Vec2 off = vec2(150.f, 150.f);
+	/*Joint J; Vec2 off = vec2(150.f, 150.f);
 	Vertex *C = newVertex(), *M = newVertex(), *S = newVertex();
 	wdAddVertex(lvlGetWorld(LvlEd.Lvl), C);
 	wdAddVertex(lvlGetWorld(LvlEd.Lvl), S);
@@ -73,6 +74,7 @@ int main(int argc, char** argv)
 	printf("C: %f, %f; M: %f, %f; S: %f, %f\n",CPos.x, CPos.y, MPos.x, MPos.y, SPos.x, SPos.y);
 
 	jnInit(&J, C, M, S);
+	 */
 
 	/*
 	Vertex *C = newVertex(), *M = newVertex(), *S = newVertex();
@@ -300,8 +302,8 @@ int main(int argc, char** argv)
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
-		for (i=0; i<4; i++)
-		jnResolve(&J);
+		//for (i=0; i<4; i++)
+		//jnResolve(&J);
 		lvlUpdate(LvlEd.Lvl);
 
 		/* == Affichage == */

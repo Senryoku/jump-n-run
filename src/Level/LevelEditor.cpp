@@ -19,11 +19,18 @@ void lvledInit(LevelEditor *Led, float Width, float Height)
 	Led->layer1Path[0]='\0';
 	Led->layer2Path[0]='\0';
 	Led->forePath[0]='\0';
+	daInit(&Led->TexturesPath);
 }
 
 void lvledFree(LevelEditor *Led)
 {
 	delLevel(Led->Lvl);
+	unsigned int i;
+	for (i=0; i<daGetSize(&Led->TexturesPath); i++)
+	{
+		free(daGet(&Led->TexturesPath, i));
+	}
+	daFree(&Led->TexturesPath);
 	delVertex(Led->Mouse);
 	delElastic(Led->GrabElastic);
 }
@@ -449,6 +456,27 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	*strstr(Led->layer2Path, "\n") = '\0';
 	*strstr(Led->forePath, "\n") = '\0';
 
+	//on libere l'array des paths des textures
+	for (i=0; i<daGetSize(&Led->TexturesPath); i++)
+	{
+		free(daGet(&Led->TexturesPath, i));
+	}
+	daFree(&Led->TexturesPath);
+	daInit(&Led->TexturesPath);
+	
+	unsigned int item;
+	while (fgets(read, 300, f)!=NULL)
+	{
+		sscanf(read, "%u", &item);
+		if (read[2]=='#' && item == o_texture)
+		{
+			char *path = (char*)malloc(255*sizeof(char));
+			fscanf(f, "%s\n", path);
+			daAdd(&Led->TexturesPath, path);
+			printf("texture read: %s\n", path);
+		}
+	}
+	
 	fclose(f);
 
 	return lvlLoad(Led->Lvl, File);
@@ -561,6 +589,13 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 		it = nodeGetNext(it);
 	}
+	
+	unsigned int i;
+	for (i=0; i<daGetSize(&Led->TexturesPath); i++)
+	{
+		fprintf(f, "%u #Texture\n%s\n", o_texture, (char*)daGet(&Led->TexturesPath, i));
+	}
+
 
 
 

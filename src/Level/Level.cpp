@@ -256,7 +256,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			case o_texture:
 			{
 				char path[255];
-				printf("Texture : \n");
+				printf("Texture lue \n");
 				fscanf(f, "%s\n", path);
 				printf("Chargement de %s", path);
 				Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
