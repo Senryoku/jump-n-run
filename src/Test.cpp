@@ -51,12 +51,6 @@ int main(int argc, char** argv)
 	lvledSetRdDraw(&LvlEd, &glDrawRigid);
 	lvledSetPolyDraw(&LvlEd, &glDrawPolygon);
 
-
-	LvlEd.Lvl->lvlTexLoad = &glTexLoad;
-	LvlEd.Lvl->lvlTexFree = &glTexFree;
-	LvlEd.Lvl->lvlDisplayTex = &glDisplayTex;
-	LvlEd.Lvl->Layer1 = (*LvlEd.Lvl->lvlTexLoad)("Pano.jpg");
-
 	MapWidth = lvlGetWorld(LvlEd.Lvl)->Width*(100.f / lvlGetWorld(LvlEd.Lvl)->Height);
 	MapHeight = 100.f;
 
@@ -176,9 +170,9 @@ int main(int argc, char** argv)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::T :
-						if (window.setActive(0))
-							printf("G->windows deactivated\n");
+						window.setActive(0);
 						lvledTestLevel(&LvlEd);
+						window.setActive(1);
 						break;
 					case sf::Keyboard::Space :
 						ViewWidth = WindowWidth;

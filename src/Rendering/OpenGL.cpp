@@ -98,22 +98,34 @@ void glDrawCircle(float x, float y, float radius)
 
 Texture glTexLoad(const char* Path)
 {
-	GLuint texture;
+	Bool LoadSuccess = 0;
+	GLuint texture = 0;
 	{
 		sf::Image image;
 		#ifdef SFML_SYSTEM_MACOS
-		image.loadFromFile(Path); //À rajouter ResourcePath selon compilation 
+		LoadSuccess = image.loadFromFile(Path); //À rajouter ResourcePath selon compilation
 		#else
-		image.loadFromFile(Path);
+		LoadSuccess = image.loadFromFile(Path);
 		#endif
 
 		glEnable(GL_TEXTURE_2D);
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getWidth(), image.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr()); /* Dépréciée apparement... */
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr()); /* Pourquoi celle là marche pas O_o */
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+		if(LoadSuccess)
+		{
+			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getWidth(), image.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr()); /* Dépréciée apparement... */
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr()); /* Pourquoi celle là marche pas O_o */
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		} else {
+			/* Texture transparente si le fichier n'a pas pu être chargé */
+			GLubyte TexNull[4] =
+			{
+				0,0,0,0
+			};
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, TexNull);
+		}
 		glDisable(GL_TEXTURE_2D);
 	}
 	return texture;

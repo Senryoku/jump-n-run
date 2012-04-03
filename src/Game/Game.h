@@ -50,7 +50,7 @@ void gmPlay(Game*);
  *
  * @param G Game
 **/
-void gmLoadLvl(Game*, char*);
+void gmLoadLvl(Game*, const char*);
 
 /** @}
 **/

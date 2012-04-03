@@ -76,41 +76,41 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	}
 	else
 		sscanf(read, "%f, %f", &width, &height);
-	
+
 	//on ignore 4 lignes pour des images car elles sont lues dans leveleditor
 	unsigned int item, nVertex, i;
 	Bool polyFixed; int booly;
-	
+
 	//back
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
-	if (strcmp(read, "")==0)
+	if (strcmp(read, ""))
 		Lvl->Background = (*Lvl->lvlTexLoad)(read);
-	
+
 	//layer
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
-	if (strcmp(read, "")==0)
+	if (strcmp(read, ""))
 		Lvl->Layer1 = (*Lvl->lvlTexLoad)(read);
 	//layer
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
-	if (strcmp(read, "")==0)
+	if (strcmp(read, ""))
 		Lvl->Layer2 = (*Lvl->lvlTexLoad)(read);
-	
+
 	//foreground
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
-	if (strcmp(read, "")==0)
+	if (strcmp(read, ""))
 		Lvl->Foreground = (*Lvl->lvlTexLoad)(read);
 
-		
+
 
 	//On libere le monde et on le realloue
 	wdFree(Lvl->W);
 	wdInit(Lvl->W, width, height);
 
-	
+
 
 	//liste des vertex
 	DynArr* Vx = newDynArr();
@@ -200,7 +200,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 						p = newPolygonL(*LPoly), polySetFixe(p, TRUE);
 						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p);
 					}
-						
+
 					wdAddPolygon(lvlGetWorld(Lvl), p);
 
 					delList(LPoly);
@@ -244,7 +244,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				//printf("données lues: %f, %f ; %f; %i\n", x, y, mass, booly);
 				//on ajoute le vertex dans la liste
 				Vertex* V = newVertex();
-				wdAddVertex(lvlGetWorld(Lvl), V);
+ 				wdAddVertex(lvlGetWorld(Lvl), V);
 				vxSetPosition(V, vec2(x, y));
 				vxSetMass(V, mass);
 				vxSetFixe(V, fixe);
@@ -257,7 +257,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			{
 				char path[255];
 				printf("Texture : \n");
-				fscanf(f, "%s\n", &path);
+				fscanf(f, "%s\n", path);
 				printf("Chargement de %s", path);
 				Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
 				*ptrTex = Lvl->lvlTexLoad(path);

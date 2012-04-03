@@ -14,7 +14,7 @@ void lvledInit(LevelEditor *Led, float Width, float Height)
 	Led->elDraw = NULL;
 	Led->rdDraw = NULL;
 	Led->polyDraw = NULL;
-	
+
 	Led->backPath[0]='\0';
 	Led->layer1Path[0]='\0';
 	Led->layer2Path[0]='\0';
@@ -429,7 +429,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	//on lit les paths des images fixes
 	FILE* f;
 	f=fopen(File, "r");
-	
+
 	if (f==NULL)
 	{
 		printf("Erreur de lecture du fichier %s\n", File);
@@ -448,9 +448,9 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	*strstr(Led->layer1Path, "\n") = '\0';
 	*strstr(Led->layer2Path, "\n") = '\0';
 	*strstr(Led->forePath, "\n") = '\0';
-	
+
 	fclose(f);
-	
+
 	return lvlLoad(Led->Lvl, File);
 }
 
@@ -489,8 +489,8 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		Polygon* p = (Polygon*)nodeGetData(it);
 		//c'est &lu pour les machines de x64 et %u pour les x86
 		if (daGetSize(&p->Vertices)>4 && polyGetCenter(p)!=NULL)
-			lstAdd(LCenter, polyGetCenter(p)), printf("vertex ignored: %lu\n", (size_t)polyGetCenter(p));
-		
+			lstAdd(LCenter, polyGetCenter(p));
+
 
 		it = nodeGetNext(it);
 	}

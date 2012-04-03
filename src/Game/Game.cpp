@@ -49,10 +49,11 @@ void gmFree(Game* G)
 {
 	if(G->Lvl != NULL) delLevel(G->Lvl);
 	G->Window->setActive(0);
+	G->Window->close();
 	delete G->Window;
 }
 
-void gmLoadLvl(Game* G, char* Path)
+void gmLoadLvl(Game* G, const char* Path)
 {
 	lvlLoad(G->Lvl, Path);
 }
@@ -123,7 +124,7 @@ void gmPlay(Game* G)
             plMoveR(G->Lvl->P1);
 
 		Center = polyComputeCenter(G->Lvl->P1->Shape);
-		
+
 		G->Window->setActive();
 
 		glClear(GL_COLOR_BUFFER_BIT);

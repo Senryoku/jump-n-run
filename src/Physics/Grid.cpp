@@ -134,7 +134,7 @@ void gridUpdatePolygonPositionByBB(Grid* g, Polygon* p)
 		for (i=l; i<=r; i++)
 			for (j=t; j<=b; j++)
 				gridAddPolygonToCell(g, p, i, j);
-		
+
 		polyUpdateGridPosition(p, l, t, r, b);
 
 	}
@@ -155,11 +155,11 @@ void gridUpdatePolygonPositionByBB(Grid* g, Polygon* p)
 			for (i=l; i<=r; i++)
 				for (j=t; j<=b; j++)
 					gridAddPolygonToCell(g, p, i, j);
-			
+
 			polyUpdateGridPosition(p, l, t, r, b);
 
 		}
-			
+
 	}
 }
 
@@ -182,7 +182,7 @@ void gridAddPolygonToCell(Grid* g, Polygon* p, unsigned int x, unsigned int y)
 void gridRemovePolygonFromCell(Grid* g, Polygon* p, unsigned int x, unsigned int y)
 {
 	List* L=gridGetCellList(g, x, y);
-	
+
 	Node* it = lstFirst(L);
 	while(!nodeEnd(it))
 	{
@@ -193,8 +193,6 @@ void gridRemovePolygonFromCell(Grid* g, Polygon* p, unsigned int x, unsigned int
 		}
 		it = nodeGetNext(it);
 	}
-	
-	printf("Polygone %p n'a pas été trouvé dans la liste ce la cellule %u, %u pour être supprimé\n", p, x, y);
 }
 
 List gridGetPolygonList(const Grid* g, Polygon* p)
@@ -243,7 +241,7 @@ void gridRemovePolygonByForce(Grid* g, Polygon* p)
 		{
 			List* L = gridGetCellList(g, i, j);
 			Node* it = lstFirst(L);
-			
+
 			while(!nodeEnd(it))
 			{
 				if (nodeGetData(it)==p)

@@ -4,6 +4,7 @@
 #include "Rendering/OpenGL.h" // Pour le type Texture (adapté à l'API)
 #include "Physics/Physics.h"
 #include "Objects/Player.h"
+#include "string.h"
 
 /** @defgroup Level
  *
