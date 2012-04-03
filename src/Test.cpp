@@ -309,25 +309,15 @@ int main(int argc, char** argv)
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
 		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
-		//glClear(GL_DEPTH_BUFFER_BIT);
-
-		// On prepare la projection
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
-		// Test Viewport : Minimap !
-		glMatrixMode(GL_PROJECTION); // On va ainsi définir le viewport
-		glViewport(0.f, 0.f, WindowWidth, WindowHeight);
-		glLoadIdentity();
-		glOrtho(0.0, WindowWidth, WindowHeight, 0.0, 0.0, 100.0);
 
 		for(ViewPort = 0; ViewPort < 2; ViewPort++)
 		{
+			glLoadIdentity();
 			if(ViewPort == 0)
 			{
+				/* Où afficher ? */
 				glViewport(0.f, 0.f, WindowWidth, WindowHeight);
-				glMatrixMode(GL_PROJECTION);
-				glLoadIdentity();
+				/* Quelle portion de la scène afficher ? */
 				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
 				if(L1) lvlDisplayL1(LvlEd.Lvl);
@@ -338,9 +328,6 @@ int main(int argc, char** argv)
 			else if(ViewPort == 1)
 			{
 				glViewport(WindowWidth - MapWidth - 10.f, WindowHeight - MapHeight - 10.f, MapWidth, MapHeight);
-				glMatrixMode(GL_PROJECTION);
-				glLoadIdentity();
-
 				/* La minimap affiche tout le monde */
 				glOrtho(0.0, lvlGetWorld(LvlEd.Lvl)->Width, lvlGetWorld(LvlEd.Lvl)->Height, 0.0, 0.0, 100.0);
 
