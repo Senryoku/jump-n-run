@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 		CreateDirectory("levels");
 
 	sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Jump n'Run");
-	window.setFramerateLimit(6000.f);
+	window.setFramerateLimit(100.f);
 	window.setKeyRepeatEnabled(0);
 	window.setMouseCursorVisible(0);
 

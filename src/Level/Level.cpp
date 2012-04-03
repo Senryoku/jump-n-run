@@ -82,7 +82,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	Bool polyFixed; int booly;
 
 	//liste des vertex
-	List* vxL = newList();
+	DynArr* Vx = newDynArr();
 
 	while (fgets(read, 300, f)!=NULL)
 	{
@@ -105,11 +105,11 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					case 3:
 					{
 					Vertex **V = (Vertex**)malloc(sizeof(Vertex)*nVertex);
-					unsigned long long *ID = (unsigned long long*)malloc(sizeof(unsigned long long)*nVertex);
+					unsigned int ID;
 					for (i=0; i<nVertex; i++)
 					{
-						fscanf(f, "%llu\n", &ID[i]);
-						V[i]=GetVertexFromID(vxL, ID[i]);
+						fscanf(f, "%u\n", &ID);
+						V[i]=(Vertex*)daGet(Vx, ID);
 					}
 					Polygon* p;
 					if (nVertex==2)
@@ -117,31 +117,36 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					else
 						p = newPolygon(3, V[0], V[1], V[2]);
 					if (polyFixed)
+					{
 						polySetFixe(p, TRUE);
+						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p); ///@todo accesseur
+					}
 
 					wdAddPolygon(lvlGetWorld(Lvl), p);
 					free(V);
-					free(ID);
 
 					break;
 				}
 					case 4:
 					{
 					Vertex *V1, *V2, *V3, *V4;
-					unsigned long long ID1, ID2, ID3, ID4;
-					fscanf(f, "%llu\n", &ID1);
-					fscanf(f, "%llu\n", &ID2);
-					fscanf(f, "%llu\n", &ID3);
-					fscanf(f, "%llu\n", &ID4);
-					V1 = GetVertexFromID(vxL, ID1);
-					V2 = GetVertexFromID(vxL, ID2);
-					V3 = GetVertexFromID(vxL, ID3);
-					V4 = GetVertexFromID(vxL, ID4);
+					unsigned int ID1, ID2, ID3, ID4;
+					fscanf(f, "%u\n", &ID1);
+					fscanf(f, "%u\n", &ID2);
+					fscanf(f, "%u\n", &ID3);
+					fscanf(f, "%u\n", &ID4);
+						V1 = (Vertex*)daGet(Vx, ID1);
+					V2 = (Vertex*)daGet(Vx, ID2);
+					V3 = (Vertex*)daGet(Vx, ID3);
+					V4 = (Vertex*)daGet(Vx, ID4);
 					Polygon* p;
 					if (!polyFixed)
 						p = polyRectangle(V1, V2, V3, V4);
 					else
+					{
 						p = newPolygon(4, V1, V2, V3, V4), polySetFixe(p, TRUE);
+						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p);
+					}
 					wdAddPolygon(lvlGetWorld(Lvl), p);
 
 					break;
@@ -152,15 +157,19 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					List* LPoly = newList();
 					for (i=0; i<nVertex; i++)
 					{
-						unsigned long long ID;
-						fscanf(f, "%llu\n", &ID);
-						lstAdd(LPoly, GetVertexFromID(vxL, ID));
+						unsigned int ID;
+						fscanf(f, "%u\n", &ID);
+						lstAdd(LPoly, (Vertex*)daGet(Vx, ID));
 					}
 					Polygon* p;
 					if (!polyFixed)
 						p = polyNGone(*LPoly);
 					else
+					{
 						p = newPolygonL(*LPoly), polySetFixe(p, TRUE);
+						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p);
+					}
+						
 					wdAddPolygon(lvlGetWorld(Lvl), p);
 
 					delList(LPoly);
@@ -171,24 +180,24 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				break;
 			case o_rigid:
 			{
-				unsigned long long ID1, ID2;
+				unsigned int ID1, ID2;
 				Vertex *V1, *V2;
 				float Lenght;
-				fscanf(f, "%llu %llu %f\n", &ID1, &ID2, &Lenght);
-				V1 = GetVertexFromID(vxL, ID1);
-				V2 = GetVertexFromID(vxL, ID2);
+				fscanf(f, "%u %u %f\n", &ID1, &ID2, &Lenght);
+				V1 = (Vertex*)daGet(Vx, ID1);
+				V2 = (Vertex*)daGet(Vx, ID2);
 				Rigid* r = newRigid(V1, V2, Lenght);
 				wdAddRigid(lvlGetWorld(Lvl), r);
 				break;
 			}
 			case o_elastic:
 			{
-				unsigned long long ID1, ID2;
+				unsigned int ID1, ID2;
 				Vertex *V1, *V2;
 				float Lenght, Spring;
-				fscanf(f, "%llu %llu %f %f\n", &ID1, &ID2, &Lenght, &Spring);
-				V1 = GetVertexFromID(vxL, ID1);
-				V2 = GetVertexFromID(vxL, ID2);
+				fscanf(f, "%u %u %f %f\n", &ID1, &ID2, &Lenght, &Spring);
+				V1 = (Vertex*)daGet(Vx, ID1);
+				V2 = (Vertex*)daGet(Vx, ID1);
 				Elastic* e = newElastic(V1, V2, Lenght, Spring);
 				wdAddElastic(lvlGetWorld(Lvl), e);
 				break;
@@ -196,20 +205,19 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			case o_vertex:
 			{
 				printf("vertex\n");
-				unsigned long long vxID;
 				float x, y, mass;
+				int booly;
 				Bool fixe;
-				fscanf(f, "%llu : %f, %f ; %f ; %i\n", &vxID, &x, &y, &mass, &fixe);
-				printf("données lues: %llu; %f, %f ; %f; %i\n", vxID, x, y, mass, fixe);
+				fscanf(f, "%f, %f ; %f ; %i\n", &x, &y, &mass, &booly);
+				fixe=(Bool)booly;
+				printf("données lues: %f, %f ; %f; %i\n", x, y, mass, booly);
 				//on ajoute le vertex dans la liste
-				ItemVertex *iV = (ItemVertex*)malloc(sizeof(ItemVertex));
-				iV->ID=vxID;
-				iV->V = newVertex();
-				wdAddVertex(lvlGetWorld(Lvl), iV->V);
-				vxSetPosition(iV->V, vec2(x, y));
-				vxSetMass(iV->V, mass);
-				vxSetFixe(iV->V, fixe);
-				lstAdd(vxL, iV);
+				Vertex* V = newVertex();
+				wdAddVertex(lvlGetWorld(Lvl), V);
+				vxSetPosition(V, vec2(x, y));
+				vxSetMass(V, mass);
+				vxSetFixe(V, fixe);
+				daAdd(Vx, V);
 
 
 				break;
@@ -236,16 +244,8 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	printf("niveau chargé: %s%sw:%f h:%f\n", lvl, description, width, height);
 	fclose(f);
 
-	//on libere la mémoire utilisée par la liste des vertex
-	Node* it = lstFirst(vxL);
 
-	while (!nodeEnd(it))
-	{
-		free((ItemVertex*)nodeGetData(it));
-		it = nodeGetNext(it);
-	}
-
-	delList(vxL);
+	delDynArr(Vx);
 
 	return TRUE;
 }
@@ -330,16 +330,3 @@ void lvlDisplayL2(Level* Lvl)
 						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));
 }
 
-Vertex* GetVertexFromID(List* L, unsigned long long ID)
-{
-	Node* it = lstFirst(L);
-
-	while (!nodeEnd(it))
-	{
-		if (((ItemVertex*)nodeGetData(it))->ID==ID)
-			return ((ItemVertex*)nodeGetData(it))->V;
-		it = nodeGetNext(it);
-	}
-
-	return NULL;
-}

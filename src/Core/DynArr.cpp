@@ -87,3 +87,14 @@ unsigned int daGetCapacity(const DynArr* DA)
 {
 	return DA->Capacity;
 }
+
+unsigned int daGetID(DynArr* D,const void* ptr)
+{
+	unsigned int i = 0;
+	
+	while (i<daGetSize(D) && daGet(D, i)!=ptr)
+		i++;
+	
+	return i;
+	
+}

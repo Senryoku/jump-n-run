@@ -424,6 +424,8 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	return lvlLoad(Led->Lvl, File);
 }
 
+
+
 Bool lvledSave(LevelEditor *Led, const char* File)
 {
 	printf("Sauvegarde...\n");
@@ -442,6 +444,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 	List* L;
 	Node* it;
+	DynArr *Vx = newDynArr();
 
 	//On stocke les vertex qui representent le centre des polygones de plus de 4 cotes pour eviter de les mettre dans le fichier
 	L = &lvlGetWorld(Led->Lvl)->Polygons;
@@ -449,13 +452,14 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 	List* LCenter = newList();
 
-	//on écrit les polygones
+	//on écrit les polygones dans la dynarr pour leur associer une ID
 	while (!nodeEnd(it))
 	{
 		Polygon* p = (Polygon*)nodeGetData(it);
 		//c'est &lu pour les machines de x64 et %u pour les x86
 		if (daGetSize(&p->Vertices)>4 && polyGetCenter(p)!=NULL)
 			lstAdd(LCenter, polyGetCenter(p)), printf("vertex ignored: %lu\n", (size_t)polyGetCenter(p));
+		
 
 		it = nodeGetNext(it);
 	}
@@ -470,7 +474,8 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		if (!lstHaveElem(LCenter, V))
 		{
 			fprintf(f, "%u #Vertex\n", o_vertex);
-			fprintf(f, "%lu : %f, %f ; %f ; %i\n", (size_t)V, vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), (int) vxIsFixe(V));
+			fprintf(f, "%f, %f ; %f ; %i\n", vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), (int) vxIsFixe(V));
+			daAdd(Vx, V);
 		}
 
 
@@ -491,7 +496,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		for (i=0; i<nVertex; i++)
 		{
 			Vertex* V =  (Vertex*)daGet(&p->Vertices, i);
-			fprintf(f, "%lu\n", (size_t)V);
+			fprintf(f, "%u\n", daGetID(Vx, V));
 		}
 		//fprintf(f, "%u ;End\n", o_end);
 
@@ -506,7 +511,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	{
 		Rigid* r = (Rigid*)nodeGetData(it);
 		fprintf(f, "%u #Rigid\n", o_rigid);
-		fprintf(f, "%lu %lu %f\n", (size_t)rdGetV1(r), (size_t)rdGetV2(r), rdGetLength(r));
+		fprintf(f, "%u %u %f\n", daGetID(Vx, rdGetV1(r)), daGetID(Vx, rdGetV2(r)), rdGetLength(r));
 		//fprintf(f, "%u ;End\n", o_end);
 
 		it = nodeGetNext(it);
@@ -520,7 +525,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	{
 		Elastic* e = (Elastic*)nodeGetData(it);
 		fprintf(f, "%u #Elastic\n", o_elastic);
-		fprintf(f, "%lu %lu %f %f\n", (size_t)elGetV1(e), (size_t)elGetV2(e), elGetLength(e), elGetSpring(e));
+		fprintf(f, "%u %u %f %f\n", daGetID(Vx, elGetV1(e)), daGetID(Vx, elGetV2(e)), elGetLength(e), elGetSpring(e));
 		//fprintf(f, "%u ;End\n", o_end);
 
 		it = nodeGetNext(it);
@@ -531,7 +536,10 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	fclose(f);
 
 	delList(LCenter);
+	delDynArr(Vx);
 
 	return TRUE;
 }
+
+
 

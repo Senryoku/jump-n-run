@@ -97,5 +97,10 @@ unsigned int daGetSize(const DynArr* DA);
 **/
 unsigned int daGetCapacity(const DynArr* DA);
 
+/** @brief Cherche une valeur et retourne son index
+ *
+ **/
+unsigned int daGetID(DynArr* D,const void* ptr);
+
 #endif
 

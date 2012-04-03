@@ -95,12 +95,7 @@ typedef enum enum_objets
 	o_object
 } e_led_objets;
 
- typedef struct {
-	 Vertex* V;
-	 unsigned long long ID;
-} ItemVertex ;
 
-Vertex* GetVertexFromID(List* L, unsigned long long ID);
 
 /** @}
 **/
