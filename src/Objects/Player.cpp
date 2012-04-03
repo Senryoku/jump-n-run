@@ -11,6 +11,7 @@ void plInit(Player* P)
 {
 	P->Shape = NULL;
 	P->Grab = NULL;
+	P->Stable = NULL;
 }
 
 void plFree(Player* P)
@@ -19,6 +20,9 @@ void plFree(Player* P)
 	P->Shape = NULL;
 	if(P->Grab != NULL) delElastic(P->Grab);
 	P->Grab = NULL;
+	
+	if (P->Stable != NULL) delVertex(P->Stable);
+	P->Stable = NULL;
 }
 
 void delPlayer(Player* P)

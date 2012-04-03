@@ -13,6 +13,7 @@
 typedef struct
 {
 	Polygon* Shape;
+	Vertex* Stable;
 	/* char* Texture */
 
 	Elastic* Grab;

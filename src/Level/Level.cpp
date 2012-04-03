@@ -227,8 +227,9 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				Vertex *V1, *V2;
 				float Lenght, Spring;
 				fscanf(f, "%u %u %f %f\n", &ID1, &ID2, &Lenght, &Spring);
+				printf("elastic entre %u et %u\n", ID1, ID2);
 				V1 = (Vertex*)daGet(Vx, ID1);
-				V2 = (Vertex*)daGet(Vx, ID1);
+				V2 = (Vertex*)daGet(Vx, ID2);
 				Elastic* e = newElastic(V1, V2, Lenght, Spring);
 				wdAddElastic(lvlGetWorld(Lvl), e);
 				break;
@@ -283,7 +284,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 void lvlLoadedInit(Level* Lvl)
 {
-	/* A modifier !!!!! Valeurs de test temporaires */
+	/**@todo A modifier !!!!! Valeurs de test temporaires */
 	Vertex* V1 = newVertex();
 	vxSetPosition(V1, vec2(0.f, 0.f));
 	Vertex* V2 = newVertex();
