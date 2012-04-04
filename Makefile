@@ -41,49 +41,15 @@ default :
 
 all : test dirs
 
+
 dirs : 
 ifeq ($(OS), Darwin)
-	@if [ ! -e  $(BIN) ] ; \
-	then \
-	echo "Creating directory $(BIN)" ; \
-	mkdir $(BIN) ; \
-	fi ; \
-	if [ ! -e  $(OBJ)Core ] ; \
-	then \
-	echo "Creating directory $(OBJ)Core" ; \
-	mkdir $(OBJ)Core ; \
-	fi ; \
-	if [ ! -e  $(OBJ)Audio ] ; \
-	then \
-	echo "Creating directory $(OBJ)Audio" ; \
-	mkdir $(OBJ)Audio ; \
-	fi ; \
-	if [ ! -e  $(OBJ)Game ] ; \
-	then \
-	echo "Creating directory $(OBJ)Game" ; \
-	mkdir $(OBJ)Game ; \
-	fi ; \
-	if [ ! -e  $(OBJ)Objects ] ; \
-	then \
-	echo "Creating directory $(OBJ)Objects" ; \
-	mkdir $(OBJ)Objects ; \
-	fi ; \
-	if [ ! -e  $(OBJ)Level ] ; \
-	then \
-	echo "Creating directory $(OBJ)Level" ; \
-	mkdir $(OBJ)Level ; \
-	fi ; \
-	if [ ! -e  $(OBJ)Rendering ] ; \
-	then \
-	echo "Creating directory $(OBJ)Rendering" ; \
-	mkdir $(OBJ)Rendering ; \
-	fi ; \
-	if [ ! -e  $(OBJ)Physics ] ; \
-	then \
-	echo "Creating directory $(OBJ)Physics" ; \
-	mkdir $(OBJ)Physics ; \
-	fi ; 
+	@./configure.sh bin obj src
 endif
+ifeq ($(OS), Linux)
+	@./configure.sh bin obj src
+endif
+	
 #A refaire mais là dessuite j'ai la flemme :D
 ifeq ($(OS), Win) 
 	mkdir bin\
@@ -107,7 +73,7 @@ debug : debug_option all
 debug_option :
 #OPT = -g
 
-run : all
+run : dirs all
 	./$(BIN)test
 .PHONY : run
 

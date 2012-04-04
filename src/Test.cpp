@@ -171,9 +171,9 @@ int main(int argc, char** argv)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::T :
-						window.setActive(0);
+						//window.setActive(0);
 						lvledTestLevel(&LvlEd);
-						window.setActive(1);
+						//window.setActive(1);
 						break;
 					case sf::Keyboard::Space :
 						ViewWidth = WindowWidth;

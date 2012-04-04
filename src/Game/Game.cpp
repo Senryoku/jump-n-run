@@ -34,11 +34,12 @@ void gmInit(Game* G)
 
 	G->WindowWidth = WindowWidth;
 	G->WindowHeight = WindowHeight;
-	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump'n'Run");
+	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump n'Run", sf::Style::Default, sf::ContextSettings(32));
 	G->Window->setFramerateLimit(FPSLimit);
 	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
 	if(VerticalSync) G->Window->setVerticalSyncEnabled(1);
+	G->Window->setVerticalSyncEnabled(1);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
@@ -73,6 +74,7 @@ void gmPlay(Game* G)
 
 	while (G->Window->isOpen())
 	{
+		printf("opeeeen\n");
 		MouseX = ViewWidth*sf::Mouse::getPosition(*G->Window).x/G->WindowWidth + ViewX;
 		MouseY = ViewHeight*sf::Mouse::getPosition(*G->Window).y/G->WindowHeight + ViewY;
 
@@ -125,7 +127,8 @@ void gmPlay(Game* G)
             plMoveL(G->Lvl->P1);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             plMoveR(G->Lvl->P1);
-
+		
+		plUpdate(G->Lvl->P1);
 		Center = polyComputeCenter(G->Lvl->P1->Shape);
 
 		G->Window->setActive();

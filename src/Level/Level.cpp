@@ -284,7 +284,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 void lvlLoadedInit(Level* Lvl)
 {
-	/**@todo A modifier !!!!! Valeurs de test temporaires */
+	/**@todo A modifier !!!!! Valeurs de test temporaires. Maintenant que j'y pense, il n'y aurai pas des leaks à cause des newqqchose ? car ils allouent la structure mais cette structure n'est pas liberée, non? on en au peut etre fait qqpart, meme si world il fait des del. car je n'ai pas fait tres attention xDD */
 	Vertex* V1 = newVertex();
 	vxSetPosition(V1, vec2(0.f, 0.f));
 	Vertex* V2 = newVertex();
@@ -293,9 +293,28 @@ void lvlLoadedInit(Level* Lvl)
 	vxSetPosition(V3, vec2(50.f, 100.f));
 	Vertex* V4 = newVertex();
 	vxSetPosition(V4, vec2(0.f, 100.f));
+	
 	Polygon* Shape = polyRectangle(V1, V2, V3, V4);
 	Lvl->P1 = newPlayer();
 	plSetShape(Lvl->P1, Shape);
+	
+	Vertex* Stable = newVertex();
+	//vxSetFixe(Stable, 1);
+	Vec2 pos = polyComputeCenter(Shape),
+	norm = vec2Ortho(vec2Sub(vxGetPosition(V3), vxGetPosition(V4)));
+	pos = vec2Add(pos, norm);
+	pos.y*=0.5f;
+	vxSetPosition(Stable, pos);
+	
+	Elastic *E1 = newElastic(V1, Stable, -1.f, 1.f),
+	*E2 = newElastic(V2, Stable, -1.f, 1.f);
+	wdAddElastic(Lvl->W, E1);
+	wdAddElastic(Lvl->W, E2);
+	 Lvl->P1->Stable=Stable;
+	 
+	
+	
+	
 	plSetPosition(Lvl->P1, Lvl->Spawn);
 	wdAddVxFromPoly(Lvl->W, Shape);
 }

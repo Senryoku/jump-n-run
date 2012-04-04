@@ -147,3 +147,11 @@ void plRelease(Player* P, World* W)
 	delElastic(P->Grab);
 	P->Grab = NULL;
 }
+
+void plUpdate(Player* P)
+{
+	if (P->Stable==NULL) return;
+	Vec2 pos = polyComputeCenter(P->Shape);
+	pos.y-=20.f;
+	vxSetPosition(P->Stable, pos);
+}
