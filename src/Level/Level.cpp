@@ -290,33 +290,42 @@ void lvlLoadedInit(Level* Lvl)
 	Vertex* V2 = newVertex();
 	vxSetPosition(V2, vec2(50.f, 0.f));
 	Vertex* V3 = newVertex();
-	vxSetPosition(V3, vec2(50.f, 100.f));
+	vxSetPosition(V3, vec2(50.f, 210.f));
 	Vertex* V4 = newVertex();
-	vxSetPosition(V4, vec2(0.f, 100.f));
+	vxSetPosition(V4, vec2(0.f, 210.f));
 	
 	Polygon* Shape = polyRectangle(V1, V2, V3, V4);
 	Lvl->P1 = newPlayer();
 	plSetShape(Lvl->P1, Shape);
 	
 	Vertex* Stable = newVertex();
-	//vxSetFixe(Stable, 1);
-	Vec2 pos = polyComputeCenter(Shape),
-	norm = vec2Ortho(vec2Sub(vxGetPosition(V3), vxGetPosition(V4)));
-	pos = vec2Add(pos, norm);
-	pos.y*=0.5f;
+	vxSetFixe(Stable, 1);
+	Vec2 pos = polyComputeCenter(Lvl->P1->Shape);
+	pos.y-=20.f;
+	 
 	vxSetPosition(Stable, pos);
 	
-	Elastic *E1 = newElastic(V1, Stable, -1.f, 1.f),
+	/*Elastic *E1 = newElastic(V1, Stable, -1.f, 1.f),
 	*E2 = newElastic(V2, Stable, -1.f, 1.f);
 	wdAddElastic(Lvl->W, E1);
 	wdAddElastic(Lvl->W, E2);
-	 Lvl->P1->Stable=Stable;
+	 Lvl->P1->Stable=Stable;*/
 	 
-	
-	
 	
 	plSetPosition(Lvl->P1, Lvl->Spawn);
 	wdAddVxFromPoly(Lvl->W, Shape);
+	
+	plCreateVertex(Lvl->P1, lvlGetWorld(Lvl));
+	plCreateRigids(Lvl->P1, lvlGetWorld(Lvl));
+	plSetPosition(Lvl->P1, Lvl->Spawn.x+100.f, Lvl->Spawn.y+150.f);
+	
+	/*Elastic *ENeck, *EBase;
+	ENeck = newElastic(Lvl->P1->Neck, Stable, -1.f, 1.f);
+	EBase = newElastic(Lvl->P1->Base, Stable, -1.f, 1.f);
+	
+	wdAddElastic(Lvl->W, ENeck);
+	wdAddElastic(Lvl->W, EBase);
+	 */
 }
 
 void lvlUpdate(Level* Lvl)
@@ -329,6 +338,7 @@ void lvlUpdate(Level* Lvl)
 	if(Lvl->P1 != NULL) plSetOnGround(Lvl->P1, 0);
 
 	/* Mise à jour du World */
+	//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
 
 	wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
 	wdResolveVextex(lvlGetWorld(Lvl));
@@ -337,14 +347,17 @@ void lvlUpdate(Level* Lvl)
 	for(i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
 	{
 		wdResolveRigid(lvlGetWorld(Lvl));
+		//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 1);
 		wdResolveElastic(lvlGetWorld(Lvl));
+		//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
 		wdHandleCollision(lvlGetWorld(Lvl));
 
 		/* Mise à jour spécifique de Player */
 		if(Lvl->P1 != NULL)
 		{
 			polyResolve(plGetShape(Lvl->P1));
-			it = wdGetPolyIt(Lvl->W);
+			List LExtracted = gridGetPolygonList(&Lvl->W->CollisionGrid, Lvl->P1->Shape);
+			it = lstFirst(&LExtracted);
 			while(!nodeEnd(it))
 			{
 				Info = polyCollide(plGetShape(Lvl->P1), (Polygon*) nodeGetData(it));
@@ -358,6 +371,7 @@ void lvlUpdate(Level* Lvl)
 				}
 				it = nodeGetNext(it);
 			}
+			lstFree(&LExtracted);
 		}
 	}
 }

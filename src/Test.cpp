@@ -75,6 +75,9 @@ int main(int argc, char** argv)
 
 	jnInit(&J, C, M, S);
 	 */
+	
+	
+	
 
 	/*
 	Vertex *C = newVertex(), *M = newVertex(), *S = newVertex();
@@ -171,9 +174,19 @@ int main(int argc, char** argv)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::T :
-						//window.setActive(0);
+						window.close();
 						lvledTestLevel(&LvlEd);
-						//window.setActive(1);
+						window.create(sf::VideoMode(WindowWidth, WindowHeight), "Jump n'Run");
+						window.setFramerateLimit(60.f);
+						window.setKeyRepeatEnabled(0);
+						window.setMouseCursorVisible(0);
+						
+						/*
+						 //c'est au cas ou, apparemment a marche sans
+						glDisable(GL_DEPTH_TEST);
+						glEnable(GL_BLEND) ;
+						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) ;
+						 */
 						break;
 					case sf::Keyboard::Space :
 						ViewWidth = WindowWidth;

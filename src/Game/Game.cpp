@@ -74,7 +74,6 @@ void gmPlay(Game* G)
 
 	while (G->Window->isOpen())
 	{
-		printf("opeeeen\n");
 		MouseX = ViewWidth*sf::Mouse::getPosition(*G->Window).x/G->WindowWidth + ViewX;
 		MouseY = ViewHeight*sf::Mouse::getPosition(*G->Window).y/G->WindowHeight + ViewY;
 
