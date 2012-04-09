@@ -200,64 +200,64 @@ void plCreateRigids(Player* P, World* W)
 	
 	if (!usePolys)
 	{
-	Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
-	LA1 = newRigid(P->Neck, P->LeftArm1, -1.f);
-	LA2 = newRigid(P->LeftArm1, P->LeftArm2, -1.f);
-	RA1 = newRigid(P->Neck, P->RightArm1, -1.f);
-	RA2 = newRigid(P->RightArm1, P->RightArm2, -1.f);
-	
-	LL1 = newRigid(P->Base, P->LeftLeg1, -1.f);
-	LL2 = newRigid(P->LeftLeg1, P->LeftLeg2, -1.f);
-	RL1 = newRigid(P->Base, P->RightLeg1, -1.f);
-	RL2 = newRigid(P->RightLeg1, P->RightLeg2, -1.f);
-	
-	Body = newRigid(P->Base, P->Neck, -1.f);
-	
-	H1 = newRigid(P->Base, P->HeadLeft, -1.f);
-	H2 = newRigid(P->Base, P->HeadRight, -1.f);
-	H3 = newRigid(P->HeadLeft, P->HeadRight, -1.f);
-	
-	wdAddRigid(W, Body);
-	wdAddRigid(W, LA1);
-	wdAddRigid(W, LA2);
-	wdAddRigid(W, RA1);
-	wdAddRigid(W, RA2);
-	wdAddRigid(W, LL1);
-	wdAddRigid(W, LL2);
-	wdAddRigid(W, RL1);
-	wdAddRigid(W, RL2);
-	wdAddRigid(W, H1);
-	wdAddRigid(W, H2);
-	wdAddRigid(W, H3);
+		Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
+		LA1 = newRigid(P->Neck, P->LeftArm1, -1.f);
+		LA2 = newRigid(P->LeftArm1, P->LeftArm2, -1.f);
+		RA1 = newRigid(P->Neck, P->RightArm1, -1.f);
+		RA2 = newRigid(P->RightArm1, P->RightArm2, -1.f);
+		
+		LL1 = newRigid(P->Base, P->LeftLeg1, -1.f);
+		LL2 = newRigid(P->LeftLeg1, P->LeftLeg2, -1.f);
+		RL1 = newRigid(P->Base, P->RightLeg1, -1.f);
+		RL2 = newRigid(P->RightLeg1, P->RightLeg2, -1.f);
+		
+		Body = newRigid(P->Base, P->Neck, -1.f);
+		
+		H1 = newRigid(P->Base, P->HeadLeft, -1.f);
+		H2 = newRigid(P->Base, P->HeadRight, -1.f);
+		H3 = newRigid(P->HeadLeft, P->HeadRight, -1.f);
+		
+		wdAddRigid(W, Body);
+		wdAddRigid(W, LA1);
+		wdAddRigid(W, LA2);
+		wdAddRigid(W, RA1);
+		wdAddRigid(W, RA2);
+		wdAddRigid(W, LL1);
+		wdAddRigid(W, LL2);
+		wdAddRigid(W, RL1);
+		wdAddRigid(W, RL2);
+		wdAddRigid(W, H1);
+		wdAddRigid(W, H2);
+		wdAddRigid(W, H3);
 	}
 	else
 	{
-	Polygon *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *head;
-	
-	head = newPolygon(3, P->Neck, P->HeadLeft, P->HeadRight);
-	wdAddPolygon(W, head);
-	
-	LA1 = newPolygon(2, P->Neck, P->LeftArm1);
-	LA2 = newPolygon(2, P->LeftArm1, P->LeftArm2);
-	RA1 = newPolygon(2, P->Neck, P->RightArm1);
-	RA2 = newPolygon(2, P->RightArm1, P->RightArm2);
-	
-	LL1 = newPolygon(2, P->Base, P->LeftLeg1);
-	LL2 = newPolygon(2, P->LeftLeg1, P->LeftLeg2);
-	RL1 = newPolygon(2, P->Base, P->RightLeg1);
-	RL2 = newPolygon(2, P->RightLeg1, P->RightLeg2);
-	
-	Body = newPolygon(2, P->Base, P->Neck);
-	
-	wdAddPolygon(W, Body);
-	wdAddPolygon(W, LA1);
-	wdAddPolygon(W, LA2);
-	wdAddPolygon(W, RA1);
-	wdAddPolygon(W, RA2);
-	wdAddPolygon(W, LL1);
-	wdAddPolygon(W, LL2);
-	wdAddPolygon(W, RL1);
-	wdAddPolygon(W, RL2);
+		Polygon *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *head;
+		
+		head = newPolygon(3, P->Neck, P->HeadLeft, P->HeadRight);
+		wdAddPolygon(W, head);
+		
+		LA1 = newPolygon(2, P->Neck, P->LeftArm1);
+		LA2 = newPolygon(2, P->LeftArm1, P->LeftArm2);
+		RA1 = newPolygon(2, P->Neck, P->RightArm1);
+		RA2 = newPolygon(2, P->RightArm1, P->RightArm2);
+		
+		LL1 = newPolygon(2, P->Base, P->LeftLeg1);
+		LL2 = newPolygon(2, P->LeftLeg1, P->LeftLeg2);
+		RL1 = newPolygon(2, P->Base, P->RightLeg1);
+		RL2 = newPolygon(2, P->RightLeg1, P->RightLeg2);
+		
+		Body = newPolygon(2, P->Base, P->Neck);
+		
+		wdAddPolygon(W, Body);
+		wdAddPolygon(W, LA1);
+		wdAddPolygon(W, LA2);
+		wdAddPolygon(W, RA1);
+		wdAddPolygon(W, RA2);
+		wdAddPolygon(W, LL1);
+		wdAddPolygon(W, LL2);
+		wdAddPolygon(W, RL1);
+		wdAddPolygon(W, RL2);
 	}
 	
 }
