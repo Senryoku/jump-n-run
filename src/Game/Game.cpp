@@ -11,7 +11,7 @@ void gmInit(Game* G)
 	float WindowHeight = 600.f;
 	float FPSLimit = 60.f;
 	float AntiAliasing = 1.f;
-	float VerticalSync = 0.f;
+	float VerticalSync = 1.f;
 
 	G->Lvl = newLevel(0.f, 0.f);
 
@@ -31,20 +31,36 @@ void gmInit(Game* G)
 		}
 		fclose(f);
 	}
+	else
+	{
+		/* on crŽe un fichier de config par dŽfaut */
+		f = fopen("Config.cfg", "w");
+		
+		if (f != NULL)
+			fprintf(f, "WindowWidth %f\nWindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\n", WindowWidth, WindowHeight, FPSLimit, AntiAliasing, VerticalSync);
+		else
+			printf("Erreur pour Žcrire le fichier de configuration\n");
+		
+		fclose(f);
+	}
 
 	G->WindowWidth = WindowWidth;
 	G->WindowHeight = WindowHeight;
 	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump n'Run", sf::Style::Default, sf::ContextSettings(32));
-	G->Window->setFramerateLimit(FPSLimit);
+	
 	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
-	if(VerticalSync) G->Window->setVerticalSyncEnabled(1);
-	G->Window->setVerticalSyncEnabled(1);
+	/* On ne peut utiliser  qu'une des deux */
+	if(VerticalSync == 1.f)
+		G->Window->setVerticalSyncEnabled(1);
+	else
+		G->Window->setFramerateLimit((unsigned int)FPSLimit);
+
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	if(AntiAliasing) glEnable(GL_LINE_SMOOTH);
+	if(AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
 
 	//lvlGetWorld(G->Lvl)->prevdt = lvlGetWorld(G->Lvl)->dt = 0.5f*60.f/FPSLimit;
 }
