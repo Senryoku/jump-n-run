@@ -1,10 +1,10 @@
 #ifndef _LEVEL_H_
 #define _LEVEL_H_
 
-#include "Rendering/OpenGL.h" // Pour le type Texture (adapté à l'API)
-#include "Physics/Physics.h"
-#include "Objects/Player.h"
-#include "string.h"
+#include <Rendering/OpenGL.h> // Pour le type Texture (adapté à l'API)
+#include <Physics/Physics.h>
+#include <Objects/Player.h>
+#include <string.h>
 
 /** @defgroup Level
  *

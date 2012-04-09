@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#include "Core/Node.h"
+#include "Node.h"
 
 /** @defgroup List
  *

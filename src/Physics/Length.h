@@ -1,7 +1,7 @@
 #ifndef _LENGHT_H
 #define _LENGHT_H
 
-#include "Physics/Vertex.h"
+#include "Vertex.h"
 
 /** @defgroup Lenght
  *

@@ -1,11 +1,9 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-#include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
 
-#include "Rendering/OpenGL.h"
-#include "Level/Level.h"
+#include <Rendering/OpenGL.h>
+#include <Level/Level.h>
 #include <string.h>
 
 /** @defgroup Game

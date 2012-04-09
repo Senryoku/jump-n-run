@@ -1,7 +1,7 @@
 #ifndef _ELASTIC_H_
 #define _ELASTIC_H_
 
-#include "Physics/Vertex.h"
+#include "Vertex.h"
 
 /** @defgroup Elastic
  *

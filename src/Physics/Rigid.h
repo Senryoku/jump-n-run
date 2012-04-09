@@ -1,7 +1,7 @@
 #ifndef _RIGID_H_
 #define _RIGID_H_
 
-#include "Physics/Vertex.h"
+#include "Vertex.h"
 
 /** @defgroup Rigid
  *

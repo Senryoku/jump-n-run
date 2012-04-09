@@ -2,7 +2,7 @@
 #define _LEVELEDITOR_H_
 
 #include "Level.h"
-#include "Game/Game.h"
+#include <Game/Game.h>
 #include <stdio.h>
 
 /** @defgroup LevelEditor

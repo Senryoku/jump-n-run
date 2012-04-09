@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#include "Core/Tools.h"
+#include "Tools.h"
 
 /** @defgroup Node
  *

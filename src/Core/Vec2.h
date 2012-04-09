@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include <Core/Tools.h>
+#include "Tools.h"
 
 /** @defgroup Vec2
  *

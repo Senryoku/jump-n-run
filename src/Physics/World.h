@@ -1,7 +1,7 @@
 #ifndef _WORLD_H_
 #define _WORLD_H_
 
-#include "Core/List.h"
+#include <Core/List.h>
 #include "Vertex.h"
 #include "Rigid.h"
 #include "Polygon.h"
