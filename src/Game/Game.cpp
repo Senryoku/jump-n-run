@@ -63,6 +63,8 @@ void gmInit(Game* G)
 	if(AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
 
 	//lvlGetWorld(G->Lvl)->prevdt = lvlGetWorld(G->Lvl)->dt = 0.5f*60.f/FPSLimit;
+	
+	mnInit(&G->GameMenu);
 }
 
 void gmFree(Game* G)
@@ -71,6 +73,7 @@ void gmFree(Game* G)
 	G->Window->setActive(0);
 	G->Window->close();
 	delete G->Window;
+	mnFree(&G->GameMenu);
 }
 
 void gmLoadLvl(Game* G, const char* Path)
