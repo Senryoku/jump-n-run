@@ -126,9 +126,16 @@ void mnGoToMenu(Menu* M, MenuID MID);
 /** @brief Accesseur de CurrentMenu
  *
  * @param M Menu à laquelle s'applique la fonction
+ * @return L'ID du menu actuel
+ **/
+MenuID mnGetCurrentMenuID(const Menu* M);
+
+/** @brief Donne accès au menu qui est courament sur l'écran
+ *
+ * @param M Menu à laquelle s'applique la fonction
  * @return Le menu actuel
  **/
-MenuID mnGetCurrentMenu(const Menu* M);
+MenuOfItems* mnGetCurrentMenu(const Menu* M);
 
 /** @brief Bouge le curseur dans le menu
  *

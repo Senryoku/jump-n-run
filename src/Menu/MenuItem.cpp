@@ -52,3 +52,27 @@ void mniRunFunction(MenuItem* I)
 	if (I->Function != NULL)
 		(*I->Function)();
 }
+
+void foo(void);
+
+///@todo vérifier les erreurs données par valgrind
+void mniRegressionTest(void)
+{
+	MenuItem I, I2;
+	float data;
+	
+	mniInit(&I, "Item 1", ITEM_LABEL, NULL, NULL);
+	mniInit(&I2, "Item2", ITEM_BUTTON, &foo, &data);
+	
+	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
+	mniSetText(&I, "Nouveau texte");
+	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
+	
+	mniFree(&I);
+	mniFree(&I2);
+}
+
+void foo(void)
+{
+	printf("foo\n");
+}

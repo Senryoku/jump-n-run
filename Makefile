@@ -121,6 +121,13 @@ testGrid : $(OBJ)Physics/Grid.o $(OBJ)testGrid.o $(OBJ)Core/List.o $(OBJ)Core/No
 	
 $(OBJ)testGrid.o :
 	$(CXX) $(OPT) $(TESTS)TestGrid.cpp -c -o $@
+	
+testMenuItem : $(OBJ)Menu/MenuItem.o $(OBJ)Core/Tools.o $(OBJ)Core/Vec2.o $(OBJ)Core/DynArr.o $(OBJ)testMenuItem.o
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind --leak-check=full --tool=memcheck ./$(BIN)testMenuItem
+	
+$(OBJ)testMenuItem.o :
+	$(CXX) $(OPT) $(TESTS)TestMenuItem.cpp -c -o $@
 
 
  

@@ -26,6 +26,8 @@ typedef struct
 	ItemID ItemSelected; /**< ID de l'item selectionné dans le menu **/
 	MenuItem* Items; /**< tableau d'items **/
 	float* ItemsZoomspd; /**< tableau de variables utilisé pour le wobble du zoom factor **/
+	Vec2 Size, SizeTo; /**< Taille de la boîte pour le menu **/
+	float SizeSpd[2]; /**< variable utilisée dans wobble **/
 	char* Text; /**< texte du menu (optionel) **/
 	
 } MenuOfItems;
@@ -72,8 +74,27 @@ MenuItem* moiGetItemSelected(MenuOfItems* M);
  * @brief Met à jour le zoom des items
  * @param SelectedFactor Facteur de zoom pour un item sélectioné
  */
-void moiUpdateZooms(MenuOfItems* M, float SelectedFactor);
+void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor);
 
+/**
+ * @brief Mutateur de SizeTo
+ * @param Size taille de la boîte du menu
+ */
+void moiSetSize(MenuOfItems* M, Vec2 Size);
+
+/**
+ * @brief Accesseur de SizeTo
+ * @return taille de la boîte du menu
+ */
+Vec2 moiGetSize(const MenuOfItems* M);
+
+/**
+ * @brief Mutateur de Size
+ *
+ * Ici on change la valeur qui est utilisé pour dessiner, le changement sera instantané et non fluide
+ * @param Size taille de la boîte du menu
+ */
+void moiSetActualSize(MenuOfItems* M, Vec2 Size);
 
 /**@}*/
 

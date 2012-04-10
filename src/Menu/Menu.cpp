@@ -73,7 +73,7 @@ Bool mnGetActive(const Menu* M)
 
 void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 {
-	moiUpdateZooms((MenuOfItems*)daGet(M->Menus, M->CurrentMenu), M->ItemSelectedZoomFactor);
+	moiUpdateVisuals((MenuOfItems*)daGet(M->Menus, M->CurrentMenu), M->ItemSelectedZoomFactor);
 	
 	if (M->CurrentMenu != M->PreviousMenu)
 	{
@@ -84,6 +84,9 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 		{
 			M->PreviousMenu = M->CurrentMenu;
 			M->Active = TRUE;
+			/* On va aller chercher le premier élement du menu qui peut être sélectioné */
+			if (mniGetType(moiGetItemSelected(mnGetCurrentMenu(M))) == ITEM_LABEL)
+				moiMoveCursor(mnGetCurrentMenu(M), MENU_GO_DOWN);
 		}
 	}
 	else
@@ -99,7 +102,12 @@ void mnGoToMenu(Menu* M, MenuID MID)
 	M->Active = FALSE;
 }
 
-MenuID mnGetCurrentMenu(const Menu* M)
+MenuID mnGetCurrentMenuID(const Menu* M)
 {
 	return M->CurrentMenu;
+}
+
+MenuOfItems* mnGetCurrentMenu(const Menu* M)
+{
+	return (MenuOfItems*)daGet(M->Menus, M->CurrentMenu);
 }

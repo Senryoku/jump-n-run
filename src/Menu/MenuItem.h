@@ -99,6 +99,8 @@ void* mniGetData(MenuItem* I);
  */
 void mniRunFunction(MenuItem* I);
 
+void mniRegressionTest(void);
+
 /**@}*/
 
 #endif
