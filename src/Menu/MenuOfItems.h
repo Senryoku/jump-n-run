@@ -71,10 +71,26 @@ void moiMoveCursor(MenuOfItems* M, MenuDirection Direction);
 MenuItem* moiGetItemSelected(MenuOfItems* M);
 
 /**
+ * @brief Accède à l'ID de l'item qui est sélectionné
+ * @param M MenuOfItem auquel s'applique la fonction
+ * @return ID de l'item selectionné
+ */
+ItemID moiGetItemSelectedID(MenuOfItems* M);
+
+/**
+ * @brief Accède à un item
+ * @param M MenuOfItem auquel s'applique la fonction
+ * @param IID ID de l'item
+ * @return Pointeur vers l'item selectionné
+ */
+MenuItem* moiGetItem(MenuOfItems* M, ItemID IID);
+
+/**
  * @brief Met à jour le zoom des items
  * @param SelectedFactor Facteur de zoom pour un item sélectioné
+ * @param UnselectedFactor Facteur de zoom pour un item non sélectioné
  */
-void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor);
+void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor, float UnselectedFactor);
 
 /**
  * @brief Mutateur de SizeTo
@@ -95,6 +111,12 @@ Vec2 moiGetSize(const MenuOfItems* M);
  * @param Size taille de la boîte du menu
  */
 void moiSetActualSize(MenuOfItems* M, Vec2 Size);
+
+/**
+ * @brief Accesseur du nombre d'items
+ * @return Nombre d'items
+ */
+unsigned short moiGetItemCount(const MenuOfItems* M);
 
 /**@}*/
 

@@ -8,6 +8,7 @@ void mnInit(Menu* M)
 	M->Active = TRUE;
 	M->ItemHeight = 25.f;
 	M->ItemSelectedZoomFactor = 1.2f;
+	M->ItemNormalZoomFactor = 0.5f;
 	M->spd[0] = 0.f;
 	M->spd[1] = 0.f;
 }
@@ -73,7 +74,7 @@ Bool mnGetActive(const Menu* M)
 
 void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 {
-	moiUpdateVisuals((MenuOfItems*)daGet(M->Menus, M->CurrentMenu), M->ItemSelectedZoomFactor);
+	moiUpdateVisuals((MenuOfItems*)daGet(M->Menus, M->CurrentMenu), M->ItemSelectedZoomFactor, M->ItemNormalZoomFactor);
 	
 	if (M->CurrentMenu != M->PreviousMenu)
 	{
@@ -110,4 +111,19 @@ MenuID mnGetCurrentMenuID(const Menu* M)
 MenuOfItems* mnGetCurrentMenu(const Menu* M)
 {
 	return (MenuOfItems*)daGet(M->Menus, M->CurrentMenu);
+}
+
+void mnMoveCursor(Menu* M, MenuDirection Direction)
+{
+	moiMoveCursor(mnGetCurrentMenu(M), Direction);
+}
+
+void mnSetCursor(Menu* M, Vec2 MousePos)
+{
+	
+}
+
+Vec2 mnGetPosition(const Menu* M)
+{
+	return vec2(M->MenuX, M->MenuY);
 }

@@ -8,6 +8,7 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 	I->Zoom = 1.f;
 	I->Function = Function;
 	I->Data = Data;
+	I->Type = Type;
 }
 
 void mniFree(MenuItem* I)
@@ -67,6 +68,8 @@ void mniRegressionTest(void)
 	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
 	mniSetText(&I, "Nouveau texte");
 	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
+	
+	mniRunFunction(&I2);
 	
 	mniFree(&I);
 	mniFree(&I2);

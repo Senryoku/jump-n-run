@@ -65,6 +65,13 @@ void gmInit(Game* G)
 	//lvlGetWorld(G->Lvl)->prevdt = lvlGetWorld(G->Lvl)->dt = 0.5f*60.f/FPSLimit;
 	
 	mnInit(&G->GameMenu);
+	mnAddMenu(&G->GameMenu, "Main Menu", 4);
+	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "Item 2", ITEM_BUTTON, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "Item 3", ITEM_LABEL, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "Item 4", ITEM_BUTTON, NULL, NULL);
+	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
+
 }
 
 void gmFree(Game* G)
@@ -104,6 +111,8 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 				G->Window->close();
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
+				mnMoveCursor(&G->GameMenu, MENU_GO_DOWN);
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
@@ -158,11 +167,14 @@ void gmPlay(Game* G)
 		ViewY = Center.y - ViewHeight/2;
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
 
-		/* Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
+		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
 		lvlDisplayL1(G->Lvl);
 
 		glDrawPolygon(G->Lvl->P1->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
+		
+		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -100.f));
+		glDrawMenu(*G->Window, &G->GameMenu, ViewX, ViewY);
 
 		G->Window->display();
 	}

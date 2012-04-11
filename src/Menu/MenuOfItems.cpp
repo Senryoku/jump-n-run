@@ -67,7 +67,13 @@ MenuItem* moiGetItemSelected(MenuOfItems* M)
 	return &M->Items[M->ItemSelected];
 }
 
-void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor)
+MenuItem* moiGetItem(MenuOfItems* M, ItemID IID)
+{
+	assert(IID < M->ItemsAdded);
+	return &M->Items[IID];
+}
+
+void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor, float UnselectedFactor)
 {
 	unsigned short i;
 	float Factor;
@@ -76,7 +82,7 @@ void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor)
 		if (M->ItemSelected == i)
 			Factor = SelectedFactor;
 		else
-			Factor = 1.f;
+			Factor = UnselectedFactor;
 		
 		Wobble(mniGetZoom(&M->Items[i]), Factor, 0.5f, 0.5f, &M->ItemsZoomspd[i]);
 	}
@@ -98,4 +104,14 @@ Vec2 moiGetSize(const MenuOfItems* M)
 void moiSetActualSize(MenuOfItems* M, Vec2 Size)
 {
 	M->Size = Size;
+}
+
+unsigned short moiGetItemCount(const MenuOfItems* M)
+{
+	return M->ItemsAdded;
+}
+
+ItemID moiGetItemSelectedID(MenuOfItems* M)
+{
+	return M->ItemSelected;
 }

@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include <Physics/Physics.h>
+#include <Menu/Menu.h>
 
 typedef GLuint Texture;
 
@@ -13,6 +14,7 @@ void glDrawElastic(Elastic* E);
 void glDrawRigid(Rigid* E);
 void glDrawPolygon(Polygon *P);
 void glDrawCircle(float x, float y, float radius);
+void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY);
 
 /** @brief Charge une texture en mémoire
  *

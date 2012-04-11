@@ -29,6 +29,7 @@ typedef struct
 	float spd[2]; /**< variable utilisé par wobble **/
 	float ItemHeight; /**< largeur d'un item non selectionné **/
 	float ItemSelectedZoomFactor; /**< Zoom d'un item quand il est sélectionné **/
+	float ItemNormalZoomFactor; /**< Zoom d'un item quand il n'est pas sélectionné **/
 	Bool Active; /**<  **/
 } Menu;
 
@@ -150,6 +151,13 @@ void mnMoveCursor(Menu* M, MenuDirection Direction);
  * @param MousePos Position du curseur
  **/
 void mnSetCursor(Menu* M, Vec2 MousePos);
+
+/** @brief Donne la position du menu
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @return La position du menu
+ **/
+Vec2 mnGetPosition(const Menu* M);
 
 /**@}*/
 #endif

@@ -87,12 +87,12 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	if (strcmp(read, ""))
 		Lvl->Background = (*Lvl->lvlTexLoad)(read);
 
-	//layer
+	//layer 1
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
 	if (strcmp(read, ""))
 		Lvl->Layer1 = (*Lvl->lvlTexLoad)(read);
-	//layer
+	//layer 2
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
 	if (strcmp(read, ""))

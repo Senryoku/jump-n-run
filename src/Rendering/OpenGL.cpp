@@ -153,3 +153,88 @@ void glDisplayTex(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 }
+
+void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
+{
+	MenuOfItems* moi = mnGetCurrentMenu(M);
+	Vec2 Size = moiGetSize(moi),
+	Position = mnGetPosition(M);
+	unsigned short i;
+	MenuItem* I;
+	
+	glPushMatrix();
+	
+	float heigth = 5.f; //offset
+	for (i=0; i<moiGetItemCount(moi); i++)
+	{
+		I = moiGetItem(moi, i);
+		heigth+=mnGetItemHeight(M)*(*mniGetZoom(I));
+	}
+		
+	
+	//On dessine le carré, ça sera fai avec des images plus tard
+	glColor4f(0.2f, 0.2f, 0.2f, 0.75f);
+	glTranslatef(ViewX, ViewY, 0.f);
+	glBegin(GL_QUADS);
+	glVertex2f(Position.x, Position.y-5.f);
+	glVertex2f(Position.x + Size.x, Position.y-5.f);
+	glVertex2f(Position.x +Size.x, Position.y + heigth);
+	glVertex2f(Position.x, Position.y + heigth);
+	glEnd();
+	
+	sf::Text ItemText;
+	ItemText.setFont(sf::Font::getDefaultFont());
+	
+	float yoffset = 5.f, selOffset;;
+	for (i=0; i<moiGetItemCount(moi); i++)
+	{
+		I = moiGetItem(moi, i);
+		if (strcmp(mniGetText(I), "")==0)
+			ItemText.setString(" "); /* une chaîne vide donne une erreur */
+		else
+			ItemText.setString(std::string(mniGetText(I)));
+		
+		ItemText.setScale(1.f, 1.f);
+		ItemText.setPosition(Position.x+5.f, Position.y+yoffset-1.5f-10.f);
+
+		ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
+
+		if (i != moiGetItemSelectedID(moi))
+		{
+			win.pushGLStates();
+			ItemText.setColor(sf::Color(0,0,0));
+			win.draw(ItemText);
+			ItemText.move(0.f, 1.5f);
+			ItemText.setColor(sf::Color(0,255,255));
+			win.draw(ItemText);
+			win.popGLStates();
+		}
+		else
+			selOffset = yoffset;
+		
+		yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
+		
+	}
+	
+	I = moiGetItemSelected(moi);
+	if (strcmp(mniGetText(I), "")==0)
+		ItemText.setString(" "); /* une chaîne vide donne une erreur */
+	else
+		ItemText.setString(std::string(mniGetText(I)));
+	
+	ItemText.setScale(1.f, 1.f);
+	ItemText.setPosition(Position.x+5.f, Position.y+selOffset-1.5f-10.f);
+	
+	yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
+	ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
+	
+	win.pushGLStates();
+	ItemText.setColor(sf::Color(0,0,0));
+	win.draw(ItemText);
+	ItemText.move(0.f, 1.5f);
+	ItemText.setColor(sf::Color(0,255,255));
+	win.draw(ItemText);
+	win.popGLStates();
+	
+	glPopMatrix();
+}
