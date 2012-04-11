@@ -22,6 +22,8 @@
 typedef struct
 {
 	Level* Lvl;
+	List tmpLstFixeFromV;
+	List tmpLstDynFromV;
 	List tmpLstFixe;
 	List tmpLstDyn;
 
@@ -69,35 +71,102 @@ void lvledSetPolyDraw(LevelEditor* Led, void (*polyDraw)(Polygon* P));
 void lvledDraw(const LevelEditor *Led, char flag);
 
 // Fonctions de Manipulation/Vision
+/** @brief Sélectionne le Vertex le plus proche de Mouse comme Grab
+**/
 void lvledGrab(LevelEditor *Led);
+/** @brief Replace Grab sur Mouse
+**/
 void lvledGrabUpdate(LevelEditor *Led);
+/** @brief Relâche Grab
+**/
 void lvledRelease(LevelEditor *Led);
 
+/** @brief Attrape le Vertex le plus proche de Mouse avec un Elastic
+**/
 void lvledGrabEl(LevelEditor *Led);
+/** @brief Relâche le Vertex lié par un Elastic à Mouse
+**/
 void lvledReleaseEl(LevelEditor *Led);
 
+/** @brief Fixe/Libère le Vertex le plus proche de Mouse
+**/
 void lvledToogleNearestFixe(LevelEditor *Led);
+/** @brief Fixe/Libère le Polygon le plus proche de Mouse
+**/
 void lvledToogleNearestPolyFixe(LevelEditor *Led);
 
-void lvledSetMousePosition(LevelEditor *Led, float, float); // Déplace le Vertex Mouse ! Pas la souris...
+/** @brief Replace le Vertex représentant la souris sur les coordonnées passées en paramètre
+**/
+void lvledSetMousePosition(LevelEditor *Led, float, float);
 
 // Fonctions d'éditions
+
+/** @brief Créé un nouveau Vertex isolé aux coordonnées de Mouse
+**/
+void lvledNewVertex(LevelEditor* Led);
+
+/** @brief Prépare la création d'un polygon Dynamique à partir de Vertex préexistants
+**/
+void lvledPolyFromVertexInit(LevelEditor* Led);
+/** @brief Ajoute un Vertex à la liste permettant la création d'un polygon Dynamique à partir de Vertex préexistants
+**/
+void lvledPolyFromVertexAdd(LevelEditor* Led);
+/** @brief Créé un polygon Dynamique partir de Vertex préexistants
+**/
+void lvledPolyFromVertexCreate(LevelEditor* Led);
+
+/** @brief Prépare la création d'un polygon Fixe à partir de Vertex préexistants
+**/
+void lvledPolyFixeFromVertexInit(LevelEditor* Led);
+/** @brief Ajoute un Vertex à la liste permettant la création d'un polygon Fixe à partir de Vertex préexistants
+**/
+void lvledPolyFixeFromVertexAdd(LevelEditor* Led);
+/** @brief Créé un polygon fixe à partir de Vertex préexistants
+**/
+void lvledPolyFixeFromVertexCreate(LevelEditor* Led);
+
+/** @brief Prépare un nouveau Polygon quelconque dynamique
+**/
 void lvledNewPolyInit(LevelEditor *Led);
+/** @brief Ajoute un Vertex au polygon quelconque dynamique en cours de création
+**/
 void lvledNewPolyAddV(LevelEditor *Led);
+/** @brief Finalise le Polygon quelconque dynamique en cours de création et l'ajoute au monde
+**/
 void lvledNewPolyCreate(LevelEditor *Led);
 
+/** @brief Initialise un nouveau Polygon quelconque fixe
+**/
 void lvledNewPolyFixeInit(LevelEditor *Led);
+/** @brief Ajoute un nouveau Vertex au polygon quelconque fixe en cours de création
+**/
 void lvledNewPolyFixeAddV(LevelEditor *Led);
+/** @brief Finalise le polygon quelconque fixe en cours de création et l'ajoute au monde
+**/
 void lvledNewPolyFixeCreate(LevelEditor *Led);
 
+/** @brief Sélectionne un Vertex afin de le lier à un autre via un Elastic
+**/
 void lvledNewElasticAddV(LevelEditor *Led);
+/** @brief Lie les Vertex sélectionnés à l'aide de lvledNewElasticAddV par un Elastic
+**/
 void lvledNewElasticCreate(LevelEditor *Led);
 
+/** @brief Sélectionne un Vertex afin de le lier à un autre via un Rigid
+**/
 void lvledNewRigidAddV(LevelEditor *Led);
+/** @brief Lie les Vertex sélectionnés à l'aide de lvledNewRigidAddV par un Elastic
+**/
 void lvledNewRigidCreate(LevelEditor *Led);
 
+/** @brief Initialise une nouvelle boite
+**/
 void lvledNewBoxInit(LevelEditor *Led);
+/** @brief Ajuste la taille de la boite en cours de création en fonction de la position de Mouse
+**/
 void lvledNewBoxUpdate(LevelEditor *Led);
+/** @brief Finalise la création de la boite
+**/
 void lvledNewBoxCreate(LevelEditor *Led);
 
 /** @brief Supprime le polygone le plus proche de Mouse

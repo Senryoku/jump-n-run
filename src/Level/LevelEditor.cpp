@@ -279,6 +279,67 @@ void lvledDelVertex(LevelEditor *Led)
 	}
 }
 
+void lvledNewVertex(LevelEditor* Led)
+{
+	Vertex* tmpVertex = newVertex();
+	vxSetPosition(tmpVertex, vxGetPosition(Led->Mouse));
+	vxSetFixe(tmpVertex, 1);
+	wdAddVertex(lvlGetWorld(Led->Lvl), tmpVertex);
+}
+
+void lvledPolyFromVertexInit(LevelEditor* Led)
+{
+	lstInit(&Led->tmpLstDynFromV);
+}
+
+void lvledPolyFromVertexAdd(LevelEditor* Led)
+{
+	lstAdd(&Led->tmpLstDynFromV, wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y));
+}
+
+void lvledPolyFromVertexCreate(LevelEditor* Led)
+{
+	Polygon* tmpPoly;
+	if(lstCount(&Led->tmpLstDynFromV) > 0)
+	{
+		if(lstCount(&Led->tmpLstDynFromV) == 4)
+		{
+			tmpPoly = polyRectangleL(Led->tmpLstDynFromV);
+		} else if (lstCount(&Led->tmpLstDynFromV) <= 3) {
+			tmpPoly = newPolygonL(Led->tmpLstDynFromV);
+		} else {
+			tmpPoly = polyNGone(Led->tmpLstDynFromV);
+		}
+		wdAddPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
+	}
+	lstFree(&Led->tmpLstDynFromV);
+}
+
+void lvledPolyFixeFromVertexInit(LevelEditor* Led)
+{
+	lstInit(&Led->tmpLstFixeFromV);
+}
+
+void lvledPolyFixeFromVertexAdd(LevelEditor* Led)
+{
+	lstAdd(&Led->tmpLstFixeFromV, wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y));
+}
+
+void lvledPolyFixeFromVertexCreate(LevelEditor* Led)
+{
+	Polygon* tmpPoly;
+	if(lstCount(&Led->tmpLstFixeFromV) > 0)
+	{
+		wdAddVxFromList(lvlGetWorld(Led->Lvl), Led->tmpLstFixeFromV);
+		tmpPoly = newPolygonL(Led->tmpLstFixeFromV);
+		polySetFixe(tmpPoly, 1);
+		wdAddPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
+		//TEMPORAIRE!!!
+		gridAddPolygonByBB(&lvlGetWorld(Led->Lvl)->CollisionGrid, tmpPoly);
+	}
+	lstFree(&Led->tmpLstFixeFromV);
+}
+
 void lvledNewPolyInit(LevelEditor *Led)
 {
 	lstInit(&Led->tmpLstDyn);
@@ -463,7 +524,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	}
 	daFree(&Led->TexturesPath);
 	daInit(&Led->TexturesPath);
-	
+
 	unsigned int item;
 	while (fgets(read, 300, f)!=NULL)
 	{
@@ -476,7 +537,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 			printf("texture read: %s\n", path);
 		}
 	}
-	
+
 	fclose(f);
 
 	return lvlLoad(Led->Lvl, File);
@@ -589,7 +650,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 		it = nodeGetNext(it);
 	}
-	
+
 	unsigned int i;
 	for (i=0; i<daGetSize(&Led->TexturesPath); i++)
 	{
