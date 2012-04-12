@@ -3,11 +3,11 @@
 void moiInit(MenuOfItems* M, const char* Text, unsigned short ItemCount)
 {
 	unsigned short i;
-	M->Text = (char*)malloc(sizeof(char)*strlen(Text));
+	M->Text = (char*) malloc(sizeof(char)*(strlen(Text) + 1));
 	strcpy(M->Text, Text);
 	M->ItemCount = ItemCount;
-	M->Items = (MenuItem*)malloc(sizeof(MenuItem)*ItemCount);
-	M->ItemsZoomspd = (float*)malloc(sizeof(float)*ItemCount);
+	M->Items = (MenuItem*) malloc(sizeof(MenuItem)*ItemCount);
+	M->ItemsZoomspd = (float*) malloc(sizeof(float)*ItemCount);
 	for (i=0; i<ItemCount; i++)
 		M->ItemsZoomspd[i] = 0.f;
 	M->ItemsAdded = 0;
@@ -48,16 +48,16 @@ void moiMoveCursor(MenuOfItems* M, MenuDirection Direction)
 			M->ItemSelected--;
 		else
 			M->ItemSelected = M->ItemsAdded-1;
-		
+
 		if (M->ItemSelected >= M->ItemsAdded)
 			M->ItemSelected = 0;
-		
+
 		if (mniGetType(moiGetItemSelected(M)) != ITEM_LABEL )
 			moved = M->ItemsAdded+1;
 		else
 			moved++;
 	}
-	
+
 	if (moved == M->ItemsAdded)
 		M->ItemSelected = INVALID_ITEM_ID;
 }
@@ -83,10 +83,10 @@ void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor, float UnselectedFact
 			Factor = SelectedFactor;
 		else
 			Factor = UnselectedFactor;
-		
+
 		Wobble(mniGetZoom(&M->Items[i]), Factor, 0.5f, 0.5f, &M->ItemsZoomspd[i]);
 	}
-	
+
 	Wobble(&M->Size.x, M->SizeTo.x, 0.5f, 0.5f, &M->SizeSpd[0]);
 	Wobble(&M->Size.y, M->SizeTo.y, 0.5f, 0.5f, &M->SizeSpd[1]);
 }

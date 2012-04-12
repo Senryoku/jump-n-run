@@ -3,7 +3,7 @@
 
 void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void), void* Data)
 {
-	I->Text = (char*)malloc(sizeof(char)*strlen(Text));
+	I->Text = (char*) malloc(sizeof(char)*(strlen(Text) + 1));
 	strcpy(I->Text, Text);
 	I->Zoom = 1.f;
 	I->Function = Function;
@@ -19,7 +19,7 @@ void mniFree(MenuItem* I)
 void mniSetText(MenuItem* I, const char* Text)
 {
 	free(I->Text);
-	I->Text = (char*)malloc(sizeof(char)*strlen(Text));
+	I->Text = (char*) malloc(sizeof(char)*(strlen(Text) + 1));
 	strcpy(I->Text, Text);
 }
 
@@ -61,16 +61,16 @@ void mniRegressionTest(void)
 {
 	MenuItem I, I2;
 	float data;
-	
+
 	mniInit(&I, "Item 1", ITEM_LABEL, NULL, NULL);
 	mniInit(&I2, "Item2", ITEM_BUTTON, &foo, &data);
-	
+
 	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
 	mniSetText(&I, "Nouveau texte");
 	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
-	
+
 	mniRunFunction(&I2);
-	
+
 	mniFree(&I);
 	mniFree(&I2);
 }
