@@ -67,10 +67,10 @@ void appRun(LevelEditorApp* App)
 		while (App->Window->pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
-				App->Window->close();
+				return;
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-				App->Window->close();
+				return;
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
@@ -188,11 +188,11 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Keyboard::S :
 						if (event.key.control)
-							lvledSave(&App->Led, "levels/tmpEditor.lvl");
+							lvledSave(&App->Led, App->WorkingPath);
 						break;
 					case sf::Keyboard::L :
 						if (event.key.control)
-							lvledLoad(&App->Led, "levels/tmpEditor.lvl");
+							lvledLoad(&App->Led, App->WorkingPath);
 						break;
 					case sf::Keyboard::X :
 						plGetUp(App->Led.Lvl->P1);

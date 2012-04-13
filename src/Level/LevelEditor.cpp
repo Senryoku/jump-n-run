@@ -26,9 +26,9 @@ void lvledFree(LevelEditor *Led)
 {
 	delLevel(Led->Lvl);
 	unsigned int i;
-	for (i=0; i<daGetSize(&Led->TexturesPath); i++)
+	for(i = 0; i < daGetSize(&Led->TexturesPath); i++)
 	{
-		free(daGet(&Led->TexturesPath, i));
+		free((char*) daGet(&Led->TexturesPath, i));
 	}
 	daFree(&Led->TexturesPath);
 	delVertex(Led->Mouse);
@@ -520,7 +520,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	//on libere l'array des paths des textures
 	for (i=0; i<daGetSize(&Led->TexturesPath); i++)
 	{
-		free(daGet(&Led->TexturesPath, i));
+		free((char*) daGet(&Led->TexturesPath, i));
 	}
 	daFree(&Led->TexturesPath);
 	daInit(&Led->TexturesPath);
