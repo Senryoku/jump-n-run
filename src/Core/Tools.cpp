@@ -76,7 +76,7 @@ Config GetConfiguration()
 		while (fgets(line, 255, f) != NULL)
 		{
 			sscanf(line, "%s %f\n", id, &value);
-			printf("Lu : %s, %f\n", id, value);
+			// printf("Lu : %s, %f\n", id, value);
 			if(strcmp(id, "WindowWidth") == 0) Cfg.WindowWidth = value;
 			if(strcmp(id, "WindowHeigth") == 0) Cfg.WindowHeight = value;
 			if(strcmp(id, "FPSLimit") == 0) Cfg.FPSLimit = value;
