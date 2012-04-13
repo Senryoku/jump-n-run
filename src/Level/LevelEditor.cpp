@@ -484,10 +484,10 @@ void lvledNewBoxCreate(LevelEditor *Led)
 
 void lvledTestLevel(LevelEditor *Led)
 {
-	lvledSave(Led, "levels/TempTest.lvl~");
+	lvledSave(Led, "levels/tmpTest.lvl~");
 	Game G;
 	gmInit(&G);
-	gmLoadLvl(&G, "levels/TempTest.lvl~");
+	gmLoadLvl(&G, "levels/tmpTest.lvl~");
 	gmPlay(&G);
 	gmFree(&G);
 }

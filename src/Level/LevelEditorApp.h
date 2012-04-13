@@ -17,12 +17,19 @@ typedef struct
 	sf::RenderWindow* Window;
 	float WindowWidth;
 	float WindowHeight;
+	char WorkingPath[255];
 } LevelEditorApp;
 
 void appInit(LevelEditorApp* App);
 
+void appWindowInit(LevelEditorApp* App);
+
+void appWindowFree(LevelEditorApp* App);
+
 void appFree(LevelEditorApp* App);
 
 void appRun(LevelEditorApp* App);
+
+void appSetWorkingPat(LevelEditorApp* App, const char* Path);
 
 #endif // _LEVELEDITORAPP_H_

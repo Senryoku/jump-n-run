@@ -48,7 +48,7 @@ List* gridGetCellList(const Grid* g, unsigned int x, unsigned int y)
 void gridAddPolygon(Grid* g, Polygon* p) //Non fonctionnelle
 {
 	unsigned int i, j, k;
-	int x1, y1, x2, y2, stepX, stepY; //Les int permetten de savoir si ça passe en dessous de 0 et de corriger ça
+	int x1, y1, x2, y2; //Les int permetten de savoir si ça passe en dessous de 0 et de corriger ça
 
 	for (i=0; i<daGetSize(&p->Vertices); i++)
 	{
@@ -68,9 +68,6 @@ void gridAddPolygon(Grid* g, Polygon* p) //Non fonctionnelle
 			y2=(int)vxGetPosition((Vertex*)daGet(&p->Vertices, i+1)).y;
 		}
 
-		stepX=SGN(x2-x1);
-		stepY=SGN(y2-y1);
-
 		//On trouve les cases ou peut se toruver la ligne (Un rectangle) et on teste les intersections pour voir si la ligne se trouve ou pas dans cette cellule
 		unsigned int cellx1=(unsigned int)x1/g->CellWidth, cellx2=(unsigned int)x2/g->CellWidth,
 		celly1=(unsigned int)y1/g->CellHeight, celly2=(unsigned int)y2/g->CellHeight;
@@ -80,7 +77,7 @@ void gridAddPolygon(Grid* g, Polygon* p) //Non fonctionnelle
 		Vec2 v=vec2(x2-x1, y2-y1);
 		printf("Vecteur de la droite: %f, %f\n", v.x, v.y);
 		float a, b; //Coefficients de la droite y = ax + b
-		unsigned int x, y;
+		unsigned int y;
 		if (ABS(v.y)>ABS(v.x)) //On va regarder les intersections de la droite conteant le vecteur v avec les droites d'équation x=[cellx1..cellx2]
 		{
 			for (j=MIN(cellx1, cellx2)+1; j<=MAX(cellx1, cellx2); j++)

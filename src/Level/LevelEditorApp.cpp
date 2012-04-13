@@ -9,74 +9,48 @@ void appInit(LevelEditorApp* App)
 	lvledSetRdDraw(&App->Led, &glDrawRigid);
 	lvledSetPolyDraw(&App->Led, &glDrawPolygon);
 	lvledLoad(&App->Led, "levels/tmpEditor.lvl");
+	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 
-	char line[255];
-	char id[255];
-	float value;
+	appWindowInit(App);
+}
 
-	/* Options par défaut */
-	App->WindowWidth = 800.f;
-	App->WindowHeight = 600.f;
-	float FPSLimit = 60.f;
-	float AntiAliasing = 1.f;
-	float VerticalSync = 1.f;
+void appWindowInit(LevelEditorApp* App)
+{
+	Config Cfg = GetConfiguration();
 
-	FILE* f;
-	f = fopen("Config.cfg", "r");
-	if(f != NULL)
-	{
-		while (fgets(line, 255, f) != NULL)
-		{
-			sscanf(line, "%s %f\n", id, &value);
-			printf("Lu : %s, %f\n", id, value);
-			if(strcmp(id, "App->WindowWidth") == 0) App->WindowWidth = value;
-			if(strcmp(id, "WindowHeigth") == 0) App->WindowHeight = value;
-			if(strcmp(id, "FPSLimit") == 0) FPSLimit = value;
-			if(strcmp(id, "AntiAliasing") == 0) AntiAliasing = value;
-			if(strcmp(id, "VerticalSync") == 0) VerticalSync = value;
-		}
-		fclose(f);
-	}
-	else
-	{
-		/* on crŽe un fichier de config par dŽfaut */
-		f = fopen("Config.cfg", "w");
-
-		if (f != NULL)
-			fprintf(f, "App->WindowWidth %f\nApp->WindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\n", App->WindowWidth, App->WindowHeight, FPSLimit, AntiAliasing, VerticalSync);
-		else
-			printf("Erreur pour écrire le fichier de configuration\n");
-
-		fclose(f);
-	}
-
-	App->WindowWidth = App->WindowWidth;
-	App->WindowHeight = App->WindowHeight;
-	App->Window = new sf::RenderWindow(sf::VideoMode(App->WindowWidth, App->WindowHeight), "Jump n'Run", sf::Style::Default, sf::ContextSettings(32));
+	App->WindowWidth = Cfg.WindowWidth;
+	App->WindowHeight = Cfg.WindowHeight;
+	App->Window = new sf::RenderWindow(sf::VideoMode(App->WindowWidth, App->WindowHeight), "Jump n'Run Level Editor", sf::Style::Default, sf::ContextSettings(32));
 
 	App->Window->setKeyRepeatEnabled(0);
 	App->Window->setMouseCursorVisible(1);
 	/* On ne peut utiliser  qu'une des deux */
-	if(VerticalSync == 1.f)
+	if(Cfg.VerticalSync == 1.f)
 		App->Window->setVerticalSyncEnabled(1);
 	else
-		App->Window->setFramerateLimit((unsigned int)FPSLimit);
+		App->Window->setFramerateLimit((unsigned int) Cfg.FPSLimit);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	if(AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
+	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
+}
+
+void appWindowFree(LevelEditorApp* App)
+{
+	App->Window->close();
+	delete App->Window;
 }
 
 void appFree(LevelEditorApp* App)
 {
 	lvledFree(&App->Led);
-	delete App->Window;
+	appWindowFree(App);
 }
 
 void appRun(LevelEditorApp* App)
 {
-	unsigned int ViewPort, frames;
+	unsigned int ViewPort, frames = 0;
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, MapWidth = App->WindowWidth/10.f, MapHeight = App->WindowHeight/10.f,
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
@@ -162,13 +136,9 @@ void appRun(LevelEditorApp* App)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::T :
-						App->Window->close();
+						appWindowFree(App);
 						lvledTestLevel(&App->Led);
-						App->Window->create(sf::VideoMode(App->WindowWidth, App->WindowHeight), "Jump n'Run");
-						App->Window->setFramerateLimit(60.f);
-						App->Window->setKeyRepeatEnabled(0);
-						App->Window->setMouseCursorVisible(0);
-
+						appWindowInit(App);
 						break;
 					case sf::Keyboard::Space :
 						ViewWidth = App->WindowWidth;
@@ -218,11 +188,11 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Keyboard::S :
 						if (event.key.control)
-							lvledSave(&App->Led, "levels/Test.txt");
+							lvledSave(&App->Led, "levels/tmpEditor.lvl");
 						break;
 					case sf::Keyboard::L :
 						if (event.key.control)
-							lvledLoad(&App->Led, "levels/Test.txt");
+							lvledLoad(&App->Led, "levels/tmpEditor.lvl");
 						break;
 					case sf::Keyboard::X :
 						plGetUp(App->Led.Lvl->P1);
@@ -296,8 +266,6 @@ void appRun(LevelEditorApp* App)
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
-		//for (i=0; i<4; i++)
-		//jnResolve(&J);
 		lvlUpdate(App->Led.Lvl);
 
 		/* == Affichage == */
@@ -356,4 +324,9 @@ void appRun(LevelEditorApp* App)
 			Clock.restart();
 		}
 	}
+}
+
+void appSetWorkingPat(LevelEditorApp* App, const char* Path)
+{
+	strcpy(App->WorkingPath, Path);
 }

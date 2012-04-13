@@ -12,6 +12,14 @@ typedef enum enum_bool
 	TRUE = 0x01
 } e_bool;
 
+typedef struct
+{
+	float WindowWidth;
+	float WindowHeight;
+	float FPSLimit;
+	float AntiAliasing;
+	float VerticalSync;
+} Config;
 
 #define MIN( X, Y ) ( (X) < (Y) ? (X) : (Y) ) /* Deux macros qui déterminent le min et le max */
 #define MAX( X, Y ) ( (X) > (Y) ? (X) : (Y) )
@@ -32,5 +40,7 @@ void Wobble(float *CurrentPosition, float TargetPosition, float Force,float Fric
 
 Bool DirectoryExists(const char* Dir);
 Bool CreateDirectory(const char* Dir);
+
+Config GetConfiguration();
 
 #endif

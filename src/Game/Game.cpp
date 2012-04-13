@@ -2,68 +2,27 @@
 
 void gmInit(Game* G)
 {
-	char line[255];
-	char id[255];
-	float value;
+	Config Cfg = GetConfiguration();
 
-	/* Options par défaut */
-	float WindowWidth = 800.f;
-	float WindowHeight = 600.f;
-	float FPSLimit = 60.f;
-	float AntiAliasing = 1.f;
-	float VerticalSync = 1.f;
-
-	G->Lvl = newLevel(0.f, 0.f);
-
-	FILE* f;
-	f = fopen("Config.cfg", "r");
-	if(f != NULL)
-	{
-		while (fgets(line, 255, f) != NULL)
-		{
-			sscanf(line, "%s %f\n", id, &value);
-			printf("Lu : %s, %f\n", id, value);
-			if(strcmp(id, "WindowWidth") == 0) WindowWidth = value;
-			if(strcmp(id, "WindowHeigth") == 0) WindowHeight = value;
-			if(strcmp(id, "FPSLimit") == 0) FPSLimit = value;
-			if(strcmp(id, "AntiAliasing") == 0) AntiAliasing = value;
-			if(strcmp(id, "VerticalSync") == 0) VerticalSync = value;
-		}
-		fclose(f);
-	}
-	else
-	{
-		/* on crŽe un fichier de config par dŽfaut */
-		f = fopen("Config.cfg", "w");
-		
-		if (f != NULL)
-			fprintf(f, "WindowWidth %f\nWindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\n", WindowWidth, WindowHeight, FPSLimit, AntiAliasing, VerticalSync);
-		else
-			printf("Erreur pour Žcrire le fichier de configuration\n");
-		
-		fclose(f);
-	}
-
-	G->WindowWidth = WindowWidth;
-	G->WindowHeight = WindowHeight;
+	G->WindowWidth = Cfg.WindowWidth;
+	G->WindowHeight = Cfg.WindowHeight;
 	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump n'Run", sf::Style::Default, sf::ContextSettings(32));
-	
+
 	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
 	/* On ne peut utiliser  qu'une des deux */
-	if(VerticalSync == 1.f)
+	if(Cfg.VerticalSync == 1.f)
 		G->Window->setVerticalSyncEnabled(1);
 	else
-		G->Window->setFramerateLimit((unsigned int)FPSLimit);
-
+		G->Window->setFramerateLimit((unsigned int) Cfg.FPSLimit);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	if(AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
+	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
 
-	//lvlGetWorld(G->Lvl)->prevdt = lvlGetWorld(G->Lvl)->dt = 0.5f*60.f/FPSLimit;
-	
+	G->Lvl = newLevel(0.f, 0.f);
+
 	mnInit(&G->GameMenu);
 	mnAddMenu(&G->GameMenu, "Main Menu", 4);
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
@@ -154,7 +113,7 @@ void gmPlay(Game* G)
             plMoveL(G->Lvl->P1);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             plMoveR(G->Lvl->P1);
-		
+
 		plUpdate(G->Lvl->P1);
 		Center = polyComputeCenter(G->Lvl->P1->Shape);
 
@@ -172,7 +131,7 @@ void gmPlay(Game* G)
 
 		glDrawPolygon(G->Lvl->P1->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
-		
+
 		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -100.f));
 		glDrawMenu(*G->Window, &G->GameMenu, ViewX, ViewY);
 
