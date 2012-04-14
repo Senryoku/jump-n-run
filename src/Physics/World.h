@@ -189,16 +189,25 @@ unsigned int wdGetRdCount(World* W);
 **/
 unsigned int wdGetPolyCount(World* W);
 
-/** @brief Retourne un itérateur sur les Vertices de World
-**/
+/** @brief Accès à l'iterateur de la liste de Vertex
+ *
+ * @param W World
+ * @return Iterateur sur le premier node de la liste des Vertex
+ */
 Node* wdGetVertexIt(World* W);
 
-/** @brief Retourne un itérateur sur les Elastics de World
-**/
+/** @brief Accès à l'iterateur de la liste de Elastic
+ *
+ * @param W World
+ * @return Iterateur sur le premier node de la liste des Elastic
+ */
 Node* wdGetElasticIt(World* W);
 
-/** @brief Retourne un itérateur sur les Rigids de World
-**/
+/** @brief Accès à l'iterateur de la liste de Rigid
+ *
+ * @param W World
+ * @return Iterateur sur le premier node de la liste des Rigid
+ */
 Node* wdGetRigidIt(World* W);
 
 /** @brief Retourne un itérateur sur les Polygons de World
@@ -266,26 +275,6 @@ void wdFree(World *W);
 **/
 void delWorld(World *W);
 
-/** @brief Accès à l'iterateur de la liste de Vertex
- *
- * @param W World
- * @return Iterateur sur le premier node de la liste des Vertex
- */
-Node* wdGetVxIt(World* W);
-
-/** @brief Accès à l'iterateur de la liste de Elastic
- *
- * @param W World
- * @return Iterateur sur le premier node de la liste des Elastic
- */
-Node* wdGetElIt(World* W);
-
-/** @brief Accès à l'iterateur de la liste de Rigid
- *
- * @param W World
- * @return Iterateur sur le premier node de la liste des Rigid
- */
-Node* wdGetRdIt(World* W);
 
 void wdUpdateGrid(World *W);
 

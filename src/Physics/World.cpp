@@ -237,17 +237,17 @@ unsigned int wdGetPolyCount(World* W)
 	return lstCount(&W->Polygons);
 }
 
-Node* wdGetVxIt(World* W)
+Node* wdGetVertexIt(World* W)
 {
 	return lstFirst(&W->Vertices);
 }
 
-Node* wdGetElIt(World* W)
+Node* wdGetElasticIt(World* W)
 {
 	return lstFirst(&W->Elastics);
 }
 
-Node* wdGetRdIt(World* W)
+Node* wdGetRigidIt(World* W)
 {
 	return lstFirst(&W->Rigids);
 }
