@@ -40,6 +40,7 @@
 			<Add option="-lsfml-graphics" />
 			<Add option="-lsfml-audio" />
 			<Add option="-lsfml-window" />
+			<Add option="-lsfml-network" />
 			<Add option="-lsfml-system" />
 			<Add option="-lopengl32" />
 			<Add option="-lglu32" />
@@ -57,6 +58,8 @@
 		<Unit filename="src\Core\Tools.h" />
 		<Unit filename="src\Core\Vec2.cpp" />
 		<Unit filename="src\Core\Vec2.h" />
+		<Unit filename="src\Core\md5.cpp" />
+		<Unit filename="src\Core\md5.h" />
 		<Unit filename="src\Game\Game.cpp" />
 		<Unit filename="src\Game\Game.h" />
 		<Unit filename="src\Level\Level.cpp" />
@@ -96,6 +99,8 @@
 		<Unit filename="src\Physics\World.h" />
 		<Unit filename="src\Rendering\OpenGL.cpp" />
 		<Unit filename="src\Rendering\OpenGL.h" />
+		<Unit filename="src\Score\Score.cpp" />
+		<Unit filename="src\Score\Score.h" />
 		<Unit filename="src\Test.cpp" />
 		<Extensions>
 			<code_completion />

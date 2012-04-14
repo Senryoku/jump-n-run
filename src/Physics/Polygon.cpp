@@ -297,25 +297,31 @@ CollisionInfo polyCollide(Polygon* P1, Polygon* P2)
 
 void polyHandleCollision(CollisionInfo Info)
 {
-	Vec2 CollisionVector, PosE1, PosE2;
+	Vec2 CollisionVector, PosV, PosE1, PosE2, Tangent;
 	float PositionOnEdge, CorrectionFactor;
 
 	CollisionVector = vec2Prod(Info.Normal, Info.Depth);
 
+	PosV = vxGetPosition(Info.V);
 	PosE1 = vxGetPosition(rdGetV1(Info.Edge));
 	PosE2 = vxGetPosition(rdGetV2(Info.Edge));
 
 	/* Position du point sur la face,
 	 On évite les divisions par 0 ! */
 	if(fabs(PosE1.x - PosE2.x) > fabs(PosE1.y - PosE2.y))
-		PositionOnEdge = (vxGetPosition(Info.V).x - CollisionVector.x
+		PositionOnEdge = (PosV.x - CollisionVector.x
 	- PosE1.x)/(PosE2.x - PosE1.x);
 	else
-		PositionOnEdge = (vxGetPosition(Info.V).y - CollisionVector.y
+		PositionOnEdge = (PosV.y - CollisionVector.y
 	- PosE1.y)/(PosE2.y - PosE1.y);
 
 	CorrectionFactor = -1.0f/(PositionOnEdge*PositionOnEdge
 		+ (1.f - PositionOnEdge)*(1.f - PositionOnEdge));
+
+	/* Application d'une force de friction, tentative d'optimisation, mais ça reste assez "cher"...
+	 La constante multiplicative est la constante de friction */
+	Tangent = rdVector(Info.Edge);
+	vxCorrectSpeed(Info.V, vec2Prod(Tangent, SGN(vec2Dot(Tangent, vec2Sub(PosV, vxGetOldPos(Info.V))))*Info.Depth*0.00001f));
 
 	/* Correction des positions
 	 Du vertex */
