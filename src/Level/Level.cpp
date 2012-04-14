@@ -293,36 +293,36 @@ void lvlLoadedInit(Level* Lvl)
 	vxSetPosition(V3, vec2(50.f, 210.f));
 	Vertex* V4 = newVertex();
 	vxSetPosition(V4, vec2(0.f, 210.f));
-	
+
 	Polygon* Shape = polyRectangle(V1, V2, V3, V4);
 	Lvl->P1 = newPlayer();
 	plSetShape(Lvl->P1, Shape);
-	
+
 	Vertex* Stable = newVertex();
 	vxSetFixe(Stable, 1);
 	Vec2 pos = polyComputeCenter(Lvl->P1->Shape);
 	pos.y-=20.f;
-	 
+
 	vxSetPosition(Stable, pos);
-	
+
 	/*Elastic *E1 = newElastic(V1, Stable, -1.f, 1.f),
 	*E2 = newElastic(V2, Stable, -1.f, 1.f);
 	wdAddElastic(Lvl->W, E1);
 	wdAddElastic(Lvl->W, E2);
 	 Lvl->P1->Stable=Stable;*/
-	 
-	
+
+
 	plSetPosition(Lvl->P1, Lvl->Spawn);
 	wdAddVxFromPoly(Lvl->W, Shape);
-	
+
 	plCreateVertex(Lvl->P1, lvlGetWorld(Lvl));
 	plCreateRigids(Lvl->P1, lvlGetWorld(Lvl));
 	plSetPosition(Lvl->P1, Lvl->Spawn.x+100.f, Lvl->Spawn.y+150.f);
-	
+
 	/*Elastic *ENeck, *EBase;
 	ENeck = newElastic(Lvl->P1->Neck, Stable, -1.f, 1.f);
 	EBase = newElastic(Lvl->P1->Base, Stable, -1.f, 1.f);
-	
+
 	wdAddElastic(Lvl->W, ENeck);
 	wdAddElastic(Lvl->W, EBase);
 	 */
@@ -333,9 +333,6 @@ void lvlUpdate(Level* Lvl)
 	unsigned int i;
 	CollisionInfo Info;
 	Node* it;
-
-	/* Mise à jour spécifique de Player */
-	if(Lvl->P1 != NULL) plSetOnGround(Lvl->P1, 0);
 
 	/* Mise à jour du World */
 	//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
@@ -353,8 +350,14 @@ void lvlUpdate(Level* Lvl)
 		wdHandleCollision(lvlGetWorld(Lvl));
 
 		/* Mise à jour spécifique de Player */
+		/** @todo Mettre ceci dans plUpdate, je ne sais pas ce que tu voulais faire
+		avec cette fonction (plUpdate), donc je n'y ai pas touché pour l'instant,
+		mais cette portion de code devrait être dans le module Player **/
 		if(Lvl->P1 != NULL)
 		{
+			Lvl->P1->RdUStatus = Lvl->P1->RdRStatus = Lvl->P1->RdDStatus =
+			Lvl->P1->RdLStatus = Lvl->P1->VxURStatus = Lvl->P1->VxULStatus =
+			Lvl->P1->VxDLStatus = Lvl->P1->VxDRStatus = nullCollisionInfo();
 			polyResolve(plGetShape(Lvl->P1));
 			List LExtracted = gridGetPolygonList(&Lvl->W->CollisionGrid, Lvl->P1->Shape);
 			it = lstFirst(&LExtracted);
@@ -364,9 +367,15 @@ void lvlUpdate(Level* Lvl)
 				if(Info.P1 != NULL)
 				{
 					/* Test des propriétés de la collision */
-					if(Info.Edge == plGetRdD(Lvl->P1) || Info.V == plGetVxDL(Lvl->P1) || Info.V == plGetVxDR(Lvl->P1))
-						plSetOnGround(Lvl->P1, 1),
-						plSetGroundNormal(Lvl->P1, Info.Normal);
+					if(Info.Edge == plGetRdU(Lvl->P1)) Lvl->P1->RdUStatus = Info;
+					else if(Info.Edge == plGetRdR(Lvl->P1)) Lvl->P1->RdRStatus = Info;
+					else if(Info.Edge == plGetRdD(Lvl->P1)) Lvl->P1->RdDStatus = Info;
+					else if(Info.Edge == plGetRdL(Lvl->P1)) Lvl->P1->RdLStatus = Info;
+					if(Info.V == plGetVxUL(Lvl->P1)) Lvl->P1->VxULStatus = Info;
+					else if(Info.V == plGetVxUR(Lvl->P1)) Lvl->P1->VxURStatus = Info;
+					else if(Info.V == plGetVxDR(Lvl->P1)) Lvl->P1->VxDRStatus = Info;
+					else if(Info.V == plGetVxDL(Lvl->P1)) Lvl->P1->VxDLStatus = Info;
+
 					polyHandleCollision(Info);
 				}
 				it = nodeGetNext(it);

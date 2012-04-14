@@ -36,6 +36,7 @@ void gmInit(Game* G)
 	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
 
+	G->Window->setActive();
 }
 
 void gmFree(Game* G)
@@ -74,7 +75,7 @@ void gmPlay(Game* G)
 				G->Window->close();
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-				G->Window->close();
+				G->Window->close(); /** @todo Faire apparaitre un menu ici **/
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
 				mnMoveCursor(&G->GameMenu, MENU_GO_DOWN);
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
@@ -96,16 +97,16 @@ void gmPlay(Game* G)
 						break;
 				}
 			}
-			
+
 			if (event.type == sf::Event::TextEntered)
 			{
-				
+
 				unsigned char c;
 				sf::Utf32::encodeAnsi(event.text.unicode, &c);
 				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_RIGHT, c, FALSE);
 				//printf("text entered: %c", c);
 			}
-			
+
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
 				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_RIGHT, 0, TRUE);
 
@@ -129,7 +130,7 @@ void gmPlay(Game* G)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
             plJump(G->Lvl->P1);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-            plJump(G->Lvl->P1);
+            printf("Tu pensais faire quoi ? Baisser la vue ?");
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             plMoveL(G->Lvl->P1);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -137,8 +138,6 @@ void gmPlay(Game* G)
 
 		plUpdate(G->Lvl->P1);
 		Center = polyComputeCenter(G->Lvl->P1->Shape);
-
-		G->Window->setActive();
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);

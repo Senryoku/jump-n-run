@@ -12,6 +12,8 @@ void plInit(Player* P)
 	P->Shape = NULL;
 	P->Grab = NULL;
 	P->Stable = NULL;
+	P->VxULStatus = P->VxURStatus = P->VxDRStatus = P->VxDLStatus =
+		P->RdUStatus = P->RdRStatus = P->RdDStatus = P->RdLStatus = nullCollisionInfo();
 }
 
 void plFree(Player* P)
@@ -20,7 +22,7 @@ void plFree(Player* P)
 	P->Shape = NULL;
 	if(P->Grab != NULL) delElastic(P->Grab);
 	P->Grab = NULL;
-	
+
 	if (P->Stable != NULL) delVertex(P->Stable);
 	P->Stable = NULL;
 }
@@ -29,16 +31,6 @@ void delPlayer(Player* P)
 {
 	plFree(P);
 	free(P);
-}
-
-Bool plGetOnGround(Player* P)
-{
-	return P->OnGround;
-}
-
-Vec2 plGetGroundNormal(Player* P)
-{
-	return P->GroundNormal;
 }
 
 Polygon* plGetShape(Player* P)
@@ -86,17 +78,6 @@ Rigid* plGetRdL(Player* P)
 	return polyGetRigid(P->Shape, 3);
 }
 
-void plSetOnGround(Player* P, Bool B)
-{
-	P->OnGround = B;
-}
-
-
-void plSetGroundNormal(Player* P, Vec2 N)
-{
-	P->GroundNormal = N;
-}
-
 void plSetPosition(Player* Pl, Vec2 Pos)
 {
 	if(Pl->Shape != NULL)
@@ -110,19 +91,26 @@ void plSetShape(Player* P, Polygon* Shape)
 
 void plMoveR(Player* P)
 {
-	if(P->OnGround) polyApplyForce(P->Shape, vec2(1.f, 0.f));
+	if(P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL
+		|| P->RdDStatus.P1 != NULL) polyApplyForce(P->Shape, vec2(1.f, 0.f));
 	else polyApplyForce(P->Shape, vec2(0.5f, 0.f));
 }
 
 void plMoveL(Player* P)
 {
-	if(P->OnGround) polyApplyForce(P->Shape, vec2(-1.f, 0.f));
+	if(P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL
+		|| P->RdDStatus.P1 != NULL) polyApplyForce(P->Shape, vec2(-1.f, 0.f));
 	else polyApplyForce(P->Shape, vec2(-0.5f, 0.f));
 }
 
 void plJump(Player* P)
 {
-	if(P->OnGround) polyApplyForce(P->Shape, vec2Prod(P->GroundNormal, 20.f));
+	if(P->VxDLStatus.P1 != NULL)
+		polyApplyForce(P->Shape, vec2Prod(P->VxDLStatus.Normal, 20.f));
+	else if(P->VxDRStatus.P1 != NULL)
+		polyApplyForce(P->Shape, vec2Prod(P->VxDRStatus.Normal, 20.f));
+	else if(P->RdDStatus.P1 != NULL)
+		polyApplyForce(P->Shape, vec2Prod(P->RdDStatus.Normal, 20.f));
 }
 
 void plGetUp(Player* P)
@@ -159,12 +147,12 @@ void plUpdate(Player* P)
 void plCreateVertex(Player* P, World* W)
 {
 	P->Neck = newVertex(), P->HeadLeft = newVertex(), P->HeadRight = newVertex(), P->Base = newVertex(), P->LeftArm1 = newVertex(), P->LeftArm2 = newVertex(), P->RightArm1 = newVertex(), P->RightArm2 = newVertex(), P->LeftLeg1 = newVertex(), P->LeftLeg2 = newVertex(), P->RightLeg1 = newVertex(), P->RightLeg2 = newVertex();
-	
+
 	/*vxSetFixe(P->Base, TRUE);
 	vxSetFixe(P->Neck, TRUE);
 	vxSetFixe(P->HeadLeft, TRUE);
 	 */
-	
+
 	wdAddVertex(W, P->Neck);
 	wdAddVertex(W, P->HeadLeft);
 	wdAddVertex(W, P->HeadRight);
@@ -177,7 +165,7 @@ void plCreateVertex(Player* P, World* W)
 	wdAddVertex(W, P->LeftLeg2);
 	wdAddVertex(W, P->RightLeg1);
 	wdAddVertex(W, P->RightLeg2);
-	
+
 }
 
 void plCreateRigids(Player* P, World* W)
@@ -195,9 +183,9 @@ void plCreateRigids(Player* P, World* W)
 	vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->Base), vec2(0.f, 80.f)));
 	vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 40.f)));
 	vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->Base), vec2(0.f, 80.f)));
-	
+
 	Bool usePolys=1;
-	
+
 	if (!usePolys)
 	{
 		Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
@@ -205,18 +193,18 @@ void plCreateRigids(Player* P, World* W)
 		LA2 = newRigid(P->LeftArm1, P->LeftArm2, -1.f);
 		RA1 = newRigid(P->Neck, P->RightArm1, -1.f);
 		RA2 = newRigid(P->RightArm1, P->RightArm2, -1.f);
-		
+
 		LL1 = newRigid(P->Base, P->LeftLeg1, -1.f);
 		LL2 = newRigid(P->LeftLeg1, P->LeftLeg2, -1.f);
 		RL1 = newRigid(P->Base, P->RightLeg1, -1.f);
 		RL2 = newRigid(P->RightLeg1, P->RightLeg2, -1.f);
-		
+
 		Body = newRigid(P->Base, P->Neck, -1.f);
-		
+
 		H1 = newRigid(P->Base, P->HeadLeft, -1.f);
 		H2 = newRigid(P->Base, P->HeadRight, -1.f);
 		H3 = newRigid(P->HeadLeft, P->HeadRight, -1.f);
-		
+
 		wdAddRigid(W, Body);
 		wdAddRigid(W, LA1);
 		wdAddRigid(W, LA2);
@@ -233,22 +221,22 @@ void plCreateRigids(Player* P, World* W)
 	else
 	{
 		Polygon *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *head;
-		
+
 		head = newPolygon(3, P->Neck, P->HeadLeft, P->HeadRight);
 		wdAddPolygon(W, head);
-		
+
 		LA1 = newPolygon(2, P->Neck, P->LeftArm1);
 		LA2 = newPolygon(2, P->LeftArm1, P->LeftArm2);
 		RA1 = newPolygon(2, P->Neck, P->RightArm1);
 		RA2 = newPolygon(2, P->RightArm1, P->RightArm2);
-		
+
 		LL1 = newPolygon(2, P->Base, P->LeftLeg1);
 		LL2 = newPolygon(2, P->LeftLeg1, P->LeftLeg2);
 		RL1 = newPolygon(2, P->Base, P->RightLeg1);
 		RL2 = newPolygon(2, P->RightLeg1, P->RightLeg2);
-		
+
 		Body = newPolygon(2, P->Base, P->Neck);
-		
+
 		wdAddPolygon(W, Body);
 		wdAddPolygon(W, LA1);
 		wdAddPolygon(W, LA2);
@@ -259,7 +247,7 @@ void plCreateRigids(Player* P, World* W)
 		wdAddPolygon(W, RL1);
 		wdAddPolygon(W, RL2);
 	}
-	
+
 }
 
 void plSetPosition(Player* P, float x, float y)
@@ -277,8 +265,8 @@ void plSetPosition(Player* P, float x, float y)
 	LL2 =vec2Sub(vxGetPosition(P->LeftLeg2), vxGetPosition(P->Base));
 	RL1 =vec2Sub(vxGetPosition(P->RightLeg1), vxGetPosition(P->Base));
 	RL2 =vec2Sub(vxGetPosition(P->RightLeg2), vxGetPosition(P->Base));
-	
-	
+
+
 	vxSetPosition(P->Base, vec2(x, y));
 	vxSetPosition(P->Neck, vec2(x+N.x, y+N.y));
 	vxSetPosition(P->HeadLeft, vec2(x+HL.x, y+HL.y));
@@ -291,6 +279,6 @@ void plSetPosition(Player* P, float x, float y)
 	vxSetPosition(P->LeftLeg2, vec2(x+LL2.x, y+LL2.y));
 	vxSetPosition(P->RightLeg1, vec2(x+RL1.x, y+RL1.y));
 	vxSetPosition(P->RightLeg2, vec2(x+RL2.x, y+RL2.y));
-	
-	
+
+
 }

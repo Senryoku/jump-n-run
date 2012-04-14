@@ -70,7 +70,7 @@ void appRun(LevelEditorApp* App)
 				return;
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-				return;
+				return; /** @todo Faire apparaitre un menu ici **/
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
@@ -99,6 +99,9 @@ void appRun(LevelEditorApp* App)
 						}
 						break;
 					case sf::Mouse::Right :
+						/** @todo Si une autre touche est appuyé avec le clic droit
+						 * (ex : E pour Elastic), faire appel à wdGetNearestElastic
+						 * et faire apparaître un menu pour l'édition de cet Elastic **/
 						lvledGrabEl(&App->Led);
 						break;
 					default :

@@ -8,7 +8,6 @@
  *
  * Interface de LevelEditor
  * Préfixe des méthodes : app
- * @todo Sortir la gestion de la configuration
  **/
 
 typedef struct
@@ -20,16 +19,39 @@ typedef struct
 	char WorkingPath[255];
 } LevelEditorApp;
 
+/** @brief Initialisation de LelvelEditorApp
+ *
+**/
 void appInit(LevelEditorApp* App);
 
+/** @brief Initialistion la fenêtre
+ *
+ * Est appellé par appInit
+**/
 void appWindowInit(LevelEditorApp* App);
 
+/** @brief Détruit la fenêtre
+ *
+ * Est appellé par appFree
+**/
 void appWindowFree(LevelEditorApp* App);
 
+/** @brief Libère les ressources  utilisées par LevelEditorApp
+ *
+**/
 void appFree(LevelEditorApp* App);
 
+/** @brief Lance l'éditeur de niveau
+ *
+ * Boucle principale de l'éditeur de niveau
+**/
 void appRun(LevelEditorApp* App);
 
-void appSetWorkingPat(LevelEditorApp* App, const char* Path);
+/** @brief Sélectionne le fichier en cours d'édition
+ *
+ * levels/tmpEditor.lvl par défaut
+ * Détermine où est sauvegardé le niveau en cours et quel fichier sera chargé
+**/
+void appSetWorkingPath(LevelEditorApp* App, const char* Path);
 
 #endif // _LEVELEDITORAPP_H_
