@@ -266,6 +266,27 @@ void wdFree(World *W);
 **/
 void delWorld(World *W);
 
+/** @brief Accès à l'iterateur de la liste de Vertex
+ *
+ * @param W World
+ * @return Iterateur sur le premier node de la liste des Vertex
+ */
+Node* wdGetVxIt(World* W);
+
+/** @brief Accès à l'iterateur de la liste de Elastic
+ *
+ * @param W World
+ * @return Iterateur sur le premier node de la liste des Elastic
+ */
+Node* wdGetElIt(World* W);
+
+/** @brief Accès à l'iterateur de la liste de Rigid
+ *
+ * @param W World
+ * @return Iterateur sur le premier node de la liste des Rigid
+ */
+Node* wdGetRdIt(World* W);
+
 void wdUpdateGrid(World *W);
 
 /** @}
