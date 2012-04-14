@@ -415,6 +415,16 @@ Rigid* polyGetRigid(Polygon* P, unsigned int i)
 	return (Rigid*) daGet(&P->Rigids, i);
 }
 
+unsigned int polyGetInternalRdCount(Polygon* P)
+{
+	return daGetSize(&P->InternalRigids);
+}
+
+Rigid* polyGetInternalRigid(Polygon* P, unsigned int i)
+{
+	return (Rigid*) daGet(&P->InternalRigids, i);
+}
+
 void polySetFixe(Polygon* P, Bool B)
 {
 	unsigned int i;

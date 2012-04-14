@@ -283,9 +283,24 @@ Vertex* wdGetNearest(World* W, float X, float Y)
 
 Elastic* wdGetNearestElastic(World* W, float X, float Y)
 {
+	/* Voir wdGetNearestRigid */
 	float Dist = INFINITY, tmpDist;
+	Vertex* NearestVx = wdGetNearest(W, X, Y);
 	Elastic *Nearest = NULL, *tmpElastic;
-	Node* it = lstFirst(&W->Elastics);
+	Node* it;
+	List lstEl;
+	lstInit(&lstEl);
+
+	it = wdGetElasticIt(W);
+	while(!nodeEnd(it))
+	{
+		if(elGetV1((Elastic*) nodeGetData(it)) == NearestVx ||
+			elGetV2((Elastic*) nodeGetData(it)) == NearestVx)
+			lstAdd(&lstEl, nodeGetData(it));
+		it = nodeGetNext(it);
+	}
+
+	it = lstFirst(&lstEl);
 	while(!nodeEnd(it))
 	{
 		tmpElastic = (Elastic*) nodeGetData(it);
@@ -293,7 +308,7 @@ Elastic* wdGetNearestElastic(World* W, float X, float Y)
 		Vec2 V1 = vec2(X - V1Pos.x, Y - V1Pos.y);
 		Vec2 V2Pos = vxGetPosition(elGetV2(tmpElastic));
 		Vec2 V2 = vec2(X - V2Pos.x, Y - V2Pos.y);
-		tmpDist = MIN(vec2SqLength(V1), vec2SqLength(V2));
+		tmpDist = MAX(vec2SqLength(V1), vec2SqLength(V2));
 		if (tmpDist < Dist)
 		{
 			Dist = tmpDist;
@@ -302,14 +317,53 @@ Elastic* wdGetNearestElastic(World* W, float X, float Y)
 		it = nodeGetNext(it);
 	}
 
+	lstFree(&lstEl);
 	return Nearest;
 }
 
 Rigid* wdGetNearestRigid(World* W, float X, float Y)
 {
 	float Dist = INFINITY, tmpDist;
+	unsigned int i;
+	Vertex* NearestVx = wdGetNearest(W, X, Y);
 	Rigid *Nearest = NULL, *tmpRigid;
-	Node* it = lstFirst(&W->Rigids);
+	Node* it;
+	List lstRd;
+	lstInit(&lstRd);
+
+	/* Recherche de tout les rigids formé à partir du Vertex le plus proche */
+	it = wdGetRigidIt(W);
+	while(!nodeEnd(it))
+	{
+		if(rdGetV1((Rigid*) nodeGetData(it)) == NearestVx ||
+			rdGetV2((Rigid*) nodeGetData(it)) == NearestVx)
+			lstAdd(&lstRd, nodeGetData(it));
+		it = nodeGetNext(it);
+	}
+
+	/* Recherche aussi dans les polygons */
+	it = wdGetPolyIt(W);
+	while(!nodeEnd(it))
+	{
+		for(i = 0; i < polyGetRdCount((Polygon*) nodeGetData(it)); i++)
+		{
+			tmpRigid = polyGetRigid((Polygon*) nodeGetData(it), i);
+			if(rdGetV1(tmpRigid) == NearestVx ||
+				rdGetV2(tmpRigid) == NearestVx)
+				lstAdd(&lstRd, tmpRigid);
+		}
+		for(i = 0; i < polyGetInternalRdCount((Polygon*) nodeGetData(it)); i++)
+		{
+			tmpRigid = polyGetInternalRigid((Polygon*) nodeGetData(it), i);
+			if(rdGetV1(tmpRigid) == NearestVx ||
+				rdGetV2(tmpRigid) == NearestVx)
+				lstAdd(&lstRd, tmpRigid);
+		}
+		it = nodeGetNext(it);
+	}
+
+	/* Détermination du Rigid le plus adapté (le deuxième vertex est le plus proche possible) */
+	it = lstFirst(&lstRd);
 	while(!nodeEnd(it))
 	{
 		tmpRigid = (Rigid*) nodeGetData(it);
@@ -317,7 +371,8 @@ Rigid* wdGetNearestRigid(World* W, float X, float Y)
 		Vec2 V1 = vec2(X - V1Pos.x, Y - V1Pos.y);
 		Vec2 V2Pos = vxGetPosition(rdGetV2(tmpRigid));
 		Vec2 V2 = vec2(X - V2Pos.x, Y - V2Pos.y);
-		tmpDist = MIN(vec2SqLength(V1), vec2SqLength(V2));
+		/* Le plus proche est NearestVx, on veut tester l'autre */
+		tmpDist = MAX(vec2SqLength(V1), vec2SqLength(V2));
 		if (tmpDist < Dist)
 		{
 			Dist = tmpDist;
@@ -326,6 +381,7 @@ Rigid* wdGetNearestRigid(World* W, float X, float Y)
 		it = nodeGetNext(it);
 	}
 
+	lstFree(&lstRd);
 	return Nearest;
 }
 

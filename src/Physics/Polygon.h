@@ -239,6 +239,13 @@ unsigned int polyGetRdCount(Polygon* P);
 **/
 Rigid* polyGetRigid(Polygon* P, unsigned int i);
 
+/** @brief Retourne le nombre de Rigids internes composants le contour du polygone
+**/
+unsigned int polyGetInternalRdCount(Polygon* P);
+
+/** @brief Retourne le Rigid interne i
+**/
+Rigid* polyGetInternalRigid(Polygon* P, unsigned int i);
 
 /** @brief Applique une force à tous les vertices du Polygon
  *
