@@ -11,14 +11,14 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 	I->Data = Data;
 	I->Type = Type;
 	
-	if (I->Type == ITEM_INPUT)
+	if (I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
 		I->Data = new std::string;
 }
 
 void mniFree(MenuItem* I)
 {
 	free(I->Text);
-	if (I->Type == ITEM_INPUT)
+	if (I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
 		delete (std::string*)I->Data;
 }
 
@@ -89,6 +89,7 @@ void foo(void)
 void mniUse(MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del)
 {
 	void* Data;
+	
 	switch (mniGetType(I))
 	{
 		case ITEM_BUTTON:
@@ -112,9 +113,25 @@ void mniUse(MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char Ke
 			std::string* str = (std::string*)I->Data;
 			if (Del && str->size()>0)
 				str->resize(str->size() - 1);
-			else
+			else if (KeyCode>=32 && KeyCode<=126) /* printable chars */
 				str->push_back(KeyCode);
 			printf("str: %s\n", str->c_str());
+			break;
+		}
+		case ITEM_INPUT_VALUE:
+		{
+			std::string* str = (std::string*)I->Data;
+			if (Del && str->size()>0)
+				str->resize(str->size() - 1);
+			else
+			{
+				if (KeyCode == ',')
+					KeyCode = '.';
+				
+				if ((KeyCode >= '0' && KeyCode <= '9') || (KeyCode == '.' && str->find('.') == std::string::npos))
+						str->push_back(KeyCode);
+			}
+				
 			break;
 		}
 		case ITEM_VALUE:
@@ -123,7 +140,7 @@ void mniUse(MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char Ke
 			{
 				if (IDir == MOVE_RIGHT)
 					*((float*) Data) += I->Incr; 
-				else
+				else if (IDir == MOVE_LEFT)
 					*((float*) Data) -= I->Incr;
 				
 				if (*((float*) Data) > I->MaxValue)
@@ -154,4 +171,11 @@ void mniSetMinMaxValues(MenuItem* I, float Min, float Max)
 {
 	I->MinValue = Min;
 	I->MaxValue = Max;
+}
+
+float mniGetInputValue(const MenuItem* I)
+{
+	float val;
+	sscanf(((std::string*)I->Data)->c_str(), "%f", &val);
+	return val;
 }

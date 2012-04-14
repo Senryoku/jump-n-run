@@ -25,13 +25,14 @@ void gmInit(Game* G)
 
 	ItemID IID;
 	mnInit(&G->GameMenu);
-	mnAddMenu(&G->GameMenu, "Main Menu", 5);
+	mnAddMenu(&G->GameMenu, "Main Menu", 6);
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
 	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
 	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10.f);
 	mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
 	G->testy = 0.f;
 	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "Input value", ITEM_INPUT_VALUE, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Item 4", ITEM_BUTTON, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
@@ -100,15 +101,17 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::TextEntered)
 			{
-
-				unsigned char c;
+				unsigned int c;
 				sf::Utf32::encodeAnsi(event.text.unicode, &c);
-				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_RIGHT, c, FALSE);
+				//if (i>=32 && i<=126) /* printables chars */
+				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_NONE, (unsigned char) c, FALSE);
+				//if (mniGetType(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))) == ITEM_INPUT_VALUE)
+				//	printf("value is %f\n", mniGetInputValue(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))));
 				//printf("text entered: %c", c);
 			}
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
-				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_RIGHT, 0, TRUE);
+				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_NONE, 0, TRUE);
 
 			if(event.type == sf::Event::MouseButtonReleased)
 			{

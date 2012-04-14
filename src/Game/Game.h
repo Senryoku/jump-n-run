@@ -21,6 +21,7 @@ typedef struct
 	float WindowHeight;
 	float testy;
 	Bool testyBool;
+	float test2;
 } Game;
 
 /** @brief Initialise le jeu

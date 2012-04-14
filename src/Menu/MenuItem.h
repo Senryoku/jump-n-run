@@ -14,12 +14,15 @@ typedef unsigned char ItemType;
 typedef unsigned char ItemDirection; /* gauche ou droite pour incrémenter des valeurs */
 
 #define ITEM_BUTTON 0x00 /**< un boutton classique */
-#define ITEM_INPUT 0x01 /**< On ecrit dans cet item */
+#define ITEM_INPUT 0x01 /**< On écrit dans cet item */
 #define ITEM_CHECKBOX 0x02 /**< Booleen ex fullscreen */
 #define ITEM_VALUE 0x03 /**< Plage de valeur ex 0-50 */
 #define ITEM_LABEL 0x04 /**< Un objet qui ne peut pas être sélectioné */
-#define MOVE_LEFT 0x00
-#define MOVE_RIGHT 0x01
+#define ITEM_INPUT_VALUE 0x05 /**< On écrit dans cet item que des chiffres ou un point */
+
+#define MOVE_NONE 0x00
+#define MOVE_LEFT 0x01
+#define MOVE_RIGHT 0x02
 
 
 /**
@@ -119,6 +122,13 @@ float* mniGetZoom(MenuItem* I);
  * @return pointeur vers Data de l'item
  */
 void* mniGetData(MenuItem* I);
+
+/**
+ * @brief Accesseur à la valeur numérique d'un ITEM_INPUT_VALUE
+ * @param I MenuItem auquel s'applique la fonction
+ * @return réel
+ */
+float mniGetInputValue(const MenuItem* I);
 
 /**
  * @brief Lance la fonction associée à l'item

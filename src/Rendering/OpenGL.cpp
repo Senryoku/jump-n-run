@@ -204,6 +204,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 				break;
 
 			case ITEM_INPUT:
+			case ITEM_INPUT_VALUE:
 				ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
 				/** @todo bug quand on fait backspace alors que la chaine est vide, étrange... */
 				break;
@@ -254,6 +255,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			break;
 
 		case ITEM_INPUT:
+		case ITEM_INPUT_VALUE:
 			ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
 			break;
 		case ITEM_VALUE:
