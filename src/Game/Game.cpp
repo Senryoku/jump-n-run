@@ -38,7 +38,7 @@ void gmInit(Game* G)
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
 
 	G->Window->setActive();
-	
+
 }
 
 void gmFree(Game* G)
@@ -59,12 +59,14 @@ void gmPlay(Game* G)
 {
 	if(G->Lvl == NULL) return;
 	Vec2 Center;
+	Score Sc;
 
 	lvlLoadedInit(G->Lvl);
 
 
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
+	sf::Clock Clk;
 	while (G->Window->isOpen())
 	{
 		MouseX = ViewWidth*sf::Mouse::getPosition(*G->Window).x/G->WindowWidth + ViewX;
@@ -141,11 +143,18 @@ void gmPlay(Game* G)
             plMoveR(G->Lvl->P1);
 
 		plUpdate(G->Lvl->P1);
-		Center = polyComputeCenter(G->Lvl->P1->Shape);
+
+		if(lvlIsGoalReached(G->Lvl))
+		{
+			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score */
+			scInit(&Sc, "Senryoku", G->Lvl->Name, G->Lvl->MD5, Clk.getElapsedTime().asMilliseconds()/10);
+			// if(scSend(&Sc) == 1) { MenuErreur } else { MenuEnvoiReussi }
+		}
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		Center = polyComputeCenter(G->Lvl->P1->Shape);
 		ViewX = Center.x - ViewWidth/2;
 		ViewY = Center.y - ViewHeight/2;
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);

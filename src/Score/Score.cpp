@@ -29,8 +29,8 @@ Bool scSend(Score* S)
 	strcat(Body, Time);
 
 	sf::Http::Request request("JumpNRun/submit.php");
-    request.setMethod(sf::Http::Request::Post);
-    request.setBody(Body);
+	request.setMethod(sf::Http::Request::Post);
+	request.setBody(Body);
 	sf::Http::Response response = http.sendRequest(request);
 
 	sf::Http::Response::Status status = response.getStatus();

@@ -1,11 +1,12 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include <string.h>
 
 #include <Rendering/OpenGL.h>
 #include <Level/Level.h>
 #include <Menu/Menu.h>
-#include <string.h>
+#include <Score/Score.h>
 
 /** @defgroup Game
  *

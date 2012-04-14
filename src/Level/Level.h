@@ -5,6 +5,7 @@
 #include <Physics/Physics.h>
 #include <Objects/Player.h>
 #include <string.h>
+#include <Core/md5.h>
 
 /** @defgroup Level
  *
@@ -74,6 +75,11 @@ void lvlLoadedInit(Level* Lvl);
  * @param Lvl Level à mettre à jour
 **/
 void lvlUpdate(Level* Lvl);
+
+/** @brief Retourne vrai si l'objectif est atteint par le joueur
+ *
+**/
+Bool lvlIsGoalReached(Level* L);
 
 /** @brief Accesseur de W
 **/

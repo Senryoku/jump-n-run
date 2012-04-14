@@ -4,15 +4,14 @@
 
 int main(int argc, char** argv)
 {
-	/*
-	Score Sc;
-	scInit(&Sc, "Senryoku", "Test.lvl", "375", 25000);
+	/*Score Sc;
+	scInit(&Sc, "Senryoku", "Test.lvl", "375", 6000);
 	if(scSend(&Sc))
 		printf("Erreur d'envoi\n");
 	else
 		printf("Score envoyé\n");
-	scFree(&Sc);
-	*/
+	scFree(&Sc);*/
+
 
 	LevelEditorApp App;
 

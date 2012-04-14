@@ -60,7 +60,8 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	strcpy(Lvl->Name, Name);
 	printf("Filename : %s\n", Lvl->Name);
 
-	/** @todo c'est ici qu'il faut ajouter le calcul du MD5 ^_^ **/
+	strcpy(Lvl->MD5, md5FromFile(File).c_str());
+	printf("MD5 : %s\n", Lvl->MD5);
 
 	FILE* f;
 	f=fopen(File, "r");
@@ -399,6 +400,16 @@ void lvlUpdate(Level* Lvl)
 			lstFree(&LExtracted);
 		}
 	}
+}
+
+Bool lvlIsGoalReached(Level* L)
+{
+	BBox B = polyGetBBox(L->P1->Shape);
+	if(B.Left < L->Goal.x && B.Right > L->Goal.x &&
+		B.Top < L->Goal.y && B.Bottom > L->Goal.y)
+		return 1;
+	else
+		return 0;
 }
 
 World* lvlGetWorld(Level* Lvl)
