@@ -46,6 +46,22 @@ Bool lvlLoad(Level* Lvl, const char* File)
 {
 	printf("Chargement...\n");
 
+	/* Recherche du nom du fichier */
+	char Path[255], Name[255];
+	char* tmp;
+	strcpy(Path, File);
+	tmp = strtok(Path , "/");
+	while(tmp != NULL)
+	{
+		strcpy(Name, tmp);
+		tmp = strtok(NULL, "/");
+	}
+
+	strcpy(Lvl->Name, Name);
+	printf("Filename : %s\n", Lvl->Name);
+
+	/** @todo c'est ici qu'il faut ajouter le calcul du MD5 ^_^ **/
+
 	FILE* f;
 	f=fopen(File, "r");
 

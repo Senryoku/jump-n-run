@@ -19,6 +19,8 @@
 **/
 typedef struct
 {
+	char Name[255]; /**< Nom du fichier chargé **/
+	char MD5[255]; /**< MD5 du fichier chargé **/
 	World* W; /**< Monde physique **/
 	Vec2 Spawn; /**< Point d'apparition du joueur **/
 	Vec2 Goal; /**< Objectif **/
