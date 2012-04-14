@@ -194,6 +194,28 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		else
 			ItemText.setString(std::string(mniGetText(I)));
 		
+		switch (mniGetType(I)) 
+		{
+			case ITEM_CHECKBOX:
+				if (*(Bool*)mniGetData(I))
+					ItemText.setString(ItemText.getString() + ": Yes");
+				else
+					ItemText.setString(ItemText.getString() + ": No");
+				break;
+			
+			case ITEM_INPUT:
+				ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
+				/** @todo bug quand on fait backspace alors que la chaine est vide, étrange... */
+				break;
+			case ITEM_VALUE:
+				char ValueText[300];
+				sprintf(ValueText, ": %.f", *(float*)mniGetData(I));
+				ItemText.setString(ItemText.getString() + std::string(ValueText));
+				break;
+			default:
+				break;
+		}
+		
 		ItemText.setScale(1.f, 1.f);
 		ItemText.setPosition(Position.x+5.f, Position.y+yoffset-1.5f-10.f);
 
@@ -221,6 +243,27 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		ItemText.setString(" "); /* une chaîne vide donne une erreur */
 	else
 		ItemText.setString(std::string(mniGetText(I)));
+	
+	switch (mniGetType(I)) 
+	{
+		case ITEM_CHECKBOX:
+			if (*(Bool*)mniGetData(I))
+				ItemText.setString(ItemText.getString() + ": Yes");
+			else
+				ItemText.setString(ItemText.getString() + ": No");
+			break;
+			
+		case ITEM_INPUT:
+			ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
+			break;
+		case ITEM_VALUE:
+			char ValueText[300];
+			sprintf(ValueText, ": %.f", *(float*)mniGetData(I));
+			ItemText.setString(ItemText.getString() + std::string(ValueText));
+			break;
+		default:
+			break;
+	}
 	
 	ItemText.setScale(1.f, 1.f);
 	ItemText.setPosition(Position.x+5.f, Position.y+selOffset-1.5f-10.f);

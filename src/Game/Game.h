@@ -19,6 +19,8 @@ typedef struct
 	sf::RenderWindow* Window;
 	float WindowWidth;
 	float WindowHeight;
+	float testy;
+	Bool testyBool;
 } Game;
 
 /** @brief Initialise le jeu

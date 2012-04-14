@@ -39,7 +39,7 @@ ItemID mnAddItem(Menu* M, MenuID MID, const char* Text, ItemType Type, void (*Fu
 	MenuOfItems* moi = (MenuOfItems*)daGet(M->Menus, MID);
 	moiAddItem(moi, Text, Type, Function, Data);
 	
-	return (moi->ItemsAdded);
+	return (moi->ItemsAdded-1);
 }
 
 void mnSetItemHeight(Menu* M, float ItemHeight)
@@ -126,4 +126,9 @@ void mnSetCursor(Menu* M, Vec2 MousePos)
 Vec2 mnGetPosition(const Menu* M)
 {
 	return vec2(M->MenuX, M->MenuY);
+}
+
+MenuItem* mnGetItem(const Menu* M, MenuID MID, ItemID IID)
+{
+	return moiGetItem((MenuOfItems*) daGet(M->Menus, MID), IID);
 }

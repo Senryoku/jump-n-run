@@ -11,12 +11,15 @@
  */
 
 typedef unsigned char ItemType;
+typedef unsigned char ItemDirection; /* gauche ou droite pour incrémenter des valeurs */
 
 #define ITEM_BUTTON 0x00 /**< un boutton classique */
 #define ITEM_INPUT 0x01 /**< On ecrit dans cet item */
 #define ITEM_CHECKBOX 0x02 /**< Booleen ex fullscreen */
 #define ITEM_VALUE 0x03 /**< Plage de valeur ex 0-50 */
 #define ITEM_LABEL 0x04 /**< Un objet qui ne peut pas être sélectioné */
+#define MOVE_LEFT 0x00
+#define MOVE_RIGHT 0x01
 
 
 /**
@@ -29,7 +32,9 @@ typedef struct
 	ItemType Type; /**< type d'item bouton, input, percentage **/
 	void (*Function)(void); /**< Fonction de l'item **/
 	void* Data; /**< Data qui peut être modifié par l'utilisateur **/
-	
+	float Incr; /**< incrémentation pour les ITEM_VALUE **/
+	float MinValue; /**< Valeur minimale pour les ITEM_VALUE **/
+	float MaxValue; /**< Valeur maximale pour les ITEM_VALUE **/
 	
 } MenuItem;
 
@@ -62,6 +67,28 @@ void mniSetText(MenuItem* I, const char* Text);
  * @return Texte de l'item
  */
 const char* mniGetText(const MenuItem* I);
+
+/**
+ * @brief Mutateur de Incr
+ * @param I MenuItem auquel s'applique la fonction
+ * @param Incr nouvelle valeur d'incrémentation
+ */
+void mniSetIncr(MenuItem* I, float Incr);
+
+/**
+ * @brief Accesseur de Incr
+ * @param I MenuItem auquel s'applique la fonction
+ * @param Incr nouvelle valeur d'incrémentation
+ */
+float mniGetIncr(const MenuItem* I);
+
+/**
+ * @brief Mutateur des limites pour un ITEM_VALUE
+ * @param I MenuItem auquel s'applique la fonction
+ * @param Min Valeur minimale
+ * @param Max Valeur maximale
+ */
+void mniSetMinMaxValues(MenuItem* I, float Min, float Max);
 
 /**
  * @brief Mutateur de Type
@@ -98,6 +125,15 @@ void* mniGetData(MenuItem* I);
  * @param I MenuItem auquel s'applique la fonction
  */
 void mniRunFunction(MenuItem* I);
+
+/**
+ * @brief gère l'entrée de l'item selon son type
+ *
+ * Cette fonction est à implémenter en dehors de ce module car elle est dépendante des libraries utilisées pour le fenêtrage @todo le nom de la fonction est à changer, t'as une idée? xD
+ * @param I MenuItem aquel s'applique la fonction
+ *
+ */
+void mniUse(MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del);
 
 void mniRegressionTest(void);
 

@@ -131,6 +131,15 @@ void mnGoToMenu(Menu* M, MenuID MID);
  **/
 MenuID mnGetCurrentMenuID(const Menu* M);
 
+/** @brief Donne accès à un item
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @param L'ID du menu 
+ * @param L'ID de l'item
+ * @return pointeur vers l'item
+ **/
+MenuItem* mnGetItem(const Menu* M, MenuID MID, ItemID IID);
+
 /** @brief Donne accès au menu qui est courament sur l'écran
  *
  * @param M Menu à laquelle s'applique la fonction

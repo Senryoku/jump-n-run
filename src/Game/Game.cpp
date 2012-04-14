@@ -23,12 +23,17 @@ void gmInit(Game* G)
 
 	G->Lvl = newLevel(0.f, 0.f);
 
+	ItemID IID;
 	mnInit(&G->GameMenu);
-	mnAddMenu(&G->GameMenu, "Main Menu", 4);
+	mnAddMenu(&G->GameMenu, "Main Menu", 5);
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "Item 2", ITEM_BUTTON, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "Item 3", ITEM_LABEL, NULL, NULL);
+	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
+	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10.f);
+	mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
+	G->testy = 0.f;
+	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Item 4", ITEM_BUTTON, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
 
 }
@@ -72,6 +77,10 @@ void gmPlay(Game* G)
 				G->Window->close();
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
 				mnMoveCursor(&G->GameMenu, MENU_GO_DOWN);
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
+				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_LEFT, 0, FALSE);
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
+				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_RIGHT, 0, FALSE);
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
@@ -87,6 +96,18 @@ void gmPlay(Game* G)
 						break;
 				}
 			}
+			
+			if (event.type == sf::Event::TextEntered)
+			{
+				
+				unsigned char c;
+				sf::Utf32::encodeAnsi(event.text.unicode, &c);
+				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_RIGHT, c, FALSE);
+				//printf("text entered: %c", c);
+			}
+			
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
+				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_RIGHT, 0, TRUE);
 
 			if(event.type == sf::Event::MouseButtonReleased)
 			{
@@ -138,3 +159,5 @@ void gmPlay(Game* G)
 		G->Window->display();
 	}
 }
+
+
