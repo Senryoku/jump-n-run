@@ -120,7 +120,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		//printf("Read: %s", read);
 		item=o_end;
 		polyFixed=FALSE;
-		sscanf(read, "%u %u %i #%.s\n", &item, &nVertex, &booly);
+		sscanf(read, "%u %u %i #\n", &item, &nVertex, &booly);
 		polyFixed = (Bool)booly;
 
 		switch (item)
