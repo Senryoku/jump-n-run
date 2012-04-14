@@ -38,6 +38,7 @@ void gmInit(Game* G)
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
 
 	G->Window->setActive();
+	
 }
 
 void gmFree(Game* G)
@@ -80,9 +81,9 @@ void gmPlay(Game* G)
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
 				mnMoveCursor(&G->GameMenu, MENU_GO_DOWN);
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
-				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_LEFT, 0, FALSE);
+				mniUse(mnGetCurrentItem(&G->GameMenu), FALSE, MOVE_LEFT, 0, FALSE);
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
-				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_RIGHT, 0, FALSE);
+				mniUse(mnGetCurrentItem(&G->GameMenu), FALSE, MOVE_RIGHT, 0, FALSE);
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
@@ -104,14 +105,14 @@ void gmPlay(Game* G)
 				unsigned int c;
 				sf::Utf32::encodeAnsi(event.text.unicode, &c);
 				//if (i>=32 && i<=126) /* printables chars */
-				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_NONE, (unsigned char) c, FALSE);
+				mniUse(mnGetCurrentItem(&G->GameMenu), FALSE, MOVE_NONE, (unsigned char) c, FALSE);
 				//if (mniGetType(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))) == ITEM_INPUT_VALUE)
 				//	printf("value is %f\n", mniGetInputValue(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))));
 				//printf("text entered: %c", c);
 			}
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
-				mniUse(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu)), FALSE, MOVE_NONE, 0, TRUE);
+				mniUse(mnGetCurrentItem(&G->GameMenu), FALSE, MOVE_NONE, 0, TRUE);
 
 			if(event.type == sf::Event::MouseButtonReleased)
 			{

@@ -147,6 +147,13 @@ MenuItem* mnGetItem(const Menu* M, MenuID MID, ItemID IID);
  **/
 MenuOfItems* mnGetCurrentMenu(const Menu* M);
 
+/** @brief Donne accès aà l'item qui est selectionné
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @return L'item actuel
+ **/
+MenuItem* mnGetCurrentItem(const Menu* M);
+
 /** @brief Bouge le curseur dans le menu
  *
  * @param M Menu à laquelle s'applique la fonction

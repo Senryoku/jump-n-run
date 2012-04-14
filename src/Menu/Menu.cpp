@@ -132,3 +132,8 @@ MenuItem* mnGetItem(const Menu* M, MenuID MID, ItemID IID)
 {
 	return moiGetItem((MenuOfItems*) daGet(M->Menus, MID), IID);
 }
+
+MenuItem* mnGetCurrentItem(const Menu* M)
+{
+	return moiGetItemSelected(mnGetCurrentMenu(M));
+}
