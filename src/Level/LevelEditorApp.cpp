@@ -2,6 +2,8 @@
 
 void appInit(LevelEditorApp* App)
 {
+	appWindowInit(App);
+
 	lvledInit(&App->Led, 4000.f, 1600.f);
 	lvledSetLineDraw(&App->Led, &glDrawLine);
 	lvledSetVxDraw(&App->Led, &glDrawVertex);
@@ -10,8 +12,6 @@ void appInit(LevelEditorApp* App)
 	lvledSetPolyDraw(&App->Led, &glDrawPolygon);
 	lvledLoad(&App->Led, "levels/tmpEditor.lvl");
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
-
-	appWindowInit(App);
 }
 
 void appWindowInit(LevelEditorApp* App)
@@ -286,7 +286,8 @@ void appRun(LevelEditorApp* App)
 				/* Quelle portion de la scène afficher ? */
 				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
-				if(L1) lvlDisplayL1(App->Led.Lvl);
+				if(L1)
+					lvlDisplayL1(App->Led.Lvl);
 
 				/* Affichage de la Grille */
 				gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
@@ -329,7 +330,7 @@ void appRun(LevelEditorApp* App)
 	}
 }
 
-void appSetWorkingPat(LevelEditorApp* App, const char* Path)
+void appSetWorkingPath(LevelEditorApp* App, const char* Path)
 {
 	strcpy(App->WorkingPath, Path);
 }

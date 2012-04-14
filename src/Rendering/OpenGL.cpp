@@ -100,37 +100,37 @@ Texture glTexLoad(const char* Path)
 {
 	Bool LoadSuccess = 0;
 	GLuint texture = 0;
+
+	sf::Image image;
+	#ifdef SFML_SYSTEM_MACOS
+	LoadSuccess = image.loadFromFile(Path); //À rajouter ResourcePath selon compilation
+	#else
+	LoadSuccess = image.loadFromFile(Path);
+	#endif
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	if(LoadSuccess)
 	{
-		sf::Image image;
-		#ifdef SFML_SYSTEM_MACOS
-		LoadSuccess = image.loadFromFile(Path); //À rajouter ResourcePath selon compilation
-		#else
-		LoadSuccess = image.loadFromFile(Path);
-		#endif
-
-		glEnable(GL_TEXTURE_2D);
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-		if(LoadSuccess)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+		// Génération de Mipmaps... Pas très utile en 2D, non ?
+		//gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getWidth(), image.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	} else {
+		/* Texture transparente si le fichier n'a pas pu être chargé */
+		GLubyte TexNull[4] =
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-			// Génération de Mipmaps... Pas très utile en 2D, non ?
-			//gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getWidth(), image.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		} else {
-			/* Texture transparente si le fichier n'a pas pu être chargé */
-			GLubyte TexNull[4] =
-			{
-				0,0,0,0
-			};
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, TexNull);
-		}
-		glDisable(GL_TEXTURE_2D);
+			0,0,0,0
+		};
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, TexNull);
 	}
+	glDisable(GL_TEXTURE_2D);
+
 	return texture;
 }
 
@@ -161,17 +161,17 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	Position = mnGetPosition(M);
 	unsigned short i;
 	MenuItem* I;
-	
+
 	glPushMatrix();
-	
+
 	float heigth = 5.f; //offset
 	for (i=0; i<moiGetItemCount(moi); i++)
 	{
 		I = moiGetItem(moi, i);
 		heigth+=mnGetItemHeight(M)*(*mniGetZoom(I));
 	}
-		
-	
+
+
 	//On dessine le carré, ça sera fai avec des images plus tard
 	glColor4f(0.2f, 0.2f, 0.2f, 0.75f);
 	glTranslatef(ViewX, ViewY, 0.f);
@@ -181,10 +181,10 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	glVertex2f(Position.x +Size.x, Position.y + heigth);
 	glVertex2f(Position.x, Position.y + heigth);
 	glEnd();
-	
+
 	sf::Text ItemText;
 	ItemText.setFont(sf::Font::getDefaultFont());
-	
+
 	float yoffset = 5.f, selOffset;;
 	for (i=0; i<moiGetItemCount(moi); i++)
 	{
@@ -193,8 +193,8 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			ItemText.setString(" "); /* une chaîne vide donne une erreur */
 		else
 			ItemText.setString(std::string(mniGetText(I)));
-		
-		switch (mniGetType(I)) 
+
+		switch (mniGetType(I))
 		{
 			case ITEM_CHECKBOX:
 				if (*(Bool*)mniGetData(I))
@@ -202,7 +202,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 				else
 					ItemText.setString(ItemText.getString() + ": No");
 				break;
-			
+
 			case ITEM_INPUT:
 				ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
 				/** @todo bug quand on fait backspace alors que la chaine est vide, étrange... */
@@ -215,7 +215,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			default:
 				break;
 		}
-		
+
 		ItemText.setScale(1.f, 1.f);
 		ItemText.setPosition(Position.x+5.f, Position.y+yoffset-1.5f-10.f);
 
@@ -233,18 +233,18 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		}
 		else
 			selOffset = yoffset;
-		
+
 		yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
-		
+
 	}
-	
+
 	I = moiGetItemSelected(moi);
 	if (strcmp(mniGetText(I), "")==0)
 		ItemText.setString(" "); /* une chaîne vide donne une erreur */
 	else
 		ItemText.setString(std::string(mniGetText(I)));
-	
-	switch (mniGetType(I)) 
+
+	switch (mniGetType(I))
 	{
 		case ITEM_CHECKBOX:
 			if (*(Bool*)mniGetData(I))
@@ -252,7 +252,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			else
 				ItemText.setString(ItemText.getString() + ": No");
 			break;
-			
+
 		case ITEM_INPUT:
 			ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
 			break;
@@ -264,13 +264,13 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		default:
 			break;
 	}
-	
+
 	ItemText.setScale(1.f, 1.f);
 	ItemText.setPosition(Position.x+5.f, Position.y+selOffset-1.5f-10.f);
-	
+
 	yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
 	ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
-	
+
 	win.pushGLStates();
 	ItemText.setColor(sf::Color(0,0,0));
 	win.draw(ItemText);
@@ -278,6 +278,6 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	ItemText.setColor(sf::Color(0,255,255));
 	win.draw(ItemText);
 	win.popGLStates();
-	
+
 	glPopMatrix();
 }
