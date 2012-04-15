@@ -320,8 +320,9 @@ void polyHandleCollision(CollisionInfo Info)
 
 	/* Application d'une force de friction, tentative d'optimisation, mais ça reste assez "cher"...
 	 La constante multiplicative est la constante de friction */
-	Tangent = rdVector(Info.Edge);
-	vxCorrectSpeed(Info.V, vec2Prod(Tangent, SGN(vec2Dot(Tangent, vec2Sub(PosV, vxGetOldPos(Info.V))))*Info.Depth*0.00001f));
+	Tangent.x = Info.Normal.y;
+	Tangent.y = -Info.Normal.x;
+	vxCorrectSpeed(Info.V, vec2Prod(Tangent, SGN(vec2Dot(Tangent, vec2Sub(PosV, vxGetOldPos(Info.V))))*Info.Depth*0.1f));
 
 	/* Correction des positions
 	 Du vertex */
