@@ -28,11 +28,20 @@ void lvlFree(Level* Lvl)
 	(*Lvl->lvlTexFree)(Lvl->Layer1);
 	(*Lvl->lvlTexFree)(Lvl->Layer2);
 	(*Lvl->lvlTexFree)(Lvl->Foreground);
+
 	delWorld(Lvl->W);
+
+	Node* it = lstFirst(&Lvl->Objects);
+	while(!nodeEnd(it))
+	{
+		delObject((Object*) nodeGetData(it));
+		it = nodeGetNext(it);
+	}
+	lstFree(&Lvl->Objects);
+
 	for(i = 0; i < daGetSize(&Lvl->Textures); i++)
 		Lvl->lvlTexFree(*((Texture*) daGet(&Lvl->Textures, i))),
 		free((Texture*) daGet(&Lvl->Textures, i));
-	lstFree(&Lvl->Objects);
 	daFree(&Lvl->Textures);
 }
 
@@ -312,7 +321,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		}
 	}
 
-	printf("niveau chargé: %s%sw:%f h:%f\n", lvl, description, width, height);
+	printf("Niveau chargé : %s%sw:%f h:%f\n", lvl, description, width, height);
 	fclose(f);
 
 	delDynArr(Poly);

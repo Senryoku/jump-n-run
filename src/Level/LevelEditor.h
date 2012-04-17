@@ -169,6 +169,10 @@ void lvledNewBoxUpdate(LevelEditor *Led);
 **/
 void lvledNewBoxCreate(LevelEditor *Led);
 
+/** @brief Crée ou édite un objet
+**/
+void lvledObject(LevelEditor *Led, Polygon* P, unsigned int T, List CT);
+
 /** @brief Supprime le polygone le plus proche de Mouse
  *
  * @param Led LevelEditor

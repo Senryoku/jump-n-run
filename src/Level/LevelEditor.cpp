@@ -491,6 +491,29 @@ void lvledNewBoxCreate(LevelEditor *Led)
 	Led->tmpBox1 = Led->tmpBox2 = Led->tmpBox3 = Led->tmpBox4 = NULL;
 }
 
+void lvledObject(LevelEditor *Led, Polygon* P, unsigned int T, List CT)
+{
+	if(lstCount(&CT) != polyGetVxCount(P)) return;
+	Object *tmpObj = NULL, *Obj = NULL;
+	Node* it = lstFirst(&Led->Lvl->Objects);
+	while(!nodeEnd(it))
+	{
+		tmpObj = (Object*) nodeGetData(it);
+		if(tmpObj->Shape == P) Obj = tmpObj;
+		it = nodeGetNext(it);
+	}
+
+	if(Obj == NULL)
+	{
+		Obj = newObject(P, T, CT);
+		lvlAddObject(Led->Lvl, Obj);
+	} else {
+		Obj->Shape = P;
+		Obj->Texture = T;
+		Obj->CoordTex = CT;
+	}
+}
+
 void lvledTestLevel(LevelEditor *Led)
 {
 	lvledSave(Led, "levels/tmpTest.lvl~");

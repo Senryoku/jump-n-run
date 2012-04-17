@@ -18,12 +18,34 @@ typedef struct {
 	List CoordTex; /**< List de Vec2*, coordonnées relatives de la texture **/
 } Object;
 
+/** @brief Constructeur
+ *
+ * @param P Polygon sur lequel sera appliqué la texture
+ * @param T Identifiant de texture (relatif à un Lvl)
+ * @param CT List de Vec2* faisant la liaison entre les Vertex et des points de la texture
+**/
 Object* newObject(Polygon* P, unsigned int T, List CT);
 
+/** @brief Initialisation
+ *
+ * @param Obj Objrtect à Initialiser
+ * @param P Polygon sur lequel sera appliqué la texture
+ * @param T Identifiant de texture (relatif à un Lvl)
+ * @param CT List de Vec2* faisant la liaison entre les Vertex et des points de la texture
+**/
 void objInit(Object* Obj, Polygon* P, unsigned int T, List CT);
 
+/** @brief Libération des ressources
+ *
+ * Libère également tout les Vec2* de CoordTex
+ * @param Obj Object à Libérer
+**/
 void objFree(Object* Obj);
 
+/** @brief Destructeur
+ *
+ * Appelle également objFree
+**/
 void delObject(Object* Obj);
 
 /** @}
