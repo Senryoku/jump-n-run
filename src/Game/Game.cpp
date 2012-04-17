@@ -27,7 +27,7 @@ void gmInit(Game* G)
 	ItemID IID;
 	mnInit(&G->GameMenu);
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
-	
+
 	mnAddMenu(&G->GameMenu, "Main Menu", 8);
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
 	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
@@ -41,15 +41,15 @@ void gmInit(Game* G)
 	mnAddItem(&G->GameMenu, 0, "Label 1", ITEM_LABEL, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Label", ITEM_LABEL, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
-	
+
 	mnAddMenu(&G->GameMenu, "Options", 4);
 	mnAddItem(&G->GameMenu, 1, "full", ITEM_BUTTON, NULL, NULL);
 	mnAddItem(&G->GameMenu, 1, "naaa", ITEM_BUTTON, NULL, NULL);
 	mnAddItem(&G->GameMenu, 1, "noooo", ITEM_BUTTON, NULL, NULL);
 	MID = 0;
 	mnAddItem(&G->GameMenu, 1, "Back", ITEM_MENU_SWITCHER, NULL, &MID);
-	
-	
+
+
 
 	G->Window->setActive();
 
@@ -87,14 +87,14 @@ void gmPlay(Game* G)
 		MouseY = ViewHeight*sf::Mouse::getPosition(*G->Window).y/G->WindowHeight + ViewY;
 
 		sf::Event event;
-		
+
 		while (G->Window->pollEvent(event))
 		{
 			if (event.type == sf::Event::MouseMoved)
 				mnSetCursor(&G->GameMenu, vec2(MouseX-ViewX, MouseY-ViewY));
-			
+
 			mnHandleEvent(&G->GameMenu, event);
-			
+
 			if (event.type == sf::Event::Closed)
 				G->Window->close();
 
