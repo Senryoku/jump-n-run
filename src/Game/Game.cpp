@@ -90,9 +90,6 @@ void gmPlay(Game* G)
 
 		while (G->Window->pollEvent(event))
 		{
-			if (event.type == sf::Event::MouseMoved)
-				mnSetCursor(&G->GameMenu, vec2(MouseX-ViewX, MouseY-ViewY));
-
 			mnHandleEvent(&G->GameMenu, event);
 
 			if (event.type == sf::Event::Closed)

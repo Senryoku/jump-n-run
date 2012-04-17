@@ -130,8 +130,9 @@ void mnMoveCursor(Menu* M, MenuDirection Direction)
 
 void mnSetCursor(Menu* M, Vec2 MousePos)
 {
+	
 	if (MousePos.y < M->MenuY || MousePos.y > M->MenuY+mnGetHeight(M))
-		mnGetCurrentMenu(M)->ItemSelected = INVALID_ITEM_ID, printf("invalid item!\n");
+		mnGetCurrentMenu(M)->ItemSelected = INVALID_ITEM_ID;
 	else
 	{
 		int pos = (MousePos.y - M->MenuY)/(mnGetItemHeight(M)*mnGetItemNormalZoomFactor(M));
@@ -161,6 +162,10 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 {
 	if (!mnGetActive(M))
 		return;
+	
+	if (event.type == sf::Event::MouseMoved)
+		mnSetCursor(M, vec2(event.mouseMove.x, event.mouseMove.y));
+	
 	Bool Enter = ((event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return));
 	
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
