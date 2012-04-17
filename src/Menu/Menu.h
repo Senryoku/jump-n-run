@@ -3,6 +3,7 @@
 
 #include "MenuItem.h"
 #include "MenuOfItems.h"
+#include <SFML/Graphics.hpp>
 
 /**
  * @defgroup menu Menu
@@ -19,18 +20,18 @@ typedef unsigned short MenuID;
  * @brief Structure définissant un menu
  */
 
-typedef struct 
+typedef struct SMenu
 {
 	DynArr* Menus; /**< Tableau contenant tous les menus **/
 	MenuID CurrentMenu; /**< Menu dans lequel on se trouve à l'instant présent **/
-	MenuID PreviousMenu; /**< Menu ou on se trouvais avant, utilisé pour les transitions **/
+	MenuID PreviousMenu; /**< Menu ou on se trouvais avant, utilisé pour les transitions et pour dessiner **/
 	float MenuY; /**< position x ou est déssiné le menu **/
 	float MenuX; /**< position y ou est déssiné le menu **/
 	float spd[2]; /**< variable utilisé par wobble **/
 	float ItemHeight; /**< largeur d'un item non selectionné **/
 	float ItemSelectedZoomFactor; /**< Zoom d'un item quand il est sélectionné **/
 	float ItemNormalZoomFactor; /**< Zoom d'un item quand il n'est pas sélectionné **/
-	Bool Active; /**<  **/
+	Bool Active; /**< Dit si le menu est active et si on doit gérer ou pas les entrées. Utilisé lorsqu'on affiche des messages par exemple **/
 } Menu;
 
 
@@ -94,6 +95,20 @@ void mnSetItemSelectedZoomFactor(Menu* M, float ItemSelectedZoomFactor);
  * @return ItemSelectedZoomFactor des menus
  **/
 float mnGetItemSelectedZoomFactor(const Menu* M);
+
+/** @brief Mutateur de ItemNormalZoomFactor
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @param ItemNormalZoomFactor facteur de zoom pour les items non sélectionnés
+ **/
+void mnSetItemNormalZoomFactor(Menu* M, float ItemNormalZoomFactor);
+
+/** @brief Accesseur de ItemNormalZoomFactor
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @return ItemNormalZoomFactor des menus
+ **/
+float mnGetItemNormalZoomFactor(const Menu* M);
 
 /** @brief Mutateur de Active
  *
@@ -174,6 +189,20 @@ void mnSetCursor(Menu* M, Vec2 MousePos);
  * @return La position du menu
  **/
 Vec2 mnGetPosition(const Menu* M);
+
+/** @brief Gère le menu selon les entrées
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @param Event Event utilisé pour les entrées
+ **/
+void mnHandleEvent(Menu* M, const sf::Event& event);
+
+/** @brief Donne la hauteur du menu
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @return L'hauteur du menu
+ **/
+float mnGetHeight(const Menu* M);
 
 /**@}*/
 #endif

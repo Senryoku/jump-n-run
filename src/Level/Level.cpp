@@ -379,7 +379,7 @@ void lvlUpdate(Level* Lvl)
 	wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
 	wdResolveVextex(lvlGetWorld(Lvl));
 
-	wdUpdateGrid(lvlGetWorld(Lvl));
+	wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
 	for(i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
 	{
 		wdResolveRigid(lvlGetWorld(Lvl));

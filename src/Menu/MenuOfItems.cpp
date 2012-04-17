@@ -39,6 +39,8 @@ void moiAddItem(MenuOfItems* M, const char* Text, ItemType Type, void (*Function
 void moiMoveCursor(MenuOfItems* M, MenuDirection Direction)
 {
 	unsigned short moved = 0;
+	if (M->ItemSelected == INVALID_ITEM_ID)
+		M->ItemSelected = 0;
 	/* Si on a que des labels (CHOSE À NE PAS FAIRE) ceci serait une boucle infinie */
 	while (moved<M->ItemsAdded)
 	{
@@ -62,9 +64,21 @@ void moiMoveCursor(MenuOfItems* M, MenuDirection Direction)
 		M->ItemSelected = INVALID_ITEM_ID;
 }
 
+void moiSetCursor(MenuOfItems* M, ItemID IID)
+{
+	if (mniGetType(moiGetItem(M, IID)) == ITEM_LABEL)
+		M->ItemSelected = INVALID_ITEM_ID;
+	else
+		M->ItemSelected = IID;
+		
+}
+
 MenuItem* moiGetItemSelected(MenuOfItems* M)
 {
-	return &M->Items[M->ItemSelected];
+	if (M->ItemSelected == INVALID_ITEM_ID)
+		return NULL;
+	else
+		return &M->Items[M->ItemSelected];
 }
 
 MenuItem* moiGetItem(MenuOfItems* M, ItemID IID)

@@ -153,6 +153,7 @@ void lvledGrab(LevelEditor *Led)
 void lvledRelease(LevelEditor *Led)
 {
 	Led->Grab = NULL;
+	wdUpdateGrid(lvlGetWorld(Led->Lvl), TRUE);
 }
 
 void lvledGrabEl(LevelEditor *Led)

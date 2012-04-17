@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 void gmInit(Game* G)
 {
 	Config Cfg = GetConfiguration();
@@ -8,7 +9,7 @@ void gmInit(Game* G)
 	G->WindowHeight = Cfg.WindowHeight;
 	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump n'Run", sf::Style::Default, sf::ContextSettings(32));
 
-	G->Window->setKeyRepeatEnabled(0);
+	//G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
 	/* On ne peut utiliser  qu'une des deux */
 	if(Cfg.VerticalSync == 1.f)
@@ -25,17 +26,30 @@ void gmInit(Game* G)
 
 	ItemID IID;
 	mnInit(&G->GameMenu);
-	mnAddMenu(&G->GameMenu, "Main Menu", 6);
+	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
+	
+	mnAddMenu(&G->GameMenu, "Main Menu", 8);
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
 	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
 	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10.f);
 	mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
 	G->testy = 0.f;
+	MenuID MID = 1;
 	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Input value", ITEM_INPUT_VALUE, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "Item 4", ITEM_BUTTON, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "go to Options", ITEM_MENU_SWITCHER, NULL, &MID);
+	mnAddItem(&G->GameMenu, 0, "Label 1", ITEM_LABEL, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "Label", ITEM_LABEL, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
-	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
+	
+	mnAddMenu(&G->GameMenu, "Options", 4);
+	mnAddItem(&G->GameMenu, 1, "full", ITEM_BUTTON, NULL, NULL);
+	mnAddItem(&G->GameMenu, 1, "naaa", ITEM_BUTTON, NULL, NULL);
+	mnAddItem(&G->GameMenu, 1, "noooo", ITEM_BUTTON, NULL, NULL);
+	MID = 0;
+	mnAddItem(&G->GameMenu, 1, "Back", ITEM_MENU_SWITCHER, NULL, &MID);
+	
+	
 
 	G->Window->setActive();
 
@@ -73,19 +87,19 @@ void gmPlay(Game* G)
 		MouseY = ViewHeight*sf::Mouse::getPosition(*G->Window).y/G->WindowHeight + ViewY;
 
 		sf::Event event;
+		
 		while (G->Window->pollEvent(event))
 		{
+			if (event.type == sf::Event::MouseMoved)
+				mnSetCursor(&G->GameMenu, vec2(MouseX-ViewX, MouseY-ViewY));
+			
+			mnHandleEvent(&G->GameMenu, event);
+			
 			if (event.type == sf::Event::Closed)
 				G->Window->close();
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-				G->Window->close(); /** @todo Faire apparaitre un menu ici **/
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
-				mnMoveCursor(&G->GameMenu, MENU_GO_DOWN);
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
-				mniUse(mnGetCurrentItem(&G->GameMenu), FALSE, MOVE_LEFT, 0, FALSE);
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
-				mniUse(mnGetCurrentItem(&G->GameMenu), FALSE, MOVE_RIGHT, 0, FALSE);
+				G->Window->close();
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
@@ -101,20 +115,6 @@ void gmPlay(Game* G)
 						break;
 				}
 			}
-
-			if (event.type == sf::Event::TextEntered)
-			{
-				unsigned int c;
-				sf::Utf32::encodeAnsi(event.text.unicode, &c);
-				//if (i>=32 && i<=126) /* printables chars */
-				mniUse(mnGetCurrentItem(&G->GameMenu), FALSE, MOVE_NONE, (unsigned char) c, FALSE);
-				//if (mniGetType(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))) == ITEM_INPUT_VALUE)
-				//	printf("value is %f\n", mniGetInputValue(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))));
-				//printf("text entered: %c", c);
-			}
-
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
-				mniUse(mnGetCurrentItem(&G->GameMenu), FALSE, MOVE_NONE, 0, TRUE);
 
 			if(event.type == sf::Event::MouseButtonReleased)
 			{
@@ -147,7 +147,7 @@ void gmPlay(Game* G)
 		if(lvlIsGoalReached(G->Lvl))
 		{
 			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score */
-			scInit(&Sc, "Senryoku", G->Lvl->Name, G->Lvl->MD5, Clk.getElapsedTime().asMilliseconds()/10);
+			scInit(&Sc, "Senryoku", G->Lvl->Name, G->Lvl->MD5, Clk.getElapsedTime().asMilliseconds()/10.f);
 			// if(scSend(&Sc) == 1) { MenuErreur } else { MenuEnvoiReussi }
 		}
 
@@ -166,7 +166,7 @@ void gmPlay(Game* G)
 		glDrawPolygon(G->Lvl->P1->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
 
-		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -100.f));
+		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&G->GameMenu) - 50.f));
 		glDrawMenu(*G->Window, &G->GameMenu, ViewX, ViewY);
 
 		G->Window->display();

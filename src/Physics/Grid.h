@@ -79,7 +79,7 @@ void gridAddPolygon(Grid* g, Polygon* p);
  */
 void gridAddPolygonByBB(Grid* g, Polygon* p);
 
-/** @brief Fait une mise à jour de laposition du polygone dans la grille selon sa BoundingBox et selon la position antérieure de celui-ci dans la grille
+/** @brief Fait une mise à jour de la position du polygone dans la grille selon sa BoundingBox et selon la position antérieure de celui-ci dans la grille
  *
  * La différence avec @see gridAddPolygonByBB est que ici on vérifie si on a besoin de mettre à jour sa position dans la grille et si c'est le cas on l'élimine des cases ou il était avant et on l'ajoute dans les nouvelles cases
  * @param g[in, out] grille à laquelle appliquer la fonction

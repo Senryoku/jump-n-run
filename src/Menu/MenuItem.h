@@ -19,11 +19,13 @@ typedef unsigned char ItemDirection; /* gauche ou droite pour incrémenter des v
 #define ITEM_VALUE 0x03 /**< Plage de valeur ex 0-50 */
 #define ITEM_LABEL 0x04 /**< Un objet qui ne peut pas être sélectioné */
 #define ITEM_INPUT_VALUE 0x05 /**< On écrit dans cet item que des chiffres ou un point */
+#define ITEM_MENU_SWITCHER 0x06 /**< Change d'un menu à un autre */
 
 #define MOVE_NONE 0x00
 #define MOVE_LEFT 0x01
 #define MOVE_RIGHT 0x02
 
+struct SMenu;
 
 /**
  * @brief structure qui défini un menu d'items
@@ -143,7 +145,7 @@ void mniRunFunction(MenuItem* I);
  * @param I MenuItem aquel s'applique la fonction
  *
  */
-void mniUse(MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del);
+void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del);
 
 void mniRegressionTest(void);
 

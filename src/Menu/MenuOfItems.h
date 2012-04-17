@@ -64,6 +64,13 @@ void moiAddItem(MenuOfItems* M, const char* Text, ItemType Type, void (*Function
 void moiMoveCursor(MenuOfItems* M, MenuDirection Direction);
 
 /**
+ * @brief Bouger dans le menu
+ * @param M MenuOfItem auquel s'applique la fonction
+ * @param IID ItemID qui est à selectionner
+ */
+void moiSetCursor(MenuOfItems* M, ItemID IID);
+
+/**
  * @brief Accède à l'item qui est sélectionné
  * @param M MenuOfItem auquel s'applique la fonction
  * @return Pointeur vers l'item selectionné

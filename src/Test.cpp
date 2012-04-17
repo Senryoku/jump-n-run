@@ -5,12 +5,13 @@
 int main(int argc, char** argv)
 {
 	/*Score Sc;
-	scInit(&Sc, "Senryoku", "Test.lvl", "375", 6000);
+	scInit(&Sc, "Daas", "tmpEditor.lvl", "3557a855ba37d9b60bc18583d99eb254", 8000);
 	if(scSend(&Sc))
 		printf("Erreur d'envoi\n");
 	else
 		printf("Score envoyé\n");
-	scFree(&Sc);*/
+	scFree(&Sc);
+	 */
 
 
 	LevelEditorApp App;

@@ -62,6 +62,16 @@ float mnGetItemSelectedZoomFactor(const Menu* M)
 	return M->ItemSelectedZoomFactor;
 }
 
+void mnSetItemNormalZoomFactor(Menu* M, float ItemNormalZoomFactor)
+{
+	M->ItemNormalZoomFactor = ItemNormalZoomFactor;
+}
+
+float mnGetItemNormalZoomFactor(const Menu* M)
+{
+	return M->ItemNormalZoomFactor;
+}
+
 void mnSetActive(Menu* M, Bool Active)
 {
 	M->Active = Active;
@@ -110,7 +120,7 @@ MenuID mnGetCurrentMenuID(const Menu* M)
 
 MenuOfItems* mnGetCurrentMenu(const Menu* M)
 {
-	return (MenuOfItems*)daGet(M->Menus, M->CurrentMenu);
+	return (MenuOfItems*)daGet(M->Menus, M->PreviousMenu);
 }
 
 void mnMoveCursor(Menu* M, MenuDirection Direction)
@@ -120,6 +130,15 @@ void mnMoveCursor(Menu* M, MenuDirection Direction)
 
 void mnSetCursor(Menu* M, Vec2 MousePos)
 {
+	if (MousePos.y < M->MenuY || MousePos.y > M->MenuY+mnGetHeight(M))
+		mnGetCurrentMenu(M)->ItemSelected = INVALID_ITEM_ID, printf("invalid item!\n");
+	else
+	{
+		int pos = (MousePos.y - M->MenuY)/(mnGetItemHeight(M)*mnGetItemNormalZoomFactor(M));
+		//printf("pos: %i\n", pos);
+		if (pos < mnGetCurrentMenu(M)->ItemsAdded)
+			moiSetCursor(mnGetCurrentMenu(M), (ItemID)pos);
+	}
 	
 }
 
@@ -136,4 +155,48 @@ MenuItem* mnGetItem(const Menu* M, MenuID MID, ItemID IID)
 MenuItem* mnGetCurrentItem(const Menu* M)
 {
 	return moiGetItemSelected(mnGetCurrentMenu(M));
+}
+
+void mnHandleEvent(Menu* M, const sf::Event& event)
+{
+	if (!mnGetActive(M))
+		return;
+	Bool Enter = ((event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return));
+	
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
+		mnMoveCursor(M, MENU_GO_DOWN);
+	
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up)
+		mnMoveCursor(M, MENU_GO_UP);
+	
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_LEFT, 0, FALSE);
+	
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_RIGHT, 0, FALSE);
+	 
+	
+	
+	if (event.type == sf::Event::TextEntered)
+	{
+		unsigned int c;
+		sf::Utf32::encodeAnsi(event.text.unicode, &c);
+		//if (i>=32 && i<=126) /* printables chars */
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_NONE, (unsigned char) c, FALSE);
+		//if (mniGetType(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))) == ITEM_INPUT_VALUE)
+		//	printf("value is %f\n", mniGetInputValue(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))));
+		//printf("text entered: %c", c);
+	}
+	
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
+		mniUse(M ,mnGetCurrentItem(M), FALSE, MOVE_NONE, 0, TRUE);
+	
+	if (Enter)
+		mniUse(M, mnGetCurrentItem(M), 1, MOVE_NONE, 0, FALSE);
+	
+}
+
+float mnGetHeight(const Menu* M)
+{
+	return (float)(mnGetCurrentMenu(M)->ItemsAdded*M->ItemHeight*mnGetItemNormalZoomFactor(M));
 }

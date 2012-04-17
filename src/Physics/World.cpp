@@ -448,12 +448,12 @@ void delWorld(World *W)
 	free(W);
 }
 
-void wdUpdateGrid(World *W)
+void wdUpdateGrid(World *W, Bool Force)
 {
 	Node* it = lstFirst(&W->Polygons);
 	while(!nodeEnd(it))
 	{
-		if (!polyIsFixe((Polygon*)nodeGetData(it)))
+		if (Force || !polyIsFixe((Polygon*)nodeGetData(it)))
 			gridUpdatePolygonPositionByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it));
 
 		it=nodeGetNext(it);

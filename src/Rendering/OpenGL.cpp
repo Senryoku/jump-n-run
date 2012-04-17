@@ -185,6 +185,8 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	Position = mnGetPosition(M);
 	unsigned short i;
 	MenuItem* I;
+	
+
 
 	glPushMatrix();
 
@@ -263,47 +265,51 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 
 	}
 
-	I = moiGetItemSelected(moi);
-	if (strcmp(mniGetText(I), "")==0)
-		ItemText.setString(" "); /* une chaîne vide donne une erreur */
-	else
-		ItemText.setString(std::string(mniGetText(I)));
-
-	switch (mniGetType(I))
+	if (moiGetItemSelectedID(moi) != INVALID_ITEM_ID)
 	{
-		case ITEM_CHECKBOX:
-			if (*(Bool*)mniGetData(I))
-				ItemText.setString(ItemText.getString() + ": Yes");
-			else
-				ItemText.setString(ItemText.getString() + ": No");
-			break;
-
-		case ITEM_INPUT:
-		case ITEM_INPUT_VALUE:
-			ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
-			break;
-		case ITEM_VALUE:
-			char ValueText[300];
-			sprintf(ValueText, ": %.f", *(float*)mniGetData(I));
-			ItemText.setString(ItemText.getString() + std::string(ValueText));
-			break;
-		default:
-			break;
+		I = moiGetItemSelected(moi);
+		if (strcmp(mniGetText(I), "")==0)
+			ItemText.setString(" "); /* une chaîne vide donne une erreur */
+		else
+			ItemText.setString(std::string(mniGetText(I)));
+		
+		switch (mniGetType(I))
+		{
+			case ITEM_CHECKBOX:
+				if (*(Bool*)mniGetData(I))
+					ItemText.setString(ItemText.getString() + ": Yes");
+				else
+					ItemText.setString(ItemText.getString() + ": No");
+				break;
+				
+			case ITEM_INPUT:
+			case ITEM_INPUT_VALUE:
+				ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
+				break;
+			case ITEM_VALUE:
+				char ValueText[300];
+				sprintf(ValueText, ": %.f", *(float*)mniGetData(I));
+				ItemText.setString(ItemText.getString() + std::string(ValueText));
+				break;
+			default:
+				break;
+		}
+		
+		ItemText.setScale(1.f, 1.f);
+		ItemText.setPosition(Position.x+5.f, Position.y+selOffset-1.5f-10.f);
+		
+		yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
+		ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
+		
+		win.pushGLStates();
+		ItemText.setColor(sf::Color(0,0,0));
+		win.draw(ItemText);
+		ItemText.move(0.f, 1.5f);
+		ItemText.setColor(sf::Color(0,255,255));
+		win.draw(ItemText);
+		win.popGLStates();
 	}
-
-	ItemText.setScale(1.f, 1.f);
-	ItemText.setPosition(Position.x+5.f, Position.y+selOffset-1.5f-10.f);
-
-	yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
-	ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
-
-	win.pushGLStates();
-	ItemText.setColor(sf::Color(0,0,0));
-	win.draw(ItemText);
-	ItemText.move(0.f, 1.5f);
-	ItemText.setColor(sf::Color(0,255,255));
-	win.draw(ItemText);
-	win.popGLStates();
+	
 
 	glPopMatrix();
 }

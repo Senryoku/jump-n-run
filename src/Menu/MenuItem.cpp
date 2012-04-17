@@ -1,4 +1,5 @@
 #include "MenuItem.h"
+#include "Menu.h"
 #include <string>
 
 
@@ -11,6 +12,12 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 	I->Data = Data;
 	I->Type = Type;
 	
+	if (I->Type == ITEM_MENU_SWITCHER)
+	{
+		I->Data = malloc(sizeof(unsigned short));
+		*(unsigned short*)I->Data = *(unsigned short*)Data;
+	}
+	
 	if (I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
 		I->Data = new std::string;
 }
@@ -20,6 +27,8 @@ void mniFree(MenuItem* I)
 	free(I->Text);
 	if (I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
 		delete (std::string*)I->Data;
+	if (I->Type == ITEM_MENU_SWITCHER)
+		free(I->Data);
 }
 
 void mniSetText(MenuItem* I, const char* Text)
@@ -86,8 +95,11 @@ void foo(void)
 	printf("foo\n");
 }
 
-void mniUse(MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del)
+void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del)
 {
+	if (I == NULL)
+		return;
+	
 	void* Data;
 	
 	switch (mniGetType(I))
@@ -149,7 +161,9 @@ void mniUse(MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char Ke
 				if (*((float*) Data) < I->MinValue)
 					*((float*) Data) = I->MinValue;
 			}
-			
+			break;
+		case ITEM_MENU_SWITCHER:
+			mnGoToMenu(M, *(MenuID*)I->Data);
 			break;
 		default:
 			break;

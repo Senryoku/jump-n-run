@@ -276,7 +276,12 @@ void wdFree(World *W);
 void delWorld(World *W);
 
 
-void wdUpdateGrid(World *W);
+/** @brief Fait une mise à jour de la grille de collisions
+ *
+ * @param W World
+ * @param Force Force la mise à jour de tous les polygones, inclus les fixes
+ **/
+void wdUpdateGrid(World *W, Bool Force);
 
 /** @}
 **/
