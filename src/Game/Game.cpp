@@ -159,9 +159,10 @@ void gmPlay(Game* G)
 		ViewY = Center.y - ViewHeight/2;
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
 
-		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
 		lvlDisplayL1(G->Lvl);
+		lvlDispAllObj(G->Lvl);
 
+		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
 		glDrawPolygon(G->Lvl->P1->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
 

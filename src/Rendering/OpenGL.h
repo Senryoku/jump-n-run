@@ -43,6 +43,13 @@ void glTexFree(Texture T);
 void glDisplayTex(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
 				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL);
 
-
+/** @brief Affiche une texture sur un Polygon
+ *
+ * Utilise les positions des Vertex du Polygon pour bind la texture à l'écran
+ * @param T Texture OpenGL
+ * @param P Polygon sur lequel afficher T
+ * @param L List de Vec2, coordonnées ordonées des points de liaison sur la texture
+ **/
+void glDispTexPoly(Texture T, Polygon* P, List* L);
 #endif
 

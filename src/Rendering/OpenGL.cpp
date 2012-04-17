@@ -154,6 +154,30 @@ void glDisplayTex(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
 	glDisable(GL_TEXTURE_2D);
 }
 
+void glDispTexPoly(Texture T, Polygon* P, List* L)
+{
+	Node* it;
+	unsigned int i = 0;
+	Vec2 VPos, CoordTex;
+	if(polyGetVxCount(P) != lstCount(L)) return;
+
+	glColor4f(1.f, 1.f, 1.f, 1.f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, T);
+	glBegin(GL_POLYGON);
+	it = lstFirst(L);
+	while(!nodeEnd(it))
+	{
+		VPos = vxGetPosition(polyGetVertex(P, i));
+		CoordTex = *((Vec2*) nodeGetData(it));
+		glTexCoord2d(CoordTex.x, CoordTex.y);  glVertex2f(VPos.x, VPos.y);
+		it = nodeGetNext(it);
+		i++;
+	}
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
 void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 {
 	MenuOfItems* moi = mnGetCurrentMenu(M);

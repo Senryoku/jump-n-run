@@ -56,7 +56,7 @@ void appRun(LevelEditorApp* App)
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
 		WindowRatio = App->WindowWidth/App->WindowHeight, FPS = 60.f;
 	sf::Clock Clock;
-	Bool L1 = FALSE;
+	Bool DispBack = FALSE, DispL1 = FALSE, DispL2 = FALSE, DispFore = FALSE, DispObjects = FALSE;
 
 	while (App->Window->isOpen())
 	{
@@ -201,7 +201,9 @@ void appRun(LevelEditorApp* App)
 						plGetUp(App->Led.Lvl->P1);
 						break;
 					case sf::Keyboard::V :
-						L1 = !L1;
+						DispL1 = !DispL1;
+					case sf::Keyboard::M :
+						DispObjects = !DispObjects;
 						break;
 					default:
 						break;
@@ -286,8 +288,9 @@ void appRun(LevelEditorApp* App)
 				/* Quelle portion de la scène afficher ? */
 				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
-				if(L1)
-					lvlDisplayL1(App->Led.Lvl);
+				if(DispL1) lvlDisplayL1(App->Led.Lvl);
+				if(DispL2) lvlDisplayL2(App->Led.Lvl);
+				if(DispObjects) lvlDispAllObj(App->Led.Lvl);
 
 				/* Affichage de la Grille */
 				gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);

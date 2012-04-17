@@ -10,13 +10,21 @@
 
 /** @brief Objet dynamique afichable (texturé)
  *
- * @todo Réfléchir à la façon de binder la texture (Liste de coordonnée ?
- * Une par Vexter de Shape ? Toujours 4 (Shape = Rectangle) ?...)
+ * Préfixe des fonctions : obj
 **/
 typedef struct {
 	Polygon* Shape; /**< Polygon de collision **/
 	unsigned int Texture; /**< Numero de texture, relatif au niveau **/
+	List CoordTex; /**< List de Vec2*, coordonnées relatives de la texture **/
 } Object;
+
+Object* newObject(Polygon* P, unsigned int T, List CT);
+
+void objInit(Object* Obj, Polygon* P, unsigned int T, List CT);
+
+void objFree(Object* Obj);
+
+void delObject(Object* Obj);
 
 /** @}
 **/

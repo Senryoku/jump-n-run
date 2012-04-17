@@ -6,6 +6,7 @@
 #include <Objects/Player.h>
 #include <string.h>
 #include <Core/md5.h>
+#include <Objects/Object.h>
 
 /** @defgroup Level
  *
@@ -30,13 +31,14 @@ typedef struct
 	Texture Layer2; /**< Texture située immédiatement devant les objets dynamiques **/
  	Texture Foreground; /**< Texture servant de premier plan **/
  	DynArr Textures; /**< Liste de textures utilisables par les objets **/
- 	DynArr Objects; /**< Liste d'objets texturés **/
+ 	List Objects; /**< Liste d'objets texturés **/
  	Player* P1; /** Joueur 1 **/
 
 	Texture (*lvlTexLoad)(const char* Path); /** Pointeur de fonction servant à charger en mémoire une texture **/
 	void (*lvlTexFree)(Texture Img); /** Pointeur de fonction libèrant une texture **/
 	void (*lvlDisplayTex)(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
 				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL); /** Pointeur de fonction affichant une texture **/
+	void (*lvlDispTexPoly)(Texture T, Polygon* P, List* L); /** Pointeur de fonction affichant une texture sur un polygon **/
 } Level;
 
 /** @brief Constructeur
@@ -92,6 +94,14 @@ void lvlDisplayL1(Level* Lvl);
 void lvlDisplayL2(Level* Lvl);
 
 void lvlDisplayFG(Level* Lvl);
+
+void lvlDisplayObj(Level* Lvl, Object* Obj);
+
+void lvlDispAllObj(Level* Lvl);
+
+void lvlAddObject(Level* Lvl, Object * Obj);
+
+void lvlDelObject(Level* Lvl, Object * Obj);
 
 typedef enum enum_objets
 {

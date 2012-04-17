@@ -13,10 +13,11 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->P1 = NULL;
 	Lvl->Spawn = Lvl->Goal = vec2(0.f, 0.f);
 	daInit(&Lvl->Textures);
-	daInit(&Lvl->Objects);
+	lstInit(&Lvl->Objects);
 	Lvl->lvlTexLoad = &glTexLoad;
 	Lvl->lvlTexFree = &glTexFree;
 	Lvl->lvlDisplayTex = &glDisplayTex;
+	Lvl->lvlDispTexPoly = &glDispTexPoly;
 }
 
 void lvlFree(Level* Lvl)
@@ -31,7 +32,7 @@ void lvlFree(Level* Lvl)
 	for(i = 0; i < daGetSize(&Lvl->Textures); i++)
 		Lvl->lvlTexFree(*((Texture*) daGet(&Lvl->Textures, i))),
 		free((Texture*) daGet(&Lvl->Textures, i));
-	daFree(&Lvl->Objects);
+	lstFree(&Lvl->Objects);
 	daFree(&Lvl->Textures);
 }
 
@@ -131,6 +132,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 	//liste des vertex
 	DynArr* Vx = newDynArr();
+	DynArr* Poly = newDynArr();
 
 	while (fgets(read, 300, f)!=NULL)
 	{
@@ -170,6 +172,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p); ///@todo accesseur
 					}
 
+					daAdd(Poly, p);
 					wdAddPolygon(lvlGetWorld(Lvl), p);
 					free(V);
 
@@ -195,6 +198,8 @@ Bool lvlLoad(Level* Lvl, const char* File)
 						p = newPolygon(4, V1, V2, V3, V4), polySetFixe(p, TRUE);
 						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p);
 					}
+
+					daAdd(Poly, p);
 					wdAddPolygon(lvlGetWorld(Lvl), p);
 
 					break;
@@ -218,6 +223,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p);
 					}
 
+					daAdd(Poly, p);
 					wdAddPolygon(lvlGetWorld(Lvl), p);
 
 					delList(LPoly);
@@ -283,8 +289,24 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				break;
 			}
 			case o_object:
-				printf("Objet : \n");
+			{
+				unsigned int ShapeInt, Tex;
+				Polygon* Shape;
+				List lstTex;
+				lstInit(&lstTex); // Les nodes ne seront ppas libérés ici, car utilisés par Object, qui se chargera de les libérer
+				printf("Chargement d'un Objet...\n");
+				fscanf(f, "%u %u\n", &ShapeInt, &Tex);
+				Shape = (Polygon*) daGet(Poly, ShapeInt);
+				for(ShapeInt = 0; ShapeInt < polyGetVxCount(Shape); ShapeInt++)
+				{
+					Vec2* CoordTex = (Vec2*) malloc(sizeof(Vec2));
+					fscanf(f, "%f %f\n", &CoordTex->x, &CoordTex->y);
+					lstAdd(&lstTex, CoordTex);
+				}
+				Object* Obj = newObject(Shape, Tex, lstTex);
+				lstAdd(&Lvl->Objects, Obj);
 				break;
+			}
 			default:
 				break;
 		}
@@ -293,7 +315,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	printf("niveau chargé: %s%sw:%f h:%f\n", lvl, description, width, height);
 	fclose(f);
 
-
+	delDynArr(Poly);
 	delDynArr(Vx);
 
 	return TRUE;
@@ -412,9 +434,25 @@ Bool lvlIsGoalReached(Level* L)
 		return 0;
 }
 
+void lvlAddObject(Level* Lvl, Object * Obj)
+{
+	lstAdd(&Lvl->Objects, Obj);
+}
+
+void lvlDelObject(Level* Lvl, Object * Obj)
+{
+	lstDel(&Lvl->Objects, Obj);
+	delObject(Obj);
+}
+
 World* lvlGetWorld(Level* Lvl)
 {
 	return Lvl->W;
+}
+
+void lvlDisplayBG(Level* Lvl)
+{
+
 }
 
 void lvlDisplayL1(Level* Lvl)
@@ -431,3 +469,22 @@ void lvlDisplayL2(Level* Lvl)
 						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));
 }
 
+void lvlDisplayFG(Level* Lvl)
+{
+
+}
+
+void lvlDisplayObj(Level* Lvl, Object* Obj)
+{
+	(*Lvl->lvlDispTexPoly)(*(Texture*) daGet(&Lvl->Textures, Obj->Texture), Obj->Shape, &Obj->CoordTex);
+}
+
+void lvlDispAllObj(Level* Lvl)
+{
+	Node* it = lstFirst(&Lvl->Objects);
+	while(!nodeEnd(it))
+	{
+		lvlDisplayObj(Lvl, (Object*) nodeGetData(it));
+		it = nodeGetNext(it);
+	}
+}

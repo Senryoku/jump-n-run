@@ -196,6 +196,14 @@ void lvledDelPoly(LevelEditor *Led)
 	{
 		wdDelPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
 		delPolygon(tmpPoly);
+		// Cherche si un objet se base sur ce polygon, si oui, le supprime également
+		Node* it = lstFirst(&Led->Lvl->Objects);
+		while(!nodeEnd(it))
+		{
+			Object* Obj = (Object*) nodeGetData(it);
+			if(Obj->Shape == tmpPoly) lvlDelObject(Led->Lvl, Obj);
+			it = nodeGetNext(it);
+		}
 	}
 }
 
@@ -565,6 +573,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	List* L;
 	Node* it;
 	DynArr *Vx = newDynArr();
+	DynArr *Poly = newDynArr();
 
 	//On stocke les vertex qui representent le centre des polygones de plus de 4 cotes pour eviter de les mettre dans le fichier
 	L = &lvlGetWorld(Led->Lvl)->Polygons;
@@ -572,10 +581,10 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 	List* LCenter = newList();
 
-	//on écrit les polygones dans la dynarr pour leur associer une ID
 	while (!nodeEnd(it))
 	{
 		Polygon* p = (Polygon*)nodeGetData(it);
+		daAdd(Poly, p); //on écrit les polygones dans la dynarr pour leur associer une ID
 		//c'est &lu pour les machines de x64 et %u pour les x86
 		if (daGetSize(&p->Vertices)>4 && polyGetCenter(p)!=NULL)
 			lstAdd(LCenter, polyGetCenter(p));
@@ -657,12 +666,26 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		fprintf(f, "%u #Texture\n%s\n", o_texture, (char*)daGet(&Led->TexturesPath, i));
 	}
 
+	it = lstFirst(&Led->Lvl->Objects);
+	while(!nodeEnd(it))
+	{
+		Object* Obj = (Object*) nodeGetData(it);
+		fprintf(f, "%u #Object\n%u %u\n", o_object, daGetID(Poly, Obj->Shape), Obj->Texture);
+		Node* it2 = lstFirst(&Obj->CoordTex);
+		while(!nodeEnd(it2))
+		{
+			Vec2 *V = (Vec2*) nodeGetData(it2);
+			fprintf(f, "%f %f\n", V->x, V->y);
+			it2 = nodeGetNext(it2);
+		}
 
-
+		it = nodeGetNext(it);
+	}
 
 	fclose(f);
 
 	delList(LCenter);
+	delDynArr(Poly);
 	delDynArr(Vx);
 
 	return TRUE;
