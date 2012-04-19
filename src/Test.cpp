@@ -11,8 +11,21 @@ int main(int argc, char** argv)
 	else
 		printf("Score envoyé\n");
 	scFree(&Sc);
-	 */
+	*/
 
+	DynArr DA;
+	unsigned int ErrorCode = scCollect(&DA, "tmpEditor.lvl", "3557a855ba37d9b60bc18583d99eb254");
+	printf("scCollect ErrorCode : %u\n", ErrorCode);
+	if(ErrorCode == 0)
+	{
+		printf("Number of Score(s) : %u\n", daGetSize(&DA));
+		for(unsigned int i = 0; i < daGetSize(&DA); i++)
+		{
+			Score* S = (Score*) daGet(&DA, i);
+			printf("Player : %s, Hour : %s, Date : %s, Time : %u\n", S->Player, S->LvlName, S->LvlMD5, S->Time);
+		}
+		scCollectFree(&DA);
+	}
 
 	LevelEditorApp App;
 

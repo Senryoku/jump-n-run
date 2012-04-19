@@ -40,7 +40,7 @@ void daReserve(DynArr* DA, unsigned int newCapa)
 	unsigned int i;
 	if(newCapa > DA->Capacity)
 	{
-		tmp = (void**)malloc(newCapa*sizeof(void*));
+		tmp = (void**) malloc(newCapa*sizeof(void*));
 		for(i = 0; i < DA->Size; i++)
 			tmp[i] = DA->First[i];
 		free(DA->First);
