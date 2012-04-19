@@ -87,16 +87,19 @@ unsigned int scCollect(DynArr* DA, char LvlName[255], char LvlMD5[255])
 			sscanf(Line, "%u", &NbScore);
 			printf("NbScore : %u\n", NbScore);
 			daReserve(DA, NbScore); // Plante, mais pas en debug...
+			printf("7\n");
 			for(i = 0; i < NbScore; i++)
 			{
 				Line = strtok(NULL, "\n");
 				sscanf(Line, "%s %s %s %u", Player, Hour, Date, &Time);
 				daAdd(DA, newScore(Player, Hour, Date, Time));
+				printf("boucle\n");
 			}
 		}
 	} else {
 		ErrorCode = 50;
 	}
+		printf("fin\n");
 	return ErrorCode;
 }
 

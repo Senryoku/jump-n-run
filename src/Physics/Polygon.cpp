@@ -448,9 +448,9 @@ void polyApplyForce(Polygon* P, Vec2 Force)
 	unsigned int i;
 	for (i = 0; i < daGetSize(&P->Vertices); i++)
 	{
-		vxApplyForce((Vertex*)daGet(&P->Vertices, i), Force);
+		vxApplyForce((Vertex*)daGet(&P->Vertices, i), Force, 0);
 	}
-	if(polyGetCenter(P) != NULL) vxApplyForce(polyGetCenter(P), Force);
+	if(polyGetCenter(P) != NULL) vxApplyForce(polyGetCenter(P), Force, 0);
 }
 
 void polySetSpeed(Polygon* P, Vec2 Speed)
@@ -523,8 +523,8 @@ void polyRegressionTest()
 				vxGetPosition(V11).x, vxGetPosition(V11).y,
 				vxGetPosition(V12).x, vxGetPosition(V12).y,
 				vxGetPosition(V13).x, vxGetPosition(V13).y);
-		vxApplyForce(V1, vec2(1.f, 0.f));
-		vxApplyForce(V10, vec2(1.f, 0.f));
+		vxApplyForce(V1, vec2(1.f, 0.f), 0);
+		vxApplyForce(V10, vec2(1.f, 0.f), 0);
 		vxResolve(V1, prevdt, dt);
 		vxResolve(V2, prevdt, dt);
 		vxResolve(V3, prevdt, dt);

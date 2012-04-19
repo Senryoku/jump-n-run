@@ -111,8 +111,10 @@ void vxSetAcceleration(Vertex* V, Vec2 newAcc);
 
 /** @brief Applique une force au Vertex
  * @param V Pointeur vers le vecteur à modifier
+ * @param addForce Froce à ajouter
+ * @param Mass Booléen, détermine si la masse du vertex doit être prose en compte
 **/
-void vxApplyForce(Vertex* V, Vec2 addForce);
+void vxApplyForce(Vertex* V, Vec2 addForce, Bool Mass);
 
 /** @brief Met à jour la position du Vertex en fonction de sa vitesse
  * et de son accélération.

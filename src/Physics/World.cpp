@@ -93,7 +93,7 @@ void wdApplyForce(World* W, Vec2 Force)
 {
 	Node* it = lstFirst(&W->Vertices);
 	while(!nodeEnd(it))
-		vxApplyForce((Vertex*) nodeGetData(it), Force),
+		vxApplyForce((Vertex*) nodeGetData(it), Force, 1),
 		it = nodeGetNext(it);
 }
 

@@ -69,10 +69,10 @@ void vxSetFixe(Vertex* V, Bool B)
 	V->Fixe = B;
 }
 
-void vxApplyForce(Vertex* V, Vec2 addForce)
+void vxApplyForce(Vertex* V, Vec2 addForce, Bool Mass)
 {
 	if(vxIsFixe(V) || vec2SqLength(addForce) < 0.00001f) return;
-	V->Acceleration = vec2Add(V->Acceleration, addForce);
+	V->Acceleration = vec2Add(V->Acceleration, (Mass)? vec2Prod(addForce, V->Mass) : addForce);
 }
 
 void vxResolve(Vertex* V, float prevdt, float dt)
@@ -96,7 +96,7 @@ void vxRegressionTest(void)
 	printf("Test de boucle sur Resolve avec une force de (2.f, 2.f) :\n");
 	for(i = 0; i < 100; i++)
 	{
-		vxApplyForce(V, vec2(2.f, 2.f));
+		vxApplyForce(V, vec2(2.f, 2.f), 0);
 		vxResolve(V, 1.f, 1.f);
 		printf(" #%d - x : %f y : %f x-y : %f \n", i, vxGetPosition(V).x, vxGetPosition(V).y, vxGetPosition(V).x-vxGetPosition(V).y);
 	}

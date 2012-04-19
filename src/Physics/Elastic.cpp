@@ -43,8 +43,8 @@ void elResolve(Elastic* E)
 		Vect = vec2(1.f, 0.f); /* Voir Rigid.cpp */
 
 	/* Si un point est fixe, le factor passe à 1 pour l'autre */
-	vxApplyForce(E->V2, vec2Prod(Vect, -factor*(vxIsFixe(E->V1)?MassFactor*1:1))),
-	vxApplyForce(E->V1, vec2Prod(Vect, factor*(vxIsFixe(E->V2)?(1-MassFactor):1)));
+	vxApplyForce(E->V2, vec2Prod(Vect, -factor*(vxIsFixe(E->V1)?MassFactor*1:1)), 0),
+	vxApplyForce(E->V1, vec2Prod(Vect, factor*(vxIsFixe(E->V2)?(1-MassFactor):1)), 0);
 }
 
 Vec2 elVector(Elastic* E)
