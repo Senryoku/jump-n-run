@@ -185,6 +185,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	Position = mnGetPosition(M);
 	unsigned short i;
 	MenuItem* I;
+	float MaxTextWidth = 0.f;
 	
 
 
@@ -262,6 +263,12 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			selOffset = yoffset;
 
 		yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
+		
+		float Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+		if (Width>MaxTextWidth)
+			MaxTextWidth=Width;
+		
+		mnSetItemHeight(M, ItemText.getCharacterSize());
 
 	}
 
@@ -308,8 +315,15 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		ItemText.setColor(sf::Color(0,255,255));
 		win.draw(ItemText);
 		win.popGLStates();
+		
+		float Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+		if (Width>MaxTextWidth)
+			MaxTextWidth=Width;
+		
 	}
 	
+	moiSetSize(moi, vec2(MaxTextWidth, Size.y));
+	printf("width; %f\n", MaxTextWidth);
 
 	glPopMatrix();
 }
