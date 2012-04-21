@@ -79,7 +79,10 @@ float elGetLength(Elastic* E)
 
 void elSetLength(Elastic* E, float newLength)
 {
-	E->Length = newLength;
+	if (newLength>0.f)
+		E->Length = newLength;
+	else
+		E->Length = vec2Length(vec2Sub(vxGetPosition(E->V1), vxGetPosition(E->V2)));
 }
 
 void elSetSpring(Elastic* E, float newSpring)

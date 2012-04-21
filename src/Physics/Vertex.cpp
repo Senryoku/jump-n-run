@@ -48,6 +48,11 @@ void vxCorrectPosition(Vertex* V, Vec2 addPos)
 	V->Position = vec2Add(V->Position, addPos);
 }
 
+void vxMove(Vertex* V, Vec2 addPos)
+{
+	V->Position = vec2Add(V->Position, addPos);
+}
+
 void vxCorrectSpeed(Vertex* V, Vec2 addSpeed)
 {
 	V->OldPos = vec2Add(V->OldPos, addSpeed);

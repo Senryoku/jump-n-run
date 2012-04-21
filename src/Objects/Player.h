@@ -13,15 +13,22 @@
 typedef struct
 {
 	Polygon* Shape;
-	Vertex* Stable;
+	Vertex* VxUL, *VxUR, *VxDL, *VxDR;
 	/* char* Texture */
 
 	Elastic* Grab;
 	Vertex* Neck, *HeadLeft, *HeadRight, *Base, *LeftArm1, *LeftArm2, *RightArm1, *RightArm2, *LeftLeg1, *LeftLeg2, *RightLeg1, *RightLeg2;
+	Vertex* VxBalance;
+	Elastic* ElBalance;
+	
+	Vec2 Speed;
+	Vec2 ULPos, URPos, DLPos, DRPos;
+	float GroundAngle;
 
 	/* Défini si une partie de la BB est en collision */
 	CollisionInfo VxULStatus, VxURStatus, VxDRStatus, VxDLStatus,
 		RdUStatus, RdRStatus, RdDStatus, RdLStatus;
+	Bool OnGround;
 } Player;
 
 Player* newPlayer();
@@ -49,7 +56,7 @@ Rigid* plGetRdL(Player* P);
 void plSetPosition(Player*, Vec2);
 void plSetShape(Player* P, Polygon* Shape);
 
-void plUpdate(Player* P);
+void plUpdate(Player* P, World* W);
 
 void plMoveR(Player* P);
 void plMoveL(Player* P);
@@ -58,6 +65,7 @@ void plGetUp(Player* P);
 
 void plGrab(Player* P, World* W, float MouseX, float MouseY);
 void plRelease(Player* P, World* W);
+
 
 /**
  @brief Créé les vertex du corps du joueur

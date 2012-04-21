@@ -83,6 +83,11 @@ Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R)
 	return vec2(cosR*V.x-sinR*V.y + Origin.x, sinR*V.x+cosR*V.y + Origin.y);
 }
 
+float vec2Angle(Vec2 V)
+{
+	return acosf(V.x/vec2Length(V));
+}
+
 #include <assert.h>
 void vec2RegressionTest(void)
 {

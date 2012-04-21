@@ -81,6 +81,12 @@ void vxSetPosition(Vertex* V, Vec2 newPos);
 **/
 void vxCorrectPosition(Vertex* V, Vec2 addPos);
 
+/** @brief Ajoute un vecteur à la position actuelle de V même s'il est fixe
+ *
+ * @param V Pointeur vers le vecteur à modifier
+ **/
+void vxMove(Vertex* V, Vec2 addPos);
+
 /** @brief Ajoute un vecteur à l'ancienne position de V
  *
  * @param V Pointeur vers le vecteur à modifier

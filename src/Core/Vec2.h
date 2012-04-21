@@ -84,6 +84,10 @@ void vec2Cp(Vec2* V1, Vec2 V2);
  **/
 Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R);
 
+/** @brief angle par rapport à l'origine
+ */
+float vec2Angle(Vec2 V);
+
 /** @brief Test de régression de Vec2
 **/
 void vec2RegressionTest(void);

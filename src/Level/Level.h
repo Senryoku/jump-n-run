@@ -7,6 +7,7 @@
 #include <string.h>
 #include <Core/md5.h>
 #include <Objects/Object.h>
+#include <Objects/Cloth.h>
 
 /** @defgroup Level
  *
@@ -33,6 +34,7 @@ typedef struct
  	DynArr Textures; /**< Liste de textures utilisables par les objets **/
  	List Objects; /**< Liste d'objets texturés **/
  	Player* P1; /** Joueur 1 **/
+	//Cloth* C;
 
 	Texture (*lvlTexLoad)(const char* Path); /** Pointeur de fonction servant à charger en mémoire une texture **/
 	void (*lvlTexFree)(Texture Img); /** Pointeur de fonction libèrant une texture **/

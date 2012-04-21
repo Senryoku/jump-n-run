@@ -58,6 +58,11 @@ void appRun(LevelEditorApp* App)
 	sf::Clock Clock;
 	Bool DispDebug = TRUE, DispBack = FALSE, DispL1 = FALSE, DispL2 = FALSE, DispFore = FALSE, DispObjects = FALSE;
 
+	/*Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), 20, 20, 20.f, 20.f);
+	clSetPointsMass(C, 0.1f);
+	vxSetFixe(clGetVertex(C, 0, 0), 1);
+	vxSetFixe(clGetVertex(C, 19, 0), 1);
+	 */
 	while (App->Window->isOpen())
 	{
 		MouseX = ViewWidth*sf::Mouse::getPosition(*App->Window).x/App->WindowWidth + ViewX;
@@ -332,6 +337,7 @@ void appRun(LevelEditorApp* App)
 			Clock.restart();
 		}
 	}
+	//delCloth(C);
 }
 
 void appSetWorkingPath(LevelEditorApp* App, const char* Path)

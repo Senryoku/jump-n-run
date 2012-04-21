@@ -52,7 +52,6 @@ void gmInit(Game* G)
 
 
 	G->Window->setActive();
-
 }
 
 void gmFree(Game* G)
@@ -132,6 +131,8 @@ void gmPlay(Game* G)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
             plJump(G->Lvl->P1);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+			plGetUp(G->Lvl->P1);
         //if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -139,7 +140,6 @@ void gmPlay(Game* G)
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             plMoveR(G->Lvl->P1);
 
-		plUpdate(G->Lvl->P1);
 
 		if(lvlIsGoalReached(G->Lvl))
 		{
