@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include <Physics/Physics.h>
+#include <Objects/Cloth.h>
 #include <Menu/Menu.h>
 
 typedef GLuint Texture;
@@ -15,6 +16,7 @@ void glDrawRigid(Rigid* E);
 void glDrawPolygon(Polygon *P);
 void glDrawCircle(float x, float y, float radius);
 void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY);
+void glDrawCloth(Cloth* C, Texture T);
 
 /** @brief Charge une texture en mémoire
  *

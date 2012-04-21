@@ -262,7 +262,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		else
 			selOffset = yoffset;
 
-		yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
+		yoffset+=ItemText.getCharacterSize()*(*mniGetZoom(I));
 		
 		float Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
 		if (Width>MaxTextWidth)
@@ -323,7 +323,42 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	}
 	
 	moiSetSize(moi, vec2(MaxTextWidth, Size.y));
-	printf("width; %f\n", MaxTextWidth);
 
 	glPopMatrix();
+}
+
+
+void glDrawCloth(Cloth* C, Texture T)
+{
+	glColor4f(1.f, 1.f, 1.f, 1.f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, T);
+	//vxGetPosition(C->Points
+	glBegin(GL_QUADS);
+	unsigned int i, j;
+	
+	for (i=0; i<C->HCells-1; i++)
+		for (j=0; j<C->VCells-1; j++)
+		{
+			//if (i>=C->HCells-1 || j>=C->VCells-1) continue;
+			
+			//left top
+			glTexCoord2f(static_cast<float>(i)/static_cast<float>(C->HCells-1), static_cast<float>(j)/static_cast<float>(C->VCells-1));
+			glVertex2f(vxGetPosition(C->Points[i][j]).x, vxGetPosition(C->Points[i][j]).y);
+			
+			//right top
+			glTexCoord2f(static_cast<float>(i+1)/static_cast<float>(C->HCells-1), static_cast<float>(j)/static_cast<float>(C->VCells-1));
+			glVertex2f(vxGetPosition(C->Points[i+1][j]).x, vxGetPosition(C->Points[i+1][j]).y);
+			
+			//right bottom
+			glTexCoord2f(static_cast<float>(i+1)/static_cast<float>(C->HCells-1), static_cast<float>(j+1)/static_cast<float>(C->VCells-1));
+			glVertex2f(vxGetPosition(C->Points[i+1][j+1]).x, vxGetPosition(C->Points[i+1][j+1]).y);
+			
+			//Left bottom
+			glTexCoord2f(static_cast<float>(i)/static_cast<float>(C->HCells-1), static_cast<float>(j+1)/static_cast<float>(C->VCells-1));
+			glVertex2f(vxGetPosition(C->Points[i][j+1]).x, vxGetPosition(C->Points[i][j+1]).y);
+		}
+	
+	glEnd();
+	
 }

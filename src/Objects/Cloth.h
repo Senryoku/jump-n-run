@@ -9,17 +9,23 @@
  *préfixe cl
  */
 
+typedef unsigned char ClothType;
+
+#define CLOTH_ELASTIC 0x00
+#define CLOTH_RIGID 0x01
+
 typedef struct {
 	Vertex*** Points;
 	unsigned int HCells, VCells;
 	float Width, Height;
+	ClothType Type;
 } Cloth;
 
-Cloth* newCloth(World *W, unsigned int HCells, unsigned int VCells, float Width, float Height);
+Cloth* newCloth(World *W, ClothType Type, unsigned int HCells, unsigned int VCells, float Width, float Height);
 
 void delCloth(Cloth* C);
 
-void clInit(Cloth* C, World *W, unsigned int HCells, unsigned int VCells, float Width, float Height);
+void clInit(Cloth* C, World *W, ClothType Type, unsigned int HCells, unsigned int VCells, float Width, float Height);
 
 void clFree(Cloth* C);
 
