@@ -45,7 +45,7 @@ void clInit(Cloth* C, World *W, ClothType Type, unsigned int HCells, unsigned in
 				else
 				{
 					Elastic* E;
-					E = newElastic(C->Points[i-1][j], C->Points[i][j], -1.f, 0.02f);
+					E = newElastic(C->Points[i-1][j], C->Points[i][j], -1.f, 0.4f);
 					wdAddElastic(W, E);
 				}
 				
@@ -61,11 +61,31 @@ void clInit(Cloth* C, World *W, ClothType Type, unsigned int HCells, unsigned in
 				else
 				{
 					Elastic* E;
-					E = newElastic(C->Points[i][j-1], C->Points[i][j], -1.f, 0.02f);
+					E = newElastic(C->Points[i][j-1], C->Points[i][j], -1.f, 0.4f);
 					wdAddElastic(W, E);
 				}
 			}
-				
+			
+			/*
+			if (i>0 && j>0)
+			{
+				if (C->Type == CLOTH_ELASTIC)
+				{
+					Rigid* R;
+					R = newRigid(C->Points[i-1][j-1], C->Points[i][j], -1.f);
+					wdAddRigid(W, R);
+				}
+				else
+				{
+					Elastic* E;
+					E = newElastic(C->Points[i-1][j-1], C->Points[i][j], -1.f, 0.4f);
+					wdAddElastic(W, E);
+					
+					E = newElastic(C->Points[i-1][j], C->Points[i][j-1], -1.f, 0.4f);
+					wdAddElastic(W, E);
+				}
+			}
+				*/
 			
 		}
 	}

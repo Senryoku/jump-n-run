@@ -24,6 +24,8 @@ void plInit(Player* P)
 	vxSetPosition(P->VxDL, P->DLPos);
 	
 	P->VxBalance = newVertex();
+	vxSetPosition(P->VxBalance, P->ULPos);
+	vxSetFixe(P->VxBalance, 1);
 	P->ElBalance = newElastic(P->VxBalance, P->VxUR, -1.f, 0.2f);
 	
 	P->Shape = polyRectangle(P->VxUL, P->VxUR, P->VxDR, P->VxDL);
@@ -237,6 +239,7 @@ void plUpdate(Player* P, World* W)
 
 	Node* it;
 	CollisionInfo Info;
+	Vec2 Normal;
 	it = lstFirst(&LExtracted);
 	while(!nodeEnd(it))
 	{
@@ -247,8 +250,11 @@ void plUpdate(Player* P, World* W)
 			if (Info.Edge == plGetRdD(P) || Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))
 			{
 				P->GroundAngle = vec2Angle(Info.Normal);
+				Normal = Info.Normal;
 				P->OnGround = TRUE;// printf("Grouuuuuuund; normal angle : %f\n", RAD2DEG(P->GroundAngle));
 			}
+			else
+				P->OnGround = FALSE;
 				
 			/* Test des propriétés de la collision */
 			if(Info.Edge == plGetRdU(P)) P->RdUStatus = Info;
@@ -267,8 +273,18 @@ void plUpdate(Player* P, World* W)
 	}
 	lstFree(&LExtracted);
 	
+	if (P->OnGround)
+	{
+		if (Normal.x!=0.f || Normal.y!=0.f)
+		{
+			vxSetPosition(P->VxBalance, vec2Add(vxGetPosition(P->VxDL), vec2Prod(Normal, 210.f)));
+		//printf("Normal: %f, %f\n", Normal.x, Normal.y);
+		printf("P pos: %f, %f; vxpos: %f, %f\n", vxGetPosition(P->VxUL).x, vxGetPosition(P->VxUL).y, vxGetPosition(P->VxBalance).x, vxGetPosition(P->VxBalance).y);
+		for (int i=0; i<4; i++)
+			elResolve(P->ElBalance);
+		}
+	}
 	
-
 	
 }
 

@@ -58,12 +58,13 @@ void appRun(LevelEditorApp* App)
 	sf::Clock Clock;
 	Bool DispDebug = TRUE, DispBack = FALSE, DispL1 = FALSE, DispL2 = FALSE, DispFore = FALSE, DispObjects = FALSE;
 
-	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, 50, 50, 10.f, 10.f);
-	clSetPointsMass(C, 0.01f);
+	int clothSize = 15;
+	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, clothSize, clothSize, 10.f, 10.f);
+	//clSetPointsMass(C, 0.01f);
 	vxSetFixe(clGetVertex(C, 0, 0), 1);
-	vxSetFixe(clGetVertex(C, 49, 0), 1);
-	vxSetFixe(clGetVertex(C, 0, 49), 1);
-	vxSetFixe(clGetVertex(C, 49, 49), 1);
+	vxSetFixe(clGetVertex(C, clothSize-1, 0), 1);
+	vxSetFixe(clGetVertex(C, 0, clothSize-1), 1);
+	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
 	Texture Tx = glTexLoad("data/trollface.jpg");
 	 
 	while (App->Window->isOpen())
