@@ -10,11 +10,18 @@
  * Préfixe des méthodes : pl
  **/
 
+#define DIR_LEFT 0x00
+#define DIR_RIGHT 0x01
+
+typedef unsigned char PlayerDirection;
+
 typedef struct
 {
 	Polygon* Shape;
 	Vertex* VxUL, *VxUR, *VxDL, *VxDR;
 	/* char* Texture */
+	
+	PlayerDirection Dir;
 
 	Rigid* Grab;
 	Vertex* Neck, *HeadLeft, *HeadRight, *Base, *LeftArm1, *LeftArm2, *RightArm1, *RightArm2, *LeftLeg1, *LeftLeg2, *RightLeg1, *RightLeg2;
@@ -22,7 +29,7 @@ typedef struct
 	Elastic* ElBalance;
 
 	Vec2 Speed;
-	Vec2 Normal;
+	Vec2 Normal, GroundVec;
 	Vec2 Center;
 	Vec2 ULPos, URPos, DLPos, DRPos;
 	float GroundAngle;

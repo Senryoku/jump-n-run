@@ -61,6 +61,7 @@ void appRun(LevelEditorApp* App)
 //	vxSetFixe(clGetVertex(C, 0, clothSize-1), 1);
 //	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
 //	Texture Tx = glTexLoad("data/trollface.jpg");
+	
 
 	while (App->Window.isOpen())
 	{

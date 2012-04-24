@@ -9,10 +9,12 @@ Player* newPlayer(World* W)
 
 void plInit(Player* P, World *W)
 {
+
 	P->ULPos = vec2(-20.f, -50.f);
 	P->URPos = vec2(20.f, -50.f);
 	P->DLPos = vec2(-35.f, 50.f);
 	P->DRPos = vec2(35.f, 50.f);
+
 
 	P->VxUL = newVertex();
 	vxSetPosition(P->VxUL, P->ULPos);
@@ -36,6 +38,8 @@ void plInit(Player* P, World *W)
 	P->Shape = polyRectangle(P->VxUL, P->VxUR, P->VxDR, P->VxDL);
 
 	P->GroundAngle = M_PI_2;
+	
+	P->Dir = DIR_RIGHT;
 
 	/*
 	vxSetPosition(P->VxUL, vec2Rotate(P->ULPos, polyComputeCenter(P->Shape), P->GroundAngle));
@@ -212,12 +216,12 @@ void plMoveR(Player* P)
 		|| P->RdDStatus.P1 != NULL)
 	{
 		//P->Speed.x+=1.5f;
-		polyApplyForce(P->Shape, vec2(1.5f, 0.f), 0);
+		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 1.5f), 0);
 	}
 	else
 	{
 		//P->Speed.x+=0.5f;
-		polyApplyForce(P->Shape, vec2(0.5f, 0.f), 0);
+		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 1.5f), 0);
 	}
 }
 
@@ -258,7 +262,7 @@ void plJump(Player* P)
 			plResetJump(P);
 		}
 	}
-	printf("Onground: %u, Normal : %f, %f\n", P->OnGround, P->Normal.x, P->Normal.y);
+	//printf("Onground: %u, Normal : %f, %f\n", P->OnGround, P->Normal.x, P->Normal.y);
 }
 
 void plResetJump(Player* P)
@@ -287,7 +291,7 @@ void plGetUp(Player* P)
 		vxChangePosition(P->VxDL, vec2Add(P->Center, P->DLPos));
 		vxChangePosition(P->VxDR, vec2Add(P->Center, P->DRPos));
 	}
-	printf("pos correc: %f, %f; with angle: %f, %f\n", vec2Add(P->Center, P->ULPos).x,  vec2Add(P->Center, P->ULPos).y, vec2Rotate(P->ULPos, P->Center, P->GroundAngle).x, vec2Rotate(P->ULPos, P->Center, P->GroundAngle).y);
+	//printf("pos correc: %f, %f; with angle: %f, %f\n", vec2Add(P->Center, P->ULPos).x,  vec2Add(P->Center, P->ULPos).y, vec2Rotate(P->ULPos, P->Center, P->GroundAngle).x, vec2Rotate(P->ULPos, P->Center, P->GroundAngle).y);
 	//vxApplyForce(P->VxUR, vec2(0.f, -15.f), 1.f);
 	/*if (1)//P->OnGround)
 	{
@@ -336,16 +340,6 @@ void plUpdate(Player* P, World* W)
 
 
 
-	if (!P->OnGround)
-		P->Speed.y = MIN(P->Speed.y+0.02f, 16.f);
-	else
-		P->Speed.y = 0.f;
-
-	if (P->Speed.x>0.f)
-		P->Speed.x = MAX(0.f, P->Speed.x-0.3f);
-	else
-		P->Speed.x = MIN(0.f, P->Speed.x+0.3f);
-
 	/*
 	for (i=0; i<polyGetVxCount(P->Shape); i++)
 	{
@@ -355,6 +349,9 @@ void plUpdate(Player* P, World* W)
 	 */
 
 
+	//FAAAAIL!
+	P->Center = polyComputeCenter(P->Shape);
+	
 
 	/* Mise à jour spécifique de Player */
 
@@ -369,6 +366,7 @@ void plUpdate(Player* P, World* W)
 	CollisionInfo Info;
 	it = lstFirst(&LExtracted);
 	P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
+	P->Normal = vec2(0.f, 0.f);
 	while(!nodeEnd(it))
 	{
 
@@ -405,6 +403,7 @@ void plUpdate(Player* P, World* W)
 	}
 	lstFree(&LExtracted);
 
+	P->GroundVec = vec2Ortho(P->Normal);
 	//FAAAAIL!
 //	P->Center = polyComputeCenter(P->Shape);
 //
@@ -413,7 +412,10 @@ void plUpdate(Player* P, World* W)
 //	vxChangePosition(P->VxDL, vec2Add(P->Center, P->DLPos));
 //	vxChangePosition(P->VxDR, vec2Add(P->Center, P->DRPos));
 
-	vxSetPosition(P->Base, vec2Add(P->Center, vec2(0.f, 25.f)));
+
+	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
+	v = vec2Normalized(v);
+	vxSetPosition(P->Base, vec2Add(P->Center, vec2Prod(v, -25.f)));
 
 	//P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
 

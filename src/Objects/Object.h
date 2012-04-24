@@ -3,6 +3,7 @@
 
 #include <Physics/Polygon.h>
 
+
 /** @defgroup Object
  *
  * Préfixe des méthodes : obj
