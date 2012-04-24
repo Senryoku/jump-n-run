@@ -40,18 +40,12 @@ void daReserve(DynArr* DA, unsigned int newCapa)
 	unsigned int i;
 	if(newCapa > DA->Capacity)
 	{
-		printf("1\n");
 		tmp = (void**) malloc(newCapa*sizeof(void*));
-		printf("2\n");
 		for(i = 0; i < DA->Size; i++)
 			tmp[i] = DA->First[i];
-		printf("3\n");
 		free(DA->First);
-		printf("4\n");
 		DA->First = tmp;
-		printf("5\n");
 		DA->Capacity = newCapa;
-		printf("6\n");
 	}
 }
 

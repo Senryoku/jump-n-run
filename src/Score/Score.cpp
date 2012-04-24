@@ -85,21 +85,17 @@ unsigned int scCollect(DynArr* DA, char LvlName[255], char LvlMD5[255])
 			daInit(DA);
 			Line = strtok(NULL, "\n");
 			sscanf(Line, "%u", &NbScore);
-			printf("NbScore : %u\n", NbScore);
 			daReserve(DA, NbScore); // Plante, mais pas en debug...
-			printf("7\n");
 			for(i = 0; i < NbScore; i++)
 			{
 				Line = strtok(NULL, "\n");
 				sscanf(Line, "%s %s %s %u", Player, Hour, Date, &Time);
 				daAdd(DA, newScore(Player, Hour, Date, Time));
-				printf("boucle\n");
 			}
 		}
 	} else {
 		ErrorCode = 50;
 	}
-		printf("fin\n");
 	return ErrorCode;
 }
 
@@ -117,4 +113,20 @@ void scFree(Score *S)
 	strcpy(S->LvlName, "");
 	strcpy(S->LvlMD5, "");
 	S->Time = 0;
+}
+
+void scRegressionTest()
+{
+	DynArr DA;
+	unsigned int ErrorCode = scCollect(&DA, "tmpEditor.lvl", "3557a855ba37d9b60bc18583d99eb254");
+	if(ErrorCode == 0)
+	{
+		printf("Number of Score(s) : %u\n", daGetSize(&DA));
+		for(unsigned int i = 0; i < daGetSize(&DA); i++)
+		{
+			Score* S = (Score*) daGet(&DA, i);
+			printf("Player : %s, Hour : %s, Date : %s, Time : %u\n", S->Player, S->LvlName, S->LvlMD5, S->Time);
+		}
+		scCollectFree(&DA);
+	}
 }

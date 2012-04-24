@@ -15,9 +15,6 @@ int main(int argc, char** argv)
 
 	DynArr DA;
 	unsigned int ErrorCode = scCollect(&DA, "tmpEditor.lvl", "3557a855ba37d9b60bc18583d99eb254");
-		printf("r:klugg\n");
-	printf("scCollect ErrorCode : %u\n", ErrorCode);
-		printf("e\n");
 	if(ErrorCode == 0)
 	{
 		printf("Number of Score(s) : %u\n", daGetSize(&DA));

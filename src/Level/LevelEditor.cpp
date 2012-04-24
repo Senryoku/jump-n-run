@@ -608,7 +608,6 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	while (!nodeEnd(it))
 	{
 		Polygon* p = (Polygon*)nodeGetData(it);
-		daAdd(Poly, p); //on écrit les polygones dans la dynarr pour leur associer une ID
 		//c'est &lu pour les machines de x64 et %u pour les x86
 		if (daGetSize(&p->Vertices)>4 && polyGetCenter(p)!=NULL)
 			lstAdd(LCenter, polyGetCenter(p));
@@ -642,6 +641,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	while (!nodeEnd(it))
 	{
 		Polygon* p = (Polygon*)nodeGetData(it);
+		daAdd(Poly, p); //on écrit les polygones dans la dynarr pour leur associer une ID
 		unsigned int nVertex = daGetSize(&p->Vertices), i;
 		//on écrit un identifiant pour dire qu'on lit un polygone
 		fprintf(f, "%u %u %i #Polygon\n", o_poly, nVertex, (int) polyIsFixe(p));
@@ -690,6 +690,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		fprintf(f, "%u #Texture\n%s\n", o_texture, (char*)daGet(&Led->TexturesPath, i));
 	}
 
+	/** @todo Debuger */
 	it = lstFirst(&Led->Lvl->Objects);
 	while(!nodeEnd(it))
 	{

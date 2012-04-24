@@ -71,7 +71,15 @@ unsigned int scCollect(DynArr* DA, char LvlName[255], char LvlMD5[255]);
 **/
 void scCollectFree(DynArr* DA);
 
+/** @brief Libération des ressources utilisées par S
+ *
+ * @param S Score à libérer
+**/
 void scFree(Score *S);
+
+/** @brief Test de Régression
+**/
+void scRegressionTest();
 
 /** @}
 **/
