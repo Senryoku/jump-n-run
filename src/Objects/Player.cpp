@@ -23,10 +23,10 @@ void plInit(Player* P, World *W)
 	P->VxDL = newVertex();
 	vxSetPosition(P->VxDL, P->DLPos);
 
-//	vxSetMass(P->VxUL, 0.2f);
-//	vxSetMass(P->VxUR, 0.2f);
-//	vxSetMass(P->VxDL, 4.f);
-//	vxSetMass(P->VxDR, 4.f);
+	vxSetMass(P->VxUL, 0.2f);
+	vxSetMass(P->VxUR, 0.2f);
+	vxSetMass(P->VxDL, 4.f);
+	vxSetMass(P->VxDR, 4.f);
 
 	P->VxBalance = newVertex();
 	vxSetPosition(P->VxBalance, P->ULPos);
@@ -55,10 +55,10 @@ void plInit(Player* P, World *W)
 	P->Speed = vec2(0.f, 0.f);
 	P->OnGround = FALSE;
 	plResetJump(P);
-	
+
 	/* On crée les vertices du personnage, pour l'animation et quand il meurt */
 	P->Neck = newVertex(), P->HeadLeft = newVertex(), P->HeadRight = newVertex(), P->Base = newVertex(), P->LeftArm1 = newVertex(), P->LeftArm2 = newVertex(), P->RightArm1 = newVertex(), P->RightArm2 = newVertex(), P->LeftLeg1 = newVertex(), P->LeftLeg2 = newVertex(), P->RightLeg1 = newVertex(), P->RightLeg2 = newVertex();
-	
+
 	vxSetPosition(P->Base, vec2(0.f, 130.f));
 	Vec2 B = vxGetPosition(P->Base);
 	vxSetPosition(P->Neck, vec2(B.x, B.y - 90.f));
@@ -72,26 +72,25 @@ void plInit(Player* P, World *W)
 	vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->Base), vec2(10.f, 80.f)));
 	vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 40.f)));
 	vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->Base), vec2(-10.f, 80.f)));
-	  
-	
+
 	Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
 	LA1 = newRigid(P->Neck, P->LeftArm1, -1.f);
 	 LA2 = newRigid(P->LeftArm1, P->LeftArm2, -1.f);
 	 RA1 = newRigid(P->Neck, P->RightArm1, -1.f);
 	 RA2 = newRigid(P->RightArm1, P->RightArm2, -1.f);
-	 
+
 	 LL1 = newRigid(P->Base, P->LeftLeg1, -1.f);
 	 LL2 = newRigid(P->LeftLeg1, P->LeftLeg2, -1.f);
 	 RL1 = newRigid(P->Base, P->RightLeg1, -1.f);
 	 RL2 = newRigid(P->RightLeg1, P->RightLeg2, -1.f);
-	
-	
+
+
 	Body = newRigid(P->Base, P->Neck, -1.f);
-	
+
 	H1 = newRigid(P->Neck, P->HeadLeft, -1.f);
 	H2 = newRigid(P->Neck, P->HeadRight, -1.f);
 	H3 = newRigid(P->HeadLeft, P->HeadRight, -1.f);
-	
+
 	wdAddRigid(W, Body);
 	wdAddRigid(W, LA1);
 	wdAddRigid(W, LA2);
@@ -104,7 +103,7 @@ void plInit(Player* P, World *W)
 	wdAddRigid(W, H1);
 	wdAddRigid(W, H2);
 	wdAddRigid(W, H3);
-	
+
 }
 
 void plFree(Player* P)
@@ -123,7 +122,7 @@ void plFree(Player* P)
 	delVertex(P->VxDL);
 	delVertex(P->VxDR);
 	 */
-	
+
 	delVertex(P->Neck);
 	delVertex(P->Base);
 	delVertex(P->HeadLeft);
@@ -136,7 +135,7 @@ void plFree(Player* P)
 	delVertex(P->LeftLeg2);
 	delVertex(P->RightLeg1);
 	delVertex(P->RightLeg2);
-	 
+
 }
 
 void delPlayer(Player* P)
@@ -257,7 +256,7 @@ void plJump(Player* P)
 			plResetJump(P);
 		}
 	}
-	printf("Onground: %u, Normal : %f, %f\n", P->OnGround, P->Normal.x, P->Normal.y);	
+	printf("Onground: %u, Normal : %f, %f\n", P->OnGround, P->Normal.x, P->Normal.y);
 }
 
 void plResetJump(Player* P)
@@ -268,16 +267,16 @@ void plResetJump(Player* P)
 
 void plGetUp(Player* P)
 {
-	
+
 	P->Center = polyComputeCenter(P->Shape);
-	
+
 	if (0)//P->OnGround)
 	{
 		vxChangePosition(P->VxUL, vec2Add(P->Center, vec2Rotate(P->ULPos, P->Center, P->GroundAngle)));
 		vxChangePosition(P->VxUR, vec2Add(P->Center, vec2Rotate(P->URPos, P->Center, P->GroundAngle)));
 		vxChangePosition(P->VxDL, vec2Add(P->Center, vec2Rotate(P->DLPos, P->Center, P->GroundAngle)));
 		vxChangePosition(P->VxDR, vec2Add(P->Center, vec2Rotate(P->DRPos, P->Center, P->GroundAngle)));
-		
+
 	}
 	else
 	{
@@ -356,7 +355,7 @@ void plUpdate(Player* P, World* W)
 
 
 	/* Mise à jour spécifique de Player */
-	
+
 
 	P->RdUStatus = P->RdRStatus = P->RdDStatus =
 	P->RdLStatus = P->VxURStatus = P->VxULStatus =
@@ -370,18 +369,22 @@ void plUpdate(Player* P, World* W)
 	P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
 	while(!nodeEnd(it))
 	{
-		
+
 		Info = polyCollide(plGetShape(P), (Polygon*) nodeGetData(it));
 		if(Info.P1 != NULL)
 		{
 			//printf("Collision\n");
-			if (!P->OnGround && (Info.Edge == plGetRdD(P) || Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P)))
+			if (Info.Edge == plGetRdD(P))
 			{
 				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
+				P->Normal = vec2Prod(Info.Normal, -1.f);
+				P->OnGround = TRUE;
+			} else if(Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))	{
+				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
 				P->Normal = Info.Normal;
-				P->OnGround = TRUE;// printf("Grouuuuuuund; normal angle : %f\n", RAD2DEG(P->GroundAngle));
+				P->OnGround = TRUE; // printf("Grouuuuuuund; normal angle : %f\n", RAD2DEG(P->GroundAngle));
 			}
-		
+
 
 			/* Test des propriétés de la collision */
 			if(Info.Edge == plGetRdU(P)) P->RdUStatus = Info;
@@ -401,33 +404,30 @@ void plUpdate(Player* P, World* W)
 	lstFree(&LExtracted);
 
 	//FAAAAIL!
-	P->Center = polyComputeCenter(P->Shape);
+//	P->Center = polyComputeCenter(P->Shape);
+//
+//	vxChangePosition(P->VxUL, vec2Add(P->Center, P->ULPos));
+//	vxChangePosition(P->VxUR, vec2Add(P->Center, P->URPos));
+//	vxChangePosition(P->VxDL, vec2Add(P->Center, P->DLPos));
+//	vxChangePosition(P->VxDR, vec2Add(P->Center, P->DRPos));
 
-	
-	vxChangePosition(P->VxUL, vec2Add(P->Center, P->ULPos));
-	vxChangePosition(P->VxUR, vec2Add(P->Center, P->URPos));
-	vxChangePosition(P->VxDL, vec2Add(P->Center, P->DLPos));
-	vxChangePosition(P->VxDR, vec2Add(P->Center, P->DRPos));
-	
-	
-	
 	vxSetPosition(P->Base, vec2Add(P->Center, vec2(0.f, 25.f)));
-	 
-	//P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
-	
 
-//	if (P->OnGround)
-//	{
-//		float Force = 0.02f;
-//		float Diff = vxGetPosition(P->VxUL).y - vxGetPosition(P->VxUR).y;
-//		if(abs(Diff) < 10.f) Diff = 0;
-//		if(Diff > 0)
-//			vxApplyForce(P->VxUL, vec2(0.f, -Force*(Diff)), 0),
-//			vxApplyForce(P->VxDR, vec2(0.f, Force*(Diff)), 0);
-//		if(Diff < 0)
-//			vxApplyForce(P->VxUR, vec2(0.f, Force*(Diff)), 0),
-//			vxApplyForce(P->VxDL, vec2(0.f, -Force*(Diff)), 0);
-//	}
+	//P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
+
+
+	if (P->OnGround)
+	{
+		float Force = 0.02f;
+		float Diff = vxGetPosition(P->VxUL).y - vxGetPosition(P->VxUR).y;
+		if(abs(Diff) < 10.f) Diff = 0;
+		if(Diff > 0)
+			vxApplyForce(P->VxUL, vec2(0.f, -Force*(Diff)), 0),
+			vxApplyForce(P->VxDR, vec2(0.f, Force*(Diff)), 0);
+		if(Diff < 0)
+			vxApplyForce(P->VxUR, vec2(0.f, Force*(Diff)), 0),
+			vxApplyForce(P->VxDL, vec2(0.f, -Force*(Diff)), 0);
+	}
 
 }
 

@@ -53,15 +53,15 @@ void appRun(LevelEditorApp* App)
 	sf::Clock Clock;
 	Bool DispDebug = TRUE, DispBack = FALSE, DispL1 = FALSE, DispL2 = FALSE, DispFore = FALSE, DispObjects = FALSE;
 
-	int clothSize = 15;
-	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, clothSize, clothSize, 10.f, 10.f);
-	//clSetPointsMass(C, 0.01f);
-	vxSetFixe(clGetVertex(C, 0, 0), 1);
-	vxSetFixe(clGetVertex(C, clothSize-1, 0), 1);
-	vxSetFixe(clGetVertex(C, 0, clothSize-1), 1);
-	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
-	Texture Tx = glTexLoad("data/trollface.jpg");
-	 
+//	int clothSize = 15;
+//	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, clothSize, clothSize, 10.f, 10.f);
+//	//clSetPointsMass(C, 0.01f);
+//	vxSetFixe(clGetVertex(C, 0, 0), 1);
+//	vxSetFixe(clGetVertex(C, clothSize-1, 0), 1);
+//	vxSetFixe(clGetVertex(C, 0, clothSize-1), 1);
+//	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
+//	Texture Tx = glTexLoad("data/trollface.jpg");
+
 	while (App->Window.isOpen())
 	{
 		MouseX = ViewWidth*sf::Mouse::getPosition(App->Window).x/App->WindowWidth + ViewX;
@@ -319,7 +319,7 @@ void appRun(LevelEditorApp* App)
 			if(DispL1) lvlDisplayL1(App->Led.Lvl);
 			if(DispL2) lvlDisplayL2(App->Led.Lvl);
 			if(DispObjects) lvlDispAllObj(App->Led.Lvl);
-			glDrawCloth(C, Tx);
+//			glDrawCloth(C, Tx);
 			if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 		}
 
@@ -337,8 +337,8 @@ void appRun(LevelEditorApp* App)
 			Clock.restart();
 		}
 	}
-	delCloth(C);
-	glTexFree(Tx);
+//	delCloth(C);
+//	glTexFree(Tx);
 }
 
 void appSetWorkingPath(LevelEditorApp* App, const char* Path)
