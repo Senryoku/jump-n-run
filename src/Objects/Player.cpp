@@ -62,9 +62,9 @@ void plInit(Player* P, World *W)
 	
 	vxSetPosition(P->Base, vec2(0.f, 130.f));
 	Vec2 B = vxGetPosition(P->Base);
-	vxSetPosition(P->Neck, vec2(B.x, B.x - 90.f));
-	 vxSetPosition(P->HeadLeft, vec2Add(vxGetPosition(P->Neck), vec2(-10.f, -10.f)));
-	 vxSetPosition(P->HeadRight, vec2Add(vxGetPosition(P->Neck), vec2(10.f, -10.f)));
+	vxSetPosition(P->Neck, vec2(B.x, B.y - 90.f));
+	 vxSetPosition(P->HeadLeft, vec2Add(vxGetPosition(P->Neck), vec2(-30.f, -40.f)));
+	 vxSetPosition(P->HeadRight, vec2Add(vxGetPosition(P->Neck), vec2(30.f, -40.f)));
 	 vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 35.f)));
 	 vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 70.f)));
 	 vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 35.f)));
@@ -73,6 +73,7 @@ void plInit(Player* P, World *W)
 	vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->Base), vec2(10.f, 80.f)));
 	vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 40.f)));
 	vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->Base), vec2(-10.f, 80.f)));
+	  
 	
 	Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
 	LA1 = newRigid(P->Neck, P->LeftArm1, -1.f);
@@ -88,8 +89,8 @@ void plInit(Player* P, World *W)
 	
 	Body = newRigid(P->Base, P->Neck, -1.f);
 	
-	H1 = newRigid(P->Base, P->HeadLeft, -1.f);
-	H2 = newRigid(P->Base, P->HeadRight, -1.f);
+	H1 = newRigid(P->Neck, P->HeadLeft, -1.f);
+	H2 = newRigid(P->Neck, P->HeadRight, -1.f);
 	H3 = newRigid(P->HeadLeft, P->HeadRight, -1.f);
 	
 	wdAddRigid(W, Body);
@@ -136,6 +137,7 @@ void plFree(Player* P)
 	delVertex(P->LeftLeg2);
 	delVertex(P->RightLeg1);
 	delVertex(P->RightLeg2);
+	 
 }
 
 void delPlayer(Player* P)
@@ -369,6 +371,7 @@ void plUpdate(Player* P, World* W)
 	P->OnGround = FALSE;
 	while(!nodeEnd(it))
 	{
+		
 		Info = polyCollide(plGetShape(P), (Polygon*) nodeGetData(it));
 		if(Info.P1 != NULL)
 		{
@@ -402,12 +405,12 @@ void plUpdate(Player* P, World* W)
 	P->Center = polyComputeCenter(P->Shape);
 
 	
-	
-	
 	vxChangePosition(P->VxUL, vec2Add(P->Center, P->ULPos));
 	vxChangePosition(P->VxUR, vec2Add(P->Center, P->URPos));
 	vxChangePosition(P->VxDL, vec2Add(P->Center, P->DLPos));
 	vxChangePosition(P->VxDR, vec2Add(P->Center, P->DRPos));
+	
+	
 	
 	vxSetPosition(P->Base, vec2Add(P->Center, vec2(0.f, 25.f)));
 	 
