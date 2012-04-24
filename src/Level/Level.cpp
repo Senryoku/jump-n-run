@@ -346,7 +346,7 @@ void lvlLoadedInit(Level* Lvl)
 {
 	/**@todo A modifier !!!!! Valeurs de test temporaires. Maintenant que j'y pense, il n'y aurai pas des leaks à cause des newqqchose ? car ils allouent la structure mais cette structure n'est pas liberée, non? on en au peut etre fait qqpart, meme si world il fait des del. car je n'ai pas fait tres attention xDD */
 
-	Lvl->P1 = newPlayer();
+	Lvl->P1 = newPlayer(lvlGetWorld(Lvl));
 
 
 	plSetPosition(Lvl->P1, Lvl->Spawn);

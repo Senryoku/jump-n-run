@@ -16,7 +16,7 @@ typedef struct
 	Vertex* VxUL, *VxUR, *VxDL, *VxDR;
 	/* char* Texture */
 
-	Elastic* Grab;
+	Rigid* Grab;
 	Vertex* Neck, *HeadLeft, *HeadRight, *Base, *LeftArm1, *LeftArm2, *RightArm1, *RightArm2, *LeftLeg1, *LeftLeg2, *RightLeg1, *RightLeg2;
 	Vertex* VxBalance;
 	Elastic* ElBalance;
@@ -26,6 +26,9 @@ typedef struct
 	Vec2 Center;
 	Vec2 ULPos, URPos, DLPos, DRPos;
 	float GroundAngle;
+	Bool Jumping;
+	float JumpTimer;
+	Vec2 JumpVec;
 
 	/* Défini si une partie de la BB est en collision */
 	CollisionInfo VxULStatus, VxURStatus, VxDRStatus, VxDLStatus,
@@ -33,9 +36,9 @@ typedef struct
 	Bool OnGround;
 } Player;
 
-Player* newPlayer();
+Player* newPlayer(World* W);
 
-void plInit(Player* P);
+void plInit(Player* P, World* W);
 
 void plFree(Player* P);
 
@@ -63,6 +66,7 @@ void plUpdate(Player* P, World* W);
 void plMoveR(Player* P);
 void plMoveL(Player* P);
 void plJump(Player* P);
+void plResetJump(Player* P);
 void plGetUp(Player* P);
 
 void plGrab(Player* P, World* W, float MouseX, float MouseY);

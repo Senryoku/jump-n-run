@@ -131,6 +131,9 @@ void gmPlay(Game* G)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
             plJump(G->Lvl->P1);
+		else
+			plResetJump(G->Lvl->P1);
+		
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 			plGetUp(G->Lvl->P1);
         //if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))

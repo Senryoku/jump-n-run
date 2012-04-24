@@ -40,7 +40,9 @@ void gridSetCellSize(Grid* g, float Size)
 
 List* gridGetCellList(const Grid* g, unsigned int x, unsigned int y)
 {
-	assert(x < g->HCells && y < g->VCells);
+	//assert(x < g->HCells && y < g->VCells);
+	x = MAX(0, MIN(g->HCells-1, x));
+	y = MAX(0, MIN(g->VCells-1, y));
 	//printf("Acces to %u, %u; max: %u, %u\n", x, y, g->HCells, g->VCells);
 	return &(g->Table[x][y]);
 }
