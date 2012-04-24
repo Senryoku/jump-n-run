@@ -9,10 +9,10 @@ Player* newPlayer()
 
 void plInit(Player* P)
 {
-	P->ULPos = vec2(0.f, 0.f);
-	P->URPos = vec2(50.f, 0.f);
-	P->DLPos = vec2(0.f, 210.f);
-	P->DRPos = vec2(50.f, 210.f);
+	P->ULPos = vec2(-25.f, -105.f);
+	P->URPos = vec2(25.f, -105.f);
+	P->DLPos = vec2(-25.f, 105.f);
+	P->DRPos = vec2(25.f, 105.f);
 	
 	P->VxUL = newVertex();
 	vxSetPosition(P->VxUL, P->ULPos);
@@ -26,7 +26,7 @@ void plInit(Player* P)
 	P->VxBalance = newVertex();
 	vxSetPosition(P->VxBalance, P->ULPos);
 	vxSetFixe(P->VxBalance, 1);
-	P->ElBalance = newElastic(P->VxBalance, P->VxUR, -1.f, 0.2f);
+	P->ElBalance = newElastic(P->VxBalance, P->VxUR, -1.f, 0.02f);
 	
 	P->Shape = polyRectangle(P->VxUL, P->VxUR, P->VxDR, P->VxDL);
 	
@@ -176,7 +176,18 @@ void plJump(Player* P)
 
 void plGetUp(Player* P)
 {
-	vxApplyForce(P->VxUR, vec2(0.f, -15.f), 1.f);
+	//vxApplyForce(P->VxUR, vec2(0.f, -15.f), 1.f);
+	if (1)//P->OnGround)
+	{
+		if (P->Normal.x!=0.f || P->Normal.y!=0.f)
+		{
+			vxSetPosition(P->VxBalance, vec2Add(vxGetPosition(P->VxDL), vec2Prod(P->Normal, 210.f)));
+			//printf("Normal: %f, %f\n", Normal.x, Normal.y);
+			//printf("P pos: %f, %f; vxpos: %f, %f\n", vxGetPosition(P->VxUL).x, vxGetPosition(P->VxUL).y, vxGetPosition(P->VxBalance).x, vxGetPosition(P->VxBalance).y);
+			for (int i=0; i<4; i++)
+				elResolve(P->ElBalance);
+		}
+	}
 }
 
 void plGrab(Player* P, World* W, float MouseX, float MouseY)
@@ -208,8 +219,8 @@ void plUpdate(Player* P, World* W)
 	
 	//printf("Onground: %u; speed: %f, %f\n", P->OnGround, P->Speed.x, P->Speed.y);
 	
-	unsigned int i;
-	Vertex* V;
+	
+
 	if (!P->OnGround)
 		P->Speed.y = MIN(P->Speed.y+0.02f, 16.f);
 	else
@@ -228,6 +239,8 @@ void plUpdate(Player* P, World* W)
 	}
 	 */
 	
+	
+	
 	/* Mise à jour spécifique de Player */
 	P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
 
@@ -239,7 +252,6 @@ void plUpdate(Player* P, World* W)
 
 	Node* it;
 	CollisionInfo Info;
-	Vec2 Normal;
 	it = lstFirst(&LExtracted);
 	while(!nodeEnd(it))
 	{
@@ -250,7 +262,7 @@ void plUpdate(Player* P, World* W)
 			if (Info.Edge == plGetRdD(P) || Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))
 			{
 				P->GroundAngle = vec2Angle(Info.Normal);
-				Normal = Info.Normal;
+				P->Normal = Info.Normal;
 				P->OnGround = TRUE;// printf("Grouuuuuuund; normal angle : %f\n", RAD2DEG(P->GroundAngle));
 			}
 			else
@@ -273,17 +285,18 @@ void plUpdate(Player* P, World* W)
 	}
 	lstFree(&LExtracted);
 	
-	if (P->OnGround)
-	{
-		if (Normal.x!=0.f || Normal.y!=0.f)
-		{
-			vxSetPosition(P->VxBalance, vec2Add(vxGetPosition(P->VxDL), vec2Prod(Normal, 210.f)));
-		//printf("Normal: %f, %f\n", Normal.x, Normal.y);
-		printf("P pos: %f, %f; vxpos: %f, %f\n", vxGetPosition(P->VxUL).x, vxGetPosition(P->VxUL).y, vxGetPosition(P->VxBalance).x, vxGetPosition(P->VxBalance).y);
-		for (int i=0; i<4; i++)
-			elResolve(P->ElBalance);
-		}
-	}
+	//FAAAAIL!
+	P->Center = polyComputeCenter(P->Shape);
+	/*vxChangePosition(P->VxUL, vec2Add(P->Center, vec2Rotate(P->ULPos, P->Center, P->GroundAngle)));
+	vxChangePosition(P->VxUR, vec2Add(P->Center, vec2Rotate(P->URPos, P->Center, P->GroundAngle)));
+	vxChangePosition(P->VxDL, vec2Add(P->Center, vec2Rotate(P->DLPos, P->Center, P->GroundAngle)));
+	vxChangePosition(P->VxDR, vec2Add(P->Center, vec2Rotate(P->DRPos, P->Center, P->GroundAngle)));
+	 */
+	
+	vxChangePosition(P->VxUL, vec2Add(P->Center, P->ULPos));
+	vxChangePosition(P->VxUR, vec2Add(P->Center, P->URPos));
+	vxChangePosition(P->VxDL, vec2Add(P->Center, P->DLPos));
+	vxChangePosition(P->VxDR, vec2Add(P->Center, P->DRPos));
 	
 	
 }

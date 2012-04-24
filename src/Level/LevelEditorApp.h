@@ -13,7 +13,7 @@
 typedef struct
 {
 	LevelEditor Led;
-	sf::RenderWindow* Window;
+	sf::RenderWindow Window;
 	float WindowWidth;
 	float WindowHeight;
 	char WorkingPath[255];
@@ -30,11 +30,6 @@ void appInit(LevelEditorApp* App);
 **/
 void appWindowInit(LevelEditorApp* App);
 
-/** @brief Détruit la fenêtre
- *
- * Est appellé par appFree
-**/
-void appWindowFree(LevelEditorApp* App);
 
 /** @brief Libère les ressources  utilisées par LevelEditorApp
  *

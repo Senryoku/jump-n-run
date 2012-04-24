@@ -20,15 +20,15 @@ void appWindowInit(LevelEditorApp* App)
 
 	App->WindowWidth = Cfg.WindowWidth;
 	App->WindowHeight = Cfg.WindowHeight;
-	App->Window = new sf::RenderWindow(sf::VideoMode(App->WindowWidth, App->WindowHeight), "Jump n'Run Level Editor", sf::Style::Default, sf::ContextSettings(32));
+	App->Window.create(sf::VideoMode(App->WindowWidth, App->WindowHeight), "Jump n'Run Level Editor", sf::Style::Default, sf::ContextSettings(32));
 
-	App->Window->setKeyRepeatEnabled(0);
-	App->Window->setMouseCursorVisible(1);
+	App->Window.setKeyRepeatEnabled(0);
+	App->Window.setMouseCursorVisible(1);
 	/* On ne peut utiliser  qu'une des deux */
 	if(Cfg.VerticalSync == 1.f)
-		App->Window->setVerticalSyncEnabled(1);
+		App->Window.setVerticalSyncEnabled(1);
 	else
-		App->Window->setFramerateLimit((unsigned int) Cfg.FPSLimit);
+		App->Window.setFramerateLimit((unsigned int) Cfg.FPSLimit);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
@@ -36,16 +36,11 @@ void appWindowInit(LevelEditorApp* App)
 	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
 }
 
-void appWindowFree(LevelEditorApp* App)
-{
-	App->Window->close();
-	delete App->Window;
-}
 
 void appFree(LevelEditorApp* App)
 {
 	lvledFree(&App->Led);
-	appWindowFree(App);
+	App->Window.close();
 }
 
 void appRun(LevelEditorApp* App)
@@ -67,13 +62,13 @@ void appRun(LevelEditorApp* App)
 	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
 	Texture Tx = glTexLoad("data/trollface.jpg");
 	 
-	while (App->Window->isOpen())
+	while (App->Window.isOpen())
 	{
-		MouseX = ViewWidth*sf::Mouse::getPosition(*App->Window).x/App->WindowWidth + ViewX;
-		MouseY = ViewHeight*sf::Mouse::getPosition(*App->Window).y/App->WindowHeight + ViewY;
+		MouseX = ViewWidth*sf::Mouse::getPosition(App->Window).x/App->WindowWidth + ViewX;
+		MouseY = ViewHeight*sf::Mouse::getPosition(App->Window).y/App->WindowHeight + ViewY;
 
 		sf::Event event;
-		while (App->Window->pollEvent(event))
+		while (App->Window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 				return;
@@ -148,7 +143,7 @@ void appRun(LevelEditorApp* App)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::T :
-						appWindowFree(App);
+						App->Window.close();
 						lvledTestLevel(&App->Led);
 						appWindowInit(App);
 						break;
@@ -332,7 +327,7 @@ void appRun(LevelEditorApp* App)
 		OldMouseY = MouseY;
 
 		// Update the App->Window
-		App->Window->display();
+		App->Window.display();
 		frames++;
 		if (Clock.getElapsedTime().asSeconds()>=1.f)
 		{

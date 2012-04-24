@@ -22,6 +22,8 @@ typedef struct
 	Elastic* ElBalance;
 	
 	Vec2 Speed;
+	Vec2 Normal;
+	Vec2 Center;
 	Vec2 ULPos, URPos, DLPos, DRPos;
 	float GroundAngle;
 
