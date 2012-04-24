@@ -9,10 +9,10 @@ Player* newPlayer(World* W)
 
 void plInit(Player* P, World *W)
 {
-	P->ULPos = vec2(-25.f, -105.f);
-	P->URPos = vec2(25.f, -105.f);
-	P->DLPos = vec2(-25.f, 105.f);
-	P->DRPos = vec2(25.f, 105.f);
+	P->ULPos = vec2(-20.f, -50.f);
+	P->URPos = vec2(20.f, -50.f);
+	P->DLPos = vec2(-35.f, 50.f);
+	P->DRPos = vec2(35.f, 50.f);
 
 	P->VxUL = newVertex();
 	vxSetPosition(P->VxUL, P->ULPos);
@@ -23,10 +23,10 @@ void plInit(Player* P, World *W)
 	P->VxDL = newVertex();
 	vxSetPosition(P->VxDL, P->DLPos);
 
-	vxSetMass(P->VxUL, 0.2f);
-	vxSetMass(P->VxUR, 0.2f);
-	vxSetMass(P->VxDL, 4.f);
-	vxSetMass(P->VxDR, 4.f);
+	vxSetMass(P->VxUL, 0.1f);
+	vxSetMass(P->VxUR, 0.1f);
+	vxSetMass(P->VxDL, 2.f);
+	vxSetMass(P->VxDR, 2.f);
 
 	P->VxBalance = newVertex();
 	vxSetPosition(P->VxBalance, P->ULPos);
@@ -206,6 +206,7 @@ void plSetShape(Player* P, Polygon* Shape)
 
 void plMoveR(Player* P)
 {
+	if(vec2Sub(vxGetPosition(P->VxUR), vxGetOldPos(P->VxUR)).x > 20.f) return; // Limite de Vitesse
 
 	if(P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL
 		|| P->RdDStatus.P1 != NULL)
@@ -222,6 +223,7 @@ void plMoveR(Player* P)
 
 void plMoveL(Player* P)
 {
+	if(vec2Sub(vxGetPosition(P->VxUR), vxGetOldPos(P->VxUR)).x < -20.f) return;
 
 	if(P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL
 		|| P->RdDStatus.P1 != NULL)
@@ -418,14 +420,18 @@ void plUpdate(Player* P, World* W)
 
 	if (P->OnGround)
 	{
-		float Force = 0.02f;
+		float Force = 0.03f;
 		float Diff = vxGetPosition(P->VxUL).y - vxGetPosition(P->VxUR).y;
 		if(abs(Diff) < 10.f) Diff = 0;
 		if(Diff > 0)
 			vxApplyForce(P->VxUL, vec2(0.f, -Force*(Diff)), 0),
+			vxApplyForce(P->VxUR, vec2(-Force*(Diff), 0), 0),
+			vxApplyForce(P->VxDL, vec2(Force*(Diff), 0), 0),
 			vxApplyForce(P->VxDR, vec2(0.f, Force*(Diff)), 0);
 		if(Diff < 0)
 			vxApplyForce(P->VxUR, vec2(0.f, Force*(Diff)), 0),
+			vxApplyForce(P->VxUL, vec2(-Force*(Diff), 0), 0),
+			vxApplyForce(P->VxDR, vec2(Force*(Diff), 0), 0),
 			vxApplyForce(P->VxDL, vec2(0.f, -Force*(Diff)), 0);
 	}
 
