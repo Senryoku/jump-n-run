@@ -170,7 +170,7 @@ void plMoveL(Player* P)
 void plJump(Player* P)
 {
 	if (P->OnGround)
-		polyApplyForce(P->Shape, vec2(0.f, -30.f));
+		polyApplyForce(P->Shape, vec2Prod(P->Normal, 20.f));
 	//P->Speed.y =-6.f, P->OnGround = FALSE;
 }
 
