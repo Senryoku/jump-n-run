@@ -70,6 +70,14 @@ void lvledSetPolyDraw(LevelEditor* Led, void (*polyDraw)(Polygon* P));
 **/
 void lvledDraw(const LevelEditor *Led, char flag);
 
+/** @brief Définit le point de Spawn
+**/
+void lvledSetSpawn(LevelEditor* Led);
+
+/** @brief Définit le Goal
+**/
+void lvledSetGoal(LevelEditor* Led);
+
 // Fonctions de Manipulation/Vision
 /** @brief Sélectionne le Vertex le plus proche de Mouse comme Grab
 **/

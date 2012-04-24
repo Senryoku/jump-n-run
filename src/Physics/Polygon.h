@@ -251,8 +251,9 @@ Rigid* polyGetInternalRigid(Polygon* P, unsigned int i);
  *
  * @param P Polygon
  * @param Force Force à appliquer
+ * @param B Prise en compte de la Masse
 **/
-void polyApplyForce(Polygon* P, Vec2 Force);
+void polyApplyForce(Polygon* P, Vec2 Force, Bool B);
 
 /** @brief Change la vitesse de tous les points
  *

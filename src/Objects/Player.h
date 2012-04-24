@@ -20,7 +20,7 @@ typedef struct
 	Vertex* Neck, *HeadLeft, *HeadRight, *Base, *LeftArm1, *LeftArm2, *RightArm1, *RightArm2, *LeftLeg1, *LeftLeg2, *RightLeg1, *RightLeg2;
 	Vertex* VxBalance;
 	Elastic* ElBalance;
-	
+
 	Vec2 Speed;
 	Vec2 Normal;
 	Vec2 Center;

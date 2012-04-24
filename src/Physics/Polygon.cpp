@@ -443,14 +443,14 @@ void polySetFixe(Polygon* P, Bool B)
 	P->Fixe = B;
 }
 
-void polyApplyForce(Polygon* P, Vec2 Force)
+void polyApplyForce(Polygon* P, Vec2 Force, Bool B)
 {
 	unsigned int i;
 	for (i = 0; i < daGetSize(&P->Vertices); i++)
 	{
-		vxApplyForce((Vertex*)daGet(&P->Vertices, i), Force, 0);
+		vxApplyForce((Vertex*)daGet(&P->Vertices, i), Force, B);
 	}
-	if(polyGetCenter(P) != NULL) vxApplyForce(polyGetCenter(P), Force, 0);
+	if(polyGetCenter(P) != NULL) vxApplyForce(polyGetCenter(P), Force, B);
 }
 
 void polySetSpeed(Polygon* P, Vec2 Speed)

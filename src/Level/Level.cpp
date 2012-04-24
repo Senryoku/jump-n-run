@@ -110,7 +110,13 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	else
 		sscanf(read, "%f, %f", &width, &height);
 
-	//on ignore 4 lignes pour des images car elles sont lues dans leveleditor
+	if (fgets(read, 300, f)==NULL)
+	{
+		printf("Le fichier ne peut pas être lu\n");
+		return FALSE;
+	}
+	else sscanf(read, "%f, %f ; %f, %f", &Lvl->Spawn.x, &Lvl->Spawn.y, &Lvl->Goal.x, &Lvl->Goal.y);
+
 	unsigned int item, nVertex, i;
 	Bool polyFixed; int booly;
 
@@ -358,7 +364,7 @@ void lvlLoadedInit(Level* Lvl)
 	wdAddElastic(Lvl->W, ENeck);
 	wdAddElastic(Lvl->W, EBase);
 	 */
-	
+
 	/*Lvl->C = newCloth(lvlGetWorld(Lvl), 20, 20, 30.f, 30.f);
 	clSetPointsMass(Lvl->C, 0.1f);
 	vxSetFixe(clGetVertex(Lvl->C, 0, 0), 1);
@@ -387,7 +393,7 @@ void lvlUpdate(Level* Lvl)
 
 		if (Lvl->P1 != NULL)
 			plUpdate(Lvl->P1, lvlGetWorld(Lvl));
-		
+
 	}
 }
 

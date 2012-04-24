@@ -140,6 +140,16 @@ void lvledDraw(const LevelEditor* Led, char flag)
 	}
 }
 
+void lvledSetSpawn(LevelEditor* Led)
+{
+	Led->Lvl->Spawn = vxGetPosition(Led->Mouse);
+}
+
+void lvledSetGoal(LevelEditor* Led)
+{
+	Led->Lvl->Goal = vxGetPosition(Led->Mouse);
+}
+
 void lvledGrabUpdate(LevelEditor *Led)
 {
 	if(Led->Grab != NULL) vxSetPosition(Led->Grab, vxGetPosition(Led->Mouse));
@@ -538,7 +548,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	//on ignore les premieres lignes
 	char read[300];
 	unsigned int i;
-	for (i=0; i<3; i++)
+	for (i=0; i<4; i++)
 		fgets(read, 300, f);
 	fgets(Led->backPath, 255, f);
 	fgets(Led->layer1Path, 255, f);
@@ -592,6 +602,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	/* Entete du fichier*/
 	char lvl[100]="Niveau Test", description[300]="Ceci est la description du niveau";
 	fprintf(f, "%s\n%s\n%f, %f\n", lvl, description, lvlGetWorld(Led->Lvl)->Width, lvlGetWorld(Led->Lvl)->Height);
+	fprintf(f, "%f, %f ; %f, %f\n", Led->Lvl->Spawn.x, Led->Lvl->Spawn.y, Led->Lvl->Goal.y, Led->Lvl->Goal.y);
 	fprintf(f, "%s\n%s\n%s\n%s\n", Led->backPath, Led->layer1Path, Led->layer2Path, Led->forePath);
 
 	List* L;
