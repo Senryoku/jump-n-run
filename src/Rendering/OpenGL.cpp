@@ -186,7 +186,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	unsigned short i;
 	MenuItem* I;
 	float MaxTextWidth = 0.f;
-	
+
 
 
 	glPushMatrix();
@@ -263,11 +263,11 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			selOffset = yoffset;
 
 		yoffset+=ItemText.getCharacterSize()*(*mniGetZoom(I));
-		
+
 		float Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
 		if (Width>MaxTextWidth)
 			MaxTextWidth=Width;
-		
+
 		mnSetItemHeight(M, ItemText.getCharacterSize());
 
 	}
@@ -279,7 +279,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			ItemText.setString(" "); /* une chaîne vide donne une erreur */
 		else
 			ItemText.setString(std::string(mniGetText(I)));
-		
+
 		switch (mniGetType(I))
 		{
 			case ITEM_CHECKBOX:
@@ -288,7 +288,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 				else
 					ItemText.setString(ItemText.getString() + ": No");
 				break;
-				
+
 			case ITEM_INPUT:
 			case ITEM_INPUT_VALUE:
 				ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
@@ -301,13 +301,13 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			default:
 				break;
 		}
-		
+
 		ItemText.setScale(1.f, 1.f);
 		ItemText.setPosition(Position.x+5.f, Position.y+selOffset-1.5f-10.f);
-		
+
 		yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
 		ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
-		
+
 		win.pushGLStates();
 		ItemText.setColor(sf::Color(0,0,0));
 		win.draw(ItemText);
@@ -315,13 +315,13 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		ItemText.setColor(sf::Color(0,255,255));
 		win.draw(ItemText);
 		win.popGLStates();
-		
+
 		float Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
 		if (Width>MaxTextWidth)
 			MaxTextWidth=Width;
-		
+
 	}
-	
+
 	moiSetSize(moi, vec2(MaxTextWidth, Size.y));
 
 	glPopMatrix();
@@ -336,29 +336,29 @@ void glDrawCloth(Cloth* C, Texture T)
 	//vxGetPosition(C->Points
 	glBegin(GL_QUADS);
 	unsigned int i, j;
-	
+
 	for (i=0; i<C->HCells-1; i++)
 		for (j=0; j<C->VCells-1; j++)
 		{
 			//if (i>=C->HCells-1 || j>=C->VCells-1) continue;
-			
+
 			//left top
 			glTexCoord2f(static_cast<float>(i)/static_cast<float>(C->HCells-1), static_cast<float>(j)/static_cast<float>(C->VCells-1));
 			glVertex2f(vxGetPosition(C->Points[i][j]).x, vxGetPosition(C->Points[i][j]).y);
-			
+
 			//right top
 			glTexCoord2f(static_cast<float>(i+1)/static_cast<float>(C->HCells-1), static_cast<float>(j)/static_cast<float>(C->VCells-1));
 			glVertex2f(vxGetPosition(C->Points[i+1][j]).x, vxGetPosition(C->Points[i+1][j]).y);
-			
+
 			//right bottom
 			glTexCoord2f(static_cast<float>(i+1)/static_cast<float>(C->HCells-1), static_cast<float>(j+1)/static_cast<float>(C->VCells-1));
 			glVertex2f(vxGetPosition(C->Points[i+1][j+1]).x, vxGetPosition(C->Points[i+1][j+1]).y);
-			
+
 			//Left bottom
 			glTexCoord2f(static_cast<float>(i)/static_cast<float>(C->HCells-1), static_cast<float>(j+1)/static_cast<float>(C->VCells-1));
 			glVertex2f(vxGetPosition(C->Points[i][j+1]).x, vxGetPosition(C->Points[i][j+1]).y);
 		}
-	
+
 	glEnd();
-	
+
 }

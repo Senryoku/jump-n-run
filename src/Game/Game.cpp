@@ -59,7 +59,7 @@ void gmFree(Game* G)
 	if(G->Lvl != NULL) delLevel(G->Lvl);
 	G->Window->setActive(0);
 	G->Window->close();
-	delete G->Window;
+	//delete G->Window; // Provoque une segfault sous Windows
 	mnFree(&G->GameMenu);
 }
 
@@ -133,7 +133,7 @@ void gmPlay(Game* G)
             plJump(G->Lvl->P1);
 		else
 			plResetJump(G->Lvl->P1);
-		
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 			plGetUp(G->Lvl->P1);
         //if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))

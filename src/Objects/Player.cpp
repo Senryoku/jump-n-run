@@ -422,7 +422,7 @@ void plUpdate(Player* P, World* W)
 
 	if (P->OnGround)
 	{
-		float Force = 0.03f;
+		float Force = 0.04f;
 		float Diff = vxGetPosition(P->VxUL).y - vxGetPosition(P->VxUR).y;
 		if(abs(Diff) < 10.f) Diff = 0;
 		if(Diff > 0)
