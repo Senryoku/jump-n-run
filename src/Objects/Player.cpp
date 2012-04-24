@@ -11,8 +11,8 @@ void plInit(Player* P, World *W)
 {
 	P->ULPos = vec2(-25.f, -105.f);
 	P->URPos = vec2(25.f, -105.f);
-	P->DLPos = vec2(-30.f, 105.f);
-	P->DRPos = vec2(30.f, 105.f);
+	P->DLPos = vec2(-25.f, 105.f);
+	P->DRPos = vec2(25.f, 105.f);
 
 	P->VxUL = newVertex();
 	vxSetPosition(P->VxUL, P->ULPos);
@@ -54,8 +54,7 @@ void plInit(Player* P, World *W)
 		P->RdUStatus = P->RdRStatus = P->RdDStatus = P->RdLStatus = nullCollisionInfo();
 	P->Speed = vec2(0.f, 0.f);
 	P->OnGround = FALSE;
-	P->Jumping = FALSE;
-	P->JumpTimer = 30.f;
+	plResetJump(P);
 	
 	/* On crée les vertices du personnage, pour l'animation et quand il meurt */
 	P->Neck = newVertex(), P->HeadLeft = newVertex(), P->HeadRight = newVertex(), P->Base = newVertex(), P->LeftArm1 = newVertex(), P->LeftArm2 = newVertex(), P->RightArm1 = newVertex(), P->RightArm2 = newVertex(), P->LeftLeg1 = newVertex(), P->LeftLeg2 = newVertex(), P->RightLeg1 = newVertex(), P->RightLeg2 = newVertex();
@@ -242,9 +241,9 @@ void plJump(Player* P)
 {
 	if (P->OnGround && !P->Jumping)
 	{
-		polyApplyForce(P->Shape, vec2Prod(P->Normal, 30.f), 0);
+		polyApplyForce(P->Shape, vec2Prod(P->Normal, 20.f), 0);
 		P->Jumping = TRUE;
-		P->JumpVec = vec2Prod(P->Normal, 0.5f);
+		P->JumpVec = vec2Prod(P->Normal, 2.f);
 	}
 	else if (P->Jumping)
 	{
@@ -258,13 +257,13 @@ void plJump(Player* P)
 			plResetJump(P);
 		}
 	}
-		
+	printf("Onground: %u, Normal : %f, %f\n", P->OnGround, P->Normal.x, P->Normal.y);	
 }
 
 void plResetJump(Player* P)
 {
 	P->Jumping = FALSE;
-	P->JumpTimer = 30.f;
+	P->JumpTimer = 10.f;
 }
 
 void plGetUp(Player* P)
@@ -368,7 +367,7 @@ void plUpdate(Player* P, World* W)
 	Node* it;
 	CollisionInfo Info;
 	it = lstFirst(&LExtracted);
-	P->OnGround = FALSE;
+	P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
 	while(!nodeEnd(it))
 	{
 		
@@ -376,7 +375,7 @@ void plUpdate(Player* P, World* W)
 		if(Info.P1 != NULL)
 		{
 			//printf("Collision\n");
-			if (Info.Edge == plGetRdD(P) || Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))
+			if (!P->OnGround && (Info.Edge == plGetRdD(P) || Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P)))
 			{
 				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
 				P->Normal = Info.Normal;
