@@ -10,10 +10,10 @@ Player* newPlayer(World* W)
 void plInit(Player* P, World *W)
 {
 
-	P->ULPos = vec2(-20.f, -50.f);
-	P->URPos = vec2(20.f, -50.f);
-	P->DLPos = vec2(-35.f, 50.f);
-	P->DRPos = vec2(35.f, 50.f);
+	P->ULPos = vec2(-20.f, -70.f);
+	P->URPos = vec2(20.f, -70.f);
+	P->DLPos = vec2(-35.f, 70.f);
+	P->DRPos = vec2(35.f, 70.f);
 
 
 	P->VxUL = newVertex();

@@ -1,4 +1,5 @@
 #include <Level/LevelEditorApp.h>
+#include <Objects/Animation.h>
 
 void appInit(LevelEditorApp* App)
 {

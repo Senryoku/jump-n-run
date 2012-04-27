@@ -32,168 +32,166 @@ typedef struct {
 
 /**
  * @brief Alloue et initialise un SoundManager
- * @param Adresse du SoundManager à allouer
  */
 
-void sndmInit(SoundManager* SM);
+void sndmInit();
 
 /**
  * @brief Déalloue un SoundManager
- * @return pointeur vers le SoundManager alloué et initialisé
  */
-void sndmFree(SoundManager* SM);
+void sndmFree();
 
 /**
  * @brief Charge un son en mémoire et l'ajoute avec une clé
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  * @param File Adrsse du fichier
  * @return faux s'il y a eu une erreur
  */
-bool sndmLoadSoundFile(SoundManager* SM, const char *Key, const char *File);
+bool sndmLoadSoundFile(const char *Key, const char *File);
 
 /**
  * @brief Charge une musique en mémoire et l'ajoute avec une clé
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  * @param File Adrsse du fichier
  * @return faux s'il y a eu une erreur
  */
-bool sndmLoadMusicFile(SoundManager* SM, const char *Key, const char *File);
+bool sndmLoadMusicFile(const char *Key, const char *File);
 
 /**
  * @brief Joue un son à une position donnée
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  * @param Position position où se trouve le son
  */
-void sndmPlay(SoundManager* SM, const char *Key, const Vec2 &Position, float MinDist=200.f, float Attenuation=1.f);
+void sndmPlay(const char *Key, const Vec2 &Position, float MinDist=200.f, float Attenuation=1.f);
 
 /**
  * @brief Joue un son sans position (non relatif au Listener)
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  */
-void sndmPlay(SoundManager* SM, const char *Key);
+void sndmPlay(const char *Key);
 
 /**
  * @brief Joue une musique
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  * @param Loop looper la chanson ou pas
  */
-void sndmPlayMusic(SoundManager* SM, const char *Key, bool Loop=1);
+void sndmPlayMusic(const char *Key, bool Loop=1);
 
 /**
  * @brief Change le volume d'une musique
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  * @param Volume nouvel volume [0..100]
  */
-void sndmMusicSetVolume(SoundManager* SM, const char *Key, float Volume);
+void sndmMusicSetVolume(const char *Key, float Volume);
 
 /**
  * @brief Change le pitch d'une musique
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  * @param pitch nouvel pitch normal = 1.f
  */
-void sndmMusicSetPitch(SoundManager* SM, const char *Key, float Pitch);
+void sndmMusicSetPitch(const char *Key, float Pitch);
 
 /**
  * @brief Donne le volume d'une musique
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  * @return Volume [0..100]
  */
-float sndmMusicGetVolume(SoundManager* SM, const char *Key);
+float sndmMusicGetVolume(const char *Key);
 
 /**
  * @brief Donne le pitch d'une musique
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé pour accéder au son
  * @return pitch normal = 1.f
  */
-float sndmMusicGetPitch(SoundManager* SM, const char *Key);
+float sndmMusicGetPitch(const char *Key);
 
 /**
  * @brief Fait un effet de Fade entre deux musiques
- * @param SM SoundManager où s'effectue la fonction
+
  * @param NextKey Clé pour accéder au son
  * @param FadeSpeed vitesse du fading 100 = tout le volume d'un coup
  */
-void sndmMusicFade(SoundManager* SM, const char *NextKey, float FadeSpeed, bool Loop=1);
+void sndmMusicFade(const char *NextKey, float FadeSpeed, bool Loop=1);
 
 /**
  * @brief Fait un effet de Fade et stoppe la musique à la fin
- * @param SM SoundManager où s'effectue la fonction
+
  * @param NextKey Clé pour accéder au son
  * @param FadeSpeed vitesse du fading 100 = tout le volume d'un coup
  */
-void sndmMusicFadeToStop(SoundManager* SM, float FadeSpeed);
+void sndmMusicFadeToStop(float FadeSpeed);
 
 /**
  * @brief Pause tous les sons
- * @param SM SoundManager où s'effectue la fonction
+
  */
-void sndmPauseAllSounds(SoundManager* SM);
+void sndmPauseAllSounds();
 
 /**
  * @brief Résume tous les sons
- * @param SM SoundManager où s'effectue la fonction
+
  */
-void sndmResumeAllSounds(SoundManager* SM);
+void sndmResumeAllSounds();
 
 /**
  * @brief Pause la musique
- * @param SM SoundManager où s'effectue la fonction
+
  */
-void sndmPauseMusic(SoundManager* SM);
+void sndmPauseMusic();
 
 /**
  * @brief Résume les musiques en pause
- * @param SM SoundManager où s'effectue la fonction
+
  */
-void sndmResumeMusic(SoundManager* SM);
+void sndmResumeMusic();
 
 
 /**
  * @brief Fait une mise à jours sur les sons (élimine de la mémoire les sons qui ne sont plus utilisés
- * @param SM SoundManager où s'effectue la fonction
+
  */
-void sndmUpdate(SoundManager* SM);
+void sndmUpdate();
 
 /**
  * @brief Stope tous les sons et les libère
- * @param SM SoundManager où s'effectue la fonction
+
  */
-void sndmStopAll(SoundManager* SM);
+void sndmStopAll();
 
 /**
  * @brief Stope toutes les musiques
- * @param SM SoundManager où s'effectue la fonction
+
  */
-void sndmStopAllMusic(SoundManager* SM);
+void sndmStopAllMusic();
 
 /**
  * @brief Stope une musique
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Key Clé de la musique
  */
-void sndmStopMusic(SoundManager* SM, const char *Key);
+void sndmStopMusic(const char *Key);
 
 /**
  * @brief Change la position du Listener
- * @param SM SoundManager où s'effectue la fonction
+
  * @param Position nouvelle position
  */
-void sndmSetListenerPosition(SoundManager* SM, const Vec2& Position);
+void sndmSetListenerPosition(const Vec2& Position);
 
 /**
  * @brief Obtient la position du Listener
- * @param SM SoundManager où s'effectue la fonction
+
  */
-Vec2 sndmGetListenerPosition(const SoundManager* SM);
+Vec2 sndmGetListenerPosition();
 
 
 ///@}
