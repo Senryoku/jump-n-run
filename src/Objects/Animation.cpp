@@ -308,6 +308,54 @@ void aniUpdate(Animation* A, float Step)
 			Wobble(&A->Positions.RightLeg2.y, Pos->RightLeg2.y, A->Force, A->Friction, &A->Spd[19]);
 		
 		
+		if (A->Triggers & ANIM_LEFT_LEG2)
+			if (ABS(A->Positions.LeftLeg2.x-Pos->LeftLeg2.x) < A->Diff && ABS(A->Positions.LeftLeg2.y-Pos->LeftLeg2.y) < A->Diff)
+				TriggerCount++;
+		if (A->Triggers & ANIM_RIGHT_LEG2)
+			if (ABS(A->Positions.RightLeg2.x-Pos->RightLeg2.x) < A->Diff && ABS(A->Positions.RightLeg2.y-Pos->RightLeg2.y) < A->Diff)
+				TriggerCount++;
+		if (A->Triggers & ANIM_RIGHT_LEG1)
+			if (ABS(A->Positions.RightLeg1.x-Pos->RightLeg1.x) < A->Diff && ABS(A->Positions.RightLeg1.y-Pos->RightLeg1.y) < A->Diff)
+				TriggerCount++;
+		if (A->Triggers & ANIM_LEFT_LEG1)
+			if (ABS(A->Positions.LeftLeg1.x-Pos->LeftLeg1.x) < A->Diff && ABS(A->Positions.LeftLeg1.y-Pos->LeftLeg1.y) < A->Diff)
+				TriggerCount++;
+		if (A->Triggers & ANIM_LEFT_ARM1)
+			if (ABS(A->Positions.LeftArm1.x-Pos->LeftArm1.x) < A->Diff && ABS(A->Positions.LeftArm1.y-Pos->LeftArm1.y) < A->Diff)
+				TriggerCount++;
+		if (A->Triggers & ANIM_LEFT_ARM2)
+			if (ABS(A->Positions.LeftArm2.x-Pos->LeftArm2.x) < A->Diff && ABS(A->Positions.LeftArm2.y-Pos->LeftArm2.y) < A->Diff)
+				TriggerCount++;
+		if (A->Triggers & ANIM_RIGHT_ARM1)
+			if (ABS(A->Positions.RightArm1.x-Pos->RightArm1.x) < A->Diff && ABS(A->Positions.RightArm1.y-Pos->RightArm1.y) < A->Diff)
+				TriggerCount++;
+		if (A->Triggers & ANIM_RIGHT_ARM2)
+			if (ABS(A->Positions.RightArm2.x-Pos->RightArm2.x) < A->Diff && ABS(A->Positions.RightArm2.y-Pos->RightArm2.y) < A->Diff)
+				TriggerCount++;
+		
+		if (A->Triggers & ANIM_NECK)
+			if (ABS(A->Positions.Neck.x-Pos->Neck.x) < A->Diff && ABS(A->Positions.Neck.y-Pos->Neck.y) < A->Diff)
+				TriggerCount++;
+		if (A->Triggers & ANIM_HEAD)
+			if (ABS(A->Positions.Head.x-Pos->Head.x) < A->Diff && ABS(A->Positions.Head.y-Pos->Head.y) < A->Diff)
+				TriggerCount++;
+		
+		if (TriggerCount>=A->TriggerCount)
+		{
+			A->CurrentState++;
+			
+			if (A->CurrentState >= daGetSize(A->States))
+			{
+				A->Ended = TRUE;
+				if (A->Repeat)
+					A->CurrentState = 0;
+				else
+					A->CurrentState--;
+			}
+		}				
+
+		
+		
 	}
 	else
 	{
