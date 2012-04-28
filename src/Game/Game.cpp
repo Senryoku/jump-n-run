@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <Objects/Animation.h>
 
 
 void gmInit(Game* G)
@@ -76,7 +77,9 @@ void gmPlay(Game* G)
 
 	lvlLoadedInit(G->Lvl);
 
-
+	Animation* A = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
+	aniLoadFromFile(A, "data/testAnim.txt");
+	
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
 	sf::Clock Clk;
@@ -161,6 +164,7 @@ void gmPlay(Game* G)
 
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
+		aniUpdate(A, G->Lvl->P1, 1.f);
 
 		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
 		glDrawPolygon(G->Lvl->P1->Shape);
@@ -171,6 +175,7 @@ void gmPlay(Game* G)
 
 		G->Window->display();
 	}
+	delAnimation(A);
 }
 
 

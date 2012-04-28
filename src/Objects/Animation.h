@@ -5,6 +5,7 @@
 #include <Core/DynArr.h>
 #include <Core/Vec2.h>
 #include <Core/Tools.h>
+#include <Physics/Vertex.h>
 
 /**
  * @brief 
@@ -43,6 +44,8 @@ typedef struct {
 	float Head, Neck, LeftArm1, LeftArm2, RightArm1, RightArm2, LeftLeg1, LeftLeg2, RightLeg1, RightLeg2;
 } AnimAngles;
 
+struct SPlayer;
+
 typedef struct {
 	AnimType Type;
 	AnimTriggers Triggers;
@@ -80,9 +83,13 @@ unsigned int aniGetCurrentState(const Animation* A);
 
 void aniAddPositionState(Animation* A, Vec2 Head, Vec2 Neck, Vec2 LeftArm1, Vec2 LeftArm2, Vec2 RightArm1, Vec2 RightArm2, Vec2 LeftLeg1, Vec2 LeftLeg2, Vec2 RightLeg1, Vec2 RightLeg2);
 
+void aniAddPositionState(Animation* A, const AnimPositions* Positions);
+
 void aniAddAngleState(Animation* A, float Head, float Neck, float LeftArm1, float LeftArm2, float RightArm1, float RightArm2, float LeftLeg1, float LeftLeg2, float RightLeg1, float RightLeg2);
 
+void aniAddAngleState(Animation* A, const AnimAngles* Angles);
 
-void aniUpdate(Animation* A, float Step);
+
+void aniUpdate(Animation* A, SPlayer* P, float Step);
  
 #endif

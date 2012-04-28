@@ -66,10 +66,10 @@ void appRun(LevelEditorApp* App)
 //	Texture Tx = glTexLoad("data/trollface.jpg");
 	
 	Animation* A = newAnimation(ANIM_POSITIONS, ANIM_NECK | ANIM_LEFT_ARM1, TRUE);
-	aniAddPositionState(A, vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f));
+	aniLoadFromFile(A, "data/testAnim.txt");
 	
-	aniUpdate(A, 1.f);
-	delAnimation(A);
+	//aniUpdate(A, 1.f);
+	
 	
 	/* Coe temporel permettant de créer des states d'animation */
 	
@@ -290,7 +290,7 @@ void appRun(LevelEditorApp* App)
 						else DispDebug = !DispDebug;
 						break;
 					case sf::Keyboard::X :
-						plGetUp(App->Led.Lvl->P1);
+						//plGetUp(App->Led.Lvl->P1);
 						break;
 					case sf::Keyboard::V :
 						DispL1 = !DispL1;
@@ -308,36 +308,36 @@ void appRun(LevelEditorApp* App)
 						//[ANIM_FREE?] [x] [y] #Part of the body
 						V = Neck;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "Neck");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "Neck");
 						
 						Pos = vec2Prod(vec2Add(vec2Add(vxGetPosition(HeadLeft), vxGetPosition(HeadRight)), vxGetPosition(Neck)), 1.f/3.f);
 						Pos = vec2Sub(Pos, vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", 0, Pos.x, Pos.y, "Head");
+						fprintf(f, "%u %f %u %f #%s\n", 0, Pos.x, 0, Pos.y, "Head");
 						
 						V = LeftArm1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "LeftArm1");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "LeftArm1");
 						V = LeftArm2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "LeftArm2");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "LeftArm2");
 						V = RightArm1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "RightArm1");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "RightArm1");
 						V = RightArm2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "RightArm2");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "RightArm2");
 						V = LeftLeg1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "LeftLeg1");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "LeftLeg1");
 						V = LeftLeg2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "LeftLeg2");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "LeftLeg2");
 						V = RightLeg1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "RightLeg1");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "RightLeg1");
 						V = RightLeg2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, Pos.y, "RightLeg2");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "RightLeg2");
 						
 						fclose(f);
 						
@@ -355,11 +355,11 @@ void appRun(LevelEditorApp* App)
 						Pos = vec2Prod(vec2Add(vec2Add(vxGetPosition(HeadLeft), vxGetPosition(HeadRight)), vxGetPosition(Neck)), 1.f/3.f);
 						Pos = vec2Sub(Pos, vxGetPosition(Neck));
 						Angle = vec2Angle(Pos);
-						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "Neck");
+						fprintf(f, "%u %f #%s\n", (unsigned int)(!vxIsFixe(V1) || !vxIsFixe(V2)), RAD2DEG(Angle), "Head");
 						
 						V1 = LeftArm1; V2 = Neck;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)(!vxIsFixe(V1) || !vxIsFixe(V2)), RAD2DEG(Angle), "Head");
+						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "LeftArm1");
 						
 						V1 = LeftArm2; V2 = LeftArm1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
@@ -530,6 +530,7 @@ void appRun(LevelEditorApp* App)
 	delVertex(RightLeg1);
 	delVertex(RightLeg2);
 	 */
+	delAnimation(A);
 }
 
 void appSetWorkingPath(LevelEditorApp* App, const char* Path)

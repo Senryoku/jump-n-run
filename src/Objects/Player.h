@@ -15,7 +15,7 @@
 
 typedef unsigned char PlayerDirection;
 
-typedef struct
+typedef struct SPlayer
 {
 	Polygon* Shape;
 	Vertex* VxUL, *VxUR, *VxDL, *VxDR;

@@ -1,4 +1,5 @@
 #include "Animation.h"
+#include <Objects/Player.h>
 
 void aniInit(Animation* A, AnimType Type, AnimTriggers Triggers, Bool Repeat)
 {
@@ -56,139 +57,157 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 	f = fopen(File, "r");
 	if (f != NULL)
 	{
-		//[nb of states] [AnimType] [Triggers]
-		unsigned int type, count, triggers;
-		fscanf(f, "%u %u %u\n", &count, &type, &triggers);
+		//[nb of states] [AnimType] [Triggers] [repeat]
+		unsigned int type, count, triggers, repeat;
+		fscanf(f, "%u %u %u %u\n", &count, &type, &triggers, &repeat);
 		A->Type = (AnimType)type;
 		A->Triggers = (AnimTriggers)triggers;
+		A->Repeat = (Bool)repeat;
 		
 		printf("type: %u, triggers: %u, nb states: %u\n", type, triggers, count);
-		if (A->Type == ANIM_POSITIONS)
+		
+		while (count>0)
 		{
-			AnimPositions Pos; unsigned int free;
-			
-			Vec2* vec;
-			
-			vec = &Pos.Neck;
-			fscanf(f, "%u %f %f #\n",&free, &vec->x, &vec->y);
-			if (free)
+			if (A->Type == ANIM_POSITIONS)
 			{
-				vec->x = ANIM_FREE;
-				vec->y = ANIM_FREE;
+				AnimPositions Pos; unsigned int free, free2;
+				
+				Vec2* vec;
+				
+				vec = &Pos.Neck;
+				fscanf(f, "%u %f %u %f #Neck\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.Head;
+				fscanf(f, "%u %f %u %f #Head\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.LeftArm1;
+				fscanf(f, "%u %f %u %f #LeftArm1\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.LeftArm2;
+				fscanf(f, "%u %f %u %f #LeftArm2\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.RightArm1;
+				fscanf(f, "%u %f %u %f #RightArm1\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.RightArm2;
+				fscanf(f, "%u %f %u %f #RightArm2\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.LeftLeg1;
+				fscanf(f, "%u %f %u %f #LeftLeg1\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.LeftLeg2;
+				fscanf(f, "%u %f %u %f #LeftLeg2\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.RightLeg1;
+				fscanf(f, "%u %f %u %f #RightLeg1\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				vec = &Pos.RightLeg2;
+				fscanf(f, "%u %f %u %f #RightLeg2\n",&free, &vec->x, &free2, &vec->y);
+				if (free)
+					vec->x = ANIM_FREE;
+				if (free2)
+					vec->y = ANIM_FREE;
+				
+				aniAddPositionState(A, &Pos);
+			}
+			else
+			{
+				AnimAngles Ang; unsigned int free;
+				
+				float* a;
+				
+				a = &Ang.Neck;
+				fscanf(f, "%u %f #Neck\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.Head;
+				fscanf(f, "%u %f #Head\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.LeftArm1;
+				fscanf(f, "%u %f #LeftArm1\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.LeftArm2;
+				fscanf(f, "%u %f #LeftArm2\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.RightArm1;
+				fscanf(f, "%u %f #RightArm1\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.RightArm2;
+				fscanf(f, "%u %f #RightArm2\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.LeftLeg1;
+				fscanf(f, "%u %f #LeftLeg1\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.LeftLeg2;
+				fscanf(f, "%u %f #LeftLeg2\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.RightLeg1;
+				fscanf(f, "%u %f #RightLeg1\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				a = &Ang.RightLeg2;
+				fscanf(f, "%u %f #RightLeg2\n",&free, a);
+				if (free)
+					*a = ANIM_FREE;
+				
+				aniAddAngleState(A, &Ang);
 			}
 			
-			vec = &Pos.Head;
-			fscanf(f, "%u %f %f #\n",&free, &vec->x, &vec->y);
-			if (free)
-			{
-				vec->x = ANIM_FREE;
-				vec->y = ANIM_FREE;
-			}
-			
-			vec = &Pos.LeftArm1;
-			fscanf(f, "%u %f %f #\n",&free, &vec->x, &vec->y);
-			if (free)
-			{
-				vec->x = ANIM_FREE;
-				vec->y = ANIM_FREE;
-			}
-			
-			vec = &Pos.LeftArm2;
-			fscanf(f, "%u %f %f #\n",&free, &vec->x, &vec->y);
-			if (free)
-			{
-				vec->x = ANIM_FREE;
-				vec->y = ANIM_FREE;
-			}
-			
-			vec = &Pos.RightArm1;
-			fscanf(f, "%u %f %f #\n",&free, &vec->x, &vec->y);
-			if (free)
-			{
-				vec->x = ANIM_FREE;
-				vec->y = ANIM_FREE;
-			}
-			
-			vec = &Pos.RightArm2;
-			fscanf(f, "%u %f %f #\n",&free, &vec->x, &vec->y);
-			if (free)
-			{
-				vec->x = ANIM_FREE;
-				vec->y = ANIM_FREE;
-			}
-			
-			vec = &Pos.LeftLeg1;
-			fscanf(f, "%u %f %f #\n",&free, &vec->x, &vec->y);
-			if (free)
-			{
-				vec->x = ANIM_FREE;
-				vec->y = ANIM_FREE;
-			}
-			
-			vec = &Pos.LeftLeg2;
-			fscanf(f, "%u %f %f #\n",&free, &vec->x, &vec->y);
-			if (free)
-			{
-				vec->x = ANIM_FREE;
-				vec->y = ANIM_FREE;
-			}
+			count--;
 		}
-		else
-		{
-			AnimAngles Ang; unsigned int free;
-			
-			float* a;
-			
-			a = &Ang.Neck;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.Head;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.LeftArm1;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.LeftArm2;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.RightArm1;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.RightArm2;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.LeftLeg1;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.LeftLeg2;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.RightLeg1;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-			
-			a = &Ang.RightLeg2;
-			fscanf(f, "%u %f #\n",&free, a);
-			if (free)
-				*a = ANIM_FREE;
-		}
+		
 	}
 	else
 		return TRUE;
@@ -236,6 +255,25 @@ void aniAddPositionState(Animation* A, Vec2 Head, Vec2 Neck, Vec2 LeftArm1, Vec2
 	daAdd(A->States, Pos);
 }
 
+void aniAddPositionState(Animation* A, const AnimPositions* Positions)
+{
+	assert(A->Type == ANIM_POSITIONS);
+	
+	AnimPositions* Pos;
+	Pos = (AnimPositions*) malloc(sizeof(AnimPositions));
+	Pos->Head = Positions->Head;
+	Pos->Neck = Positions->Neck;
+	Pos->LeftArm1 = Positions->LeftArm1;
+	Pos->LeftArm2 = Positions->LeftArm2;
+	Pos->RightArm1 = Positions->RightArm1;
+	Pos->RightArm2 = Positions->RightArm2;
+	Pos->LeftLeg1 = Positions->LeftLeg1;
+	Pos->LeftLeg2 = Positions->LeftLeg2;
+	Pos->RightLeg1 = Positions->RightLeg1;
+	Pos->RightLeg2 = Positions->RightLeg2;
+	daAdd(A->States, Pos);
+}
+
 void aniAddAngleState(Animation* A, float Head, float Neck, float LeftArm1, float LeftArm2, float RightArm1, float RightArm2, float LeftLeg1, float LeftLeg2, float RightLeg1, float RightLeg2)
 {
 	assert(A->Type == ANIM_ANGLES);
@@ -255,7 +293,28 @@ void aniAddAngleState(Animation* A, float Head, float Neck, float LeftArm1, floa
 	daAdd(A->States, Ang);
 }
 
-void aniUpdate(Animation* A, float Step)
+void aniAddAngleState(Animation* A, const AnimAngles* Angles)
+{
+	assert(A->Type == ANIM_ANGLES);
+	
+	AnimAngles* Ang;
+	Ang = (AnimAngles*) malloc(sizeof(AnimAngles));
+	Ang->Head = Angles->Head;
+	Ang->Neck = Angles->Neck;
+	Ang->LeftArm1 = Angles->LeftArm1;
+	Ang->LeftArm2 = Angles->LeftArm2;
+	Ang->RightArm1 = Angles->RightArm1;
+	Ang->RightArm2 = Angles->RightArm2;
+	Ang->LeftLeg1 = Angles->LeftLeg1;
+	Ang->LeftLeg2 = Angles->LeftLeg2;
+	Ang->RightLeg1 = Angles->RightLeg1;
+	Ang->RightLeg2 = Angles->RightLeg2;
+	daAdd(A->States, Ang);
+	
+	printf("Added angle state with : H: %f, N: %f, LA1:%f, LA2:%f\n", Ang->Head, Ang->Neck, Ang->LeftArm1, Ang->LeftArm2);
+}
+
+void aniUpdate(Animation* A, SPlayer* P, float Step)
 {
 	unsigned char TriggerCount = 0;
 	/* Mise à jour des angles ou des positions */
@@ -306,6 +365,7 @@ void aniUpdate(Animation* A, float Step)
 			Wobble(&A->Positions.RightLeg2.x, Pos->RightLeg2.x, A->Force, A->Friction, &A->Spd[18]);
 		if (Pos->RightLeg2.y != ANIM_FREE)
 			Wobble(&A->Positions.RightLeg2.y, Pos->RightLeg2.y, A->Force, A->Friction, &A->Spd[19]);
+		
 		
 		/* Vérification de l'état de l'animation pour passer à létat suivant */
 		if (A->Triggers & ANIM_LEFT_LEG2)
@@ -360,20 +420,50 @@ void aniUpdate(Animation* A, float Step)
 		AnimAngles* Ang;
 		Ang = (AnimAngles*) daGet(A->States, A->CurrentState);
 		
-		if (Ang->Head != ANIM_FREE)
-			Wobble(&A->Angles.Head, Ang->Head, A->Force, A->Friction, &A->Spd[0]);
+		/* On change la position des vertex du joueur */
+		
 		if (Ang->Neck != ANIM_FREE)
+		{
 			Wobble(&A->Angles.Neck, Ang->Neck, A->Force, A->Friction, &A->Spd[1]);
+			vxSetPosition(P->Neck, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(90.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.Neck))));
+		}
+			
+		if (Ang->Head != ANIM_FREE)
+		{
+			Wobble(&A->Angles.Head, Ang->Head, A->Force, A->Friction, &A->Spd[0]);
+			//la tête est un peu spéciale car on a l'angle du
+		}
+			
+		
+		
 				
 		if (Ang->LeftArm1 != ANIM_FREE)
+		{
 			Wobble(&A->Angles.LeftArm1, Ang->LeftArm1, A->Force, A->Friction, &A->Spd[2]);
+			printf("angle: %f\n", A->Angles.LeftArm1);
+			vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm1))));
+		}
+			
 		if (Ang->LeftArm2 != ANIM_FREE)
+		{
 			Wobble(&A->Angles.LeftArm2, Ang->LeftArm2, A->Force, A->Friction, &A->Spd[3]);
+			printf("angle: %f\n", A->Angles.LeftArm2);
+			vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->LeftArm1), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm2))));
+		}
+			
 		
 		if (Ang->RightArm1 != ANIM_FREE)
+		{
 			Wobble(&A->Angles.RightArm1, Ang->RightArm1, A->Force, A->Friction, &A->Spd[4]);
+			vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm1))));
+		}
+			
 		if (Ang->RightArm2 != ANIM_FREE)
+		{
 			Wobble(&A->Angles.RightArm2, Ang->RightArm2, A->Force, A->Friction, &A->Spd[5]);
+			vxSetPosition(P->RightArm2, vec2Add(vxGetPosition(P->RightArm1), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm2))));
+		}
+			
 				
 		if (Ang->LeftLeg1 != ANIM_FREE)
 			Wobble(&A->Angles.LeftLeg1, Ang->LeftLeg1, A->Force, A->Friction, &A->Spd[6]);
@@ -384,6 +474,8 @@ void aniUpdate(Animation* A, float Step)
 			Wobble(&A->Angles.RightLeg1, Ang->RightLeg1, A->Force, A->Friction, &A->Spd[8]);
 		if (Ang->RightLeg2 != ANIM_FREE)
 			Wobble(&A->Angles.RightLeg2, Ang->RightLeg2, A->Force, A->Friction, &A->Spd[9]);
+		
+		
 		
 		
 		/* Vérification de l'état de l'animation pour passer à létat suivant */
@@ -422,7 +514,7 @@ void aniUpdate(Animation* A, float Step)
 		if (TriggerCount>=A->TriggerCount)
 		{
 			A->CurrentState++;
-			
+			printf("Animation go on !\n");
 			if (A->CurrentState >= daGetSize(A->States))
 			{
 				A->Ended = TRUE;
