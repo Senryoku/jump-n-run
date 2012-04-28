@@ -51,24 +51,24 @@ typedef struct {
 	unsigned char TriggerCount;
 	DynArr* States;
 	Bool Ended;
+	Bool Repeat;
 	unsigned int CurrentState;
 	float Spd[20];
 	float Friction;
 	float Force;
+	float Diff; /**< Différence absolue qui permet de savoir quand on passe à l'animation suivante **/
 } Animation;
 
 
-void aniInit(Animation* A);
+void aniInit(Animation* A, AnimType Type, AnimTriggers Triggers, Bool Repeat);
 
 void aniFree(Animation* A);
 
-Animation* newAnimation();
+Animation* newAnimation(AnimType Type, AnimTriggers Triggers, Bool Repeat);
 
 void delAnimation(Animation* A);
 
-void aniSetOptions(Animation* A, AnimType Type, AnimTriggers Triggers);
-
-Bool aniLoadFromFile(Animation* A);
+Bool aniLoadFromFile(Animation* A, const char* File);
 
 void aniResetEnded(Animation* A);
 
