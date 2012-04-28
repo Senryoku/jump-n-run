@@ -1,6 +1,6 @@
 #include "Score.h"
 
-Score* newScore(char Player[255], char LvlName[255], char LvlMD5[255], unsigned int Time)
+Score* newScore(char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time)
 {
 	Score* S = (Score*) malloc(sizeof(Score));
 	scInit(S, Player, LvlName, LvlMD5, Time);
@@ -13,7 +13,7 @@ void delScore(Score* S)
 	free(S);
 }
 
-void scInit(Score* S, char Player[255], char LvlName[255], char LvlMD5[255], unsigned int Time)
+void scInit(Score* S, const char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time)
 {
 	strcpy(S->Player, Player);
 	strcpy(S->LvlName, LvlName);
@@ -56,7 +56,7 @@ Bool scSend(Score* S)
 	}
 }
 
-unsigned int scCollect(DynArr* DA, char LvlName[255], char LvlMD5[255])
+unsigned int scCollect(DynArr* DA, const char LvlName[255], const char LvlMD5[255])
 {
 	unsigned int ErrorCode, NbScore, i, Time;
 	char *ResString, *Line, Player[255], Hour[255], Date[255];

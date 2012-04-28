@@ -26,7 +26,7 @@ typedef struct
 
 /** @brief Constructeur
 **/
-Score* newScore(char Player[255], char LvlName[255], char LvlMD5[255], unsigned int Time);
+Score* newScore(char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time);
 
 /** @brief Destructeur
  *
@@ -42,7 +42,7 @@ void delScore(Score* S);
  * @param lvlMD5 MD5 du niveau
  * @param Time Temps (en centièmes de secondes) réalisé par le joueur
 **/
-void scInit(Score* S, char Player[255], char LvlName[255], char LvlMD5[255], unsigned int Time);
+void scInit(Score* S, const char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time);
 
 /** @brief Envoi un score au serveur de score pour être enregistré
  *
@@ -62,7 +62,7 @@ Bool scSend(Score *S);
  * @param LvlMD5 MD5 du niveau
  * @return Code d'erreur
 **/
-unsigned int scCollect(DynArr* DA, char LvlName[255], char LvlMD5[255]);
+unsigned int scCollect(DynArr* DA, const char LvlName[255], const char LvlMD5[255]);
 
 /** @brief Libère un tableau de score rempli par scCollect
  *

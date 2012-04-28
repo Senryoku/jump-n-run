@@ -60,12 +60,14 @@ endif
 .PHONY : dirs
 
 $(OBJ)%.o : $(SRC)%.cpp
+	@echo "Compilation du fichier $^" ; \
 	$(CXX) $(OPT) $^ -c -o $@
 	
 #$(OBJ)%.o : $(SRC)%.cpp
 #$(C) $(OPT) $^ -c -o $@
 
 test : $(POINTO)
+	@echo "Édition des liens pour $@" ; \
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	
 debug : debug_option all
@@ -74,6 +76,7 @@ debug_option :
 #OPT = -g
 
 run : dirs all
+	@echo "Éxécution de $(BIN)test" ; \
 	./$(BIN)test
 .PHONY : run
 

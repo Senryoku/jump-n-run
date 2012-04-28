@@ -471,7 +471,7 @@ void plCreateVertex(Player* P, World* W)
 void plCreateRigids(Player* P, World* W)
 {
 	/* On met en place les parties du corps par rapport à la base */
-	Vec2 B = vxGetPosition(P->Base);
+	//Vec2 B = vxGetPosition(P->Base);
 	/*vxSetPosition(P->Neck, vec2(B.x, B.x - 90.f));
 	vxSetPosition(P->HeadLeft, vec2Add(vxGetPosition(P->Neck), vec2(-30.f, -40.f)));
 	vxSetPosition(P->HeadRight, vec2Add(vxGetPosition(P->Neck), vec2(30.f, -40.f)));
@@ -521,7 +521,7 @@ void plCreateRigids(Player* P, World* W)
 	}
 	else
 	{
-		Polygon *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *head;
+		//Polygon *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *head;
 
 		/*head = newPolygon(3, P->Neck, P->HeadLeft, P->HeadRight);
 		wdAddPolygon(W, head);
@@ -547,12 +547,13 @@ void plCreateRigids(Player* P, World* W)
 		wdAddPolygon(W, LL2);
 		wdAddPolygon(W, RL1);
 		wdAddPolygon(W, RL2);
-		 */
+		 
 		LL2 = newPolygon(2, P->Base, P->LeftLeg2);
 		RL2 = newPolygon(2, P->Base, P->RightLeg2);
 
 		wdAddPolygon(W, LL2);
 		wdAddPolygon(W, RL2);
+		 */
 
 		Elastic* E;
 		E = newElastic(P->LeftLeg2, P->RightLeg2, -1.f, 1.f);

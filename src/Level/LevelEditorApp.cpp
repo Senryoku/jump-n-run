@@ -54,7 +54,7 @@ void appRun(LevelEditorApp* App)
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
 		WindowRatio = App->WindowWidth/App->WindowHeight, FPS = 60.f;
 	sf::Clock Clock;
-	Bool DispDebug = TRUE, DispBack = FALSE, DispL1 = FALSE, DispL2 = FALSE, DispFore = FALSE, DispObjects = FALSE;
+	Bool DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
 
 //	int clothSize = 15;
 //	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, clothSize, clothSize, 10.f, 10.f);
@@ -65,8 +65,7 @@ void appRun(LevelEditorApp* App)
 //	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
 //	Texture Tx = glTexLoad("data/trollface.jpg");
 	
-	Animation* A = newAnimation();
-	aniSetOptions(A, ANIM_POSITIONS, ANIM_NECK | ANIM_LEFT_ARM1);
+	Animation* A = newAnimation(ANIM_POSITIONS, ANIM_NECK | ANIM_LEFT_ARM1, TRUE);
 	aniAddPositionState(A, vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f), vec2(0.f, 0.f));
 	
 	aniUpdate(A, 1.f);

@@ -140,52 +140,52 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 			float* a;
 			
 			a = &Ang.Neck;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.Head;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.LeftArm1;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.LeftArm2;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.RightArm1;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.RightArm2;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.LeftLeg1;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.LeftLeg2;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.RightLeg1;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 			
 			a = &Ang.RightLeg2;
-			fscanf(f, "%u %f #\n",&free, &a);
+			fscanf(f, "%u %f #\n",&free, a);
 			if (free)
 				*a = ANIM_FREE;
 		}
@@ -307,7 +307,7 @@ void aniUpdate(Animation* A, float Step)
 		if (Pos->RightLeg2.y != ANIM_FREE)
 			Wobble(&A->Positions.RightLeg2.y, Pos->RightLeg2.y, A->Force, A->Friction, &A->Spd[19]);
 		
-		
+		/* Vérification de l'état de l'animation pour passer à létat suivant */
 		if (A->Triggers & ANIM_LEFT_LEG2)
 			if (ABS(A->Positions.LeftLeg2.x-Pos->LeftLeg2.x) < A->Diff && ABS(A->Positions.LeftLeg2.y-Pos->LeftLeg2.y) < A->Diff)
 				TriggerCount++;
@@ -352,9 +352,7 @@ void aniUpdate(Animation* A, float Step)
 				else
 					A->CurrentState--;
 			}
-		}				
-
-		
+		}
 		
 	}
 	else
@@ -387,6 +385,8 @@ void aniUpdate(Animation* A, float Step)
 		if (Ang->RightLeg2 != ANIM_FREE)
 			Wobble(&A->Angles.RightLeg2, Ang->RightLeg2, A->Force, A->Friction, &A->Spd[9]);
 		
+		
+		/* Vérification de l'état de l'animation pour passer à létat suivant */
 		if (A->Triggers & ANIM_LEFT_LEG2)
 			if (ABS(A->Angles.LeftLeg2-Ang->LeftLeg2) < A->Diff)
 				TriggerCount++;
@@ -434,10 +434,7 @@ void aniUpdate(Animation* A, float Step)
 		}				
 				
 		
-	}
-	
-	/* Vérification de l'état de l'animation pour passer à létat suivant */
-	
+	}	
 	
 	
 }
