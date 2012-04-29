@@ -20,7 +20,14 @@ typedef unsigned short AnimTriggers; /**< Il faut utiliser les flags pour défin
 #define ANIM_POSITIONS 0x01
 
 
-#define ANIM_FREE 0x7fc00000 /**< Définie quand on ne tient pas en compte cette valeur. C'est un NaN **/
+/*#define ANIM_FREE 0x7fc00000 < Définie quand on ne tient pas en compte cette valeur. C'est un NaN. EDIT: Finalement ceci ne sert à rien car il considère que c'est un entier. De toutes façons NAN est définie dans math.h avec 
+#if defined(__GNUC__)
+#define NAN         __builtin_nanf("0x7fc00000") 
+#else
+#define NAN		__nan( )
+#endif
+
+**/
 
 /* Flags pour décider qui va permettre l'animation d'avancer */
 

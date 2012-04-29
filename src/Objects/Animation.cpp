@@ -207,7 +207,7 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 				a = &Ang.RightArm1;
 				fscanf(f, "%u %f #RightArm1\n",&free, a);
 				if (free)
-					*a = NAN, printf("NaN read: %u\n", (NAN!=NAN));
+					*a = NAN;
 				
 				a = &Ang.RightArm2;
 				fscanf(f, "%u %f #RightArm2\n",&free, a);
