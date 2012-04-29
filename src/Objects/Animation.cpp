@@ -7,11 +7,42 @@ void aniInit(Animation* A, AnimType Type, AnimTriggers Triggers, Bool Repeat)
 	A->Ended = FALSE;
 	A->Repeat = Repeat;
 	A->CurrentState = 0;
-	A->Force = 0.75f;
+	A->Force = 0.25f;
 	A->Friction = 0.6f;
 	A->Type = Type;
+	A->Diff = 1.f;
 	assert(Triggers != 0);
 	A->Triggers = Triggers;
+	aniCountTriggers(A);
+	
+	A->Angles.Head = 0.f;
+	A->Angles.Neck = 0.f;
+	A->Angles.LeftArm1 = 0.f;
+	A->Angles.LeftArm2 = 0.f;
+	A->Angles.RightArm1 = 0.f;
+	A->Angles.RightArm2 = 0.f;
+	A->Angles.LeftLeg1 = 0.f;
+	A->Angles.LeftLeg2 = 0.f;
+	A->Angles.RightLeg1 = 0.f;
+	A->Angles.RightLeg2 = 0.f;
+	
+	A->Positions.Head = vec2(0.f, 0.f);
+	A->Positions.Neck = vec2(0.f, 0.f);
+	A->Positions.LeftArm1 = vec2(0.f, 0.f);
+	A->Positions.LeftArm2 = vec2(0.f, 0.f);
+	A->Positions.RightArm1 = vec2(0.f, 0.f);
+	A->Positions.RightArm2 = vec2(0.f, 0.f);
+	A->Positions.LeftLeg1 = vec2(0.f, 0.f);
+	A->Positions.LeftLeg2 = vec2(0.f, 0.f);
+	A->Positions.RightLeg1 = vec2(0.f, 0.f);
+	A->Positions.RightLeg2 = vec2(0.f, 0.f);
+	
+	
+}
+
+void aniCountTriggers(Animation* A)
+{
+	AnimTriggers Triggers = A->Triggers;
 	if (A->Triggers == ANIM_ALL_TRIGGERS)
 		A->TriggerCount = 10;
 	else
@@ -64,7 +95,7 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 		A->Triggers = (AnimTriggers)triggers;
 		A->Repeat = (Bool)repeat;
 		
-		printf("type: %u, triggers: %u, nb states: %u\n", type, triggers, count);
+		//printf("type: %u, triggers: %u, nb states: %u\n", type, triggers, count);
 		
 		while (count>0)
 		{
@@ -213,6 +244,7 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 		return TRUE;
 	
 	fclose(f);
+	aniCountTriggers(A);
 	return FALSE; /* No Error */
 }
 
@@ -310,8 +342,6 @@ void aniAddAngleState(Animation* A, const AnimAngles* Angles)
 	Ang->RightLeg1 = Angles->RightLeg1;
 	Ang->RightLeg2 = Angles->RightLeg2;
 	daAdd(A->States, Ang);
-	
-	printf("Added angle state with : H: %f, N: %f, LA1:%f, LA2:%f\n", Ang->Head, Ang->Neck, Ang->LeftArm1, Ang->LeftArm2);
 }
 
 void aniUpdate(Animation* A, SPlayer* P, float Step)
@@ -440,14 +470,12 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		if (Ang->LeftArm1 != ANIM_FREE)
 		{
 			Wobble(&A->Angles.LeftArm1, Ang->LeftArm1, A->Force, A->Friction, &A->Spd[2]);
-			printf("angle: %f\n", A->Angles.LeftArm1);
 			vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm1))));
 		}
 			
 		if (Ang->LeftArm2 != ANIM_FREE)
 		{
 			Wobble(&A->Angles.LeftArm2, Ang->LeftArm2, A->Force, A->Friction, &A->Spd[3]);
-			printf("angle: %f\n", A->Angles.LeftArm2);
 			vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->LeftArm1), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm2))));
 		}
 			
@@ -466,14 +494,30 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			
 				
 		if (Ang->LeftLeg1 != ANIM_FREE)
+		{
 			Wobble(&A->Angles.LeftLeg1, Ang->LeftLeg1, A->Force, A->Friction, &A->Spd[6]);
+			vxSetPosition(P->LeftLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg1))));
+		}
+			
 		if (Ang->LeftLeg2 != ANIM_FREE)
+		{
 			Wobble(&A->Angles.LeftLeg2, Ang->LeftLeg2, A->Force, A->Friction, &A->Spd[7]);
+			vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->LeftLeg1), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg2))));
+		}
+			
 		
 		if (Ang->RightLeg1 != ANIM_FREE)
+		{
 			Wobble(&A->Angles.RightLeg1, Ang->RightLeg1, A->Force, A->Friction, &A->Spd[8]);
+			vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg1))));
+		}
+			
 		if (Ang->RightLeg2 != ANIM_FREE)
+		{
 			Wobble(&A->Angles.RightLeg2, Ang->RightLeg2, A->Force, A->Friction, &A->Spd[9]);
+			vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->RightLeg1), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg2))));
+		}
+			
 		
 		
 		
@@ -511,10 +555,9 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			if (ABS(A->Angles.Head-Ang->Head) < A->Diff)
 				TriggerCount++;
 		
-		if (TriggerCount>=A->TriggerCount)
+		if (TriggerCount >= A->TriggerCount)
 		{
 			A->CurrentState++;
-			printf("Animation go on !\n");
 			if (A->CurrentState >= daGetSize(A->States))
 			{
 				A->Ended = TRUE;

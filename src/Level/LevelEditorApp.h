@@ -3,6 +3,7 @@
 
 #include <Rendering/OpenGL.h>
 #include <Level/LevelEditor.h>
+#include <Game/FPSCounter.h>
 
 /** @defgroup LevelEditorApp
  *

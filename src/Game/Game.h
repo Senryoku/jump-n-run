@@ -7,6 +7,7 @@
 #include <Level/Level.h>
 #include <Menu/Menu.h>
 #include <Score/Score.h>
+#include "FPSCounter.h"
 
 /** @defgroup Game
  *

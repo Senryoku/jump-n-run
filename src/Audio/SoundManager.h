@@ -64,6 +64,8 @@ bool sndmLoadMusicFile(const char *Key, const char *File);
 
  * @param Key Clé pour accéder au son
  * @param Position position où se trouve le son
+ * @param MinDist Distance à laquelle le son peu être écouté sans attenuation
+ * @param Attenuation Attenuation du son
  */
 void sndmPlay(const char *Key, const Vec2 &Position, float MinDist=200.f, float Attenuation=1.f);
 

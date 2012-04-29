@@ -2,7 +2,6 @@
 #include <Objects/Animation.h>
 
 
-
 void appInit(LevelEditorApp* App)
 {
 	appWindowInit(App);
@@ -48,13 +47,13 @@ void appFree(LevelEditorApp* App)
 
 void appRun(LevelEditorApp* App)
 {
-	unsigned int ViewPort, frames = 0;
+	unsigned int ViewPort;
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, MapWidth = App->WindowWidth/10.f, MapHeight = App->WindowHeight/10.f,
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
-		WindowRatio = App->WindowWidth/App->WindowHeight, FPS = 60.f;
-	sf::Clock Clock;
+		WindowRatio = App->WindowWidth/App->WindowHeight;
 	Bool DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
+	FPSCounter fps;
 
 //	int clothSize = 15;
 //	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, clothSize, clothSize, 10.f, 10.f);
@@ -69,7 +68,6 @@ void appRun(LevelEditorApp* App)
 	aniLoadFromFile(A, "data/testAnim.txt");
 	
 	//aniUpdate(A, 1.f);
-	
 	
 	/* Coe temporel permettant de créer des states d'animation */
 	
@@ -148,7 +146,7 @@ void appRun(LevelEditorApp* App)
 	wdAddRigid(App->Led.Lvl->W, H3);
 	
 	/* Fin du code temporel pour les states des animations */
-
+	fpsInit(&fps);
 	while (App->Window.isOpen())
 	{
 		MouseX = ViewWidth*sf::Mouse::getPosition(App->Window).x/App->WindowWidth + ViewX;
@@ -498,21 +496,20 @@ void appRun(LevelEditorApp* App)
 			if(DispObjects) lvlDispAllObj(App->Led.Lvl);
 //			glDrawCloth(C, Tx);
 			if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
+			/* je n'arrive pas à afficher les fps en faisant marcher la vue. J'ai pas tenté trop de trucs mais bon xD */
+			//if (ViewPort == 0) glDrawFPS(App->Window, fpsGetString(&fps));
 		}
 
 		OldMouseX = MouseX;
 		OldMouseY = MouseY;
+		
+		//glDrawFPS(App->Window, fpsGetString(&fps));
 
 		// Update the App->Window
 		App->Window.display();
-		frames++;
-		if (Clock.getElapsedTime().asSeconds()>=1.f)
-		{
-			FPS = frames/Clock.getElapsedTime().asSeconds();
-			printf("FPS: %.1f\n", round(FPS));
-			frames = 0;
-			Clock.restart();
-		}
+		fpsStep(&fps);
+		if (fpsChanged(&fps))
+			printf("FPS: %s\n", fpsGetChar(&fps));
 	}
 //	delCloth(C);
 //	glTexFree(Tx);

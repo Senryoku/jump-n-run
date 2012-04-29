@@ -83,6 +83,8 @@ void gmPlay(Game* G)
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
 	sf::Clock Clk;
+	FPSCounter fps;
+	fpsInit(&fps);
 	while (G->Window->isOpen())
 	{
 		MouseX = ViewWidth*sf::Mouse::getPosition(*G->Window).x/G->WindowWidth + ViewX;
@@ -172,6 +174,8 @@ void gmPlay(Game* G)
 
 		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&G->GameMenu) - 50.f));
 		glDrawMenu(*G->Window, &G->GameMenu, ViewX, ViewY);
+		glDrawFPS(*G->Window, fpsGetString(&fps));
+		fpsStep(&fps);
 
 		G->Window->display();
 	}

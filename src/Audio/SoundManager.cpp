@@ -82,6 +82,7 @@ void sndmPlay(const char *Key, const Vec2 &Position, float MinDist, float Attenu
 	snd->play();
 }
 
+
 void sndmPlay(const char *Key)
 {
 	std::map<std::string, sf::SoundBuffer*>::iterator it = SM.SoundBuffers.find(Key);

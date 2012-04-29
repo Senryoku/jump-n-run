@@ -17,6 +17,7 @@ void glDrawPolygon(Polygon *P);
 void glDrawCircle(float x, float y, float radius);
 void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY);
 void glDrawCloth(Cloth* C, Texture T);
+void glDrawFPS(sf::RenderTarget& win, const std::string& FPS);
 
 /** @brief Charge une texture en mémoire
  *

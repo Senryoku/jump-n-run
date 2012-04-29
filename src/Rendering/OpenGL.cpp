@@ -362,3 +362,28 @@ void glDrawCloth(Cloth* C, Texture T)
 	glEnd();
 
 }
+
+void glDrawFPS(sf::RenderTarget& win, const std::string& FPS)
+{
+	glPushMatrix();
+	sf::Text Text;
+	Text.setString(FPS);
+	Text.setPosition(5.f, 5.f);
+	Text.setColor(sf::Color::Black);
+	win.pushGLStates();
+	Text.move(-1.5f, 0.f);
+	win.draw(Text);
+	Text.move(3.f, 0.f);
+	win.draw(Text);
+	Text.move(-1.5f, -1.5f);
+	win.draw(Text);
+	Text.move(0.f, 1.5f);
+	win.draw(Text);
+	
+	Text.setColor(sf::Color::White);
+	Text.move(0.f, -1.5f);
+	win.draw(Text);
+	win.popGLStates();
+	
+	glPopMatrix();
+}

@@ -89,6 +89,7 @@ void aniAddAngleState(Animation* A, float Head, float Neck, float LeftArm1, floa
 
 void aniAddAngleState(Animation* A, const AnimAngles* Angles);
 
+void aniCountTriggers(Animation* A);
 
 void aniUpdate(Animation* A, SPlayer* P, float Step);
  
