@@ -64,12 +64,9 @@ void appRun(LevelEditorApp* App)
 //	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
 //	Texture Tx = glTexLoad("data/trollface.jpg");
 	
-	Animation* A = newAnimation(ANIM_POSITIONS, ANIM_NECK | ANIM_LEFT_ARM1, TRUE);
-	aniLoadFromFile(A, "data/testAnim.txt");
+
 	
-	//aniUpdate(A, 1.f);
-	
-	/* Coe temporel permettant de créer des states d'animation */
+	/* Code temporel permettant de créer des states d'animation */
 	
 	Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
 	
@@ -527,7 +524,6 @@ void appRun(LevelEditorApp* App)
 	delVertex(RightLeg1);
 	delVertex(RightLeg2);
 	 */
-	delAnimation(A);
 }
 
 void appSetWorkingPath(LevelEditorApp* App, const char* Path)

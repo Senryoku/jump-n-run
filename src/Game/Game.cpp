@@ -79,6 +79,7 @@ void gmPlay(Game* G)
 
 	Animation* A = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(A, "data/testAnim.txt");
+	aniUpdateForCurrentState(A);
 	
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 

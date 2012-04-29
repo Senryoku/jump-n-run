@@ -1,6 +1,7 @@
 #include "Animation.h"
 #include <Objects/Player.h>
 
+
 void aniInit(Animation* A, AnimType Type, AnimTriggers Triggers, Bool Repeat)
 {
 	A->States = newDynArr();
@@ -108,72 +109,72 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 				vec = &Pos.Neck;
 				fscanf(f, "%u %f %u %f #Neck\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.Head;
 				fscanf(f, "%u %f %u %f #Head\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.LeftArm1;
 				fscanf(f, "%u %f %u %f #LeftArm1\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.LeftArm2;
 				fscanf(f, "%u %f %u %f #LeftArm2\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.RightArm1;
 				fscanf(f, "%u %f %u %f #RightArm1\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.RightArm2;
 				fscanf(f, "%u %f %u %f #RightArm2\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.LeftLeg1;
 				fscanf(f, "%u %f %u %f #LeftLeg1\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.LeftLeg2;
 				fscanf(f, "%u %f %u %f #LeftLeg2\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.RightLeg1;
 				fscanf(f, "%u %f %u %f #RightLeg1\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				vec = &Pos.RightLeg2;
 				fscanf(f, "%u %f %u %f #RightLeg2\n",&free, &vec->x, &free2, &vec->y);
 				if (free)
-					vec->x = ANIM_FREE;
+					vec->x = NAN;
 				if (free2)
-					vec->y = ANIM_FREE;
+					vec->y = NAN;
 				
 				aniAddPositionState(A, &Pos);
 			}
@@ -186,52 +187,52 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 				a = &Ang.Neck;
 				fscanf(f, "%u %f #Neck\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				a = &Ang.Head;
 				fscanf(f, "%u %f #Head\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				a = &Ang.LeftArm1;
 				fscanf(f, "%u %f #LeftArm1\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				a = &Ang.LeftArm2;
 				fscanf(f, "%u %f #LeftArm2\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				a = &Ang.RightArm1;
 				fscanf(f, "%u %f #RightArm1\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN, printf("NaN read: %u\n", (NAN!=NAN));
 				
 				a = &Ang.RightArm2;
 				fscanf(f, "%u %f #RightArm2\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				a = &Ang.LeftLeg1;
 				fscanf(f, "%u %f #LeftLeg1\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				a = &Ang.LeftLeg2;
 				fscanf(f, "%u %f #LeftLeg2\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				a = &Ang.RightLeg1;
 				fscanf(f, "%u %f #RightLeg1\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				a = &Ang.RightLeg2;
 				fscanf(f, "%u %f #RightLeg2\n",&free, a);
 				if (free)
-					*a = ANIM_FREE;
+					*a = NAN;
 				
 				aniAddAngleState(A, &Ang);
 			}
@@ -266,6 +267,11 @@ unsigned int aniGetStatesCount(const Animation* A)
 unsigned int aniGetCurrentState(const Animation* A)
 {
 	return A->CurrentState;
+}
+
+void aniSetCurrentState(Animation* A, unsigned int State)
+{
+	A->CurrentState = State;
 }
 
 void aniAddPositionState(Animation* A, Vec2 Head, Vec2 Neck, Vec2 LeftArm1, Vec2 LeftArm2, Vec2 RightArm1, Vec2 RightArm2, Vec2 LeftLeg1, Vec2 LeftLeg2, Vec2 RightLeg1, Vec2 RightLeg2)
@@ -353,81 +359,81 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		AnimPositions* Pos;
 		Pos = (AnimPositions*) daGet(A->States, A->CurrentState);
 		
-		if (Pos->Head.x != ANIM_FREE)
+		if (Pos->Head.x == Pos->Head.x)
 			Wobble(&A->Positions.Head.x, Pos->Head.x, A->Force, A->Friction, &A->Spd[0]);
-		if (Pos->Head.y != ANIM_FREE)
+		if (Pos->Head.y == Pos->Head.y)
 			Wobble(&A->Positions.Head.y, Pos->Head.y, A->Force, A->Friction, &A->Spd[1]);
-		if (Pos->Neck.x != ANIM_FREE)
+		if (Pos->Neck.x == Pos->Neck.x)
 			Wobble(&A->Positions.Neck.x, Pos->Neck.x, A->Force, A->Friction, &A->Spd[2]);
-		if (Pos->Neck.y != ANIM_FREE)
+		if (Pos->Neck.y == Pos->Neck.y)
 			Wobble(&A->Positions.Neck.y, Pos->Neck.y, A->Force, A->Friction, &A->Spd[3]);
 		
-		if (Pos->LeftArm1.x != ANIM_FREE)
+		if (Pos->LeftArm1.x == Pos->LeftArm1.x)
 			Wobble(&A->Positions.LeftArm1.x, Pos->LeftArm1.x, A->Force, A->Friction, &A->Spd[4]);
-		if (Pos->LeftArm1.y != ANIM_FREE)
+		if (Pos->LeftArm1.y == Pos->LeftArm1.y)
 			Wobble(&A->Positions.LeftArm1.y, Pos->LeftArm1.y, A->Force, A->Friction, &A->Spd[5]);
-		if (Pos->LeftArm2.x != ANIM_FREE)
+		if (Pos->LeftArm2.x == Pos->LeftArm2.x)
 			Wobble(&A->Positions.LeftArm2.x, Pos->LeftArm2.x, A->Force, A->Friction, &A->Spd[6]);
-		if (Pos->LeftArm2.y != ANIM_FREE)
+		if (Pos->LeftArm2.y == Pos->LeftArm2.y)
 			Wobble(&A->Positions.LeftArm2.y, Pos->LeftArm2.y, A->Force, A->Friction, &A->Spd[7]);
-		if (Pos->RightArm1.x != ANIM_FREE)
+		if (Pos->RightArm1.x == Pos->RightArm1.x)
 			Wobble(&A->Positions.RightArm1.x, Pos->RightArm1.x, A->Force, A->Friction, &A->Spd[8]);
-		if (Pos->RightArm1.y != ANIM_FREE)
+		if (Pos->RightArm1.y == Pos->RightArm1.y)
 			Wobble(&A->Positions.RightArm1.y, Pos->RightArm1.y, A->Force, A->Friction, &A->Spd[9]);
-		if (Pos->RightArm2.x != ANIM_FREE)
+		if (Pos->RightArm2.x == Pos->RightArm2.x)
 			Wobble(&A->Positions.RightArm2.x, Pos->RightArm2.x, A->Force, A->Friction, &A->Spd[10]);
-		if (Pos->RightArm2.y != ANIM_FREE)
+		if (Pos->RightArm2.y == Pos->RightArm2.y)
 			Wobble(&A->Positions.RightArm2.y, Pos->RightArm2.y, A->Force, A->Friction, &A->Spd[11]);
 		
-		if (Pos->LeftLeg1.x != ANIM_FREE)
+		if (Pos->LeftLeg1.x == Pos->LeftLeg1.x)
 			Wobble(&A->Positions.LeftLeg1.x, Pos->LeftLeg1.x, A->Force, A->Friction, &A->Spd[12]);
-		if (Pos->LeftLeg1.y != ANIM_FREE)
+		if (Pos->LeftLeg1.y == Pos->LeftLeg1.y)
 			Wobble(&A->Positions.LeftLeg1.y, Pos->LeftLeg1.y, A->Force, A->Friction, &A->Spd[13]);
-		if (Pos->LeftLeg2.x != ANIM_FREE)
+		if (Pos->LeftLeg2.x == Pos->LeftLeg2.x)
 			Wobble(&A->Positions.LeftLeg2.x, Pos->LeftLeg2.x, A->Force, A->Friction, &A->Spd[14]);
-		if (Pos->LeftLeg2.y != ANIM_FREE)
+		if (Pos->LeftLeg2.y == Pos->LeftLeg2.y)
 			Wobble(&A->Positions.LeftLeg2.y, Pos->LeftLeg2.y, A->Force, A->Friction, &A->Spd[15]);
-		if (Pos->RightLeg1.x != ANIM_FREE)
+		if (Pos->RightLeg1.x == Pos->RightLeg1.x)
 			Wobble(&A->Positions.RightLeg1.x, Pos->RightLeg1.x, A->Force, A->Friction, &A->Spd[16]);
-		if (Pos->RightLeg1.y != ANIM_FREE)
+		if (Pos->RightLeg1.y == Pos->RightLeg1.y)
 			Wobble(&A->Positions.RightLeg1.y, Pos->RightLeg1.y, A->Force, A->Friction, &A->Spd[17]);
-		if (Pos->RightLeg2.x != ANIM_FREE)
+		if (Pos->RightLeg2.x == Pos->RightLeg2.x)
 			Wobble(&A->Positions.RightLeg2.x, Pos->RightLeg2.x, A->Force, A->Friction, &A->Spd[18]);
-		if (Pos->RightLeg2.y != ANIM_FREE)
+		if (Pos->RightLeg2.y == Pos->RightLeg2.y)
 			Wobble(&A->Positions.RightLeg2.y, Pos->RightLeg2.y, A->Force, A->Friction, &A->Spd[19]);
 		
 		
 		/* Vérification de l'état de l'animation pour passer à létat suivant */
 		if (A->Triggers & ANIM_LEFT_LEG2)
-			if (ABS(A->Positions.LeftLeg2.x-Pos->LeftLeg2.x) < A->Diff && ABS(A->Positions.LeftLeg2.y-Pos->LeftLeg2.y) < A->Diff)
+			if ((Pos->LeftLeg2.x!=Pos->LeftLeg2.x || ABS(A->Positions.LeftLeg2.x-Pos->LeftLeg2.x) < A->Diff) && (Pos->LeftLeg2.y!=Pos->LeftLeg2.y || ABS(A->Positions.LeftLeg2.y-Pos->LeftLeg2.y) < A->Diff))
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_LEG2)
-			if (ABS(A->Positions.RightLeg2.x-Pos->RightLeg2.x) < A->Diff && ABS(A->Positions.RightLeg2.y-Pos->RightLeg2.y) < A->Diff)
+			if ((Pos->RightLeg2.x!=Pos->RightLeg2.x || ABS(A->Positions.RightLeg2.x-Pos->RightLeg2.x)) < A->Diff && (Pos->RightLeg2.y!=Pos->RightLeg2.y || ABS(A->Positions.RightLeg2.y-Pos->RightLeg2.y) < A->Diff))
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_LEG1)
-			if (ABS(A->Positions.RightLeg1.x-Pos->RightLeg1.x) < A->Diff && ABS(A->Positions.RightLeg1.y-Pos->RightLeg1.y) < A->Diff)
+			if ((Pos->RightLeg1.x!=Pos->RightLeg1.x || ABS(A->Positions.RightLeg1.x-Pos->RightLeg1.x) < A->Diff) && (Pos->RightLeg1.y!=Pos->RightLeg1.y || ABS(A->Positions.RightLeg1.y-Pos->RightLeg1.y) < A->Diff))
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_LEG1)
-			if (ABS(A->Positions.LeftLeg1.x-Pos->LeftLeg1.x) < A->Diff && ABS(A->Positions.LeftLeg1.y-Pos->LeftLeg1.y) < A->Diff)
+			if ((Pos->LeftLeg1.x!=Pos->LeftLeg1.x || ABS(A->Positions.LeftLeg1.x-Pos->LeftLeg1.x) < A->Diff) && (Pos->LeftLeg1.y!=Pos->LeftLeg1.y || ABS(A->Positions.LeftLeg1.y-Pos->LeftLeg1.y) < A->Diff))
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_ARM1)
-			if (ABS(A->Positions.LeftArm1.x-Pos->LeftArm1.x) < A->Diff && ABS(A->Positions.LeftArm1.y-Pos->LeftArm1.y) < A->Diff)
+			if ((Pos->LeftArm1.x!=Pos->LeftArm1.x || ABS(A->Positions.LeftArm1.x-Pos->LeftArm1.x) < A->Diff) && (Pos->LeftArm1.y!=Pos->LeftArm1.y || ABS(A->Positions.LeftArm1.y-Pos->LeftArm1.y) < A->Diff))
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_ARM2)
-			if (ABS(A->Positions.LeftArm2.x-Pos->LeftArm2.x) < A->Diff && ABS(A->Positions.LeftArm2.y-Pos->LeftArm2.y) < A->Diff)
+			if ((Pos->LeftArm2.x!=Pos->LeftArm2.x || ABS(A->Positions.LeftArm2.x-Pos->LeftArm2.x) < A->Diff) && (Pos->LeftArm2.y!=Pos->LeftArm2.y || ABS(A->Positions.LeftArm2.y-Pos->LeftArm2.y) < A->Diff))
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_ARM1)
-			if (ABS(A->Positions.RightArm1.x-Pos->RightArm1.x) < A->Diff && ABS(A->Positions.RightArm1.y-Pos->RightArm1.y) < A->Diff)
+			if ((Pos->RightArm1.x!=Pos->RightArm1.x || ABS(A->Positions.RightArm1.x-Pos->RightArm1.x) < A->Diff) && (Pos->RightArm1.y!=Pos->RightArm1.y || ABS(A->Positions.RightArm1.y-Pos->RightArm1.y) < A->Diff))
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_ARM2)
-			if (ABS(A->Positions.RightArm2.x-Pos->RightArm2.x) < A->Diff && ABS(A->Positions.RightArm2.y-Pos->RightArm2.y) < A->Diff)
+			if ((Pos->RightArm2.x!=Pos->RightArm2.x || ABS(A->Positions.RightArm2.x-Pos->RightArm2.x) < A->Diff) && (Pos->RightArm2.y!=Pos->RightArm2.y || ABS(A->Positions.RightArm2.y-Pos->RightArm2.y) < A->Diff))
 				TriggerCount++;
 		
 		if (A->Triggers & ANIM_NECK)
-			if (ABS(A->Positions.Neck.x-Pos->Neck.x) < A->Diff && ABS(A->Positions.Neck.y-Pos->Neck.y) < A->Diff)
+			if ((Pos->Neck.x!=Pos->Neck.x || ABS(A->Positions.Neck.x-Pos->Neck.x) < A->Diff) && (Pos->Neck.y!=Pos->Neck.y || ABS(A->Positions.Neck.y-Pos->Neck.y) < A->Diff))
 				TriggerCount++;
 		if (A->Triggers & ANIM_HEAD)
-			if (ABS(A->Positions.Head.x-Pos->Head.x) < A->Diff && ABS(A->Positions.Head.y-Pos->Head.y) < A->Diff)
+			if ((Pos->Head.x!=Pos->Head.x || ABS(A->Positions.Head.x-Pos->Head.x) < A->Diff) && (Pos->Head.y!=Pos->Head.y || ABS(A->Positions.Head.y-Pos->Head.y) < A->Diff))
 				TriggerCount++;
 		
 		if (TriggerCount>=A->TriggerCount)
@@ -452,13 +458,13 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		/* On change la position des vertex du joueur */
 		
-		if (Ang->Neck != ANIM_FREE)
+		if (Ang->Neck == Ang->Head)
 		{
 			Wobble(&A->Angles.Neck, Ang->Neck, A->Force, A->Friction, &A->Spd[1]);
 			vxSetPosition(P->Neck, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(90.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.Neck))));
 		}
 			
-		if (Ang->Head != ANIM_FREE)
+		if (Ang->Head == Ang->Head)
 		{
 			Wobble(&A->Angles.Head, Ang->Head, A->Force, A->Friction, &A->Spd[0]);
 			//la tête est un peu spéciale car on a l'angle du
@@ -467,52 +473,52 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 				
-		if (Ang->LeftArm1 != ANIM_FREE)
+		if (Ang->LeftArm1 == Ang->LeftArm1)
 		{
 			Wobble(&A->Angles.LeftArm1, Ang->LeftArm1, A->Force, A->Friction, &A->Spd[2]);
 			vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm1))));
 		}
 			
-		if (Ang->LeftArm2 != ANIM_FREE)
+		if (Ang->LeftArm2 == Ang->LeftArm2)
 		{
 			Wobble(&A->Angles.LeftArm2, Ang->LeftArm2, A->Force, A->Friction, &A->Spd[3]);
 			vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->LeftArm1), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm2))));
 		}
 			
 		
-		if (Ang->RightArm1 != ANIM_FREE)
+		if (Ang->RightArm1 == Ang->RightArm1)
 		{
 			Wobble(&A->Angles.RightArm1, Ang->RightArm1, A->Force, A->Friction, &A->Spd[4]);
 			vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm1))));
 		}
 			
-		if (Ang->RightArm2 != ANIM_FREE)
+		if (Ang->RightArm2 == Ang->RightArm2)
 		{
 			Wobble(&A->Angles.RightArm2, Ang->RightArm2, A->Force, A->Friction, &A->Spd[5]);
 			vxSetPosition(P->RightArm2, vec2Add(vxGetPosition(P->RightArm1), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm2))));
 		}
 			
 				
-		if (Ang->LeftLeg1 != ANIM_FREE)
+		if (Ang->LeftLeg1 == Ang->LeftLeg1)
 		{
 			Wobble(&A->Angles.LeftLeg1, Ang->LeftLeg1, A->Force, A->Friction, &A->Spd[6]);
 			vxSetPosition(P->LeftLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg1))));
 		}
 			
-		if (Ang->LeftLeg2 != ANIM_FREE)
+		if (Ang->LeftLeg2 == Ang->LeftLeg2)
 		{
 			Wobble(&A->Angles.LeftLeg2, Ang->LeftLeg2, A->Force, A->Friction, &A->Spd[7]);
 			vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->LeftLeg1), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg2))));
 		}
 			
 		
-		if (Ang->RightLeg1 != ANIM_FREE)
+		if (Ang->RightLeg1 == Ang->RightLeg1)
 		{
 			Wobble(&A->Angles.RightLeg1, Ang->RightLeg1, A->Force, A->Friction, &A->Spd[8]);
 			vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg1))));
 		}
 			
-		if (Ang->RightLeg2 != ANIM_FREE)
+		if (Ang->RightLeg2 == Ang->RightLeg2)
 		{
 			Wobble(&A->Angles.RightLeg2, Ang->RightLeg2, A->Force, A->Friction, &A->Spd[9]);
 			vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->RightLeg1), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg2))));
@@ -523,36 +529,37 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 		/* Vérification de l'état de l'animation pour passer à létat suivant */
+		/* Ang->LeftLeg2!=Ang->LeftLeg2 teste le NaN donc NAN (le vertex n'est pas à tenir en compte) */
 		if (A->Triggers & ANIM_LEFT_LEG2)
-			if (ABS(A->Angles.LeftLeg2-Ang->LeftLeg2) < A->Diff)
+			if (Ang->LeftLeg2!=Ang->LeftLeg2 || ABS(A->Angles.LeftLeg2-Ang->LeftLeg2) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_LEG2)
-			if (ABS(A->Angles.RightLeg2-Ang->RightLeg2) < A->Diff)
+			if (Ang->RightLeg2!=Ang->RightLeg2 || ABS(A->Angles.RightLeg2-Ang->RightLeg2) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_LEG1)
-			if (ABS(A->Angles.RightLeg1-Ang->RightLeg1) < A->Diff)
+			if (Ang->RightLeg1!=Ang->RightLeg1 || ABS(A->Angles.RightLeg1-Ang->RightLeg1) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_LEG1)
-			if (ABS(A->Angles.LeftLeg1-Ang->LeftLeg1) < A->Diff)
+			if (Ang->LeftLeg1!=Ang->LeftLeg1 || ABS(A->Angles.LeftLeg1-Ang->LeftLeg1) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_ARM1)
-			if (ABS(A->Angles.LeftArm1-Ang->LeftArm1) < A->Diff)
+			if (Ang->LeftArm1!=Ang->LeftArm1 || ABS(A->Angles.LeftArm1-Ang->LeftArm1) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_ARM2)
-			if (ABS(A->Angles.LeftArm2-Ang->LeftArm2) < A->Diff)
+			if (Ang->LeftArm2!=Ang->LeftArm2 || ABS(A->Angles.LeftArm2-Ang->LeftArm2) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_ARM1)
-			if (ABS(A->Angles.RightArm1-Ang->RightArm1) < A->Diff)
+			if (Ang->RightArm1!=Ang->RightArm1 || ABS(A->Angles.RightArm1-Ang->RightArm1) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_ARM2)
-			if (ABS(A->Angles.RightArm2-Ang->RightArm2) < A->Diff)
+			if (Ang->RightArm2!=Ang->RightArm2 || ABS(A->Angles.RightArm2-Ang->RightArm2) < A->Diff)
 				TriggerCount++;
 		
 		if (A->Triggers & ANIM_NECK)
-			if (ABS(A->Angles.Neck-Ang->Neck) < A->Diff)
+			if (Ang->Neck!=Ang->Neck || ABS(A->Angles.Neck-Ang->Neck) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_HEAD)
-			if (ABS(A->Angles.Head-Ang->Head) < A->Diff)
+			if (Ang->Head!=Ang->Head || ABS(A->Angles.Head-Ang->Head) < A->Diff)
 				TriggerCount++;
 		
 		if (TriggerCount >= A->TriggerCount)
@@ -572,5 +579,113 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 	}	
 	
 	
+}
+
+void aniUpdateForCurrentState(Animation* A)
+{
+	if (A->Type == ANIM_POSITIONS)
+	{
+		AnimPositions* Pos;
+		Vec2* Vsrc, *Vdest;
+		Pos = (AnimPositions*) daGet(A->States, A->CurrentState);
+		
+		Vsrc = &Pos->Neck;
+		Vdest = &A->Positions.Neck;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->Head;
+		Vdest = &A->Positions.Head;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->LeftArm1;
+		Vdest = &A->Positions.LeftArm1;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->LeftArm2;
+		Vdest = &A->Positions.LeftArm2;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->RightArm1;
+		Vdest = &A->Positions.RightArm1;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->RightArm2;
+		Vdest = &A->Positions.RightArm2;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->LeftLeg1;
+		Vdest = &A->Positions.LeftLeg1;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->LeftLeg2;
+		Vdest = &A->Positions.LeftLeg2;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->RightLeg1;
+		Vdest = &A->Positions.RightLeg1;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+		Vsrc = &Pos->RightLeg2;
+		Vdest = &A->Positions.RightLeg2;
+		if (Vsrc->x == Vsrc->x)
+			Vdest->x = Vsrc->x;
+		if (Vsrc->y == Vsrc->y)
+			Vdest->y = Vsrc->y;
+		
+	}
+	else
+	{
+		AnimAngles* Ang;
+		Ang = (AnimAngles*) daGet(A->States, A->CurrentState);
+		
+		if (Ang->Neck == Ang->Neck)
+			A->Angles.Neck = Ang->Neck;
+		if (Ang->LeftArm1 == Ang->LeftArm1)
+			A->Angles.LeftArm1 = Ang->LeftArm1;
+		if (Ang->LeftArm2 == Ang->LeftArm2)
+			A->Angles.LeftArm2 = Ang->LeftArm2;
+		if (Ang->RightArm1 == Ang->RightArm1)
+			A->Angles.RightArm1 = Ang->RightArm1;
+		if (Ang->RightArm2 == Ang->RightArm2)
+			A->Angles.RightArm2 = Ang->RightArm2;
+		if (Ang->LeftLeg1 == Ang->LeftLeg1)
+			A->Angles.LeftLeg1 = Ang->LeftLeg1;
+		if (Ang->LeftLeg2 == Ang->LeftLeg2)
+			A->Angles.LeftLeg2 = Ang->LeftLeg2;
+		if (Ang->RightLeg1 == Ang->RightLeg1)
+			A->Angles.RightLeg1 = Ang->RightLeg1;
+		if (Ang->RightLeg2 == Ang->RightLeg2)
+			A->Angles.RightLeg2 = Ang->RightLeg2;
+		if (Ang->Head == Ang->Head)
+			A->Angles.Head = Ang->Head;
+		
+	}
 }
 

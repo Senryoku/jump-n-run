@@ -20,7 +20,7 @@ typedef unsigned short AnimTriggers; /**< Il faut utiliser les flags pour défin
 #define ANIM_POSITIONS 0x01
 
 
-#define ANIM_FREE 0xFF000000 /**< Définie quand on ne tient pas en compte cette valeur. C'est un NaN **/
+#define ANIM_FREE 0x7fc00000 /**< Définie quand on ne tient pas en compte cette valeur. C'est un NaN **/
 
 /* Flags pour décider qui va permettre l'animation d'avancer */
 
@@ -81,6 +81,8 @@ unsigned int aniGetStatesCount(const Animation* A);
 
 unsigned int aniGetCurrentState(const Animation* A);
 
+void aniSetCurrentState(Animation* A, unsigned int State);
+
 void aniAddPositionState(Animation* A, Vec2 Head, Vec2 Neck, Vec2 LeftArm1, Vec2 LeftArm2, Vec2 RightArm1, Vec2 RightArm2, Vec2 LeftLeg1, Vec2 LeftLeg2, Vec2 RightLeg1, Vec2 RightLeg2);
 
 void aniAddPositionState(Animation* A, const AnimPositions* Positions);
@@ -92,5 +94,7 @@ void aniAddAngleState(Animation* A, const AnimAngles* Angles);
 void aniCountTriggers(Animation* A);
 
 void aniUpdate(Animation* A, SPlayer* P, float Step);
+
+void aniUpdateForCurrentState(Animation* A);
  
 #endif
