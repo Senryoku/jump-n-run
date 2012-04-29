@@ -2,6 +2,7 @@
 #define _FPSCOUNTER_H
 
 #include <SFML/System/Clock.hpp>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <Core/Tools.h>

@@ -12,8 +12,8 @@ void plInit(Player* P, World *W)
 
 	P->ULPos = vec2(-20.f, -70.f);
 	P->URPos = vec2(20.f, -70.f);
-	P->DLPos = vec2(-35.f, 70.f);
-	P->DRPos = vec2(35.f, 70.f);
+	P->DLPos = vec2(-20.f, 70.f);
+	P->DRPos = vec2(20.f, 70.f);
 
 
 	P->VxUL = newVertex();
@@ -38,7 +38,7 @@ void plInit(Player* P, World *W)
 	P->Shape = polyRectangle(P->VxUL, P->VxUR, P->VxDR, P->VxDL);
 
 	P->GroundAngle = M_PI_2;
-	
+
 	P->Dir = DIR_RIGHT;
 
 	/*
@@ -216,12 +216,12 @@ void plMoveR(Player* P)
 		|| P->RdDStatus.P1 != NULL)
 	{
 		//P->Speed.x+=1.5f;
-		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 1.5f), 0);
+		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 10.f), 0);
 	}
 	else
 	{
 		//P->Speed.x+=0.5f;
-		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 1.5f), 0);
+		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 0.5f), 0);
 	}
 }
 
@@ -233,7 +233,7 @@ void plMoveL(Player* P)
 		|| P->RdDStatus.P1 != NULL)
 	{
 		//P->Speed.x-=1.5f;
-		polyApplyForce(P->Shape, vec2(-1.5f, 0.f), 0);
+		polyApplyForce(P->Shape, vec2(-10.f, 0.f), 0);
 	}
 	else
 	{
@@ -351,7 +351,7 @@ void plUpdate(Player* P, World* W)
 
 	//FAAAAIL!
 	P->Center = polyComputeCenter(P->Shape);
-	
+
 
 	/* Mise à jour spécifique de Player */
 
@@ -420,21 +420,29 @@ void plUpdate(Player* P, World* W)
 	//P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
 
 
-	if (P->OnGround)
+	if (P->OnGround && P->Normal.y < -0.5f && P->RdDStatus.P1 == NULL)
 	{
-		float Force = 0.04f;
-		float Diff = vxGetPosition(P->VxUL).y - vxGetPosition(P->VxUR).y;
-		if(abs(Diff) < 10.f) Diff = 0;
-		if(Diff > 0)
-			vxApplyForce(P->VxUL, vec2(0.f, -Force*(Diff)), 0),
-			vxApplyForce(P->VxUR, vec2(-Force*(Diff), 0), 0),
-			vxApplyForce(P->VxDL, vec2(Force*(Diff), 0), 0),
-			vxApplyForce(P->VxDR, vec2(0.f, Force*(Diff)), 0);
-		if(Diff < 0)
-			vxApplyForce(P->VxUR, vec2(0.f, Force*(Diff)), 0),
-			vxApplyForce(P->VxUL, vec2(-Force*(Diff), 0), 0),
-			vxApplyForce(P->VxDR, vec2(Force*(Diff), 0), 0),
-			vxApplyForce(P->VxDL, vec2(0.f, -Force*(Diff)), 0);
+//		float Force = 0.04f;
+//		float Diff = vxGetPosition(P->VxUL).y - vxGetPosition(P->VxUR).y;
+//		if(abs(Diff) < 10.f) Diff = 0;
+//		if(Diff > 0)
+//			vxApplyForce(P->VxUL, vec2(0.f, -Force*(Diff)), 0),
+//			vxApplyForce(P->VxUR, vec2(-Force*(Diff), 0), 0),
+//			vxApplyForce(P->VxDL, vec2(Force*(Diff), 0), 0),
+//			vxApplyForce(P->VxDR, vec2(0.f, Force*(Diff)), 0);
+//		if(Diff < 0)
+//			vxApplyForce(P->VxUR, vec2(0.f, Force*(Diff)), 0),
+//			vxApplyForce(P->VxUL, vec2(-Force*(Diff), 0), 0),
+//			vxApplyForce(P->VxDR, vec2(Force*(Diff), 0), 0),
+//			vxApplyForce(P->VxDL, vec2(0.f, -Force*(Diff)), 0);
+		if(P->VxDLStatus.P1 == NULL)
+		{
+			vxSetPosition(P->VxDL, vec2Add(vxGetPosition(P->VxDR), vec2Prod(vec2Ortho(P->Normal), 40.f)));
+		} else if(P->VxDRStatus.P1 == NULL) {
+			vxSetPosition(P->VxDR, vec2Add(vxGetPosition(P->VxDL), vec2Prod(vec2Ortho(P->Normal), -40.f)));
+		}
+		vxSetPosition(P->VxUL, vec2Add(vxGetPosition(P->VxDL), vec2Prod(P->Normal, 140.f)));
+		vxSetPosition(P->VxUR, vec2Add(vxGetPosition(P->VxDR), vec2Prod(P->Normal, 140.f)));
 	}
 
 }
@@ -547,7 +555,7 @@ void plCreateRigids(Player* P, World* W)
 		wdAddPolygon(W, LL2);
 		wdAddPolygon(W, RL1);
 		wdAddPolygon(W, RL2);
-		 
+
 		LL2 = newPolygon(2, P->Base, P->LeftLeg2);
 		RL2 = newPolygon(2, P->Base, P->RightLeg2);
 
