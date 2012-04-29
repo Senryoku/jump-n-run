@@ -8,7 +8,7 @@ void aniInit(Animation* A, AnimType Type, AnimTriggers Triggers, Bool Repeat)
 	A->Ended = FALSE;
 	A->Repeat = Repeat;
 	A->CurrentState = 0;
-	A->Force = 0.25f;
+	A->Force = 0.75f;
 	A->Friction = 0.6f;
 	A->Type = Type;
 	A->Diff = 1.f;
@@ -458,7 +458,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		/* On change la position des vertex du joueur */
 		
-		if (Ang->Neck == Ang->Head)
+		if (Ang->Neck == Ang->Neck)
 		{
 			Wobble(&A->Angles.Neck, Ang->Neck, A->Force, A->Friction, &A->Spd[1]);
 			vxSetPosition(P->Neck, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(90.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.Neck))));
