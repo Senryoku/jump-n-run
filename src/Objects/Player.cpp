@@ -216,7 +216,7 @@ void plMoveR(Player* P)
 		|| P->RdDStatus.P1 != NULL)
 	{
 		//P->Speed.x+=1.5f;
-		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 10.f), 0);
+		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 3.f), 0);
 	}
 	else
 	{
@@ -233,7 +233,7 @@ void plMoveL(Player* P)
 		|| P->RdDStatus.P1 != NULL)
 	{
 		//P->Speed.x-=1.5f;
-		polyApplyForce(P->Shape, vec2(-10.f, 0.f), 0);
+		polyApplyForce(P->Shape, vec2(-3.f, 0.f), 0);
 	}
 	else
 	{
@@ -435,14 +435,26 @@ void plUpdate(Player* P, World* W)
 //			vxApplyForce(P->VxUL, vec2(-Force*(Diff), 0), 0),
 //			vxApplyForce(P->VxDR, vec2(Force*(Diff), 0), 0),
 //			vxApplyForce(P->VxDL, vec2(0.f, -Force*(Diff)), 0);
+		float PlayerLength = 40.f, PlayerHeight = 140.f;
+		Vec2 Edge = vec2Ortho(P->Normal);
+		Vec2 Speed = vec2Prod(Edge, vec2Dot(vec2Sub(vxGetPosition(P->VxDR), vxGetOldPos(P->VxDR)), Edge));
 		if(P->VxDLStatus.P1 == NULL)
 		{
-			vxSetPosition(P->VxDL, vec2Add(vxGetPosition(P->VxDR), vec2Prod(vec2Ortho(P->Normal), 40.f)));
+			vxSetPosition(P->VxDL, vec2Add(vxGetPosition(P->VxDR), vec2Prod(Edge, PlayerLength)));
 		} else if(P->VxDRStatus.P1 == NULL) {
-			vxSetPosition(P->VxDR, vec2Add(vxGetPosition(P->VxDL), vec2Prod(vec2Ortho(P->Normal), -40.f)));
+			vxSetPosition(P->VxDR, vec2Add(vxGetPosition(P->VxDL), vec2Prod(Edge, -PlayerLength)));
 		}
-		vxSetPosition(P->VxUL, vec2Add(vxGetPosition(P->VxDL), vec2Prod(P->Normal, 140.f)));
-		vxSetPosition(P->VxUR, vec2Add(vxGetPosition(P->VxDR), vec2Prod(P->Normal, 140.f)));
+		vxSetPosition(P->VxUL, vec2Add(vxGetPosition(P->VxDL), vec2Prod(P->Normal, PlayerHeight)));
+		vxSetPosition(P->VxUR, vec2Add(vxGetPosition(P->VxDR), vec2Prod(P->Normal, PlayerHeight)));
+//			vxCorrectSpeed(P->VxDR, Speed);
+//			vxCorrectSpeed(P->VxDL, Speed);
+//			vxCorrectSpeed(P->VxUR, Speed);
+//			vxCorrectSpeed(P->VxUL, Speed);
+			P->VxDR->OldPos = vec2Sub(vxGetPosition(P->VxDR), Speed);
+			P->VxDL->OldPos = vec2Sub(vxGetPosition(P->VxDL), Speed);
+			P->VxUR->OldPos = vec2Sub(vxGetPosition(P->VxUR), Speed);
+			P->VxUL->OldPos = vec2Sub(vxGetPosition(P->VxUL), Speed);
+			printf("%f %f\n", Speed.x, Speed.y);
 	}
 
 }

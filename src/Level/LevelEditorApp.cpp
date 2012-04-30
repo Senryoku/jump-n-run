@@ -52,7 +52,7 @@ void appRun(LevelEditorApp* App)
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
 		WindowRatio = App->WindowWidth/App->WindowHeight;
-	Bool DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
+	Bool Paused = FALSE, DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
 	FPSCounter fps;
 
 //	int clothSize = 15;
@@ -63,13 +63,13 @@ void appRun(LevelEditorApp* App)
 //	vxSetFixe(clGetVertex(C, 0, clothSize-1), 1);
 //	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
 //	Texture Tx = glTexLoad("data/trollface.jpg");
-	
 
-	
+
+
 	/* Code temporel permettant de créer des states d'animation */
-	
+
 	Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
-	
+
 	vxSetPosition(Base, vec2(150.f, 330.f));
 	Vec2 B = vxGetPosition(Base);
 	vxSetPosition(Neck, vec2(B.x, B.y - 90.f));
@@ -83,7 +83,7 @@ void appRun(LevelEditorApp* App)
 	vxSetPosition(LeftLeg2, vec2Add(vxGetPosition(Base), vec2(10.f, 80.f)));
 	vxSetPosition(RightLeg1, vec2Add(vxGetPosition(Base), vec2(0.f, 40.f)));
 	vxSetPosition(RightLeg2, vec2Add(vxGetPosition(Base), vec2(-10.f, 80.f)));
-	
+
 	vxSetFixe(Neck, TRUE);
 	vxSetFixe(Base, TRUE);
 	vxSetFixe(LeftArm1, TRUE);
@@ -96,7 +96,7 @@ void appRun(LevelEditorApp* App)
 	vxSetFixe(RightLeg2, TRUE);
 	vxSetFixe(HeadLeft, TRUE);
 	vxSetFixe(HeadRight, TRUE);
-	
+
 	wdAddVertex(App->Led.Lvl->W, Base);
 	wdAddVertex(App->Led.Lvl->W, Neck);
 	wdAddVertex(App->Led.Lvl->W, HeadLeft);
@@ -109,26 +109,26 @@ void appRun(LevelEditorApp* App)
 	wdAddVertex(App->Led.Lvl->W, RightArm2);
 	wdAddVertex(App->Led.Lvl->W, RightLeg1);
 	wdAddVertex(App->Led.Lvl->W, RightLeg2);
-	
+
 	Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
 	LA1 = newRigid(Neck, LeftArm1, -1.f);
 	LA2 = newRigid(LeftArm1, LeftArm2, -1.f);
 	RA1 = newRigid(Neck, RightArm1, -1.f);
 	RA2 = newRigid(RightArm1, RightArm2, -1.f);
-	
+
 	LL1 = newRigid(Base, LeftLeg1, -1.f);
 	LL2 = newRigid(LeftLeg1, LeftLeg2, -1.f);
 	RL1 = newRigid(Base, RightLeg1, -1.f);
 	RL2 = newRigid(RightLeg1, RightLeg2, -1.f);
-	
-	
+
+
 	Body = newRigid(Base, Neck, -1.f);
-	
+
 	H1 = newRigid(Neck, HeadLeft, -1.f);
 	H2 = newRigid(Neck, HeadRight, -1.f);
 	H3 = newRigid(HeadLeft, HeadRight, -1.f);
-	
-	
+
+
 	wdAddRigid(App->Led.Lvl->W, Body);
 	wdAddRigid(App->Led.Lvl->W, LA1);
 	wdAddRigid(App->Led.Lvl->W, LA2);
@@ -141,7 +141,7 @@ void appRun(LevelEditorApp* App)
 	wdAddRigid(App->Led.Lvl->W, H1);
 	wdAddRigid(App->Led.Lvl->W, H2);
 	wdAddRigid(App->Led.Lvl->W, H3);
-	
+
 	/* Fin du code temporel pour les states des animations */
 	fpsInit(&fps);
 	while (App->Window.isOpen())
@@ -293,7 +293,10 @@ void appRun(LevelEditorApp* App)
 					case sf::Keyboard::M :
 						DispObjects = !DispObjects;
 						break;
-						
+					case sf::Keyboard::Comma :
+						Paused = !Paused;
+						break;
+
 					/* code de sauvegarde de l'animation */
 				case sf::Keyboard::A :
 						FILE* f; Vertex* V; Vec2 Pos; float Angle;
@@ -304,11 +307,11 @@ void appRun(LevelEditorApp* App)
 						V = Neck;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
 						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "Neck");
-						
+
 						Pos = vec2Prod(vec2Add(vec2Add(vxGetPosition(HeadLeft), vxGetPosition(HeadRight)), vxGetPosition(Neck)), 1.f/3.f);
 						Pos = vec2Sub(Pos, vxGetPosition(Base));
 						fprintf(f, "%u %f %u %f #%s\n", 0, Pos.x, 0, Pos.y, "Head");
-						
+
 						V = LeftArm1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
 						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "LeftArm1");
@@ -333,54 +336,54 @@ void appRun(LevelEditorApp* App)
 						V = RightLeg2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
 						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)!vxIsFixe(V), Pos.x, (unsigned int)!vxIsFixe(V), Pos.y, "RightLeg2");
-						
+
 						fclose(f);
-						
+
 						f = fopen("animAngles.txt", "w");
 						Vertex* V1, *V2;
 						//[nb of states] [AnimType]
 						fprintf(f, "%u %u %u\n", 1, (unsigned int)ANIM_ANGLES, (unsigned int)ANIM_ALL_TRIGGERS);
-						
-						
+
+
 						V1 = Neck; V2 = Base;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "Neck");
-						
+
 						V1 = HeadLeft; V2 = HeadRight;
 						Pos = vec2Prod(vec2Add(vec2Add(vxGetPosition(HeadLeft), vxGetPosition(HeadRight)), vxGetPosition(Neck)), 1.f/3.f);
 						Pos = vec2Sub(Pos, vxGetPosition(Neck));
 						Angle = vec2Angle(Pos);
 						fprintf(f, "%u %f #%s\n", (unsigned int)(!vxIsFixe(V1) || !vxIsFixe(V2)), RAD2DEG(Angle), "Head");
-						
+
 						V1 = LeftArm1; V2 = Neck;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "LeftArm1");
-						
+
 						V1 = LeftArm2; V2 = LeftArm1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "LeftArm2");
-						
+
 						V1 = RightArm1; V2 = Neck;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "RightArm1");
 						V1 = RightArm2; V2 = RightArm1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "RightArm2");
-						
+
 						V1 = LeftLeg1; V2 = Base;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "LeftLeg1");
 						V1 = LeftLeg2; V2 = LeftLeg1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "LeftLeg2");
-						
+
 						V1 = RightLeg1; V2 = Base;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "RightLeg1");
 						V1 = RightLeg2; V2 = RightLeg1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
 						fprintf(f, "%u %f #%s\n", (unsigned int)!vxIsFixe(V1), RAD2DEG(Angle), "RightLeg2");
-						
+
 						fclose(f);
 						break;
 					default:
@@ -449,7 +452,7 @@ void appRun(LevelEditorApp* App)
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
-		lvlUpdate(App->Led.Lvl);
+		if(!Paused) lvlUpdate(App->Led.Lvl);
 
 		/* == Affichage == */
 
@@ -499,7 +502,7 @@ void appRun(LevelEditorApp* App)
 
 		OldMouseX = MouseX;
 		OldMouseY = MouseY;
-		
+
 		//glDrawFPS(App->Window, fpsGetString(&fps));
 
 		// Update the App->Window
