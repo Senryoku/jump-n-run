@@ -127,7 +127,7 @@ void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsign
 				str->resize(str->size() - 1);
 			else if (KeyCode>=32 && KeyCode<=126) /* printable chars */
 				str->push_back(KeyCode);
-			printf("str: %s\n", str->c_str());
+			//printf("str: %s\n", str->c_str());
 			break;
 		}
 		case ITEM_INPUT_VALUE:

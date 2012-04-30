@@ -15,6 +15,7 @@ typedef struct
 {
 	LevelEditor Led;
 	sf::RenderWindow Window;
+	Bool WindowIsActive;
 	float WindowWidth;
 	float WindowHeight;
 	char WorkingPath[255];

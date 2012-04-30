@@ -14,6 +14,7 @@ void appInit(LevelEditorApp* App)
 	lvledSetPolyDraw(&App->Led, &glDrawPolygon);
 	lvledLoad(&App->Led, "levels/tmpEditor.lvl");
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
+	App->WindowIsActive = TRUE;
 }
 
 void appWindowInit(LevelEditorApp* App)
@@ -157,6 +158,11 @@ void appRun(LevelEditorApp* App)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 				return; /** @todo Faire apparaitre un menu ici **/
+			
+			if (event.type == sf::Event::LostFocus)
+				App->WindowIsActive = FALSE;
+			if (event.type == sf::Event::GainedFocus)
+				App->WindowIsActive = TRUE;
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
@@ -433,20 +439,24 @@ void appRun(LevelEditorApp* App)
 
 		/* Déplacement de la vue */
 		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-			toViewY-=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-			toViewY+=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			toViewX-=ViewSpeed;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-			toViewX+=ViewSpeed;
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+		if (App->WindowIsActive)
 		{
-			toViewX += (OldMouseX - MouseX)*10.f;
-			toViewY += (OldMouseY - MouseY)*10.f;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+				toViewY-=ViewSpeed;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+				toViewY+=ViewSpeed;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+				toViewX-=ViewSpeed;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+				toViewX+=ViewSpeed;
+			
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+			{
+				toViewX += (OldMouseX - MouseX)*10.f;
+				toViewY += (OldMouseY - MouseY)*10.f;
+			}
 		}
+		
 
 		Wobble(&ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
