@@ -168,6 +168,8 @@ void gmPlay(Game* G)
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
 		aniUpdate(A, G->Lvl->P1, 1.f);
+		
+		sndmUpdate();
 
 		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
 		glDrawPolygon(G->Lvl->P1->Shape);

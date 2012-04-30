@@ -8,6 +8,7 @@
 #include <Menu/Menu.h>
 #include <Score/Score.h>
 #include "FPSCounter.h"
+#include <Audio/SoundManager.h>
 
 /** @defgroup Game
  *

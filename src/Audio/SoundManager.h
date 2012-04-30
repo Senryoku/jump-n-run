@@ -26,7 +26,13 @@ typedef struct {
 
 	//Pour le fading entre deux musiques
 	float FadeSpeed;
+	unsigned int PlayCount; /**<PlayCount de la musique, permet de changer la musique au bout d'un certain nombre de Replays **/
+	unsigned int MaxPlayCount;
+	float DefaultFadingSpeed;
+	float LastTimeOffset;
+	float CurrentTimeOffset;
 	std::map<std::string, Music*>::iterator NextMusic;
+	std::map<std::string, Music*>::iterator CurrentMusic;
 	bool IsFading, Loop, Paused;
 } SoundManager;
 
@@ -58,6 +64,20 @@ bool sndmLoadSoundFile(const char *Key, const char *File);
  * @return faux s'il y a eu une erreur
  */
 bool sndmLoadMusicFile(const char *Key, const char *File);
+
+/**
+ * @brief Obtient le PlayCount de la musique en cours
+
+ * @return PlayCount
+ */
+unsigned int sndmGetPlayCount();
+
+/**
+ * @brief Dit si on est en train de faire un Fade sur une chanson
+ 
+ * @return Vrai si c'ets le cas
+ */
+Bool sndmIsInFading();
 
 /**
  * @brief Joue un son à une position donnée

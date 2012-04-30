@@ -13,6 +13,12 @@ void sndmInit()
 	SM.IsFading=0;
 	SM.Loop=1;
 	SM.Paused=0;
+	SM.PlayCount = 0;
+	SM.MaxPlayCount = 1;
+	SM.LastTimeOffset = 0.f;
+	SM.CurrentTimeOffset = 0.f;
+	SM.DefaultFadingSpeed = 5.f;
+	SM.CurrentMusic = SM.Musics.end();
 	//SM.NextMusic=;
 }
 
@@ -61,6 +67,7 @@ bool sndmLoadMusicFile(const char *Key, const char *File)
 		std::map<std::string, sf::Music*>::iterator it;
 		it=SM.Musics.find(Key);
 		SM.Musics.erase(it);
+		printf("Error Loading Music File %s\n", File);
 		return 0;
 	}
 	
@@ -104,6 +111,18 @@ void sndmPlayMusic(const char *Key, bool Loop)
 	
 	it->second->setLoop(Loop);
 	it->second->play();
+	SM.CurrentMusic = it;
+	SM.PlayCount = 0;
+}
+
+unsigned int sndmGetPlayCount()
+{
+	return SM.PlayCount;
+}
+
+Bool sndmIsInFading()
+{
+	return SM.FadeSpeed>0.f;
 }
 
 void sndmMusicSetVolume(const char *Key, float Volume)
@@ -180,10 +199,29 @@ void sndmUpdate()
 		}
 	}
 	
+	if (SM.CurrentMusic != SM.Musics.end())
+	{
+		// PlayCount
+		SM.LastTimeOffset = SM.CurrentTimeOffset;
+		SM.CurrentTimeOffset = SM.CurrentMusic->second->getPlayingOffset().asSeconds();
+		if (SM.CurrentTimeOffset < SM.LastTimeOffset)
+			SM.PlayCount++;
+		if (SM.PlayCount >= SM.MaxPlayCount && !sndmIsInFading())
+		{
+			SM.NextMusic = ++SM.CurrentMusic;
+			if (SM.NextMusic == SM.Musics.end())
+				SM.NextMusic = SM.Musics.begin();
+			SM.FadeSpeed = SM.DefaultFadingSpeed;
+		}
+		
+	}
+	
+	
 	//Fading effect
 	if (!SM.Paused && SM.FadeSpeed>0.f)
 	{
-		if (SM.IsFading) //fade ver la nouvelle musique
+		
+		if (SM.IsFading) //fade vers la nouvelle musique
 		{
 			SM.NextMusic->second->setVolume(MIN(100.f, SM.NextMusic->second->getVolume()+SM.FadeSpeed));
 			if (SM.NextMusic->second->getVolume()>=100.f)
@@ -212,6 +250,8 @@ void sndmUpdate()
 							SM.NextMusic->second->setVolume(0.f);
 							SM.NextMusic->second->play();
 							SM.NextMusic->second->setLoop(SM.Loop);
+							SM.CurrentMusic = SM.NextMusic;
+							SM.PlayCount = 0;
 						}
 						else
 						{
@@ -229,6 +269,8 @@ void sndmUpdate()
 				SM.NextMusic->second->setVolume(0.f);
 				SM.NextMusic->second->play();
 				SM.NextMusic->second->setLoop(SM.Loop);
+				SM.CurrentMusic = SM.NextMusic;
+				SM.PlayCount = 0;
 			}
 
 		}

@@ -4,6 +4,7 @@
 #include <Rendering/OpenGL.h>
 #include <Level/LevelEditor.h>
 #include <Game/FPSCounter.h>
+#include <Audio/SoundManager.h>
 
 /** @defgroup LevelEditorApp
  *

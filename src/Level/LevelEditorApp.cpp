@@ -15,6 +15,13 @@ void appInit(LevelEditorApp* App)
 	lvledLoad(&App->Led, "levels/tmpEditor.lvl");
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
+	sndmInit();
+	sndmLoadMusicFile("music0", "data/music.ogg");
+	sndmLoadMusicFile("music1", "data/music1.ogg");
+	sndmLoadMusicFile("music2", "data/music2.ogg");
+	sndmLoadMusicFile("music3", "data/music3.ogg");
+	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
+	sndmPlayMusic("music0");
 }
 
 void appWindowInit(LevelEditorApp* App)
@@ -37,11 +44,13 @@ void appWindowInit(LevelEditorApp* App)
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
+	
 }
 
 
 void appFree(LevelEditorApp* App)
 {
+	sndmFree();
 	lvledFree(&App->Led);
 	App->Window.close();
 }
@@ -65,7 +74,7 @@ void appRun(LevelEditorApp* App)
 //	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
 //	Texture Tx = glTexLoad("data/trollface.jpg");
 
-
+	//unsigned int CurrentMusic = 0;
 
 	/* Code temporel permettant de créer des states d'animation */
 
@@ -465,6 +474,21 @@ void appRun(LevelEditorApp* App)
 
 		/* == Mise à jour du niveau == */
 		if(!Paused) lvlUpdate(App->Led.Lvl); else lvlResolveRigids(App->Led.Lvl);
+		
+		sndmUpdate();
+		
+		/*
+		 //Ça c'est la façon manuelle, j'ai cependant rajouté dans SoundManager des trucs pour faire que ça se fasse seul. Je rajouterai d'autre choses pour le personaliser un peu plus tard
+		if (!sndmIsInFading() && sndmGetPlayCount() > 0)
+		{
+			CurrentMusic++;
+			if (CurrentMusic>3)
+				CurrentMusic = 0;
+			char Key[30];
+			sprintf(Key, "music%u", CurrentMusic);
+			sndmMusicFade(Key, 2.f);
+		}
+		 */
 
 		/* == Affichage == */
 
