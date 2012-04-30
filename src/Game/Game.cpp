@@ -133,7 +133,7 @@ void gmPlay(Game* G)
 
 		}
 
-		lvlUpdate(G->Lvl);
+		lvlUpdate(G->Lvl, FALSE);
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
             plJump(G->Lvl->P1);

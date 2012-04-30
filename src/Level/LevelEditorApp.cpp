@@ -21,7 +21,8 @@ void appInit(LevelEditorApp* App)
 	sndmLoadMusicFile("music2", "data/music2.ogg");
 	sndmLoadMusicFile("music3", "data/music3.ogg");
 	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
-	sndmPlayMusic("music0");
+	//sndmPlayMusic("music3");
+	//sndmPlay("meat");
 }
 
 void appWindowInit(LevelEditorApp* App)
@@ -473,7 +474,7 @@ void appRun(LevelEditorApp* App)
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
-		if(!Paused) lvlUpdate(App->Led.Lvl); else lvlResolveRigids(App->Led.Lvl);
+		lvlUpdate(App->Led.Lvl, Paused);
 		
 		sndmUpdate();
 		
@@ -534,6 +535,8 @@ void appRun(LevelEditorApp* App)
 			if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 			/* je n'arrive pas à afficher les fps en faisant marcher la vue. J'ai pas tenté trop de trucs mais bon xD */
 			//if (ViewPort == 0) glDrawFPS(App->Window, fpsGetString(&fps));
+			glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY));
+			glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
 		}
 
 		OldMouseX = MouseX;

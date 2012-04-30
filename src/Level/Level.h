@@ -77,11 +77,9 @@ void lvlLoadedInit(Level* Lvl);
  * notament aux collisions, ils ne sont pas ajoutés directement à la
  * simulation, il faut donc effectuer certaines vérification manuellement.
  * @param Lvl Level à mettre à jour
+ * @param Paused Le monde est il en pause?
 **/
-void lvlUpdate(Level* Lvl);
-
-//Permet de maintenir la forme des figure lors de la pause(très utile pour que je fasse les animations xD)
-void lvlResolveRigids(Level* Lvl);
+void lvlUpdate(Level* Lvl, Bool Paused);
 
 /** @brief Retourne vrai si l'objectif est atteint par le joueur
  *

@@ -387,3 +387,32 @@ void glDrawFPS(sf::RenderTarget& win, const std::string& FPS)
 	
 	glPopMatrix();
 }
+
+void glDrawPolyFromList(List* L, Vec2 MousePos)
+{
+	if (lstCount(L) <= 0) return;
+	
+	Node* it = lstFirst(L);
+	
+	if (lstCount(L) > 1)
+	{
+		glBegin(GL_POLYGON);
+		while (!nodeEnd(it))
+		{
+			Vertex* V = (Vertex*) nodeGetData(it);
+			glVertex2f(vxGetPosition(V).x, vxGetPosition(V).y);
+			it = nodeGetNext(it);
+		}
+		glVertex2f(MousePos.x, MousePos.y);
+		glEnd();
+	}
+	else
+	{
+		glBegin(GL_LINES);
+		Vertex* V = (Vertex*) nodeGetData(it);
+		glVertex2f(vxGetPosition(V).x, vxGetPosition(V).y);
+		glVertex2f(MousePos.x, MousePos.y);
+		glEnd();
+	}
+	
+}

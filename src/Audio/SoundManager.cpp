@@ -206,7 +206,7 @@ void sndmUpdate()
 		SM.CurrentTimeOffset = SM.CurrentMusic->second->getPlayingOffset().asSeconds();
 		if (SM.CurrentTimeOffset < SM.LastTimeOffset)
 			SM.PlayCount++;
-		if (SM.PlayCount >= SM.MaxPlayCount && !sndmIsInFading())
+		if (SM.MaxPlayCount > 0 && SM.PlayCount >= SM.MaxPlayCount && !sndmIsInFading())
 		{
 			SM.NextMusic = ++SM.CurrentMusic;
 			if (SM.NextMusic == SM.Musics.end())

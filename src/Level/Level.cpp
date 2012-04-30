@@ -372,40 +372,43 @@ void lvlLoadedInit(Level* Lvl)
 	 */
 }
 
-void lvlUpdate(Level* Lvl)
+void lvlUpdate(Level* Lvl, Bool Paused)
 {
 	unsigned int i;
-
-	/* Mise à jour du World */
-	//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
-
-	wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
-	wdResolveVextex(lvlGetWorld(Lvl));
-
-	wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
-	for(i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
+	
+	if (!Paused)
 	{
-		wdResolveRigid(lvlGetWorld(Lvl));
-		//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 1);
-		wdResolveElastic(lvlGetWorld(Lvl));
+		/* Mise à jour du World */
 		//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
-		wdHandleCollision(lvlGetWorld(Lvl));
-
-		if (Lvl->P1 != NULL)
-			plUpdate(Lvl->P1, lvlGetWorld(Lvl));
-
+		
+		wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
+		wdResolveVextex(lvlGetWorld(Lvl));
+		
+		wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
+		for(i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
+		{
+			wdResolveRigid(lvlGetWorld(Lvl));
+			//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 1);
+			wdResolveElastic(lvlGetWorld(Lvl));
+			//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
+			wdHandleCollision(lvlGetWorld(Lvl));
+			
+			if (Lvl->P1 != NULL)
+				plUpdate(Lvl->P1, lvlGetWorld(Lvl));
+			
+		}
 	}
-}
-
-void lvlResolveRigids(Level* Lvl)
-{
-	wdLimitVextexPosition(lvlGetWorld(Lvl));
-	wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
-	for(int i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
+	else
 	{
-		wdResolveRigid(lvlGetWorld(Lvl));
-		wdHandleCollision(lvlGetWorld(Lvl));
+		wdLimitVextexPosition(lvlGetWorld(Lvl));
+		wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
+		for(int i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
+		{
+			wdResolveRigid(lvlGetWorld(Lvl));
+			wdHandleCollision(lvlGetWorld(Lvl));
+		}
 	}
+
 	
 }
 

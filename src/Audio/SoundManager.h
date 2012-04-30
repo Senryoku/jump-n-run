@@ -27,7 +27,7 @@ typedef struct {
 	//Pour le fading entre deux musiques
 	float FadeSpeed;
 	unsigned int PlayCount; /**<PlayCount de la musique, permet de changer la musique au bout d'un certain nombre de Replays **/
-	unsigned int MaxPlayCount;
+	int MaxPlayCount; /**<Si MaxPlayCount est < à 0 Le playcount n'est pas tenu en compte pour passer les chansons automatiquement **/
 	float DefaultFadingSpeed;
 	float LastTimeOffset;
 	float CurrentTimeOffset;
