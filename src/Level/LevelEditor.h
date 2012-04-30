@@ -85,9 +85,12 @@ void lvledGrab(LevelEditor *Led);
 /** @brief Replace Grab sur Mouse
 **/
 void lvledGrabUpdate(LevelEditor *Led);
-/** @brief Relâche Grab
+/**
+ * @brief Relâche Grab
+ * @param Led
+ * @param Paused Si le monde est en pause et on a atrappé un polygone on aurai besoin de modifier la position de tous ces vertices
 **/
-void lvledRelease(LevelEditor *Led);
+void lvledRelease(LevelEditor *Led, Bool Paused);
 
 /** @brief Attrape le Vertex le plus proche de Mouse avec un Elastic
 **/

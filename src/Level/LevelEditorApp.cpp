@@ -209,7 +209,7 @@ void appRun(LevelEditorApp* App)
 						if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
 							lvledNewBoxCreate(&App->Led);
 						} else {
-							lvledRelease(&App->Led);
+							lvledRelease(&App->Led, Paused);
 						}
 						break;
 					case sf::Mouse::Right :
@@ -402,7 +402,7 @@ void appRun(LevelEditorApp* App)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::G :
-						lvledRelease(&App->Led);
+						lvledRelease(&App->Led, Paused);
 						break;
 					case sf::Keyboard::E :
 						lvledReleaseEl(&App->Led);
@@ -462,7 +462,7 @@ void appRun(LevelEditorApp* App)
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
-		if(!Paused) lvlUpdate(App->Led.Lvl);
+		if(!Paused) lvlUpdate(App->Led.Lvl); else lvlResolveRigid(App->Led.Lvl);
 
 		/* == Affichage == */
 

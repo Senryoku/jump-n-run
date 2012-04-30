@@ -283,6 +283,14 @@ void delWorld(World *W);
  **/
 void wdUpdateGrid(World *W, Bool Force);
 
+/** @brief Cherche un polygone contenant un vertice donné
+ *
+ * @param W World
+ * @param Vertex Vertex à rechercher
+ * @return Pointeur vers le Polygone si trouvé, NULL sinon
+ **/
+Polygon* wdFindPolygon(World *W, Vertex* V);
+
 /** @}
 **/
 

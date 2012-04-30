@@ -511,3 +511,25 @@ void wdDraw(World* W, void (*vxDraw)(Vertex* V, float R, float G, float B, float
 		}
 	}
 }
+
+
+Polygon* wdFindPolygon(World *W, Vertex* V)
+{
+	Node* it;
+	Polygon* P;
+	it = lstFirst(&W->Polygons);
+	
+	while(!nodeEnd(it))
+	{
+		P = (Polygon*)nodeGetData(it);
+		unsigned int vxnb = polyGetVxCount(P), i;
+		for (i=0; i<vxnb; i++)
+		{
+			if (polyGetVertex(P, i) == V)
+				return P;
+		}
+		it = nodeGetNext(it);
+	}
+	
+	return NULL;
+}

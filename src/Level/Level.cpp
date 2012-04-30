@@ -397,6 +397,12 @@ void lvlUpdate(Level* Lvl)
 	}
 }
 
+void lvlResolveRigid(Level* Lvl)
+{
+	for(int i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
+		wdResolveRigid(lvlGetWorld(Lvl));
+}
+
 Bool lvlIsGoalReached(Level* L)
 {
 	BBox B = polyGetBBox(L->P1->Shape);

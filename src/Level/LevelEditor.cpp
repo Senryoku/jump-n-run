@@ -160,8 +160,15 @@ void lvledGrab(LevelEditor *Led)
 	Led->Grab = wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
 }
 
-void lvledRelease(LevelEditor *Led)
-{
+void lvledRelease(LevelEditor *Led, Bool Paused)
+{	
+	if (Paused)
+	{
+		Polygon* P = wdFindPolygon(lvlGetWorld(Led->Lvl), Led->Grab);
+		if (P != NULL)
+			polySetSpeed(P, vec2(0.f, 0.f));
+	}
+	
 	Led->Grab = NULL;
 	wdUpdateGrid(lvlGetWorld(Led->Lvl), TRUE);
 }
