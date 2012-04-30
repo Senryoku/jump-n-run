@@ -397,10 +397,16 @@ void lvlUpdate(Level* Lvl)
 	}
 }
 
-void lvlResolveRigid(Level* Lvl)
+void lvlResolveRigids(Level* Lvl)
 {
+	wdLimitVextexPosition(lvlGetWorld(Lvl));
+	wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
 	for(int i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
+	{
 		wdResolveRigid(lvlGetWorld(Lvl));
+		wdHandleCollision(lvlGetWorld(Lvl));
+	}
+	
 }
 
 Bool lvlIsGoalReached(Level* L)

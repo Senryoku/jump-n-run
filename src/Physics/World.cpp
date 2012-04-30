@@ -132,6 +132,38 @@ void wdResolveVextex(World* W)
 	W->prevdt = W->dt;
 }
 
+void wdLimitVextexPosition(World* W)
+{
+	Vec2 curPos;
+	Vec2 newPos;
+	Node* it = lstFirst(&W->Vertices);
+	
+	while(!nodeEnd(it))
+	{
+		/* Garde le Vertex dans les limites du monde */
+		curPos = vxGetPosition((Vertex*) nodeGetData(it));
+		
+		if(curPos.x > W->Width)
+			newPos.x = W->Width;
+		else if(curPos.x < 0.f)
+			newPos.x = 0.f;
+		else newPos.x = curPos.x;
+		if(curPos.y > W->Height)
+			newPos.y = W->Height;
+		else if(curPos.y < 0.f)
+			newPos.y = 0.f;
+		else newPos.y = curPos.y;
+		//printf("new pos : %f, %f ; curpos: %f, %f\n", newPos.x, newPos.y, curPos.x, curPos.y);
+		if (curPos.y != newPos.y || curPos.x != newPos.x)
+			vxSetPosition((Vertex*) nodeGetData(it), newPos);
+		
+		if (curPos.y != newPos.y || curPos.x != newPos.x)
+			vxSetPosition((Vertex*) nodeGetData(it), newPos);
+		
+		it = nodeGetNext(it);
+	}
+}
+
 void wdResolveRigid(World* W)
 {
         Node* it = lstFirst(&W->Rigids);

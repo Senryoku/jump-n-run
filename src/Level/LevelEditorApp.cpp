@@ -53,7 +53,7 @@ void appRun(LevelEditorApp* App)
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
 		WindowRatio = App->WindowWidth/App->WindowHeight;
-	Bool Paused = FALSE, DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
+	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
 	FPSCounter fps;
 
 //	int clothSize = 15;
@@ -85,6 +85,7 @@ void appRun(LevelEditorApp* App)
 	vxSetPosition(RightLeg1, vec2Add(vxGetPosition(Base), vec2(0.f, 40.f)));
 	vxSetPosition(RightLeg2, vec2Add(vxGetPosition(Base), vec2(-10.f, 80.f)));
 
+	/*
 	vxSetFixe(Neck, TRUE);
 	vxSetFixe(Base, TRUE);
 	vxSetFixe(LeftArm1, TRUE);
@@ -97,6 +98,7 @@ void appRun(LevelEditorApp* App)
 	vxSetFixe(RightLeg2, TRUE);
 	vxSetFixe(HeadLeft, TRUE);
 	vxSetFixe(HeadRight, TRUE);
+	 */
 
 	wdAddVertex(App->Led.Lvl->W, Base);
 	wdAddVertex(App->Led.Lvl->W, Neck);
@@ -462,7 +464,7 @@ void appRun(LevelEditorApp* App)
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
-		if(!Paused) lvlUpdate(App->Led.Lvl); else lvlResolveRigid(App->Led.Lvl);
+		if(!Paused) lvlUpdate(App->Led.Lvl); else lvlResolveRigids(App->Led.Lvl);
 
 		/* == Affichage == */
 

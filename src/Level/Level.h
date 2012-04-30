@@ -80,8 +80,8 @@ void lvlLoadedInit(Level* Lvl);
 **/
 void lvlUpdate(Level* Lvl);
 
-//Permet de maintenir la forme des figure lors de la pose(très utile pour que je fasse les animations xd)
-void lvlResolveRigid(Level* Lvl);
+//Permet de maintenir la forme des figure lors de la pause(très utile pour que je fasse les animations xD)
+void lvlResolveRigids(Level* Lvl);
 
 /** @brief Retourne vrai si l'objectif est atteint par le joueur
  *

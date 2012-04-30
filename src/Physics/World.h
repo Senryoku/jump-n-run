@@ -144,6 +144,14 @@ void wdApplyForce(World* W, Vec2 Force);
 **/
 void wdResolveVextex(World* W);
 
+/** @brief Limite la position des vertex dans les limites du monde
+ *
+ * Ne parcours que la liste Vertices, les vertices faisant partie d'un
+ * ensemble plus grand du monde (polygon...) doivent aussi y figurer !
+ * @param W Monde à mettre à jour
+ **/
+void wdLimitVextexPosition(World* W);
+
 /** @brief Appelle Resolve() pour tout les Rigid du monde
  *
  * Resolve() les contraintes rigides isolées et contenues dans des polygones
