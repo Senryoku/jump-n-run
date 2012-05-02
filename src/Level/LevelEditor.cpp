@@ -3,7 +3,12 @@
 void lvledInit(LevelEditor *Led, float Width, float Height)
 {
 	Led->Lvl = newLevel(Width, Height);
-	/* Pas besoin d'initialiser les listes */
+
+	lstInit(&Led->tmpLstFixeFromV);
+	lstInit(&Led->tmpLstDynFromV);
+	lstInit(&Led->tmpLstFixe);
+	lstInit(&Led->tmpLstDyn);
+
  	Led->Grab = NULL;
  	Led->GrabEl = NULL;
  	Led->Mouse = newVertex();
@@ -161,14 +166,14 @@ void lvledGrab(LevelEditor *Led)
 }
 
 void lvledRelease(LevelEditor *Led, Bool Paused)
-{	
+{
 	if (Paused)
 	{
 		Polygon* P = wdFindPolygon(lvlGetWorld(Led->Lvl), Led->Grab);
 		if (P != NULL)
 			polySetSpeed(P, vec2(0.f, 0.f));
 	}
-	
+
 	Led->Grab = NULL;
 	wdUpdateGrid(lvlGetWorld(Led->Lvl), TRUE);
 }
