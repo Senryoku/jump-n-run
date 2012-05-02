@@ -60,6 +60,8 @@
 		<Unit filename="src\Core\Vec2.h" />
 		<Unit filename="src\Core\md5.cpp" />
 		<Unit filename="src\Core\md5.h" />
+		<Unit filename="src\Game\FPSCounter.cpp" />
+		<Unit filename="src\Game\FPSCounter.h" />
 		<Unit filename="src\Game\Game.cpp" />
 		<Unit filename="src\Game\Game.h" />
 		<Unit filename="src\Level\Level.cpp" />
@@ -74,6 +76,8 @@
 		<Unit filename="src\Menu\MenuItem.h" />
 		<Unit filename="src\Menu\MenuOfItems.cpp" />
 		<Unit filename="src\Menu\MenuOfItems.h" />
+		<Unit filename="src\Objects\Animation.cpp" />
+		<Unit filename="src\Objects\Animation.h" />
 		<Unit filename="src\Objects\Cloth.cpp" />
 		<Unit filename="src\Objects\Cloth.h" />
 		<Unit filename="src\Objects\Object.cpp" />

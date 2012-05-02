@@ -12,8 +12,8 @@ void plInit(Player* P, World *W)
 
 	P->ULPos = vec2(-20.f, -70.f);
 	P->URPos = vec2(20.f, -70.f);
-	P->DLPos = vec2(-20.f, 70.f);
-	P->DRPos = vec2(20.f, 70.f);
+	P->DLPos = vec2(-35.f, 70.f);
+	P->DRPos = vec2(35.f, 70.f);
 
 
 	P->VxUL = newVertex();
@@ -25,8 +25,8 @@ void plInit(Player* P, World *W)
 	P->VxDL = newVertex();
 	vxSetPosition(P->VxDL, P->DLPos);
 
-	vxSetMass(P->VxUL, 0.1f);
-	vxSetMass(P->VxUR, 0.1f);
+	vxSetMass(P->VxUL, 0.01f);
+	vxSetMass(P->VxUR, 0.01f);
 	vxSetMass(P->VxDL, 2.f);
 	vxSetMass(P->VxDR, 2.f);
 
@@ -216,10 +216,11 @@ void plMoveR(Player* P)
 		|| P->RdDStatus.P1 != NULL)
 	{
 		//P->Speed.x+=1.5f;
-		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 3.f), 0);
-	}
-	else
-	{
+		if((fabs((vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL))).y) < 20.f))
+		{
+			polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 3.f), 0);
+		}
+	} else {
 		//P->Speed.x+=0.5f;
 		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 0.5f), 0);
 	}
@@ -233,7 +234,10 @@ void plMoveL(Player* P)
 		|| P->RdDStatus.P1 != NULL)
 	{
 		//P->Speed.x-=1.5f;
-		polyApplyForce(P->Shape, vec2(-3.f, 0.f), 0);
+		if((fabs((vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL))).y) < 20.f))
+		{
+			polyApplyForce(P->Shape, vec2(-3.f, 0.f), 0);
+		}
 	}
 	else
 	{
@@ -273,7 +277,8 @@ void plResetJump(Player* P)
 
 void plGetUp(Player* P)
 {
-
+	/// @todo Modifier pour éviter les contacts avec le sol lors de la rotation
+	/// * Utilisable auniquement au sol + Test des Vx en colision ?
 	P->Center = polyComputeCenter(P->Shape);
 
 	if (0)//P->OnGround)
@@ -311,7 +316,7 @@ void plGrab(Player* P, World* W, float MouseX, float MouseY)
 	Vertex* tmpVx = wdGetNearest(W, MouseX, MouseY);
 	if(vec2Length(vec2Sub(vxGetPosition(tmpVx), vxGetPosition(plGetVxUR(P)))) < 400.f)
 	{
-		P->Grab = newRigid(plGetVxUR(P), tmpVx, 3.f);//, 0.1f);
+		P->Grab = newRigid(plGetVxUR(P), tmpVx, 50.f);//, 0.1f);
 		wdAddRigid(W, P->Grab);
 		//wdAddElastic(W, P->Grab);
 	}
@@ -419,43 +424,44 @@ void plUpdate(Player* P, World* W)
 
 	//P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
 
+// Pourquoi ne pas en faire un élément de gameplay sérieux ?...
 
-	if (P->OnGround && P->Normal.y < -0.5f && P->RdDStatus.P1 == NULL)
-	{
-//		float Force = 0.04f;
-//		float Diff = vxGetPosition(P->VxUL).y - vxGetPosition(P->VxUR).y;
-//		if(abs(Diff) < 10.f) Diff = 0;
+//	if (P->OnGround && P->Normal.y < -0.5f && P->RdDStatus.P1 == NULL)
+//	{
+//		float PlayerLength = 40.f, PlayerHeight = 140.f;
+//		float Force = 1.f;
+//		float Diff = P->Normal.x - (vxGetPosition(P->VxUL).y - vxGetPosition(P->VxUR).y)/PlayerLength;
+//		//if(abs(Diff) < 10.f) Diff = 0;
 //		if(Diff > 0)
-//			vxApplyForce(P->VxUL, vec2(0.f, -Force*(Diff)), 0),
-//			vxApplyForce(P->VxUR, vec2(-Force*(Diff), 0), 0),
-//			vxApplyForce(P->VxDL, vec2(Force*(Diff), 0), 0),
-//			vxApplyForce(P->VxDR, vec2(0.f, Force*(Diff)), 0);
-//		if(Diff < 0)
-//			vxApplyForce(P->VxUR, vec2(0.f, Force*(Diff)), 0),
-//			vxApplyForce(P->VxUL, vec2(-Force*(Diff), 0), 0),
-//			vxApplyForce(P->VxDR, vec2(Force*(Diff), 0), 0),
-//			vxApplyForce(P->VxDL, vec2(0.f, -Force*(Diff)), 0);
-		float PlayerLength = 40.f, PlayerHeight = 140.f;
-		Vec2 Edge = vec2Ortho(P->Normal);
-		Vec2 Speed = vec2Prod(Edge, vec2Dot(vec2Sub(vxGetPosition(P->VxDR), vxGetOldPos(P->VxDR)), Edge));
-		if(P->VxDLStatus.P1 == NULL)
-		{
-			vxSetPosition(P->VxDL, vec2Add(vxGetPosition(P->VxDR), vec2Prod(Edge, PlayerLength)));
-		} else if(P->VxDRStatus.P1 == NULL) {
-			vxSetPosition(P->VxDR, vec2Add(vxGetPosition(P->VxDL), vec2Prod(Edge, -PlayerLength)));
-		}
-		vxSetPosition(P->VxUL, vec2Add(vxGetPosition(P->VxDL), vec2Prod(P->Normal, PlayerHeight)));
-		vxSetPosition(P->VxUR, vec2Add(vxGetPosition(P->VxDR), vec2Prod(P->Normal, PlayerHeight)));
-//			vxCorrectSpeed(P->VxDR, Speed);
-//			vxCorrectSpeed(P->VxDL, Speed);
-//			vxCorrectSpeed(P->VxUR, Speed);
-//			vxCorrectSpeed(P->VxUL, Speed);
-			P->VxDR->OldPos = vec2Sub(vxGetPosition(P->VxDR), Speed);
-			P->VxDL->OldPos = vec2Sub(vxGetPosition(P->VxDL), Speed);
-			P->VxUR->OldPos = vec2Sub(vxGetPosition(P->VxUR), Speed);
-			P->VxUL->OldPos = vec2Sub(vxGetPosition(P->VxUL), Speed);
-			printf("%f %f\n", Speed.x, Speed.y);
-	}
+//		{
+//			vxApplyForce(P->VxUL, vec2(0.f, -Force*(Diff)), 0);
+//			vxApplyForce(P->VxUR, vec2(-Force*(Diff), 0), 0);
+//			//vxApplyForce(P->VxDL, vec2(Force*(Diff), 0), 0);
+//			//vxApplyForce(P->VxDR, vec2(0.f, Force*(Diff)), 0);
+//		} else if(Diff < 0) {
+//			vxApplyForce(P->VxUR, vec2(0.f, Force*(Diff)), 0);
+//			vxApplyForce(P->VxUL, vec2(-Force*(Diff), 0), 0);
+//			//vxApplyForce(P->VxDR, vec2(Force*(Diff), 0), 0);
+//			//vxApplyForce(P->VxDL, vec2(0.f, -Force*(Diff)), 0);
+//		}
+
+		// Autre Version
+//		float PlayerLength = 40.f, PlayerHeight = 140.f;
+//		Vec2 Edge = vec2Ortho(P->Normal);
+//		Vec2 Speed = vec2Prod(Edge, vec2Dot(vec2Sub(vxGetPosition(P->VxDR), vxGetOldPos(P->VxDR)), Edge));
+//		if(P->VxDLStatus.P1 == NULL)
+//		{
+//			vxSetPosition(P->VxDL, vec2Add(vxGetPosition(P->VxDR), vec2Prod(Edge, PlayerLength)));
+//		} else if(P->VxDRStatus.P1 == NULL) {
+//			vxSetPosition(P->VxDR, vec2Add(vxGetPosition(P->VxDL), vec2Prod(Edge, -PlayerLength)));
+//		}
+//		vxSetPosition(P->VxUL, vec2Add(vxGetPosition(P->VxDL), vec2Prod(P->Normal, PlayerHeight)));
+//		vxSetPosition(P->VxUR, vec2Add(vxGetPosition(P->VxDR), vec2Prod(P->Normal, PlayerHeight)));
+//		P->VxDR->OldPos = vec2Sub(vxGetPosition(P->VxDR), Speed);
+//		P->VxDL->OldPos = vec2Sub(vxGetPosition(P->VxDL), Speed);
+//		P->VxUR->OldPos = vec2Sub(vxGetPosition(P->VxUR), Speed);
+//		P->VxUL->OldPos = vec2Sub(vxGetPosition(P->VxUL), Speed);
+//	}
 
 }
 
