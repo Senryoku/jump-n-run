@@ -464,7 +464,7 @@ void lvlDisplayFG(Level* Lvl)
 
 void lvlDisplayObj(Level* Lvl, Object* Obj)
 {
-	(*Lvl->lvlDispTexPoly)(*(Texture*) daGet(&Lvl->Textures, Obj->Texture), Obj->Shape, &Obj->CoordTex);
+	(*Lvl->lvlDispTexPoly)(*(Texture*) daGet(&Lvl->Textures, Obj->Tex), Obj->Shape, &Obj->CoordTex);
 }
 
 void lvlDispAllObj(Level* Lvl)

@@ -550,7 +550,7 @@ void lvledObject(LevelEditor *Led, Polygon* P, unsigned int T, List CT)
 		lvlAddObject(Led->Lvl, Obj);
 	} else {
 		Obj->Shape = P;
-		Obj->Texture = T;
+		Obj->Tex = T;
 		Obj->CoordTex = CT;
 	}
 }
@@ -737,7 +737,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	while(!nodeEnd(it))
 	{
 		Object* Obj = (Object*) nodeGetData(it);
-		fprintf(f, "%u #Object\n%u %u\n", o_object, daGetID(Poly, Obj->Shape), Obj->Texture);
+		fprintf(f, "%u #Object\n%u %u\n", o_object, daGetID(Poly, Obj->Shape), Obj->Tex);
 		Node* it2 = lstFirst(&Obj->CoordTex);
 		while(!nodeEnd(it2))
 		{

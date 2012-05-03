@@ -2,6 +2,7 @@
 #define _OBJECT_H_
 
 #include <Physics/Polygon.h>
+#include <Rendering/OpenGl.h>
 
 
 /** @defgroup Object
@@ -15,7 +16,7 @@
 **/
 typedef struct {
 	Polygon* Shape; /**< Polygon de collision **/
-	unsigned int Texture; /**< Numero de texture, relatif au niveau **/
+	Texture Tex; /**< Numero de texture, relatif au niveau **/
 	List CoordTex; /**< List de Vec2*, coordonnées relatives de la texture **/
 } Object;
 

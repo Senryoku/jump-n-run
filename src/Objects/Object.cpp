@@ -10,7 +10,7 @@ Object* newObject(Polygon* P, unsigned int T, List CT)
 void objInit(Object* Obj, Polygon* P, unsigned int T, List CT)
 {
 	Obj->Shape = P;
-	Obj->Texture = T;
+	Obj->Tex = T;
 	Obj->CoordTex = CT;
 }
 
@@ -25,7 +25,7 @@ void objFree(Object* Obj)
 	}
 	lstFree(&Obj->CoordTex); // Peu utile
 	Obj->Shape = NULL;
-	Obj->Texture = 0;
+	Obj->Tex = 0;
 }
 
 void delObject(Object* Obj)

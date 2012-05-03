@@ -44,12 +44,20 @@ typedef struct SPlayer
 	Bool OnGround;
 } Player;
 
+/** @brief Constructeur
+**/
 Player* newPlayer(World* W);
 
+/** @brief Initialisation
+**/
 void plInit(Player* P, World* W);
 
+/** @brief Libération
+**/
 void plFree(Player* P);
 
+/** @brief Destructeur
+**/
 void delPlayer(Player* P);
 
 /* Accesseurs */
@@ -69,19 +77,43 @@ Rigid* plGetRdL(Player* P);
 void plCorrectPosition(Player*, Vec2);
 void plSetShape(Player* P, Polygon* Shape);
 
+/** @brief Mise à jour du joueur (Physique, Informations...)
+**/
 void plUpdate(Player* P, World* W);
 
+/** @brief Déplacement vers la droite
+**/
 void plMoveR(Player* P);
+/** @brief Déplacement vers la gauche
+**/
 void plMoveL(Player* P);
+/** @brief Rotation Droite
+**/
 void plRotateR(Player* P);
+/** @brief Rotation Gauche
+**/
 void plRotateL(Player* P);
+/** @brief Saut
+**/
 void plJump(Player* P);
+/** @brief Reset du Saut
+**/
 void plResetJump(Player* P);
+/** @brief Aide le joueur à se relever
+**/
 void plGetUp(Player* P);
 
+/** @brief Attrape un vertex de la "main" droite
+**/
 void plGrabR(Player* P, World* W, float MouseX, float MouseY);
+/** @brief Relâche un vertex de la "main" droite
+**/
 void plReleaseR(Player* P, World* W);
+/** @brief Attrape un vertex de la "main" gauche
+**/
 void plGrabL(Player* P, World* W, float MouseX, float MouseY);
+/** @brief Relâche un vertex de la "main" gauche
+**/
 void plReleaseL(Player* P, World* W);
 
 
