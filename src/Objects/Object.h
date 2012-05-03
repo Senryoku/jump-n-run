@@ -26,7 +26,7 @@ typedef struct {
  * @param T Identifiant de texture (relatif à un Lvl)
  * @param CT List de Vec2* faisant la liaison entre les Vertex et des points de la texture
 **/
-Object* newObject(Polygon* P, unsigned int T, List CT);
+Object* newObject(Polygon* P, Texture T, List CT);
 
 /** @brief Initialisation
  *
@@ -35,7 +35,7 @@ Object* newObject(Polygon* P, unsigned int T, List CT);
  * @param T Identifiant de texture (relatif à un Lvl)
  * @param CT List de Vec2* faisant la liaison entre les Vertex et des points de la texture
 **/
-void objInit(Object* Obj, Polygon* P, unsigned int T, List CT);
+void objInit(Object* Obj, Polygon* P, Texture T, List CT);
 
 /** @brief Libération des ressources
  *
