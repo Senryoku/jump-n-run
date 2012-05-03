@@ -30,16 +30,8 @@ RM = del
 LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lopengl32
 endif
 
-default :
-	@echo "C Files:" $(POINTC) ; \
-	echo "C++ Files:" $(POINTCPP) ; \
-	echo "O Files:" $(POINTO) ; \
-	echo $(OPT)
-
-.PHONY : default
-
-
-all : test dirs
+all : dirs test 
+	@echo "\n\n\t== Faire 'make run' pour lancer l'application ==\n\n"
 
 
 dirs : 

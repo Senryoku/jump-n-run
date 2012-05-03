@@ -16,13 +16,22 @@ void appInit(LevelEditorApp* App)
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
 	sndmInit();
-//	sndmLoadMusicFile("music0", "data/music.ogg");
-//	sndmLoadMusicFile("music1", "data/music1.ogg");
-//	sndmLoadMusicFile("music2", "data/music2.ogg");
-//	sndmLoadMusicFile("music3", "data/music3.ogg");
-//	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
-	//sndmPlayMusic("music3");
+	/*
+	sndmLoadMusicFile("music0", "data/music.ogg");
+	sndmLoadMusicFile("music1", "data/music1.ogg");
+	sndmLoadMusicFile("music2", "data/music2.ogg");
+	sndmLoadMusicFile("music3", "data/music3.ogg");
+	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
+
+	sndmPlayMusic("music3");
+	 */
 	//sndmPlay("meat");
+	//Temporel
+	txBoxCorner = glTexLoad("data/s_boxcorner.png");
+	txBoxSide = glTexLoad("data/s_boxside.png");
+	txBoxShadow = glTexLoad("data/s_box_shadow.png");
+	txBoxBackAnim = glTexLoad("data/box_anim_strip20.png");
+	txBoxGloss = glTexLoad("data/s_box_gloss.png");
 }
 
 void appWindowInit(LevelEditorApp* App)
@@ -54,6 +63,11 @@ void appFree(LevelEditorApp* App)
 	sndmFree();
 	lvledFree(&App->Led);
 	App->Window.close();
+	glTexFree(txBoxSide);
+	glTexFree(txBoxCorner);
+	glTexFree(txBoxShadow);
+	glTexFree(txBoxBackAnim);
+	glTexFree(txBoxGloss);
 }
 
 void appRun(LevelEditorApp* App)

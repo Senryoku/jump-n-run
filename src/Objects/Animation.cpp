@@ -4,6 +4,9 @@
 
 void aniInit(Animation* A, AnimType Type, AnimTriggers Triggers, Bool Repeat)
 {
+	int i;
+	for (i=0; i<20; i++)
+		A->Spd[i] = 0.f;
 	A->States = newDynArr();
 	A->Ended = FALSE;
 	A->Repeat = Repeat;
@@ -583,6 +586,11 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 
 void aniUpdateForCurrentState(Animation* A)
 {
+	int i;
+	//On fait un reset sur les changement de valeurs;
+	for (i=0; i<20; i++)
+		A->Spd[i] = 0.f;
+	
 	if (A->Type == ANIM_POSITIONS)
 	{
 		AnimPositions* Pos;

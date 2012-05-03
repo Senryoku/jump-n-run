@@ -44,11 +44,17 @@ void gmInit(Game* G)
 	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
 
 	mnAddMenu(&G->GameMenu, "Options", 4);
-	mnAddItem(&G->GameMenu, 1, "full", ITEM_BUTTON, NULL, NULL);
-	mnAddItem(&G->GameMenu, 1, "naaa", ITEM_BUTTON, NULL, NULL);
-	mnAddItem(&G->GameMenu, 1, "noooo", ITEM_BUTTON, NULL, NULL);
+	mnAddItem(&G->GameMenu, 1, "Whaaaaaow", ITEM_BUTTON, NULL, NULL);
+	mnAddItem(&G->GameMenu, 1, "CraAAaAzYy!!", ITEM_BUTTON, NULL, NULL);
+	MID = 2;
+	mnAddItem(&G->GameMenu, 1, "A Secreeeet", ITEM_MENU_SWITCHER, NULL, &MID);
 	MID = 0;
 	mnAddItem(&G->GameMenu, 1, "Back", ITEM_MENU_SWITCHER, NULL, &MID);
+	
+	mnAddMenu(&G->GameMenu, "", 2);
+	mnAddItem(&G->GameMenu, 2, "Go to main MENU!!!!!!", ITEM_MENU_SWITCHER, NULL, &MID);
+	MID=1;
+	mnAddItem(&G->GameMenu, 2, "Go Back!", ITEM_MENU_SWITCHER, NULL, &MID);
 
 
 

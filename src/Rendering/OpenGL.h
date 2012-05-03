@@ -2,12 +2,11 @@
 #define _OPENGL_H_
 
 #include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
 #include <Physics/Physics.h>
 #include <Objects/Cloth.h>
 #include <Menu/Menu.h>
+#include "Textures.h"
 
-typedef GLuint Texture;
 
 void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);
 void glDrawVertex(Vertex* V, float R, float G, float B, float A);
@@ -19,6 +18,8 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY);
 void glDrawCloth(Cloth* C, Texture T);
 void glDrawFPS(sf::RenderTarget& win, const std::string& FPS);
 void glDrawPolyFromList(List* L, Vec2 MousePos);
+void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim);
+void glDrawTitleBox(Vec2 Position, Vec2 Size);
 
 /** @brief Charge une texture en mémoire
  *

@@ -112,6 +112,12 @@ void moiSetSize(MenuOfItems* M, Vec2 Size);
 Vec2 moiGetSize(const MenuOfItems* M);
 
 /**
+ * @brief Accesseur de Text
+ * @return Titre du menu
+ */
+const char* moiGetText(const MenuOfItems* M);
+
+/**
  * @brief Mutateur de Size
  *
  * Ici on change la valeur qui est utilisé pour dessiner, le changement sera instantané et non fluide

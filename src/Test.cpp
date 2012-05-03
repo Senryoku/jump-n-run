@@ -14,12 +14,15 @@ int main(int argc, char** argv)
 	*/
 
 	scRegressionTest();
+	
+
 
 	LevelEditorApp App;
 
 	appInit(&App);
 	appRun(&App);
 	appFree(&App);
+
 
 	return EXIT_SUCCESS;
 }

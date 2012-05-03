@@ -27,6 +27,7 @@ typedef struct SMenu
 	MenuID PreviousMenu; /**< Menu ou on se trouvais avant, utilisé pour les transitions et pour dessiner **/
 	float MenuY; /**< position x ou est déssiné le menu **/
 	float MenuX; /**< position y ou est déssiné le menu **/
+	float SubAnim; /**< Subimage de l'animation du fond **/
 	float spd[2]; /**< variable utilisé par wobble **/
 	float ItemHeight; /**< largeur d'un item non selectionné **/
 	float ItemSelectedZoomFactor; /**< Zoom d'un item quand il est sélectionné **/

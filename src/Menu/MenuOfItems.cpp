@@ -29,6 +29,11 @@ void moiFree(MenuOfItems* M)
 	free(M->ItemsZoomspd);
 }
 
+const char* moiGetText(const MenuOfItems* M)
+{
+	return M->Text;
+}
+
 void moiAddItem(MenuOfItems* M, const char* Text, ItemType Type, void (*Function)(void), void* Data)
 {
 	assert(M->ItemsAdded < M->ItemCount);

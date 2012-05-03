@@ -11,6 +11,9 @@ void mnInit(Menu* M)
 	M->ItemNormalZoomFactor = 0.5f;
 	M->spd[0] = 0.f;
 	M->spd[1] = 0.f;
+	M->MenuX = 0.f;
+	M->MenuY = -100.f;
+	M->SubAnim = 0.f;
 }
 
 
@@ -86,6 +89,10 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 {
 	moiUpdateVisuals((MenuOfItems*)daGet(M->Menus, M->CurrentMenu), M->ItemSelectedZoomFactor, M->ItemNormalZoomFactor);
 	
+	M->SubAnim+=0.25f;
+	if (M->SubAnim>=19.f)
+		M->SubAnim = 0.f;
+	
 	if (M->CurrentMenu != M->PreviousMenu)
 	{
 		Wobble(&M->MenuX, OutPos.x, 0.5f, 0.5f, &M->spd[0]);
@@ -130,13 +137,14 @@ void mnMoveCursor(Menu* M, MenuDirection Direction)
 
 void mnSetCursor(Menu* M, Vec2 MousePos)
 {
-	
+	MousePos.y-=17.f;
 	if (MousePos.y < M->MenuY || MousePos.y > M->MenuY+mnGetHeight(M))
 		mnGetCurrentMenu(M)->ItemSelected = INVALID_ITEM_ID;
 	else
 	{
 		int pos = (MousePos.y - M->MenuY)/(mnGetItemHeight(M)*mnGetItemNormalZoomFactor(M));
 		//printf("pos: %i\n", pos);
+		//if ((pos+1)*(mnGetItemHeight(M)*mnGetItemNormalZoomFactor(M)) < MousePos.y - M->MenuY <
 		if (pos < mnGetCurrentMenu(M)->ItemsAdded)
 			moiSetCursor(mnGetCurrentMenu(M), (ItemID)pos);
 	}
