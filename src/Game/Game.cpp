@@ -28,6 +28,7 @@ void gmInit(Game* G)
 	ItemID IID;
 	mnInit(&G->GameMenu);
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
+	mnSetItemNormalZoomFactor(&G->GameMenu, 0.75f);
 
 	mnAddMenu(&G->GameMenu, "Main Menu", 8);
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
@@ -51,7 +52,8 @@ void gmInit(Game* G)
 	MID = 0;
 	mnAddItem(&G->GameMenu, 1, "Back", ITEM_MENU_SWITCHER, NULL, &MID);
 	
-	mnAddMenu(&G->GameMenu, "", 2);
+	mnAddMenu(&G->GameMenu, "", 3);
+	mnAddItem(&G->GameMenu, 2, "I HAVE NO TITLE!!!! HA HA HA!", ITEM_LABEL, NULL, NULL);
 	mnAddItem(&G->GameMenu, 2, "Go to main MENU!!!!!!", ITEM_MENU_SWITCHER, NULL, &MID);
 	MID=1;
 	mnAddItem(&G->GameMenu, 2, "Go Back!", ITEM_MENU_SWITCHER, NULL, &MID);
