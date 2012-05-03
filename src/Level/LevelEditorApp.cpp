@@ -16,11 +16,11 @@ void appInit(LevelEditorApp* App)
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
 	sndmInit();
-	sndmLoadMusicFile("music0", "data/music.ogg");
-	sndmLoadMusicFile("music1", "data/music1.ogg");
-	sndmLoadMusicFile("music2", "data/music2.ogg");
-	sndmLoadMusicFile("music3", "data/music3.ogg");
-	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
+//	sndmLoadMusicFile("music0", "data/music.ogg");
+//	sndmLoadMusicFile("music1", "data/music1.ogg");
+//	sndmLoadMusicFile("music2", "data/music2.ogg");
+//	sndmLoadMusicFile("music3", "data/music3.ogg");
+//	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
 	//sndmPlayMusic("music3");
 	//sndmPlay("meat");
 }
@@ -45,7 +45,7 @@ void appWindowInit(LevelEditorApp* App)
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
-	
+
 }
 
 
@@ -170,7 +170,7 @@ void appRun(LevelEditorApp* App)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 				return; /** @todo Faire apparaitre un menu ici **/
-			
+
 			if (event.type == sf::Event::LostFocus)
 				App->WindowIsActive = FALSE;
 			if (event.type == sf::Event::GainedFocus)
@@ -461,23 +461,23 @@ void appRun(LevelEditorApp* App)
 				toViewX-=ViewSpeed;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 				toViewX+=ViewSpeed;
-			
+
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
 			{
 				toViewX += (OldMouseX - MouseX)*10.f;
 				toViewY += (OldMouseY - MouseY)*10.f;
 			}
 		}
-		
+
 
 		Wobble(&ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
 		lvlUpdate(App->Led.Lvl, Paused);
-		
+
 		sndmUpdate();
-		
+
 		/*
 		 //Ça c'est la façon manuelle, j'ai cependant rajouté dans SoundManager des trucs pour faire que ça se fasse seul. Je rajouterai d'autre choses pour le personaliser un peu plus tard
 		if (!sndmIsInFading() && sndmGetPlayCount() > 0)

@@ -35,6 +35,12 @@ void lvledFree(LevelEditor *Led)
 	{
 		free((char*) daGet(&Led->TexturesPath, i));
 	}
+
+	if(lstCount(&Led->tmpLstFixeFromV) != 0) lstFree(&Led->tmpLstFixeFromV);
+	if(lstCount(&Led->tmpLstDynFromV) != 0) lstFree(&Led->tmpLstDynFromV);
+	if(lstCount(&Led->tmpLstFixe) != 0) lstFree(&Led->tmpLstFixe);
+	if(lstCount(&Led->tmpLstDyn) != 0) lstFree(&Led->tmpLstDyn);
+
 	daFree(&Led->TexturesPath);
 	delVertex(Led->Mouse);
 	delElastic(Led->GrabElastic);

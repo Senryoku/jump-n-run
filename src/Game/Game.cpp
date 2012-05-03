@@ -80,7 +80,7 @@ void gmPlay(Game* G)
 	Animation* A = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(A, "data/animRun.txt");
 	aniUpdateForCurrentState(A);
-	
+
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
 	sf::Clock Clk;
@@ -110,8 +110,11 @@ void gmPlay(Game* G)
 			{
 				switch (event.mouseButton.button)
 				{
+					case sf::Mouse::Right :
+						plGrabR(G->Lvl->P1, lvlGetWorld(G->Lvl), MouseX, MouseY);
+						break;
 					case sf::Mouse::Left :
-						plGrab(G->Lvl->P1, lvlGetWorld(G->Lvl), MouseX, MouseY);
+						plGrabL(G->Lvl->P1, lvlGetWorld(G->Lvl), MouseX, MouseY);
 						break;
 					default :
 						break;
@@ -122,8 +125,11 @@ void gmPlay(Game* G)
 			{
 				switch (event.mouseButton.button)
 				{
+					case sf::Mouse::Right :
+						plReleaseR(G->Lvl->P1, lvlGetWorld(G->Lvl));
+						break;
 					case sf::Mouse::Left :
-						plRelease(G->Lvl->P1, lvlGetWorld(G->Lvl));
+						plReleaseL(G->Lvl->P1, lvlGetWorld(G->Lvl));
 						break;
 					default :
 						break;
@@ -149,6 +155,11 @@ void gmPlay(Game* G)
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             plMoveR(G->Lvl->P1);
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            plRotateR(G->Lvl->P1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+            plRotateL(G->Lvl->P1);
+
 
 		if(lvlIsGoalReached(G->Lvl))
 		{
@@ -168,7 +179,7 @@ void gmPlay(Game* G)
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
 		aniUpdate(A, G->Lvl->P1, 1.f);
-		
+
 		sndmUpdate();
 
 		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */

@@ -349,7 +349,7 @@ void lvlLoadedInit(Level* Lvl)
 	Lvl->P1 = newPlayer(lvlGetWorld(Lvl));
 
 
-	plSetPosition(Lvl->P1, Lvl->Spawn);
+	plCorrectPosition(Lvl->P1, Lvl->Spawn);
 	wdAddVxFromPoly(Lvl->W, plGetShape(Lvl->P1));
 
 	/*plCreateVertex(Lvl->P1, lvlGetWorld(Lvl));
@@ -375,15 +375,15 @@ void lvlLoadedInit(Level* Lvl)
 void lvlUpdate(Level* Lvl, Bool Paused)
 {
 	unsigned int i;
-	
+
 	if (!Paused)
 	{
 		/* Mise à jour du World */
 		//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
-		
+
 		wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
 		wdResolveVextex(lvlGetWorld(Lvl));
-		
+
 		wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
 		for(i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
 		{
@@ -392,10 +392,10 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 			wdResolveElastic(lvlGetWorld(Lvl));
 			//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
 			wdHandleCollision(lvlGetWorld(Lvl));
-			
+
 			if (Lvl->P1 != NULL)
 				plUpdate(Lvl->P1, lvlGetWorld(Lvl));
-			
+
 		}
 	}
 	else
@@ -409,7 +409,7 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 		}
 	}
 
-	
+
 }
 
 Bool lvlIsGoalReached(Level* L)

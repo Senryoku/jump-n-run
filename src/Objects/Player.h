@@ -20,10 +20,11 @@ typedef struct SPlayer
 	Polygon* Shape;
 	Vertex* VxUL, *VxUR, *VxDL, *VxDR;
 	/* char* Texture */
-	
+
 	PlayerDirection Dir;
 
-	Rigid* Grab;
+	Rigid* GrabR;
+	Rigid* GrabL;
 	Vertex* Neck, *HeadLeft, *HeadRight, *Base, *LeftArm1, *LeftArm2, *RightArm1, *RightArm2, *LeftLeg1, *LeftLeg2, *RightLeg1, *RightLeg2;
 	Vertex* VxBalance;
 	Elastic* ElBalance;
@@ -65,19 +66,23 @@ Rigid* plGetRdD(Player* P);
 Rigid* plGetRdL(Player* P);
 
 /* Mutateurs */
-void plSetPosition(Player*, Vec2);
+void plCorrectPosition(Player*, Vec2);
 void plSetShape(Player* P, Polygon* Shape);
 
 void plUpdate(Player* P, World* W);
 
 void plMoveR(Player* P);
 void plMoveL(Player* P);
+void plRotateR(Player* P);
+void plRotateL(Player* P);
 void plJump(Player* P);
 void plResetJump(Player* P);
 void plGetUp(Player* P);
 
-void plGrab(Player* P, World* W, float MouseX, float MouseY);
-void plRelease(Player* P, World* W);
+void plGrabR(Player* P, World* W, float MouseX, float MouseY);
+void plReleaseR(Player* P, World* W);
+void plGrabL(Player* P, World* W, float MouseX, float MouseY);
+void plReleaseL(Player* P, World* W);
 
 
 /**
