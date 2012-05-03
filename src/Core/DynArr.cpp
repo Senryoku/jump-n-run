@@ -14,10 +14,16 @@ DynArr* newDynArr()
 	return DA;
 }
 
+//#include <stdio.h>
 void daInit(DynArr* DA)
 {
-	DA->First = (void**)malloc(sizeof(void*));
+	//printf("DA1 sizeof(void*) : %u, sizeof(size_t) : %u, sizeof(void**) : %u\n", sizeof(void*), sizeof(size_t), sizeof(void**));
+	//assert(DA != NULL);
+	DA->First = (void**) malloc(sizeof(void*));
+	//printf("DA2\n");
+	assert(DA->First != NULL);
 	DA->Capacity = 1;
+	//printf("DA3\n");
 	DA->Size = 0;
 }
 
@@ -33,7 +39,7 @@ void delDynArr(DynArr* DA)
 	daFree(DA);
 	free(DA);
 }
-#include <stdio.h>
+
 void daReserve(DynArr* DA, unsigned int newCapa)
 {
 	void* *tmp;
@@ -41,6 +47,7 @@ void daReserve(DynArr* DA, unsigned int newCapa)
 	if(newCapa > DA->Capacity)
 	{
 		tmp = (void**) malloc(newCapa*sizeof(void*));
+		assert(tmp != NULL);
 		for(i = 0; i < DA->Size; i++)
 			tmp[i] = DA->First[i];
 		free(DA->First);

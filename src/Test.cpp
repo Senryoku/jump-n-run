@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 	scFree(&Sc);
 	*/
 
-	//scRegressionTest();
+	scRegressionTest();
 
 	LevelEditorApp App;
 

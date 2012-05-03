@@ -90,20 +90,36 @@ Bool lvlIsGoalReached(Level* L);
 **/
 World* lvlGetWorld(Level* Lvl);
 
+/** @brief Affiche le fond
+**/
 void lvlDisplayBG(Level* Lvl);
 
+/** @brief Affiche la première couche (fond) de décors
+**/
 void lvlDisplayL1(Level* Lvl);
 
+/** @brief Affiche la deuxième couche (front) de décors
+**/
 void lvlDisplayL2(Level* Lvl);
 
+/** @brief Affiche le Foreground
+**/
 void lvlDisplayFG(Level* Lvl);
 
+/** @brief Affich un objet texturé
+**/
 void lvlDisplayObj(Level* Lvl, Object* Obj);
 
+/** @brief Affiche les objets texturés
+**/
 void lvlDispAllObj(Level* Lvl);
 
+/** @brief Ajoute un objet texturé
+**/
 void lvlAddObject(Level* Lvl, Object * Obj);
 
+/** @brief Supprime un objet texturé
+**/
 void lvlDelObject(Level* Lvl, Object * Obj);
 
 typedef enum enum_objets

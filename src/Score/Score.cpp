@@ -56,8 +56,10 @@ Bool scSend(Score* S)
 	}
 }
 
-unsigned int scCollect(DynArr* DA, const char LvlName[255], const char LvlMD5[255])
+//unsigned int scCollect(DynArr* DA, const char LvlName[255], const char LvlMD5[255])
+DynArr* scCollect(const char LvlName[255], const char LvlMD5[255])
 {
+	DynArr* DA = newDynArr();
 	unsigned int ErrorCode, NbScore, i, Time;
 	char *ResString, *Line, Player[255], Hour[255], Date[255];
 	sf::Http http;
@@ -82,10 +84,13 @@ unsigned int scCollect(DynArr* DA, const char LvlName[255], const char LvlMD5[25
 		sscanf(Line, "%u", &ErrorCode);
 		if(ErrorCode == 0)
 		{
-			daInit(DA);
+			//printf("Avant daInit \n");
+			//daInit(DA);
+			//printf("Apres daInit \n");
 			Line = strtok(NULL, "\n");
 			sscanf(Line, "%u", &NbScore);
-			daReserve(DA, NbScore); // Plante, mais pas en debug...
+			//printf("Nb Score : %u\n", NbScore);
+			daReserve(DA, NbScore);
 			for(i = 0; i < NbScore; i++)
 			{
 				Line = strtok(NULL, "\n");
@@ -96,7 +101,8 @@ unsigned int scCollect(DynArr* DA, const char LvlName[255], const char LvlMD5[25
 	} else {
 		ErrorCode = 50;
 	}
-	return ErrorCode;
+	//return ErrorCode;
+	return DA;
 }
 
 void scCollectFree(DynArr* DA)
@@ -117,16 +123,18 @@ void scFree(Score *S)
 
 void scRegressionTest()
 {
-	DynArr DA;
-	unsigned int ErrorCode = scCollect(&DA, "tmpEditor.lvl", "3557a855ba37d9b60bc18583d99eb254");
-	if(ErrorCode == 0)
+	// DynArr DA;
+	// unsigned int ErrorCode = scCollect(&DA, "tmpEditor.lvl", "3557a855ba37d9b60bc18583d99eb254");
+	DynArr* DA = scCollect("tmpEditor.lvl", "3557a855ba37d9b60bc18583d99eb254");
+	//if(ErrorCode == 0)
+	if(daGetSize(DA) != 0)
 	{
-		printf("Number of Score(s) : %u\n", daGetSize(&DA));
-		for(unsigned int i = 0; i < daGetSize(&DA); i++)
+		printf("Number of Score(s) : %u\n", daGetSize(DA));
+		for(unsigned int i = 0; i < daGetSize(DA); i++)
 		{
-			Score* S = (Score*) daGet(&DA, i);
+			Score* S = (Score*) daGet(DA, i);
 			printf("Player : %s, Hour : %s, Date : %s, Time : %u\n", S->Player, S->LvlName, S->LvlMD5, S->Time);
 		}
-		scCollectFree(&DA);
+		scCollectFree(DA);
 	}
 }

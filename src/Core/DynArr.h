@@ -2,6 +2,7 @@
 #define _DYNARR_H_
 
 #include <stdlib.h>
+#include <assert.h>
 
 /** @defgroup DynArr
  *
@@ -13,7 +14,7 @@
 
 typedef struct
 {
-	void* *First;
+	void** First;
 	unsigned int Capacity;
 	unsigned int Size;
 } DynArr;
@@ -30,13 +31,13 @@ DynArr* newDynArr();
 
 /** @brief Initialise un DynArr
  *
- * @param DA Le DynArr à intialiser
+ * @param DA Le DynArr à intialiser, != NULL
 **/
 void daInit(DynArr* DA);
 
 /** @brief Libère le tableau
  *
- * @param DA Le DynArr à libérer
+ * @param DA Le DynArr à libérer, !=NULL
 **/
 void daFree(DynArr* DA);
 

@@ -112,6 +112,10 @@ void lvledSetMousePosition(LevelEditor *Led, float, float);
 
 // Fonctions d'éditions
 
+/** @brief Modifie la taille du world
+**/
+void lvledSetSize(LevelEditor* Led, float Width, float Height);
+
 /** @brief Créé un nouveau Vertex isolé aux coordonnées de Mouse
 **/
 void lvledNewVertex(LevelEditor* Led);

@@ -200,6 +200,19 @@ void lvledReleaseEl(LevelEditor *Led)
 	wdDelElastic(lvlGetWorld(Led->Lvl), Led->GrabElastic);
 }
 
+void lvledSetSize(LevelEditor* Led, float Width, float Height)
+{
+	World* W = lvlGetWorld(Led->Lvl);
+
+	W->Width = Width;
+	W->Height = Height;
+
+	float CellSize = 128.f;
+	gridFree(&W->CollisionGrid);
+	gridInit(&W->CollisionGrid, Width/CellSize+1, Height/CellSize+1);
+	gridSetCellSize(&W->CollisionGrid, CellSize);
+}
+
 void lvledToogleNearestFixe(LevelEditor *Led)
 {
 	Vertex* tmpVertex = wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);

@@ -51,18 +51,16 @@ void scInit(Score* S, const char Player[255], const char LvlName[255], const cha
 **/
 Bool scSend(Score *S);
 
-/** @brief Récupère les scores d'un niveau depuis le serveur et les stocke dansDA
+/** @brief Retourne un DynArr* rempli avec les scores du niveau demandé
  *
- * DA ne doit pas être initialisé !
- * Pour les codes d'erreurs, voir le script PHP,
- * les codes supérieurs ou égaux à 50 sont générés par scCollect :
- * 50 : Erreur HTTP (de connexion)
- * @param DA DynArr* à remplir avec les Score*
+ * Les codes d'erreurs ne sont pas géré, le passage en paramètre d'un tableau à remplir
+ * générant des erreurs incompréhensibles (plantage sous windows sur un malloc(sizeof(void*)))
  * @param LvlName Nom du niveau
  * @param LvlMD5 MD5 du niveau
- * @return Code d'erreur
+ * @return DynArr* contenant les score récupérés
 **/
-unsigned int scCollect(DynArr* DA, const char LvlName[255], const char LvlMD5[255]);
+//unsigned int scCollect(DynArr* DA, const char LvlName[255], const char LvlMD5[255]);
+DynArr* scCollect(const char LvlName[255], const char LvlMD5[255]);
 
 /** @brief Libère un tableau de score rempli par scCollect
  *

@@ -27,8 +27,8 @@ void plInit(Player* P, World *W)
 
 	vxSetMass(P->VxUL, 0.01f);
 	vxSetMass(P->VxUR, 0.01f);
-	vxSetMass(P->VxDL, 2.f);
-	vxSetMass(P->VxDR, 2.f);
+	vxSetMass(P->VxDL, 1.5f);
+	vxSetMass(P->VxDR, 1.5f);
 
 	P->VxBalance = newVertex();
 	vxSetPosition(P->VxBalance, P->ULPos);
