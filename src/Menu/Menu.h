@@ -201,6 +201,13 @@ Bool mnGetHide(const Menu* M);
 /** @brief Mutateur de Active
  *
  * @param M Menu à laquelle s'applique la fonction
+ * @param Active valeur d'active
+ **/
+void mnSetActive(Menu* M, Bool Active);
+
+/** @brief Accesseur de Active
+ *
+ * @param M Menu à laquelle s'applique la fonction
  * @return le menu est-il actif pour les input (changements de l'item sélectioné et lancement de fonctions)
  **/
 Bool mnGetActive(const Menu* M);

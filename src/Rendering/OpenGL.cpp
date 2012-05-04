@@ -403,7 +403,6 @@ void glDrawCloth(Cloth* C, Texture T)
 
 void glDrawFPS(sf::RenderTarget& win, const std::string& FPS)
 {
-	glPushMatrix();
 	sf::Text Text;
 	Text.setFont(FntMenu);
 	Text.setString(FPS);
@@ -423,8 +422,7 @@ void glDrawFPS(sf::RenderTarget& win, const std::string& FPS)
 	Text.move(0.f, -1.5f);
 	win.draw(Text);
 	win.popGLStates();
-	
-	glPopMatrix();
+
 }
 
 void glDrawPolyFromList(List* L, Vec2 MousePos)

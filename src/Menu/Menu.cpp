@@ -138,6 +138,11 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 	}
 }
 
+void mnSetActive(Menu* M, Bool Active)
+{
+	M->Active = Active;
+}
+
 void mnGoToMenu(Menu* M, MenuID MID)
 {
 	M->CurrentMenu = MID;
