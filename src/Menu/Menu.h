@@ -19,7 +19,47 @@ typedef unsigned short MenuID;
 /**
  * @brief Structure définissant un menu
  *
- * Ce module permet de créer des Menu avec des effets fluides de zoom
+ * Ce module permet de créer des Menu avec des effets fluides de zoom. Il existe différent types d'items qui peuvent y être ajoutés. Voici un exemple d'utilisation du module
+ * @code
+ Menu * M; //À instancier
+ //On initialise le menu
+ mnInit(M);
+ mnSetItemSelectedZoomFactor(M, 1.f);
+ mnSetItemNormalZoomFactor(M, 0.75f);
+ 
+ MenuID Main; MenuID MenuToGoTo = 1; //1 sera le menu de play
+ //On ajoute un menu avec 3 items
+ Main = mnAddMenu(M, "Main Menu", 3);
+ mnAddItem(M, Main, "Play", ITEM_MENU_SWITCHER, NULL, &MenuToGoTo);
+ MenuToGoTo = 2; //2 sera le menu des options
+ mnAddItem(M, Main, "Options", ITEM_MENU_SWITCHER, NULL, &MenuToGoTo);
+ //mnAddItem(M, Main, "Exit", ITEM_BUTTON, &Exit, NULL); //Exit() est une fonction
+ 
+ mnAddMenu(M, "Play", 5);
+ mnAddItem(M, 1, "I'm a label", ITEM_LABEL, NULL, NULL); //Les label peuvent ètre aussi utilisés comme séparateur si on ne met pas de texte
+ float value; ItemID ID;
+ ID = mnAddItem(M, 1, "Change my value", ITEM_VALUE, NULL, &value);
+ mniSetIncr(mnGetItem(M, 1, ID), 5.f); // la valeur est incrémenté de 5 ou -5 avec les flèches
+ mniSetMinMaxValues(mnGetItem(M, 1, ID), 0.f, 100.f); //On limite la valeur
+ mnAddItem(M, 1, "Input", ITEM_INPUT, NULL, NULL); //il alloue l'espace nécessaire pour l'input
+ //Celui ci ne peut avoir qu'une valeur réelle
+ mnAddItem(M, 1, "Input a real", ITEM_INPUT_VALUE, NULL, NULL); //il alloue l'espace nécessaire pour l'input
+ MenuToGoTo = Main;
+ mnAddItem(M, 1, "Back", ITEM_MENU_SWITCHER, NULL, &MenuToGoTo);
+ 
+ // etc
+
+ // Main Loop 
+//MousePosition est un Vec2 contenant la position du curseur relative à la fenêtre
+//OutofWindowPosition est un Vec2 contenant la position (relative à la fenêtre) ou doit aller le menu lors des transitions entre menu ou pour le cacher
+mnUpdate(M, MousePosition, OutofWindowPosition);
+
+
+ // Fin 
+mnFree(M);
+ @endcode
+ * @see MenuItem
+ * @see MenuOfItems
  */
 
 typedef struct SMenu
@@ -37,6 +77,7 @@ typedef struct SMenu
 	float ItemSelectedZoomFactor; /**< Zoom d'un item quand il est sélectionné **/
 	float ItemNormalZoomFactor; /**< Zoom d'un item quand il n'est pas sélectionné **/
 	Bool Active; /**< Dit si le menu est active et si on doit gérer ou pas les entrées. Utilisé lorsqu'on affiche des messages par exemple **/
+	Bool Hide; /**< permet de cacher le menu et le rendre inactif **/
 } Menu;
 
 
@@ -143,12 +184,19 @@ void mnSetForce(Menu* M, float Force);
  **/
 void mnSetFriction(Menu* M, float Friction);
 
-/** @brief Mutateur de Active
+/** @brief Mutateur de Hide
  *
+ * Cette fonction permet de cacher le menu et le rendre inactif (Active==0)
  * @param M Menu à laquelle s'applique la fonction
- * @param Active le menu est-il active? Les inputs n'auront aucun effet
+ * @param Hide Vrai pour cacher le menu
  **/
-void mnSetActive(Menu* M, Bool Active);
+void mnSetHide(Menu* M, Bool Hide);
+
+/** @brief Accesseur de Hide
+ * @param M Menu à laquelle s'applique la fonction
+ * @return Vrai si le menu est caché
+ **/
+Bool mnGetHide(const Menu* M);
 
 /** @brief Mutateur de Active
  *

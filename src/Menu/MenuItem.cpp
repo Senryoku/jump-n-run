@@ -1,6 +1,5 @@
 #include "MenuItem.h"
 #include "Menu.h"
-#include <string>
 
 
 void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void), void* Data)
@@ -20,6 +19,8 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 	
 	if (I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
 		I->Data = new std::string;
+	I->MaxValue = INFINITY;
+	I->MinValue = -INFINITY;
 }
 
 void mniFree(MenuItem* I)
@@ -61,6 +62,11 @@ float* mniGetZoom(MenuItem* I)
 void* mniGetData(MenuItem* I)
 {
 	return I->Data;
+}
+
+const std::string& mniGetInput(const MenuItem* I)
+{
+	return *static_cast<std::string*>(I->Data);
 }
 
 void mniRunFunction(MenuItem* I)

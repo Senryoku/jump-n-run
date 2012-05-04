@@ -97,11 +97,6 @@ float mnGetItemNormalZoomFactor(const Menu* M)
 	return M->ItemNormalZoomFactor;
 }
 
-void mnSetActive(Menu* M, Bool Active)
-{
-	M->Active = Active;
-}
-
 Bool mnGetActive(const Menu* M)
 {
 	return M->Active;
@@ -114,6 +109,13 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 	M->SubAnim+=0.25f;
 	if (M->SubAnim>=19.f)
 		M->SubAnim = 0.f;
+	
+	if (M->Hide)
+	{
+		Wobble(&M->MenuX, OutPos.x, M->Force, M->Friction, &M->spd[0]);
+		Wobble(&M->MenuY, OutPos.y, M->Force, M->Friction, &M->spd[1]);
+		return;
+	}
 	
 	if (M->CurrentMenu != M->PreviousMenu)
 	{
@@ -140,6 +142,20 @@ void mnGoToMenu(Menu* M, MenuID MID)
 {
 	M->CurrentMenu = MID;
 	M->Active = FALSE;
+}
+
+void mnSetHide(Menu* M, Bool Hide)
+{
+	M->Hide = Hide;
+	if (Hide == TRUE)
+		M->Active = FALSE;
+	else if (M->CurrentMenu == M->PreviousMenu)
+		M->Active = TRUE;
+}
+
+Bool mnGetHide(const Menu* M)
+{
+	return M->Hide;
 }
 
 MenuID mnGetCurrentMenuID(const Menu* M)
@@ -197,9 +213,6 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 		mnSetCursor(M, vec2(event.mouseMove.x, event.mouseMove.y));
 	
 	Bool Enter = ((event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return));
-	
-	if (Enter)
-		printf("Enter\n");
 	
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
 		mnMoveCursor(M, MENU_GO_DOWN);

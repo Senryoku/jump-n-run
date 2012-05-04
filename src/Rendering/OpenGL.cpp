@@ -405,6 +405,7 @@ void glDrawFPS(sf::RenderTarget& win, const std::string& FPS)
 {
 	glPushMatrix();
 	sf::Text Text;
+	Text.setFont(FntMenu);
 	Text.setString(FPS);
 	Text.setPosition(5.f, 5.f);
 	Text.setColor(sf::Color::Black);

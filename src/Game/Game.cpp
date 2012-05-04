@@ -33,15 +33,15 @@ void gmInit(Game* G)
 	mnAddMenu(&G->GameMenu, "Main Menu", 8);
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
 	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
-	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10.f);
-	mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
+	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10000000.f);
+	//mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
 	G->testy = 0.f;
 	MenuID MID = 1;
 	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Input value", ITEM_INPUT_VALUE, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "go to Options", ITEM_MENU_SWITCHER, NULL, &MID);
 	mnAddItem(&G->GameMenu, 0, "Label 1", ITEM_LABEL, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "Label", ITEM_LABEL, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "------------", ITEM_LABEL, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
 
 	mnAddMenu(&G->GameMenu, "Options", 4);
@@ -57,7 +57,6 @@ void gmInit(Game* G)
 	mnAddItem(&G->GameMenu, 2, "Go to main MENU!!!!!!", ITEM_MENU_SWITCHER, NULL, &MID);
 	MID=1;
 	mnAddItem(&G->GameMenu, 2, "Go Back!", ITEM_MENU_SWITCHER, NULL, &MID);
-
 
 
 	G->Window->setActive();
@@ -103,7 +102,6 @@ void gmPlay(Game* G)
 
 		while (G->Window->pollEvent(event))
 		{
-			mnHandleEvent(&G->GameMenu, event);
 
 			if (event.type == sf::Event::Closed)
 				G->Window->close();
@@ -144,7 +142,10 @@ void gmPlay(Game* G)
 				}
 			}
 
-
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M)
+				mnSetHide(&G->GameMenu, !mnGetHide(&G->GameMenu));
+			
+			mnHandleEvent(&G->GameMenu, event);
 		}
 
 		lvlUpdate(G->Lvl, FALSE);

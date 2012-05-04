@@ -4,7 +4,7 @@
 #include <Core/DynArr.h>
 #include <Core/Vec2.h>
 #include <Core/Tools.h>
-#include <string.h>
+#include <string>
 
 /** @defgroup menu Menu
  *@{
@@ -124,6 +124,13 @@ float* mniGetZoom(MenuItem* I);
  * @return pointeur vers Data de l'item
  */
 void* mniGetData(MenuItem* I);
+
+/**
+ * @brief Accesseur au texte rentré pour les ITEM_INPUT et les ITEM_INPUT_VALUE
+ * @param I MenuItem auquel s'applique la fonction
+ * @return référence constante vers le texte
+ */
+const std::string& mniGetInput(const MenuItem* I);
 
 /**
  * @brief Accesseur à la valeur numérique d'un ITEM_INPUT_VALUE
