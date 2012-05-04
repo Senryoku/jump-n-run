@@ -110,7 +110,7 @@ void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsign
 			break;
 		case ITEM_CHECKBOX:
 			Data = mniGetData(I);
-			if (Data!=NULL)
+			if (Data!=NULL && (EnterPressed || IDir != MOVE_NONE))
 			{
 				*((Bool*) Data) = !(*((Bool*) Data) );
 				/*if (*((Bool*)(Data))==FALSE)
@@ -163,7 +163,8 @@ void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsign
 			}
 			break;
 		case ITEM_MENU_SWITCHER:
-			mnGoToMenu(M, *(MenuID*)I->Data);
+			if (EnterPressed || IDir != MOVE_NONE)
+				mnGoToMenu(M, *(MenuID*)I->Data);
 			break;
 		default:
 			break;

@@ -109,7 +109,7 @@ void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor, float UnselectedFact
 void moiSetSize(MenuOfItems* M, Vec2 Size);
 
 /**
- * @brief Accesseur de SizeTo
+ * @brief Accesseur de Size
  * @param M MenuOfItem auquel s'applique la fonction
  * @return taille de la boîte du menu
  */

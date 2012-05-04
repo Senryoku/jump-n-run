@@ -5,7 +5,18 @@
 #include <Physics/Physics.h>
 #include <Objects/Cloth.h>
 #include <Menu/Menu.h>
-#include "Textures.h"
+#include <SFML/OpenGL.hpp>
+
+typedef GLuint Texture;
+
+extern Texture txBoxCorner;
+extern Texture txBoxSide;
+extern Texture txBoxShadow;
+extern Texture txBoxShineSide;
+extern Texture txBoxGloss;
+extern Texture txBoxBackAnim;
+
+extern sf::Font FntMenu;
 
 
 void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);

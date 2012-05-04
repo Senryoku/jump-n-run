@@ -194,7 +194,7 @@ void gmPlay(Game* G)
 		glDrawPolygon(G->Lvl->P1->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
 
-		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&G->GameMenu) - 50.f));
+		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&G->GameMenu) - 100.f));
 		glDrawMenu(*G->Window, &G->GameMenu, ViewX, ViewY);
 		glDrawFPS(*G->Window, fpsGetString(&fps));
 		fpsStep(&fps);

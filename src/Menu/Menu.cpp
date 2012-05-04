@@ -14,8 +14,8 @@ void mnInit(Menu* M)
 	M->MenuX = 0.f;
 	M->MenuY = -100.f;
 	M->SubAnim = 0.f;
-	M->Force = 0.5f;
-	M->Friction = 0.3f;
+	M->Force = 0.25f;
+	M->Friction = 0.4f;
 }
 
 
@@ -198,6 +198,9 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 	
 	Bool Enter = ((event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return));
 	
+	if (Enter)
+		printf("Enter\n");
+	
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
 		mnMoveCursor(M, MENU_GO_DOWN);
 	
@@ -227,7 +230,7 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 		mniUse(M ,mnGetCurrentItem(M), FALSE, MOVE_NONE, 0, TRUE);
 	
 	if (Enter)
-		mniUse(M, mnGetCurrentItem(M), 1, MOVE_NONE, 0, FALSE);
+		mniUse(M, mnGetCurrentItem(M), TRUE, MOVE_NONE, 0, FALSE);
 	
 }
 

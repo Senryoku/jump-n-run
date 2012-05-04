@@ -18,6 +18,8 @@ typedef unsigned short MenuID;
 
 /**
  * @brief Structure définissant un menu
+ *
+ * Ce module permet de créer des Menu avec des effets fluides de zoom
  */
 
 typedef struct SMenu

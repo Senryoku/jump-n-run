@@ -1,5 +1,8 @@
 #include "OpenGL.h"
 
+Texture txBoxCorner, txBoxSide, txBoxShadow, txBoxGloss, txBoxBackAnim;
+sf::Font FntMenu;
+
 void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A)
 {
 	glColor4f(R, G, B, A);
@@ -187,7 +190,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	MenuItem* I;
 	float MaxTextWidth = 0.f;
 	sf::Text ItemText;
-	ItemText.setFont(sf::Font::getDefaultFont());
+	ItemText.setFont(FntMenu);
 	ItemText.setString(std::string(moiGetText(moi)));
 	float TitleWidth = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
 

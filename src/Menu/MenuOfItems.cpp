@@ -17,7 +17,7 @@ void moiInit(MenuOfItems* M, const char* Text, unsigned short ItemCount)
 	M->Size = vec2(0.f, 0.f);
 	M->SizeTo = vec2(100.f, 100.f);
 	M->Force = 0.5f;
-	M->Friction = 0.3f;
+	M->Friction = 0.4f;
 }
 
 void moiFree(MenuOfItems* M)
@@ -119,7 +119,7 @@ void moiSetSize(MenuOfItems* M, Vec2 Size)
 
 Vec2 moiGetSize(const MenuOfItems* M)
 {
-	return M->SizeTo;
+	return M->Size;
 }
 
 void moiSetActualSize(MenuOfItems* M, Vec2 Size)
