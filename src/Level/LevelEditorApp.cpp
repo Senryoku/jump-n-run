@@ -16,7 +16,7 @@ void appInit(LevelEditorApp* App)
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
 	sndmInit();
-	/*
+	
 	sndmLoadMusicFile("music0", "data/music.ogg");
 	sndmLoadMusicFile("music1", "data/music1.ogg");
 	sndmLoadMusicFile("music2", "data/music2.ogg");
@@ -24,7 +24,7 @@ void appInit(LevelEditorApp* App)
 	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
 
 	sndmPlayMusic("music3");
-	 */
+	 
 	//sndmPlay("meat");
 	//Temporel
 	txBoxCorner = glTexLoad("data/s_boxcorner.png");

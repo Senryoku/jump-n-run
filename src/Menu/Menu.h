@@ -28,6 +28,8 @@ typedef struct SMenu
 	float MenuY; /**< position x ou est déssiné le menu **/
 	float MenuX; /**< position y ou est déssiné le menu **/
 	float SubAnim; /**< Subimage de l'animation du fond **/
+	float Friction; /**< Friction du mouvement du menu **/
+	float Force; /**< Vitesse du mouvement du mouvement **/
 	float spd[2]; /**< variable utilisé par wobble **/
 	float ItemHeight; /**< largeur d'un item non selectionné **/
 	float ItemSelectedZoomFactor; /**< Zoom d'un item quand il est sélectionné **/
@@ -110,6 +112,34 @@ void mnSetItemNormalZoomFactor(Menu* M, float ItemNormalZoomFactor);
  * @return ItemNormalZoomFactor des menus
  **/
 float mnGetItemNormalZoomFactor(const Menu* M);
+
+/** @brief Accesseur de Force
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @return Force des animations des menus
+ **/
+float mnGetForce(const Menu* M);
+
+/** @brief Accesseur de Friction
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @return Friction des animations des menus
+ **/
+float mnGetFriction(const Menu* M);
+
+/** @brief Mutateur de Force
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @param Force des animations des menus
+ **/
+void mnSetForce(Menu* M, float Force);
+
+/** @brief Mutateur de Friction
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @param Friction des animations des menus
+ **/
+void mnSetFriction(Menu* M, float Friction);
 
 /** @brief Mutateur de Active
  *

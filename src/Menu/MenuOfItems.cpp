@@ -16,6 +16,8 @@ void moiInit(MenuOfItems* M, const char* Text, unsigned short ItemCount)
 	M->SizeSpd[1] = 0.f;
 	M->Size = vec2(0.f, 0.f);
 	M->SizeTo = vec2(100.f, 100.f);
+	M->Force = 0.5f;
+	M->Friction = 0.3f;
 }
 
 void moiFree(MenuOfItems* M)
@@ -103,11 +105,11 @@ void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor, float UnselectedFact
 		else
 			Factor = UnselectedFactor;
 
-		Wobble(mniGetZoom(&M->Items[i]), Factor, 0.5f, 0.5f, &M->ItemsZoomspd[i]);
+		Wobble(mniGetZoom(&M->Items[i]), Factor, M->Force, M->Friction, &M->ItemsZoomspd[i]);
 	}
 
-	Wobble(&M->Size.x, M->SizeTo.x, 0.5f, 0.5f, &M->SizeSpd[0]);
-	Wobble(&M->Size.y, M->SizeTo.y, 0.5f, 0.5f, &M->SizeSpd[1]);
+	Wobble(&M->Size.x, M->SizeTo.x, M->Force, M->Friction, &M->SizeSpd[0]);
+	Wobble(&M->Size.y, M->SizeTo.y, M->Force, M->Friction, &M->SizeSpd[1]);
 }
 
 void moiSetSize(MenuOfItems* M, Vec2 Size)
@@ -133,4 +135,24 @@ unsigned short moiGetItemCount(const MenuOfItems* M)
 ItemID moiGetItemSelectedID(MenuOfItems* M)
 {
 	return M->ItemSelected;
+}
+
+float moiGetForce(const MenuOfItems* M)
+{
+	return M->Force;
+}
+
+float moiGetFriction(const MenuOfItems* M)
+{
+	return M->Friction;
+}
+
+void moiSetForce(MenuOfItems* M, float Force)
+{
+	M->Force = Force;
+}
+
+void moiSetFriction(MenuOfItems* M, float Friction)
+{
+	M->Friction = Friction;
 }

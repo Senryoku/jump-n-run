@@ -14,6 +14,8 @@ void mnInit(Menu* M)
 	M->MenuX = 0.f;
 	M->MenuY = -100.f;
 	M->SubAnim = 0.f;
+	M->Force = 0.5f;
+	M->Friction = 0.3f;
 }
 
 
@@ -48,6 +50,26 @@ ItemID mnAddItem(Menu* M, MenuID MID, const char* Text, ItemType Type, void (*Fu
 void mnSetItemHeight(Menu* M, float ItemHeight)
 {
 	M->ItemHeight = ItemHeight;
+}
+
+float mnGetForce(const Menu* M)
+{
+	return M->Force;
+}
+
+float mnGetFriction(const Menu* M)
+{
+	return M->Friction;
+}
+
+void mnSetForce(Menu* M, float Force)
+{
+	M->Force = Force;
+}
+
+void mnSetFriction(Menu* M, float Friction)
+{
+	M->Friction = Friction;
 }
 
 float mnGetItemHeight(const Menu* M)
@@ -95,8 +117,8 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 	
 	if (M->CurrentMenu != M->PreviousMenu)
 	{
-		Wobble(&M->MenuX, OutPos.x, 0.5f, 0.5f, &M->spd[0]);
-		Wobble(&M->MenuY, OutPos.y, 0.5f, 0.5f, &M->spd[1]);
+		Wobble(&M->MenuX, OutPos.x, M->Force, M->Friction, &M->spd[0]);
+		Wobble(&M->MenuY, OutPos.y, M->Force, M->Friction, &M->spd[1]);
 		
 		if (ABS(M->MenuX-OutPos.x) < 1.f && ABS(M->MenuY-OutPos.y) < 1.f)
 		{
@@ -109,8 +131,8 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 	}
 	else
 	{
-		Wobble(&M->MenuX, MenuPos.x, 0.5f, 0.5f, &M->spd[0]);
-		Wobble(&M->MenuY, MenuPos.y, 0.5f, 0.5f, &M->spd[1]);
+		Wobble(&M->MenuX, MenuPos.x, M->Force, M->Friction, &M->spd[0]);
+		Wobble(&M->MenuY, MenuPos.y, M->Force, M->Friction, &M->spd[1]);
 	}
 }
 

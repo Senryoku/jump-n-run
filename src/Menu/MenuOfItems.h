@@ -28,6 +28,8 @@ typedef struct
 	float* ItemsZoomspd; /**< tableau de variables utilisé pour le wobble du zoom factor **/
 	Vec2 Size, SizeTo; /**< Taille de la boîte pour le menu **/
 	float SizeSpd[2]; /**< variable utilisée dans wobble **/
+	float Friction; /**< Friction du zoom des items **/
+	float Force; /**< Vitesse du zoom des items **/
 	char* Text; /**< texte du menu (optionel) **/
 	
 } MenuOfItems;
@@ -101,18 +103,21 @@ void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor, float UnselectedFact
 
 /**
  * @brief Mutateur de SizeTo
+ * @param M MenuOfItem auquel s'applique la fonction
  * @param Size taille de la boîte du menu
  */
 void moiSetSize(MenuOfItems* M, Vec2 Size);
 
 /**
  * @brief Accesseur de SizeTo
+ * @param M MenuOfItem auquel s'applique la fonction
  * @return taille de la boîte du menu
  */
 Vec2 moiGetSize(const MenuOfItems* M);
 
 /**
  * @brief Accesseur de Text
+ * @param M MenuOfItem auquel s'applique la fonction
  * @return Titre du menu
  */
 const char* moiGetText(const MenuOfItems* M);
@@ -121,6 +126,7 @@ const char* moiGetText(const MenuOfItems* M);
  * @brief Mutateur de Size
  *
  * Ici on change la valeur qui est utilisé pour dessiner, le changement sera instantané et non fluide
+ * @param M MenuOfItem auquel s'applique la fonction
  * @param Size taille de la boîte du menu
  */
 void moiSetActualSize(MenuOfItems* M, Vec2 Size);
@@ -130,6 +136,34 @@ void moiSetActualSize(MenuOfItems* M, Vec2 Size);
  * @return Nombre d'items
  */
 unsigned short moiGetItemCount(const MenuOfItems* M);
+
+/** @brief Accesseur de Force
+ *
+ * @param M MenuOfItem auquel s'applique la fonction
+ * @return Force des animations des menus
+ **/
+float moiGetForce(const MenuOfItems* M);
+
+/** @brief Accesseur de Friction
+ *
+ * @param M MenuOfItem auquel s'applique la fonction
+ * @return Friction des animations des menus
+ **/
+float moiGetFriction(const MenuOfItems* M);
+
+/** @brief Mutateur de Force
+ *
+ * @param M MenuOfItem auquel s'applique la fonction
+ * @param Force des animations des menus
+ **/
+void moiSetForce(MenuOfItems* M, float Force);
+
+/** @brief Mutateur de Friction
+ *
+ * @param M MenuOfItem auquel s'applique la fonction
+ * @param Friction des animations des menus
+ **/
+void moiSetFriction(MenuOfItems* M, float Friction);
 
 /**@}*/
 
