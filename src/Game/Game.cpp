@@ -30,7 +30,7 @@ void gmInit(Game* G)
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
 	mnSetItemNormalZoomFactor(&G->GameMenu, 0.75f);
 
-	mnAddMenu(&G->GameMenu, "Main Menu", 8);
+	mnAddMenu(&G->GameMenu, "Main Menu", 9);
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
 	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
 	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10000000.f);
@@ -38,25 +38,26 @@ void gmInit(Game* G)
 	G->testy = 0.f;
 	MenuID MID = 1;
 	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "Input multiligne", ITEM_INPUT_MULTILINE, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Input value", ITEM_INPUT_VALUE, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "go to Options", ITEM_MENU_SWITCHER, NULL, &MID);
+	mnAddItemMenuSwitcher(&G->GameMenu, 0, "go to Options", 1);
 	mnAddItem(&G->GameMenu, 0, "Label 1", ITEM_LABEL, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "------------", ITEM_LABEL, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "------\n------", ITEM_LABEL, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
 
 	mnAddMenu(&G->GameMenu, "Options", 4);
 	mnAddItem(&G->GameMenu, 1, "Whaaaaaow", ITEM_BUTTON, NULL, NULL);
 	mnAddItem(&G->GameMenu, 1, "CraAAaAzYy!!", ITEM_BUTTON, NULL, NULL);
 	MID = 2;
-	mnAddItem(&G->GameMenu, 1, "A Secreeeet", ITEM_MENU_SWITCHER, NULL, &MID);
+	mnAddItemMenuSwitcher(&G->GameMenu, 1, "A Secreeeet", 2);
 	MID = 0;
-	mnAddItem(&G->GameMenu, 1, "Back", ITEM_MENU_SWITCHER, NULL, &MID);
+	mnAddItemMenuSwitcher(&G->GameMenu, 1, "Back", 0);
 	
 	mnAddMenu(&G->GameMenu, "", 3);
 	mnAddItem(&G->GameMenu, 2, "I HAVE NO TITLE!!!! HA HA HA!", ITEM_LABEL, NULL, NULL);
-	mnAddItem(&G->GameMenu, 2, "Go to main MENU!!!!!!", ITEM_MENU_SWITCHER, NULL, &MID);
+	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go to main MENU!!!!!!", 0);
 	MID=1;
-	mnAddItem(&G->GameMenu, 2, "Go Back!", ITEM_MENU_SWITCHER, NULL, &MID);
+	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go Back!", 1);
 
 
 	G->Window->setActive();

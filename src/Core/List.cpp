@@ -35,10 +35,30 @@ void delList(List* L)
 
 void lstAdd(List* L, Elem Data)
 {
-	Node* Node = newNode(Data, L->Last, NULL);
-	if(L->Count == 0) L->First = Node; else L->Last->Next = Node;
-	L->Last = Node;
+	Node* node = newNode(Data, L->Last, NULL);
+	if(L->Count == 0) L->First = node; else L->Last->Next = node;
+	L->Last = node;
 	L->Count += 1;
+}
+
+void lstAddAtBeginning(List* L, Elem Data)
+{
+	
+	if(L->Count == 0)
+	{
+		Node* node = newNode(Data, L->Last, NULL);
+		L->First = node;
+		L->Last = node;
+	}
+	else
+	{
+		Node* node = newNode(Data, NULL, L->First);
+		Node* First = L->First;
+		L->First = node;
+		First->Prev = node;
+	}
+	
+	L->Count++;
 }
 
 void lstDel(List* L, Elem E)

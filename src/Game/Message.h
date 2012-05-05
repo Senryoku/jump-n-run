@@ -11,6 +11,36 @@
  * @{
  */
 
+typedef MenuID MessageID;
+
+/** @brief Initialise Le manager de Messages
+ *
+ * @param MainMenu Menu principal (Il doit être désactivé lors des messages)
+ **/
+void msgInit(Menu* MainMenu);
+
+/** @brief Libère Le manager de Messages
+ *
+ **/
+void msgFree();
+
+/** @brief Crée un message simple et l'ajoute à la queue
+ *
+ * Ce message attend dans la queue pour être montré. pour le montrer directement en cachant le menu actuel utiliser msgForceToShow
+ * @param Title titre de la boîte de dialogue. Peut être nulle
+ * @param Texte du message
+ * @param Button Texte qui sera affiché dans le bouton pour fermer le message ex: Ok
+ * @param Force Force le menu à apparaître ou il est mis dans la queue
+ * @return MessageID du message qu'on vient de créer. Nécessaire si on veut faire des modifications ou récuperer des donnés (Pour des messages ayant des inputs)
+ **/
+MessageID msgShow(const char* Title, const char* Text, const char* Button, Bool Force);
+
+void msgUpdate();
+
+
+
+
+void CloseMessage();
 
 
 /**@}**/

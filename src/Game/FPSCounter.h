@@ -28,6 +28,12 @@ typedef struct {
  **/
 void fpsInit(FPSCounter* F);
 
+/** @brief Reset un FPSCounter
+ *
+ * @param F FPSCounter auquel s'applique la fonction
+ **/
+void fpsReset(FPSCounter* F);
+
 /** @brief Compte un Step pour le FPSCounter
  *
  * Cette fonction doit être appelée avant chanque Display

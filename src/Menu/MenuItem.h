@@ -20,6 +20,7 @@ typedef unsigned char ItemDirection; /* gauche ou droite pour incrémenter des v
 #define ITEM_LABEL 0x04 /**< Un objet qui ne peut pas être sélectioné */
 #define ITEM_INPUT_VALUE 0x05 /**< On écrit dans cet item que des chiffres ou un point */
 #define ITEM_MENU_SWITCHER 0x06 /**< Change d'un menu à un autre */
+#define ITEM_INPUT_MULTILINE 0x07 /**< On écrit dans cet item. on peut mettre des sauts à la ligne*/
 
 #define MOVE_NONE 0x00
 #define MOVE_LEFT 0x01

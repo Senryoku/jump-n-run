@@ -267,6 +267,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 
 			case ITEM_INPUT:
 			case ITEM_INPUT_VALUE:
+			case ITEM_INPUT_MULTILINE:
 				ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
 				/** @todo bug quand on fait backspace alors que la chaine est vide, étrange... */
 				break;
@@ -297,9 +298,38 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		else
 			selOffset = yoffset;
 
-		yoffset+=ItemText.getCharacterSize()*(*mniGetZoom(I));
+		
+		yoffset+=((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).y+ItemText.getCharacterSize())*(*mniGetZoom(I));
 
-		float Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+		float Width;
+		if (mniGetType(I) != ITEM_INPUT_MULTILINE)
+			Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+		else
+		{
+			float extrax = 0.f, calc;
+			//On cherche tous les sauts à la ligne pour trouver la ligne la plus longue
+			std::size_t pos = ItemText.getString().find("\n"), last_pos = 0;
+			while (pos != sf::String::InvalidPos)
+			{
+				calc = ((ItemText.findCharacterPos(pos)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+				if (calc > extrax)
+					extrax = calc;
+				last_pos = pos;
+				pos = ItemText.getString().find("\n", last_pos+1);
+				if (pos == last_pos)
+					pos = sf::String::InvalidPos;
+				
+			}
+			
+			calc = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+			if (calc > extrax)
+				extrax = calc;
+			
+			if (last_pos == 0 && pos == sf::String::InvalidPos) //Pas de saut à la ligne
+				Width = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+			else
+				Width = extrax;
+		}
 		if (Width>MaxTextWidth)
 			MaxTextWidth=Width;
 
@@ -329,6 +359,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 
 			case ITEM_INPUT:
 			case ITEM_INPUT_VALUE:
+			case ITEM_INPUT_MULTILINE:
 				ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
 				break;
 			case ITEM_VALUE:
@@ -343,8 +374,10 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		ItemText.setScale(1.f, 1.f);
 		ItemText.setPosition(Position.x+5.f, Position.y+selOffset+5.f);
 
-		yoffset+=mnGetItemHeight(M)*(*mniGetZoom(I));
 		ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
+		
+		yoffset+=((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).y+ItemText.getCharacterSize())*(*mniGetZoom(I));
+		
 
 		win.pushGLStates();
 		ItemText.setColor(sf::Color(0,0,0));
@@ -354,7 +387,35 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		win.draw(ItemText);
 		win.popGLStates();
 
-		float Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+		float Width;
+		if (mniGetType(I) != ITEM_INPUT_MULTILINE)
+			Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+		else
+		{
+			float extrax = 0.f, calc;
+			//On cherche tous les sauts à la ligne pour trouver la ligne la plus longue
+			std::size_t pos = ItemText.getString().find("\n"), last_pos = 0;
+			while (pos != sf::String::InvalidPos)
+			{
+				calc = ((ItemText.findCharacterPos(pos)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+				if (calc > extrax)
+					extrax = calc;
+				last_pos = pos;
+				pos = ItemText.getString().find("\n", last_pos+1);
+				if (pos == last_pos)
+					pos = sf::String::InvalidPos;
+				
+			}
+			
+			calc = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+			if (calc > extrax)
+				extrax = calc;
+			
+			if (last_pos == 0 && pos == sf::String::InvalidPos) //Pas de saut à la ligne
+				Width = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+			else
+				Width = extrax;
+		}
 		if (Width>MaxTextWidth)
 			MaxTextWidth=Width;
 

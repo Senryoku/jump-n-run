@@ -47,6 +47,10 @@ void delList(List* L);
 **/
 void lstAdd(List* L, Elem Data);
 
+/** @brief Ajoute un élément en début (enpile)
+ **/
+void lstAddAtBeginning(List* L, Elem Data);
+
 /** @brief Supprime l'élément passé en paramètre s'il se trouve dans la liste
  *
  * Complexité en O(n)
@@ -74,19 +78,19 @@ void lstRem(List* L, Node* N);
 
 /** @brief Renvoi vrai si la file est vide
 **/
-Bool lstEmpty(List*);
+Bool lstEmpty(List* L);
 
 /** @brief Retourne un pointeur vers le premier Node de la liste
 **/
-Node* lstFirst(List*);
+Node* lstFirst(List* L);
 
 /** @brief Retourne un pointeur vers le dernier Node de la liste
 **/
-Node* lstEnd(List*);
+Node* lstEnd(List* L);
 
 /** @brief Accesseur de Count
 **/
-unsigned int lstCount(List*);
+unsigned int lstCount(List* L);
 
 /** @brief Test de Regression
 **/

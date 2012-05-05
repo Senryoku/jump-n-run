@@ -17,7 +17,7 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 		*(unsigned short*)I->Data = *(unsigned short*)Data;
 	}
 	
-	if (I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
+	if (I->Type == ITEM_INPUT_MULTILINE || I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
 		I->Data = new std::string;
 	I->MaxValue = INFINITY;
 	I->MinValue = -INFINITY;
@@ -26,7 +26,7 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 void mniFree(MenuItem* I)
 {
 	free(I->Text);
-	if (I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
+	if (I->Type == ITEM_INPUT_MULTILINE || I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
 		delete (std::string*)I->Data;
 	if (I->Type == ITEM_MENU_SWITCHER)
 		free(I->Data);
@@ -133,6 +133,18 @@ void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsign
 				str->resize(str->size() - 1);
 			else if (KeyCode>=32 && KeyCode<=126) /* printable chars */
 				str->push_back(KeyCode);
+			//printf("str: %s\n", str->c_str());
+			break;
+		}
+		case ITEM_INPUT_MULTILINE:
+		{
+			std::string* str = (std::string*)I->Data;
+			if (Del && str->size()>0)
+				str->resize(str->size() - 1);
+			else if (KeyCode>=32 && KeyCode<=126) /* printable chars */
+				str->push_back(KeyCode);
+			else if (EnterPressed)
+				str->push_back('\n');
 			//printf("str: %s\n", str->c_str());
 			break;
 		}

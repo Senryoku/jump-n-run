@@ -47,6 +47,11 @@ ItemID mnAddItem(Menu* M, MenuID MID, const char* Text, ItemType Type, void (*Fu
 	return (moi->ItemsAdded-1);
 }
 
+ItemID mnAddItemMenuSwitcher(Menu* M, MenuID MID, const char* Text, MenuID MIDTo)
+{
+	return mnAddItem(M, MID, Text, ITEM_MENU_SWITCHER, NULL, &MIDTo);
+}
+
 void mnSetItemHeight(Menu* M, float ItemHeight)
 {
 	M->ItemHeight = ItemHeight;
@@ -106,7 +111,7 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 {
 	moiUpdateVisuals((MenuOfItems*)daGet(M->Menus, M->CurrentMenu), M->ItemSelectedZoomFactor, M->ItemNormalZoomFactor);
 	
-	M->SubAnim+=0.25f;
+	M->SubAnim+=0.35f;
 	if (M->SubAnim>=19.f)
 		M->SubAnim = 0.f;
 	
@@ -254,5 +259,5 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 
 float mnGetHeight(const Menu* M)
 {
-	return (float)(mnGetCurrentMenu(M)->ItemsAdded*M->ItemHeight*mnGetItemNormalZoomFactor(M));
+	return moiGetSize(mnGetCurrentMenu(M)).y;
 }

@@ -27,12 +27,11 @@ typedef unsigned short MenuID;
  mnSetItemSelectedZoomFactor(M, 1.f);
  mnSetItemNormalZoomFactor(M, 0.75f);
  
- MenuID Main; MenuID MenuToGoTo = 1; //1 sera le menu de play
+ MenuID Main;
  //On ajoute un menu avec 3 items
  Main = mnAddMenu(M, "Main Menu", 3);
- mnAddItem(M, Main, "Play", ITEM_MENU_SWITCHER, NULL, &MenuToGoTo);
- MenuToGoTo = 2; //2 sera le menu des options
- mnAddItem(M, Main, "Options", ITEM_MENU_SWITCHER, NULL, &MenuToGoTo);
+ mnAddItem(M, Main, "Play", ITEM_MENU_SWITCHER, NULL, 1); //1 Sera le menu de Play
+ mnAddItem(M, Main, "Options", ITEM_MENU_SWITCHER, NULL, 2); //2 sera le menu des options
  //mnAddItem(M, Main, "Exit", ITEM_BUTTON, &Exit, NULL); //Exit() est une fonction
  
  mnAddMenu(M, "Play", 5);
@@ -44,8 +43,7 @@ typedef unsigned short MenuID;
  mnAddItem(M, 1, "Input", ITEM_INPUT, NULL, NULL); //il alloue l'espace nécessaire pour l'input
  //Celui ci ne peut avoir qu'une valeur réelle
  mnAddItem(M, 1, "Input a real", ITEM_INPUT_VALUE, NULL, NULL); //il alloue l'espace nécessaire pour l'input
- MenuToGoTo = Main;
- mnAddItem(M, 1, "Back", ITEM_MENU_SWITCHER, NULL, &MenuToGoTo);
+ mnAddItem(M, 1, "Back", ITEM_MENU_SWITCHER, NULL, Main);
  
  // etc
 
@@ -93,7 +91,7 @@ void mnInit(Menu* M);
  **/
 void mnFree(Menu* M);
 
-/** @brief Libère un menu
+/** @brief Crée un menu
  *
  * @param M Menu à laquelle s'applique la fonction
  * @param Text texte du menu à ajouter (peut être nul)
@@ -102,7 +100,7 @@ void mnFree(Menu* M);
  **/
 MenuID mnAddMenu(Menu* M, const char* Text, unsigned short ItemCount);
 
-/** @brief Libère un menu
+/** @brief Crée un item pour un menu
  *
  * @param M Menu à laquelle s'applique la fonction
  * @param MID ID du menu auquel on ajoute l'item
@@ -113,6 +111,16 @@ MenuID mnAddMenu(Menu* M, const char* Text, unsigned short ItemCount);
  * @return ID de l'item ajouté (c'est l'indice de l'item dans le tableau du menu)
  **/
 ItemID mnAddItem(Menu* M, MenuID MID, const char* Text, ItemType Type, void (*Function)(void), void* Data);
+
+/** @brief Crée un item de ITEM_MENU_SWITCHER pour un menu
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @param MID ID du menu auquel on ajoute l'item
+ * @param Text texte de l'item
+ * @param MIDTo MenuID du menu vers lequel renvoie cet item
+ * @return ID de l'item ajouté (c'est l'indice de l'item dans le tableau du menu)
+ **/
+ItemID mnAddItemMenuSwitcher(Menu* M, MenuID MID, const char* Text, MenuID MIDTo);
 
 /** @brief Mutateur de ItemHeight
  *

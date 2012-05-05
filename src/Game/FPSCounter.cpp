@@ -9,6 +9,12 @@ void fpsInit(FPSCounter* F)
 	F->Clock.restart();
 }
 
+void fpsReset(FPSCounter* F)
+{
+	F->Frames = 0;
+	F->Clock.restart();
+}
+
 
 void fpsStep(FPSCounter* F)
 {
