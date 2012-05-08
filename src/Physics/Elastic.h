@@ -58,7 +58,7 @@ void elResolve(Elastic* E);
 /** @brief Retourne le vecteur formé par les deux points de la contrainte
  *
 **/
-Vec2 elVector(Elastic* E);
+Vec2 elVector(const Elastic* E);
 
 /** @brief Accesseur de V1
  *
@@ -73,7 +73,7 @@ Vertex* elGetV2(const Elastic* E);
 /** @brief Accesseur de Length
  *
 **/
-float elGetLength(Elastic* E);
+float elGetLength(const Elastic* E);
 
 /** @brief Mutateur de V1
  *

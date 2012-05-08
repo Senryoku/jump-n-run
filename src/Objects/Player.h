@@ -74,45 +74,89 @@ Rigid* plGetRdD(Player* P);
 Rigid* plGetRdL(Player* P);
 
 /* Mutateurs */
-void plCorrectPosition(Player*, Vec2);
+/** @brief Corrigie la position du joueur
+ *
+ * Ne modifie pas la vitesse actuelle
+ * @param P Joueur
+ * @param V Vec2, Vecteur de déplacement
+**/
+void plCorrectPosition(Player* P, Vec2 V);
+/** @brief Affecte une forme au joueur
+ *
+ * @param P Joueur
+ * @param Shape Polygon servant aux collisions
+**/
 void plSetShape(Player* P, Polygon* Shape);
 
 /** @brief Mise à jour du joueur (Physique, Informations...)
+ *
+ * @param P Joueur
+ * @param W Monde physique dans lequel évolue le joueur
 **/
 void plUpdate(Player* P, World* W);
 
 /** @brief Déplacement vers la droite
+ *
+ * @param P Joueur
 **/
 void plMoveR(Player* P);
 /** @brief Déplacement vers la gauche
+ *
+ * @param P Joueur
 **/
 void plMoveL(Player* P);
 /** @brief Rotation Droite
+ *
+ * @param P Joueur
 **/
 void plRotateR(Player* P);
 /** @brief Rotation Gauche
+ *
+ * @param P Joueur
 **/
 void plRotateL(Player* P);
 /** @brief Saut
+ *
+ * @param P Joueur
 **/
 void plJump(Player* P);
 /** @brief Reset du Saut
+ *
+ * @param P Joueur
 **/
 void plResetJump(Player* P);
 /** @brief Aide le joueur à se relever
+ *
+ * @param P Joueur
 **/
 void plGetUp(Player* P);
 
 /** @brief Attrape un vertex de la "main" droite
+ *
+ * @param P Joueur
+ * @param W Monde physique dans lequel évolue le joueur
+ * @param MouseX Position de la souris dans le Monde
+ * @param MouseY Position de la souris dans le Monde
 **/
 void plGrabR(Player* P, World* W, float MouseX, float MouseY);
 /** @brief Relâche un vertex de la "main" droite
+ *
+ * @param P Joueur
+ * @param W Monde physique dans lequel évolue le joueur
 **/
 void plReleaseR(Player* P, World* W);
 /** @brief Attrape un vertex de la "main" gauche
+ *
+ * @param P Joueur
+ * @param W Monde physique dans lequel évolue le joueur
+ * @param MouseX Position de la souris dans le Monde
+ * @param MouseY Position de la souris dans le Monde
 **/
 void plGrabL(Player* P, World* W, float MouseX, float MouseY);
 /** @brief Relâche un vertex de la "main" gauche
+ *
+ * @param P Joueur
+ * @param W Monde physique dans lequel évolue le joueur
 **/
 void plReleaseL(Player* P, World* W);
 

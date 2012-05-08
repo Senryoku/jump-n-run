@@ -4,6 +4,7 @@
 #include <Core/DynArr.h>
 #include <Core/Vec2.h>
 #include <Core/Tools.h>
+#include <string.h>
 #include <string>
 
 /** @defgroup menu Menu
@@ -41,7 +42,7 @@ typedef struct
 	float Incr; /**< incrémentation pour les ITEM_VALUE **/
 	float MinValue; /**< Valeur minimale pour les ITEM_VALUE **/
 	float MaxValue; /**< Valeur maximale pour les ITEM_VALUE **/
-	
+
 } MenuItem;
 
 /**

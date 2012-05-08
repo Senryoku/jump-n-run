@@ -47,7 +47,7 @@ void elResolve(Elastic* E)
 	vxApplyForce(E->V1, vec2Prod(Vect, factor*(vxIsFixe(E->V2)?(1-MassFactor):1)), 0);
 }
 
-Vec2 elVector(Elastic* E)
+Vec2 elVector(const Elastic* E)
 {
 	return vec2Sub(vxGetPosition(E->V2), vxGetPosition(E->V1));
 }
@@ -72,7 +72,7 @@ void elSetV2(Elastic* E, Vertex* V)
 	E->V2 = V;
 }
 
-float elGetLength(Elastic* E)
+float elGetLength(const Elastic* E)
 {
 	return E->Length;
 }

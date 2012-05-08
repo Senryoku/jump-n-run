@@ -105,8 +105,6 @@
 		<Unit filename="src\Physics\World.h" />
 		<Unit filename="src\Rendering\OpenGL.cpp" />
 		<Unit filename="src\Rendering\OpenGL.h" />
-		<Unit filename="src\Rendering\Textures.cpp" />
-		<Unit filename="src\Rendering\Textures.h" />
 		<Unit filename="src\Score\Score.cpp" />
 		<Unit filename="src\Score\Score.h" />
 		<Unit filename="src\Test.cpp" />

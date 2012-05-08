@@ -82,14 +82,14 @@ void delPolygon(Polygon* P);
  * @param V3 Troisième Vertex
  * @param V4 Quatrième Vertex
 **/
-Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4);
+Polygon* polyRectangle(const Vertex* V1, const Vertex* V2, const Vertex* V3, const Vertex* V4);
 
 /** @brief Teste la convexité (validité) du polygon
  *
  * @param P Polygon à tester
  * @return Vrai (1) si P est convexe, 0 sinon
 **/
-Bool polyIsConvexe(Polygon* P);
+Bool polyIsConvexe(const Polygon* P);
 
 void polyUpdateGridPosition(Polygon* P, unsigned int Left, unsigned int Top, unsigned int Right, unsigned int Bottom);
 
@@ -152,7 +152,7 @@ typedef struct
 /** @brief Retourne une la bounding box du polygone
  * @return BBox
  **/
-BBox polyGetBBox(Polygon* P);
+BBox polyGetBBox(const Polygon* P);
 
 /** @brief Retourne une struct CollisionInfo vide
  *
@@ -179,7 +179,7 @@ void polyHandleCollision(CollisionInfo Info);
  *
  * @return Vrai si le Vertex est dans le Polygon
 **/
-Bool polyIsInside(Polygon* P, Vertex* V);
+Bool polyIsInside(const Polygon* P, const Vertex* V);
 
 /** @brief Projete un Polygon sur un axe
  *
@@ -190,14 +190,14 @@ Bool polyIsInside(Polygon* P, Vertex* V);
  * @param Max Deuxième borne de l'intervalle résultat
  * @param Axis Axe normalisé sur lequel projeter
 **/
-void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis);
+void polyProject(const Polygon* P, float* Min, float* Max, Vec2 Axis);
 
 /** @brief Calcul le centre (non pondéré) des points de P
  *
  * Isobarycentre (Rien à voir avec P->Center qui lui sert aux contraintes internes)
  * @param P Polygon dont on cherche le centre
 **/
-Vec2 polyComputeCenter(Polygon* P);
+Vec2 polyComputeCenter(const Polygon* P);
 
 /** @brief Appelle rdResolve pour chaque contrainte du Polygon
  *
@@ -209,7 +209,7 @@ void polyResolve(Polygon* P);
  *
  * @param P Polygon
 **/
-Bool polyIsFixe(Polygon* P);
+Bool polyIsFixe(const Polygon* P);
 
 /** @brief Mutateur de Fixe
  *
@@ -221,31 +221,31 @@ void polySetFixe(Polygon* P, Bool B);
 
 /** @brief Accesseur de Center (Contraintes internes)
 **/
-Vertex* polyGetCenter(Polygon* P);
+Vertex* polyGetCenter(const Polygon* P);
 
 /** @brief Retourne le nombre de Vertices composants le polygone
 **/
-unsigned int polyGetVxCount(Polygon* P);
+unsigned int polyGetVxCount(const Polygon* P);
 
 /** @brief Retourne le Vertex i
 **/
-Vertex* polyGetVertex(Polygon* P, unsigned int i);
+Vertex* polyGetVertex(const Polygon* P, unsigned int i);
 
 /** @brief Retourne le nombre de Rigids composants le contour du polygone
 **/
-unsigned int polyGetRdCount(Polygon* P);
+unsigned int polyGetRdCount(const Polygon* P);
 
 /** @brief Retourne le Rigid i
 **/
-Rigid* polyGetRigid(Polygon* P, unsigned int i);
+Rigid* polyGetRigid(const Polygon* P, unsigned int i);
 
 /** @brief Retourne le nombre de Rigids internes composants le contour du polygone
 **/
-unsigned int polyGetInternalRdCount(Polygon* P);
+unsigned int polyGetInternalRdCount(const Polygon* P);
 
 /** @brief Retourne le Rigid interne i
 **/
-Rigid* polyGetInternalRigid(Polygon* P, unsigned int i);
+Rigid* polyGetInternalRigid(const Polygon* P, unsigned int i);
 
 /** @brief Applique une force à tous les vertices du Polygon
  *
@@ -267,7 +267,7 @@ void polySetSpeed(Polygon* P, Vec2 Speed);
  * @param P Polygon
  * @return vitesse
  **/
-Vec2 polyGetSpeed(Polygon* P);
+Vec2 polyGetSpeed(const Polygon* P);
 
 /** @brief Test de régression
  *

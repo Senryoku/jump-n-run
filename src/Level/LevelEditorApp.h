@@ -5,6 +5,7 @@
 #include <Level/LevelEditor.h>
 #include <Game/FPSCounter.h>
 #include <Audio/SoundManager.h>
+#include <Menu/Menu.h>
 
 /** @defgroup LevelEditorApp
  *
@@ -20,6 +21,8 @@ typedef struct
 	float WindowWidth;
 	float WindowHeight;
 	char WorkingPath[255];
+	Menu M;
+	bool MenuUsed;
 } LevelEditorApp;
 
 /** @brief Initialisation de LelvelEditorApp
@@ -32,7 +35,6 @@ void appInit(LevelEditorApp* App);
  * Est appellé par appInit
 **/
 void appWindowInit(LevelEditorApp* App);
-
 
 /** @brief Libère les ressources  utilisées par LevelEditorApp
  *

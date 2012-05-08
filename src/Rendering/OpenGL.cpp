@@ -204,24 +204,24 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		I = moiGetItem(moi, i);
 		heigth+=mnGetItemHeight(M)*(*mniGetZoom(I));
 	}
-	
+
 	glTranslatef(ViewX, ViewY, 0.f);
-	
+
 	Size.x = MAX(TitleWidth+10.f, Size.x);
-	
+
 	Vec2 TitleSize = vec2(TitleWidth, 60.f);
 	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
-	
+
 	if (strcmp(moiGetText(moi), "")!=0)
 		glDrawTitleBox(TitlePos, TitleSize);
 
 	glDrawBox(Position, Size, (int)M->SubAnim);
-	
-		
+
+
 	//glTranslatef(13.f, -13.f, 0.f);
 
 	//On dessine le carré, ça sera fai avec des images plus tard
-	
+
 	/*glBegin(GL_QUADS);
 	glVertex2f(Position.x, Position.y-5.f);
 	glVertex2f(Position.x + Size.x, Position.y-5.f);
@@ -229,14 +229,14 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	glVertex2f(Position.x, Position.y + heigth);
 	glEnd();*/
 
-	
-	
+
+
 	if (strcmp(moiGetText(moi), "")!=0)
 	{
-		
+
 		ItemText.setScale(mnGetItemSelectedZoomFactor(M), mnGetItemSelectedZoomFactor(M));
 		ItemText.setPosition(TitlePos.x, TitlePos.y+13.f);
-		
+
 		win.pushGLStates();
 		ItemText.setColor(sf::Color(0,0,0));
 		win.draw(ItemText);
@@ -245,7 +245,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		win.draw(ItemText);
 		win.popGLStates();
 	}
-	
+
 
 	float yoffset = 5.f, selOffset;
 	for (i=0; i<moiGetItemCount(moi); i++)
@@ -298,7 +298,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		else
 			selOffset = yoffset;
 
-		
+
 		yoffset+=((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).y+ItemText.getCharacterSize())*(*mniGetZoom(I));
 
 		float Width;
@@ -318,13 +318,13 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 				pos = ItemText.getString().find("\n", last_pos+1);
 				if (pos == last_pos)
 					pos = sf::String::InvalidPos;
-				
+
 			}
-			
+
 			calc = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
 			if (calc > extrax)
 				extrax = calc;
-			
+
 			if (last_pos == 0 && pos == sf::String::InvalidPos) //Pas de saut à la ligne
 				Width = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
 			else
@@ -334,8 +334,8 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			MaxTextWidth=Width;
 
 		mnSetItemHeight(M, ItemText.getCharacterSize());
-		
-		
+
+
 
 	}
 	Size.y = yoffset+10.f;
@@ -375,9 +375,9 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		ItemText.setPosition(Position.x+5.f, Position.y+selOffset+5.f);
 
 		ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
-		
+
 		yoffset+=((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).y+ItemText.getCharacterSize())*(*mniGetZoom(I));
-		
+
 
 		win.pushGLStates();
 		ItemText.setColor(sf::Color(0,0,0));
@@ -404,13 +404,13 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 				pos = ItemText.getString().find("\n", last_pos+1);
 				if (pos == last_pos)
 					pos = sf::String::InvalidPos;
-				
+
 			}
-			
+
 			calc = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
 			if (calc > extrax)
 				extrax = calc;
-			
+
 			if (last_pos == 0 && pos == sf::String::InvalidPos) //Pas de saut à la ligne
 				Width = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
 			else
@@ -478,20 +478,19 @@ void glDrawFPS(sf::RenderTarget& win, const std::string& FPS)
 	win.draw(Text);
 	Text.move(0.f, 1.5f);
 	win.draw(Text);
-	
+
 	Text.setColor(sf::Color::White);
 	Text.move(0.f, -1.5f);
 	win.draw(Text);
 	win.popGLStates();
-
 }
 
 void glDrawPolyFromList(List* L, Vec2 MousePos)
 {
 	if (lstCount(L) <= 0) return;
-	
+
 	Node* it = lstFirst(L);
-	
+
 	if (lstCount(L) > 1)
 	{
 		glBegin(GL_POLYGON);
@@ -512,7 +511,7 @@ void glDrawPolyFromList(List* L, Vec2 MousePos)
 		glVertex2f(MousePos.x, MousePos.y);
 		glEnd();
 	}
-	
+
 }
 
 
@@ -522,204 +521,204 @@ void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, txBoxCorner);
-	
+
 	//TopLeft
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-13.f, Position.y);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 2.f, Position.y);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 2.f, Position.y + 11.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-13.f, Position.y + 11.f);
-	
-	
+
+
 	//TopRight
-	
+
 	glTexCoord2f(-1.f, 0.f);
 	glVertex2f(Position.x + Size.x , Position.y);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x + Size.x - 11.f, Position.y);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x + Size.x - 11.f, Position.y + 11.f);
-	
+
 	glTexCoord2f(-1.f, 1.f);
 	glVertex2f(Position.x + Size.x, Position.y + 11.f);
-	
-	
+
+
 	//BottomLeft
-	
+
 	glTexCoord2f(0.f, -1.f);
 	glVertex2f(Position.x-13.f, Position.y+Size.y+13.f);
-	
+
 	glTexCoord2f(1.f, -1.f);
 	glVertex2f(Position.x - 2.f, Position.y+Size.y+13.f);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 2.f, Position.y + Size.y+2.f);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-13.f, Position.y +Size.y+2.f);
-	
-	
+
+
 	//BottomRight
-	
+
 	glTexCoord2f(-1.f, -1.f);
 	glVertex2f(Position.x+Size.x, Position.y+Size.y+13.f);
-	
+
 	glTexCoord2f(0.f, -1.f);
 	glVertex2f(Position.x +Size.x-11.f, Position.y+Size.y+13.f);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x +Size.x-11.f, Position.y + Size.y+2.f);
-	
+
 	glTexCoord2f(-1.f, 0.f);
 	glVertex2f(Position.x+Size.x, Position.y +Size.y+2.f);
-	
+
 	glEnd();
-	
+
 	//On dessine le Side
 	glBindTexture(GL_TEXTURE_2D, txBoxSide);
-	
+
 	//Left
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-13.f, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 2.f, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 2.f, Position.y +Size.y +2.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-13.f, Position.y +Size.y+2.f);
-	
+
 	//Right
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x-11.f+Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x +Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x +Size.x, Position.y +Size.y +2.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x-11.f+Size.x, Position.y +Size.y+2.f);
-	
-	
+
+
 	//Top
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y +11.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y +11.f);
-	
+
 	//Bottom
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y+Size.y+2.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y+Size.y+2.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y +13.f+Size.y);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y +13.f+Size.y);
-	
+
 	glEnd();
-	
+
 	//Shine
-	
-	
+
+
 	//back anim 800x40
-	
+
 	glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
-	
+
 	glBindTexture(GL_TEXTURE_2D, txBoxBackAnim);
-	
+
 	// when texture area is large, bilinear filter the original
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-	
+
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f((SubAnim)/20.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y+11.f);
-	
+
 	glTexCoord2f((SubAnim+1)/20.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f((SubAnim+1)/20.f, (Size.y-9.f)/40.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y +Size.y+2.f);
-	
+
 	glTexCoord2f((SubAnim)/20.f, (Size.y-9.f)/40.f);
 	glVertex2f(Position.x-2.f, Position.y +Size.y+2.f);
-	 
-	
-	
+
+
+
 	glEnd();
-	
+
 	//Back
 	glBindTexture(GL_TEXTURE_2D, txBoxShadow);
-	
+
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y +Size.y+2.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y +Size.y+2.f);
-	 
-	
-	
+
+
+
 	glEnd();
-	
+
 	//gloss
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glBindTexture(GL_TEXTURE_2D, txBoxGloss);
-	
+
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y + MIN(50.f, Size.y-11.f) +11.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y + MIN(50.f, Size.y-11.f)+ 11.f);
-	
-	
+
+
 	glEnd();
-	
-	
+
+
 	glDisable(GL_TEXTURE_2D);
 
 }
@@ -730,133 +729,133 @@ void glDrawTitleBox(Vec2 Position, Vec2 Size)
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, txBoxCorner);
-	
+
 	//TopLeft
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-13.f, Position.y);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 2.f, Position.y);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 2.f, Position.y + 11.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-13.f, Position.y + 11.f);
-	
-	
+
+
 	//TopRight
-	
+
 	glTexCoord2f(-1.f, 0.f);
 	glVertex2f(Position.x + Size.x , Position.y);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x + Size.x - 11.f, Position.y);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x + Size.x - 11.f, Position.y + 11.f);
-	
+
 	glTexCoord2f(-1.f, 1.f);
 	glVertex2f(Position.x + Size.x, Position.y + 11.f);
-	
-	
-	
+
+
+
 	glEnd();
-	
+
 	//On dessine le Side
 	glBindTexture(GL_TEXTURE_2D, txBoxSide);
-	
+
 	//Left
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-13.f, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 2.f, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 2.f, Position.y +Size.y +2.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-13.f, Position.y +Size.y+2.f);
-	
+
 	//Right
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x-11.f+Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x +Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x +Size.x, Position.y +Size.y +2.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x-11.f+Size.x, Position.y +Size.y+2.f);
-	
-	
+
+
 	//Top
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y +11.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y +11.f);
 
 	glEnd();
-	
+
 	//back anim 800x40
-	
+
 	glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
-	
+
 	//Back
 	glBindTexture(GL_TEXTURE_2D, txBoxShadow);
-	
+
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y +Size.y+2.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y +Size.y+2.f);
-	
-	
+
+
 	glEnd();
-	
+
 	//gloss
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glBindTexture(GL_TEXTURE_2D, txBoxGloss);
-	
+
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 0.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y+11.f);
-	
+
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x - 11.f+Size.x, Position.y + MIN(50.f, Size.y-11.f) +11.f);
-	
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y + MIN(50.f, Size.y-11.f)+ 11.f);
-	
-	
+
+
 	glEnd();
-	
-	
+
+
 	glDisable(GL_TEXTURE_2D);
 }

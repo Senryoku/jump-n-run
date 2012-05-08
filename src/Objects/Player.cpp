@@ -221,10 +221,10 @@ void plMoveR(Player* P)
 	{
 		if((fabs((vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL))).y) < 30.f))
 		{
-			polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 2.f), 0);
+			polyApplyForce(P->Shape, vec2(2.f, 0.f), 0);
 		}
 	} else {
-		polyApplyForce(P->Shape, vec2Prod(P->GroundVec, 0.5f), 0);
+		polyApplyForce(P->Shape, vec2(0.5f, 0.f), 0);
 	}
 }
 

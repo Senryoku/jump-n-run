@@ -16,16 +16,16 @@ void appInit(LevelEditorApp* App)
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
 	sndmInit();
-	
-	/*sndmLoadMusicFile("music0", "data/music.ogg");
-	sndmLoadMusicFile("music1", "data/music1.ogg");
-	sndmLoadMusicFile("music2", "data/music2.ogg");
-	sndmLoadMusicFile("music3", "data/music3.ogg");
-	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
-	 */
+//
+//	sndmLoadMusicFile("music0", "data/music.ogg");
+//	sndmLoadMusicFile("music1", "data/music1.ogg");
+//	sndmLoadMusicFile("music2", "data/music2.ogg");
+//	sndmLoadMusicFile("music3", "data/music3.ogg");
+//	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
+//
+//
+//	sndmPlayMusic("music0");
 
-	//sndmPlayMusic("music3");
-	 
 	//sndmPlay("meat");
 	//Temporel
 	txBoxCorner = glTexLoad("data/s_boxcorner.png");
@@ -34,6 +34,8 @@ void appInit(LevelEditorApp* App)
 	txBoxBackAnim = glTexLoad("data/box_anim_strip20.png");
 	txBoxGloss = glTexLoad("data/s_box_gloss.png");
 	FntMenu.loadFromFile("data/fnt_menu.ttf");
+
+	App->MenuUsed = 0;
 }
 
 void appWindowInit(LevelEditorApp* App)
@@ -222,7 +224,18 @@ void appRun(LevelEditorApp* App)
 						/** @todo Si une autre touche est appuyé avec le clic droit
 						 * (ex : E pour Elastic), faire appel à wdGetNearestElastic
 						 * et faire apparaître un menu pour l'édition de cet Elastic **/
-						lvledGrabEl(&App->Led);
+						//lvledGrabEl(&App->Led);
+
+						if(App->MenuUsed) mnFree(&App->M);
+
+						mnInit(&App->M);
+						mnSetItemSelectedZoomFactor(&App->M, 1.f);
+						mnSetItemNormalZoomFactor(&App->M, 0.75f);
+						MenuID VxMenu;
+						VxMenu = mnAddMenu(&App->M, "Vertex Edition", 1);
+						mnAddItem(&App->M, 0, "Input a real", ITEM_INPUT_VALUE, NULL, NULL);
+
+						App->MenuUsed = 1;
 						break;
 					default :
 						break;
@@ -319,7 +332,7 @@ void appRun(LevelEditorApp* App)
 						else DispDebug = !DispDebug;
 						break;
 					case sf::Keyboard::X :
-						//plGetUp(App->Led.Lvl->P1);
+						plGetUp(App->Led.Lvl->P1);
 						break;
 					case sf::Keyboard::V :
 						DispL1 = !DispL1;
@@ -492,7 +505,7 @@ void appRun(LevelEditorApp* App)
 		/* == Mise à jour du niveau == */
 		lvlUpdate(App->Led.Lvl, Paused);
 
-		sndmUpdate();
+		//sndmUpdate();
 
 		/*
 		 //Ça c'est la façon manuelle, j'ai cependant rajouté dans SoundManager des trucs pour faire que ça se fasse seul. Je rajouterai d'autre choses pour le personaliser un peu plus tard
@@ -558,6 +571,11 @@ void appRun(LevelEditorApp* App)
 		OldMouseX = MouseX;
 		OldMouseY = MouseY;
 
+		if(App->MenuUsed)
+		{
+			mnUpdate(&App->M, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&App->M) - 100.f));
+			glDrawMenu(App->Window, &App->M, ViewX, ViewY);
+		}
 		//glDrawFPS(App->Window, fpsGetString(&fps));
 
 		// Update the App->Window

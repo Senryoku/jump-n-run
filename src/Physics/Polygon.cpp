@@ -131,7 +131,7 @@ void polyAddInternal(Polygon* P, unsigned int V1, unsigned int V2, float Length)
 										Length));
 }
 
-Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4)
+Polygon* polyRectangle(const Vertex* V1, const Vertex* V2, const Vertex* V3, const Vertex* V4)
 {
 	Polygon* newRectangle = newPolygon(4, V1, V2, V3, V4);
 	polyAddInternal(newRectangle, 0, 2, -1);
@@ -139,7 +139,7 @@ Polygon* polyRectangle(Vertex* V1, Vertex* V2, Vertex* V3, Vertex* V4)
 	return newRectangle;
 }
 
-Bool polyIsConvexe(Polygon* P)
+Bool polyIsConvexe(const Polygon* P)
 {
 	if(daGetSize(&P->Rigids) < 2) return 1;
 
@@ -186,7 +186,7 @@ Polygon* polyNGone(List L)
 	return newNGone;
 }
 
-void polyProject(Polygon* P, float* Min, float* Max, Vec2 Axis)
+void polyProject(const Polygon* P, float* Min, float* Max, Vec2 Axis)
 {
 	unsigned int i;
 	float tmp;
@@ -334,7 +334,7 @@ void polyHandleCollision(CollisionInfo Info)
 												   CorrectionFactor*PositionOnEdge*0.5f));
 }
 
-Bool polyIsInside(Polygon* P, Vertex* V)
+Bool polyIsInside(const Polygon* P, const Vertex* V)
 {
 	unsigned int i;
 	Rigid* Edge;
@@ -362,7 +362,7 @@ Bool polyIsInside(Polygon* P, Vertex* V)
 	return true;
 }
 
-Vec2 polyComputeCenter(Polygon* P)
+Vec2 polyComputeCenter(const Polygon* P)
 {
 	unsigned int i;
 	Vec2 Center = vxGetPosition((Vertex*)daGet(&P->Vertices, 0));
@@ -392,42 +392,42 @@ void polySetCollided(Polygon* P, Bool Collided)
 	P->Collided=Collided;
 }
 
-Bool polyIsFixe(Polygon* P)
+Bool polyIsFixe(const Polygon* P)
 {
 	return P->Fixe;
 }
 
-Vertex* polyGetCenter(Polygon* P)
+Vertex* polyGetCenter(const Polygon* P)
 {
 	return P->Center;
 }
 
-unsigned int polyGetVxCount(Polygon* P)
+unsigned int polyGetVxCount(const Polygon* P)
 {
 	return daGetSize(&P->Vertices);
 }
 
-Vertex* polyGetVertex(Polygon* P, unsigned int i)
+Vertex* polyGetVertex(const Polygon* P, unsigned int i)
 {
 	return (Vertex*) daGet(&P->Vertices, i);
 }
 
-unsigned int polyGetRdCount(Polygon* P)
+unsigned int polyGetRdCount(const Polygon* P)
 {
 	return daGetSize(&P->Rigids);
 }
 
-Rigid* polyGetRigid(Polygon* P, unsigned int i)
+Rigid* polyGetRigid(const Polygon* P, unsigned int i)
 {
 	return (Rigid*) daGet(&P->Rigids, i);
 }
 
-unsigned int polyGetInternalRdCount(Polygon* P)
+unsigned int polyGetInternalRdCount(const Polygon* P)
 {
 	return daGetSize(&P->InternalRigids);
 }
 
-Rigid* polyGetInternalRigid(Polygon* P, unsigned int i)
+Rigid* polyGetInternalRigid(const Polygon* P, unsigned int i)
 {
 	return (Rigid*) daGet(&P->InternalRigids, i);
 }
@@ -462,12 +462,12 @@ void polySetSpeed(Polygon* P, Vec2 Speed)
 	}
 }
 
-Vec2 polyGetSpeed(Polygon* P)
+Vec2 polyGetSpeed(const Polygon* P)
 {
 	return vec2Sub(((Vertex*)daGet(&P->Vertices, 0))->Position, ((Vertex*)daGet(&P->Vertices, 0))->OldPos);
 }
 
-BBox polyGetBBox(Polygon* P)
+BBox polyGetBBox(const Polygon* P)
 {
 	BBox B; unsigned int i;
 	B.Left = B.Right = vxGetPosition((Vertex*)daGet(&P->Vertices, 0)).x;
