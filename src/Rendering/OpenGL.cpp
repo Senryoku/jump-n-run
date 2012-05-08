@@ -183,9 +183,14 @@ void glDispTexPoly(Texture T, Polygon* P, List* L)
 
 void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 {
+	
 	MenuOfItems* moi = mnGetCurrentMenu(M);
 	Vec2 Size = moiGetSize(moi),
 	Position = mnGetPosition(M);
+	
+	if (Position.y+Size.y+20.f <= 0.f) // Pas besoin de dessiner
+		return;
+	
 	unsigned short i;
 	MenuItem* I;
 	float MaxTextWidth = 0.f;
@@ -621,10 +626,10 @@ void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x-2.f, Position.y);
 
 	glTexCoord2f(0.f, 0.f);
-	glVertex2f(Position.x - 11.f+Size.x, Position.y);
+	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y);
 
 	glTexCoord2f(1.f, 0.f);
-	glVertex2f(Position.x - 11.f+Size.x, Position.y +11.f);
+	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y +11.f);
 
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y +11.f);
@@ -634,10 +639,10 @@ void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x-2.f, Position.y+Size.y+2.f);
 
 	glTexCoord2f(1.f, 1.f);
-	glVertex2f(Position.x - 11.f+Size.x, Position.y+Size.y+2.f);
+	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y+Size.y+2.f);
 
 	glTexCoord2f(0.f, 1.f);
-	glVertex2f(Position.x - 11.f+Size.x, Position.y +13.f+Size.y);
+	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y +13.f+Size.y);
 
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y +13.f+Size.y);
@@ -801,10 +806,10 @@ void glDrawTitleBox(Vec2 Position, Vec2 Size)
 	glVertex2f(Position.x-2.f, Position.y);
 
 	glTexCoord2f(0.f, 0.f);
-	glVertex2f(Position.x - 11.f+Size.x, Position.y);
+	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y);
 
 	glTexCoord2f(1.f, 0.f);
-	glVertex2f(Position.x - 11.f+Size.x, Position.y +11.f);
+	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y +11.f);
 
 	glTexCoord2f(1.f, 1.f);
 	glVertex2f(Position.x-2.f, Position.y +11.f);

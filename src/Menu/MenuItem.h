@@ -38,6 +38,7 @@ typedef struct
 	float Zoom; /**< facteur de zoom avec lequel il est dessiné **/
 	ItemType Type; /**< type d'item bouton, input, percentage **/
 	void (*Function)(void); /**< Fonction de l'item **/
+	void (*FunctionArg)(void*); /**< Fonction avec argument de l'item **/
 	void* Data; /**< Data qui peut être modifié par l'utilisateur **/
 	float Incr; /**< incrémentation pour les ITEM_VALUE **/
 	float MinValue; /**< Valeur minimale pour les ITEM_VALUE **/
@@ -54,6 +55,16 @@ typedef struct
  * @param Data pointeur vers des données
  */
 void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void), void* Data);
+
+/**
+ * @brief Constructeur
+ * @param I MenuItem auquel s'applique la fonction
+ * @param Text texte de l'item
+ * @param Type type de l'item
+ * @param Function fonction avec argument associée à l'item
+ * @param Data pointeur vers des données
+ */
+void mniInitWithArg(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void*), void* Data);
 
 /**
  * @brief Destructeur
@@ -145,7 +156,7 @@ float mniGetInputValue(const MenuItem* I);
  * @brief Lance la fonction associée à l'item
  * @param I MenuItem auquel s'applique la fonction
  */
-void mniRunFunction(MenuItem* I);
+void mniRunFunction(MenuItem* I, void* Arg);
 
 /**
  * @brief gère l'entrée de l'item selon son type
@@ -154,7 +165,7 @@ void mniRunFunction(MenuItem* I);
  * @param I MenuItem aquel s'applique la fonction
  *
  */
-void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del);
+void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del, void* Arg);
 
 void mniRegressionTest(void);
 

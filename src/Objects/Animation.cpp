@@ -356,54 +356,229 @@ void aniAddAngleState(Animation* A, const AnimAngles* Angles)
 void aniUpdate(Animation* A, SPlayer* P, float Step)
 {
 	unsigned char TriggerCount = 0;
+	float prevdt = 0.5f, dt = 0.5f;
+	/**
+	 @todo la tête on s'en fout un peu vu que l'on dessine quelquechose dessus, elle n'est importante que lorsque l'on fait un ragdoll, et dans ce cas l'animation n'affecte plus le joueur 
+	 */
+	
 	/* Mise à jour des angles ou des positions */
 	if (A->Type == ANIM_POSITIONS)
 	{
 		AnimPositions* Pos;
 		Pos = (AnimPositions*) daGet(A->States, A->CurrentState);
 		
+		Bool VxResolved = FALSE;
+		
 		if (Pos->Head.x == Pos->Head.x)
+		{
 			Wobble(&A->Positions.Head.x, Pos->Head.x, A->Force, A->Friction, &A->Spd[0]);
+			//vxsetpos
+		}
+		else
+		{
+			vxResolve(P->HeadLeft, prevdt, dt);
+			vxResolve(P->HeadRight, prevdt, dt);
+			VxResolved = TRUE;
+		}
+			
+			
 		if (Pos->Head.y == Pos->Head.y)
+		{
 			Wobble(&A->Positions.Head.y, Pos->Head.y, A->Force, A->Friction, &A->Spd[1]);
+		}
+		else if (!VxResolved)
+		{
+			vxResolve(P->HeadLeft, prevdt, dt);
+			vxResolve(P->HeadRight, prevdt, dt);
+		}
+		
+		VxResolved = FALSE;
 		if (Pos->Neck.x == Pos->Neck.x)
+		{
 			Wobble(&A->Positions.Neck.x, Pos->Neck.x, A->Force, A->Friction, &A->Spd[2]);
+			vxSetX(P->Neck, A->Positions.Neck.x);
+		}
+		else
+		{
+			vxResolve(P->Neck, prevdt, dt);
+			VxResolved = TRUE;
+		}
+
 		if (Pos->Neck.y == Pos->Neck.y)
+		{
 			Wobble(&A->Positions.Neck.y, Pos->Neck.y, A->Force, A->Friction, &A->Spd[3]);
+			vxSetY(P->Neck, A->Positions.Neck.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->Neck, prevdt, dt);
 		
+		
+		VxResolved = FALSE;
 		if (Pos->LeftArm1.x == Pos->LeftArm1.x)
+		{
 			Wobble(&A->Positions.LeftArm1.x, Pos->LeftArm1.x, A->Force, A->Friction, &A->Spd[4]);
-		if (Pos->LeftArm1.y == Pos->LeftArm1.y)
-			Wobble(&A->Positions.LeftArm1.y, Pos->LeftArm1.y, A->Force, A->Friction, &A->Spd[5]);
-		if (Pos->LeftArm2.x == Pos->LeftArm2.x)
-			Wobble(&A->Positions.LeftArm2.x, Pos->LeftArm2.x, A->Force, A->Friction, &A->Spd[6]);
-		if (Pos->LeftArm2.y == Pos->LeftArm2.y)
-			Wobble(&A->Positions.LeftArm2.y, Pos->LeftArm2.y, A->Force, A->Friction, &A->Spd[7]);
-		if (Pos->RightArm1.x == Pos->RightArm1.x)
-			Wobble(&A->Positions.RightArm1.x, Pos->RightArm1.x, A->Force, A->Friction, &A->Spd[8]);
-		if (Pos->RightArm1.y == Pos->RightArm1.y)
-			Wobble(&A->Positions.RightArm1.y, Pos->RightArm1.y, A->Force, A->Friction, &A->Spd[9]);
-		if (Pos->RightArm2.x == Pos->RightArm2.x)
-			Wobble(&A->Positions.RightArm2.x, Pos->RightArm2.x, A->Force, A->Friction, &A->Spd[10]);
-		if (Pos->RightArm2.y == Pos->RightArm2.y)
-			Wobble(&A->Positions.RightArm2.y, Pos->RightArm2.y, A->Force, A->Friction, &A->Spd[11]);
+			vxSetX(P->LeftArm1, A->Positions.LeftArm1.x);
+		}
+		else
+		{
+			vxResolve(P->LeftArm1, prevdt, dt);
+			VxResolved = TRUE;
+		}
 		
+		if (Pos->LeftArm1.y == Pos->LeftArm1.y)
+		{
+			Wobble(&A->Positions.LeftArm1.y, Pos->LeftArm1.y, A->Force, A->Friction, &A->Spd[5]);
+			vxSetY(P->LeftArm1, A->Positions.LeftArm1.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->LeftArm1, prevdt, dt);
+		
+		
+		VxResolved = FALSE;
+		if (Pos->LeftArm2.x == Pos->LeftArm2.x)
+		{
+			Wobble(&A->Positions.LeftArm2.x, Pos->LeftArm2.x, A->Force, A->Friction, &A->Spd[4]);
+			vxSetX(P->LeftArm2, A->Positions.LeftArm2.x);
+		}
+		else
+		{
+			vxResolve(P->LeftArm2, prevdt, dt);
+			VxResolved = TRUE;
+		}
+		
+		if (Pos->LeftArm2.y == Pos->LeftArm2.y)
+		{
+			Wobble(&A->Positions.LeftArm2.y, Pos->LeftArm2.y, A->Force, A->Friction, &A->Spd[5]);
+			vxSetY(P->LeftArm2, A->Positions.LeftArm2.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->LeftArm2, prevdt, dt);
+		
+		
+		VxResolved = FALSE;
+		if (Pos->RightArm1.x == Pos->RightArm1.x)
+		{
+			Wobble(&A->Positions.RightArm1.x, Pos->RightArm1.x, A->Force, A->Friction, &A->Spd[4]);
+			vxSetX(P->RightArm1, A->Positions.RightArm1.x);
+		}
+		else
+		{
+			vxResolve(P->RightArm1, prevdt, dt);
+			VxResolved = TRUE;
+		}
+		
+		if (Pos->RightArm1.y == Pos->RightArm1.y)
+		{
+			Wobble(&A->Positions.RightArm1.y, Pos->RightArm1.y, A->Force, A->Friction, &A->Spd[5]);
+			vxSetY(P->RightArm1, A->Positions.RightArm1.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->RightArm1, prevdt, dt);
+		
+		
+		VxResolved = FALSE;
+		if (Pos->RightArm2.x == Pos->RightArm2.x)
+		{
+			Wobble(&A->Positions.RightArm2.x, Pos->RightArm2.x, A->Force, A->Friction, &A->Spd[4]);
+			vxSetX(P->RightArm2, A->Positions.RightArm2.x);
+		}
+		else
+		{
+			vxResolve(P->RightArm2, prevdt, dt);
+			VxResolved = TRUE;
+		}
+		
+		if (Pos->RightArm2.y == Pos->RightArm2.y)
+		{
+			Wobble(&A->Positions.RightArm2.y, Pos->RightArm2.y, A->Force, A->Friction, &A->Spd[5]);
+			vxSetY(P->RightArm2, A->Positions.RightArm2.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->RightArm2, prevdt, dt);
+		
+		
+		VxResolved = FALSE;
 		if (Pos->LeftLeg1.x == Pos->LeftLeg1.x)
-			Wobble(&A->Positions.LeftLeg1.x, Pos->LeftLeg1.x, A->Force, A->Friction, &A->Spd[12]);
+		{
+			Wobble(&A->Positions.LeftLeg1.x, Pos->LeftLeg1.x, A->Force, A->Friction, &A->Spd[4]);
+			vxSetX(P->LeftLeg1, A->Positions.LeftLeg1.x);
+		}
+		else
+		{
+			vxResolve(P->LeftLeg1, prevdt, dt);
+			VxResolved = TRUE;
+		}
+		
 		if (Pos->LeftLeg1.y == Pos->LeftLeg1.y)
-			Wobble(&A->Positions.LeftLeg1.y, Pos->LeftLeg1.y, A->Force, A->Friction, &A->Spd[13]);
+		{
+			Wobble(&A->Positions.LeftLeg1.y, Pos->LeftLeg1.y, A->Force, A->Friction, &A->Spd[5]);
+			vxSetY(P->LeftLeg1, A->Positions.LeftLeg1.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->LeftLeg1, prevdt, dt);
+		
+		
+		VxResolved = FALSE;
 		if (Pos->LeftLeg2.x == Pos->LeftLeg2.x)
-			Wobble(&A->Positions.LeftLeg2.x, Pos->LeftLeg2.x, A->Force, A->Friction, &A->Spd[14]);
+		{
+			Wobble(&A->Positions.LeftLeg2.x, Pos->LeftLeg2.x, A->Force, A->Friction, &A->Spd[4]);
+			vxSetX(P->LeftLeg2, A->Positions.LeftLeg2.x);
+		}
+		else
+		{
+			vxResolve(P->LeftLeg2, prevdt, dt);
+			VxResolved = TRUE;
+		}
+		
 		if (Pos->LeftLeg2.y == Pos->LeftLeg2.y)
-			Wobble(&A->Positions.LeftLeg2.y, Pos->LeftLeg2.y, A->Force, A->Friction, &A->Spd[15]);
+		{
+			Wobble(&A->Positions.LeftLeg2.y, Pos->LeftLeg2.y, A->Force, A->Friction, &A->Spd[5]);
+			vxSetY(P->LeftLeg2, A->Positions.LeftLeg2.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->LeftLeg2, prevdt, dt);
+		
+		
+		VxResolved = FALSE;
 		if (Pos->RightLeg1.x == Pos->RightLeg1.x)
-			Wobble(&A->Positions.RightLeg1.x, Pos->RightLeg1.x, A->Force, A->Friction, &A->Spd[16]);
+		{
+			Wobble(&A->Positions.RightLeg1.x, Pos->RightLeg1.x, A->Force, A->Friction, &A->Spd[4]);
+			vxSetX(P->RightLeg1, A->Positions.RightLeg1.x);
+		}
+		else
+		{
+			vxResolve(P->RightLeg1, prevdt, dt);
+			VxResolved = TRUE;
+		}
+		
 		if (Pos->RightLeg1.y == Pos->RightLeg1.y)
-			Wobble(&A->Positions.RightLeg1.y, Pos->RightLeg1.y, A->Force, A->Friction, &A->Spd[17]);
+		{
+			Wobble(&A->Positions.RightLeg1.y, Pos->RightLeg1.y, A->Force, A->Friction, &A->Spd[5]);
+			vxSetY(P->RightLeg1, A->Positions.RightLeg1.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->RightLeg1, prevdt, dt);
+		
+		
+		VxResolved = FALSE;
 		if (Pos->RightLeg2.x == Pos->RightLeg2.x)
-			Wobble(&A->Positions.RightLeg2.x, Pos->RightLeg2.x, A->Force, A->Friction, &A->Spd[18]);
+		{
+			Wobble(&A->Positions.RightLeg2.x, Pos->RightLeg2.x, A->Force, A->Friction, &A->Spd[4]);
+			vxSetX(P->RightLeg2, A->Positions.RightLeg2.x);
+		}
+		else
+		{
+			vxResolve(P->RightLeg2, prevdt, dt);
+			VxResolved = TRUE;
+		}
+		
 		if (Pos->RightLeg2.y == Pos->RightLeg2.y)
-			Wobble(&A->Positions.RightLeg2.y, Pos->RightLeg2.y, A->Force, A->Friction, &A->Spd[19]);
+		{
+			Wobble(&A->Positions.RightLeg2.y, Pos->RightLeg2.y, A->Force, A->Friction, &A->Spd[5]);
+			vxSetY(P->RightLeg2, A->Positions.RightLeg2.y);
+		}
+		else if (!VxResolved)
+			vxResolve(P->RightLeg2, prevdt, dt);
 		
 		
 		/* Vérification de l'état de l'animation pour passer à létat suivant */
@@ -466,11 +641,18 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			Wobble(&A->Angles.Neck, Ang->Neck, A->Force, A->Friction, &A->Spd[1]);
 			vxSetPosition(P->Neck, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(90.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.Neck))));
 		}
+		else
+			vxResolve(P->Neck, prevdt, dt);
 			
 		if (Ang->Head == Ang->Head)
 		{
 			Wobble(&A->Angles.Head, Ang->Head, A->Force, A->Friction, &A->Spd[0]);
 			//la tête est un peu spéciale car on a l'angle du
+		}
+		else
+		{
+			vxResolve(P->HeadLeft, prevdt, dt);
+			vxResolve(P->HeadRight, prevdt, dt);
 		}
 			
 		
@@ -481,12 +663,16 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			Wobble(&A->Angles.LeftArm1, Ang->LeftArm1, A->Force, A->Friction, &A->Spd[2]);
 			vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm1))));
 		}
+		else
+			vxResolve(P->LeftArm1, prevdt, dt);
 			
 		if (Ang->LeftArm2 == Ang->LeftArm2)
 		{
 			Wobble(&A->Angles.LeftArm2, Ang->LeftArm2, A->Force, A->Friction, &A->Spd[3]);
 			vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->LeftArm1), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm2))));
 		}
+		else
+			vxResolve(P->LeftArm2, prevdt, dt);
 			
 		
 		if (Ang->RightArm1 == Ang->RightArm1)
@@ -494,12 +680,16 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			Wobble(&A->Angles.RightArm1, Ang->RightArm1, A->Force, A->Friction, &A->Spd[4]);
 			vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm1))));
 		}
+		else
+			vxResolve(P->RightArm1, prevdt, dt);
 			
 		if (Ang->RightArm2 == Ang->RightArm2)
 		{
 			Wobble(&A->Angles.RightArm2, Ang->RightArm2, A->Force, A->Friction, &A->Spd[5]);
 			vxSetPosition(P->RightArm2, vec2Add(vxGetPosition(P->RightArm1), vec2Rotate(vec2(-35.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm2))));
 		}
+		else
+			vxResolve(P->RightArm2, prevdt, dt);
 			
 				
 		if (Ang->LeftLeg1 == Ang->LeftLeg1)
@@ -507,12 +697,16 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			Wobble(&A->Angles.LeftLeg1, Ang->LeftLeg1, A->Force, A->Friction, &A->Spd[6]);
 			vxSetPosition(P->LeftLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg1))));
 		}
+		else
+			vxResolve(P->LeftLeg1, prevdt, dt);
 			
 		if (Ang->LeftLeg2 == Ang->LeftLeg2)
 		{
 			Wobble(&A->Angles.LeftLeg2, Ang->LeftLeg2, A->Force, A->Friction, &A->Spd[7]);
 			vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->LeftLeg1), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg2))));
 		}
+		else
+			vxResolve(P->LeftLeg2, prevdt, dt);
 			
 		
 		if (Ang->RightLeg1 == Ang->RightLeg1)
@@ -520,12 +714,16 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			Wobble(&A->Angles.RightLeg1, Ang->RightLeg1, A->Force, A->Friction, &A->Spd[8]);
 			vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg1))));
 		}
+		else
+			vxResolve(P->RightLeg1, prevdt, dt);
 			
 		if (Ang->RightLeg2 == Ang->RightLeg2)
 		{
 			Wobble(&A->Angles.RightLeg2, Ang->RightLeg2, A->Force, A->Friction, &A->Spd[9]);
 			vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->RightLeg1), vec2Rotate(vec2(-40.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg2))));
 		}
+		else
+			vxResolve(P->RightLeg2, prevdt, dt);
 			
 		
 		

@@ -16,15 +16,17 @@ void appInit(LevelEditorApp* App)
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
 	sndmInit();
-//
-//	sndmLoadMusicFile("music0", "data/music.ogg");
-//	sndmLoadMusicFile("music1", "data/music1.ogg");
-//	sndmLoadMusicFile("music2", "data/music2.ogg");
-//	sndmLoadMusicFile("music3", "data/music3.ogg");
-//	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
-//
-//
-//	sndmPlayMusic("music0");
+
+	/*
+	sndmLoadMusicFile("music0", "data/music.ogg");
+	sndmLoadMusicFile("music1", "data/music1.ogg");
+	sndmLoadMusicFile("music2", "data/music2.ogg");
+	sndmLoadMusicFile("music3", "data/music3.ogg");
+	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
+	 
+
+	sndmPlayMusic("music3");
+	 */
 
 	//sndmPlay("meat");
 	//Temporel
@@ -56,6 +58,7 @@ void appWindowInit(LevelEditorApp* App)
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
+	glEnable(GL_ALPHA_TEST) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
 

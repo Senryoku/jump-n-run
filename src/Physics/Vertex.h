@@ -75,6 +75,20 @@ Bool vxIsFixe(const Vertex* V);
 **/
 void vxSetPosition(Vertex* V, Vec2 newPos);
 
+/** @brief Mutateur de la position en x
+ *
+ * Modifie également l'ancienne position !
+ * @param V Pointeur vers le vecteur à modifier
+ **/
+void vxSetX(Vertex* V, float x);
+
+/** @brief Mutateur de la position en y
+ *
+ * Modifie également l'ancienne position !
+ * @param V Pointeur vers le vecteur à modifier
+ **/
+void vxSetY(Vertex* V, float y);
+
 /** @brief Mutateur de la position qui conserve la vitesse
  *
  * @param V Pointeur vers le vecteur à modifier

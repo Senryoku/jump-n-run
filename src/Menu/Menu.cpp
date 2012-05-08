@@ -16,6 +16,7 @@ void mnInit(Menu* M)
 	M->SubAnim = 0.f;
 	M->Force = 0.25f;
 	M->Friction = 0.4f;
+	M->Arg = NULL;
 }
 
 
@@ -230,11 +231,12 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up)
 		mnMoveCursor(M, MENU_GO_UP);
 	
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
-		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_LEFT, 0, FALSE);
+	if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) || (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right))
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_LEFT, 0, FALSE, M->Arg);
 	
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
-		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_RIGHT, 0, FALSE);
+	if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) || (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left))
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_RIGHT, 0, FALSE, M->Arg);
+	
 	 
 	
 	
@@ -243,21 +245,31 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 		unsigned int c;
 		sf::Utf32::encodeAnsi(event.text.unicode, &c);
 		//if (i>=32 && i<=126) /* printables chars */
-		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_NONE, (unsigned char) c, FALSE);
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_NONE, (unsigned char) c, FALSE, M->Arg);
 		//if (mniGetType(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))) == ITEM_INPUT_VALUE)
 		//	printf("value is %f\n", mniGetInputValue(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))));
 		//printf("text entered: %c", c);
 	}
 	
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
-		mniUse(M ,mnGetCurrentItem(M), FALSE, MOVE_NONE, 0, TRUE);
+		mniUse(M ,mnGetCurrentItem(M), FALSE, MOVE_NONE, 0, TRUE, M->Arg);
 	
 	if (Enter)
-		mniUse(M, mnGetCurrentItem(M), TRUE, MOVE_NONE, 0, FALSE);
+		mniUse(M, mnGetCurrentItem(M), TRUE, MOVE_NONE, 0, FALSE, M->Arg);
 	
 }
 
 float mnGetHeight(const Menu* M)
 {
 	return moiGetSize(mnGetCurrentMenu(M)).y;
+}
+
+void* mnGetArg(Menu* M)
+{
+	return M->Arg;
+}
+
+void mnSetArg(Menu* M, void* Arg)
+{
+	M->Arg = Arg;
 }

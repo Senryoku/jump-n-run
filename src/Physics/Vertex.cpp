@@ -49,6 +49,18 @@ void vxChangePosition(Vertex* V, Vec2 newPos)
 	V->OldPos = vec2Sub(newPos, spd);
 }
 
+void vxSetX(Vertex* V, float x)
+{
+	V->Position.x = x;
+	V->OldPos.x = x;
+}
+
+void vxSetY(Vertex* V, float y)
+{
+	V->Position.y = y;
+	V->OldPos.y = y;
+}
+
 void vxCorrectPosition(Vertex* V, Vec2 addPos)
 {
 	if(V->Fixe) return;
