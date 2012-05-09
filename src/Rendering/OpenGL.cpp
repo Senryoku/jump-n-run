@@ -1,5 +1,6 @@
 #include "OpenGL.h"
 
+/** @todo Virer ça, non ? **/
 Texture txBoxCorner, txBoxSide, txBoxShadow, txBoxGloss, txBoxBackAnim;
 sf::Font FntMenu;
 

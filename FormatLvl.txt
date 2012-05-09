@@ -1,0 +1,71 @@
+Format .lvl
+============================================
+
+Fichier Texte. Les commentaires (ligne) sont délimités par #.
+String désigne une suite de caractères (sans retour chariot ni caractère de fin de chaîne C).
+Les valeurs numériques sont en décimal (float, int...).
+Image désigne un chemin relatif vers un fichier image (jpg, png, bmp...).
+
+Entête (8 lignes) formée de :
+Nom(string)
+Description(string)
+Largeur(float), Hauteur(float)
+SpawnX(float), SpawnY(float) ; GoalX(float), GoalY(float)
+Chemin_Background(Image)
+Chemin_Layer1(Image)
+Chemin_Layer2(Image)
+Chemin_Foreground(Image)
+
+Suivi de groupes de lignes délimités par un identifiant de structure,
+chaque groupe est identifié par l'ordre de définition dans le fichier.
+2/ Vertex, 
+	CoordonnéeX(float), CoordonnéeY(float) ; Mass(float) ; Fixe(bool)
+
+	Exemple : 
+	2 #Vertex
+	150.000000, 330.000000 ; 1.000000 ; 1
+	
+1/ Polygon, 1 NombreVertices(int) Fixe(bool)
+	IndentifiantVertex(int) # Autant que NombreVertices (un par ligne)
+	
+	Exemple :
+	1 4 1 #Polygon
+	12
+	13
+	14
+	15
+
+3/ Rigid,
+	IdentifiantVertex(int) IdentifiantVertex(int) Longueur(float)
+	
+	Exemple :
+	
+	3 #Rigid
+	0 1 90.000000
+	
+4/ Elastic,
+	IdentifiantVertex(int) IdentifiantVertex(int) Longueur(float) Spring(float=
+	
+	Exemple :
+	
+	4 #Elastic
+	0 1 90.000000 0.100000
+	
+5/ Texture
+	CheminTexture(Image)
+	
+	Exemple :
+	5 #Texture
+	data/texture.jpg
+
+6/ Objet
+	IndentifiantPolygon(int) IdentifiantTexture(int)
+	CoordonnéeTextureX CoordonnéeTextureY #Une ligne par Vertex du Polygon
+	
+	Exemple :
+	6 #Object
+	0 0
+	0 0
+	0 1
+	1 1
+	1 0
