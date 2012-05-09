@@ -13,7 +13,8 @@
  *
  * Décrit un niveau de jeu
  * Préfixe des méthodes : lvl
- * @todo Chargement des Textures depuis le fichier de description du niveau
+ *
+ * Voir FormatLvl.txt pour des informations sur le format de fichier lvl
  **/
 
 /** @brief Structure définissant un niveau de jeu

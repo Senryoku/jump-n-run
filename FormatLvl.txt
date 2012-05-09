@@ -5,6 +5,7 @@ Fichier Texte. Les commentaires (ligne) sont délimités par #.
 String désigne une suite de caractères (sans retour chariot ni caractère de fin de chaîne C).
 Les valeurs numériques sont en décimal (float, int...).
 Image désigne un chemin relatif vers un fichier image (jpg, png, bmp...).
+Par convention, les Vertices d'un Polygon sont décrit en suivant l'ordre des aiguilles d'une montre.
 
 Entête (8 lignes) formée de :
 Nom(string)

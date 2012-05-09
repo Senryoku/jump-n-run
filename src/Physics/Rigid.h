@@ -15,8 +15,8 @@
 
 typedef struct
 {
-	Vertex* V1;
-	Vertex* V2;
+	Vertex* V1; /**< Premier Vertex **/
+	Vertex* V2; /**< Deuxième Vertex **/
 	float Length; /**< Longueur à l'équilibre **/
 } Rigid;
 

@@ -16,11 +16,11 @@
 
 typedef struct
 {
-	Vec2 Position;
-	Vec2 OldPos;
-	Vec2 Acceleration;
-	float Mass;
-	Bool Fixe;
+	Vec2 Position; /**< Position actuelle **/
+	Vec2 OldPos; /**< Position précédente (Frame) **/
+	Vec2 Acceleration; /**< Valeur de l'accélération pour la frame courante **/
+	float Mass; /**< Mass (Défaut = 1) **/
+	Bool Fixe; /**< Défini si le Vertex est Fixe, si vrai, seul un appel direct à vxSetPosition peut modifier sa position **/
 } Vertex;
 
 /** @brief Constructeur

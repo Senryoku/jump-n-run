@@ -21,7 +21,8 @@
  * ils sont gérés à part, en revanche, leur Vertices doivent être
  * ajoutés manuellement au World pour être mis à jour par les
  * méthodes générales ! En effet un Vertex peut être partagé par
- * plusieurs polygons.
+ * plusieurs polygons (Par convention, ce n'est pas le cas d'un Rigid,
+ * même si, rétrospectivement, ce n'était pas forcément très logique).
 **/
 typedef struct
 {
