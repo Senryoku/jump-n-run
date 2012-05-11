@@ -10,7 +10,7 @@ Par convention, les Vertices d'un Polygon sont décrit en suivant l'ordre des aig
 Entête (8 lignes) formée de :
 Nom(string)
 Description(string)
-Largeur(float), Hauteur(float)
+Largeur(float), Hauteur(float) ; DistBG(float), DistFG(float)
 SpawnX(float), SpawnY(float) ; GoalX(float), GoalY(float)
 Chemin_Background(Image)
 Chemin_Layer1(Image)

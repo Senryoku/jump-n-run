@@ -10,7 +10,7 @@ void gmInit(Game* G)
 	G->WindowHeight = Cfg.WindowHeight;
 	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump n'Run", sf::Style::Default, sf::ContextSettings(32));
 
-	//G->Window->setKeyRepeatEnabled(0);
+	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
 	/* On ne peut utiliser  qu'une des deux */
 	if(Cfg.VerticalSync == 1.f)
@@ -52,7 +52,7 @@ void gmInit(Game* G)
 	mnAddItemMenuSwitcher(&G->GameMenu, 1, "A Secreeeet", 2);
 	MID = 0;
 	mnAddItemMenuSwitcher(&G->GameMenu, 1, "Back", 0);
-	
+
 	mnAddMenu(&G->GameMenu, "", 3);
 	mnAddItem(&G->GameMenu, 2, "I HAVE NO TITLE!!!! HA HA HA!", ITEM_LABEL, NULL, NULL);
 	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go to main MENU!!!!!!", 0);
@@ -145,7 +145,7 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M)
 				mnSetHide(&G->GameMenu, !mnGetHide(&G->GameMenu));
-			
+
 			mnHandleEvent(&G->GameMenu, event);
 		}
 
@@ -182,12 +182,15 @@ void gmPlay(Game* G)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		Center = polyComputeCenter(G->Lvl->P1->Shape);
-		ViewX = Center.x - ViewWidth/2;
-		ViewY = Center.y - ViewHeight/2;
+		ViewX = MAX(0, MIN(Center.x - ViewWidth/2, wdGetWidth(lvlGetWorld(G->Lvl)) - ViewWidth));
+		ViewY = MAX(0, MIN(Center.y - ViewHeight/2, wdGetHeight(lvlGetWorld(G->Lvl)) - ViewHeight));
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
 
+		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
+		lvlDisplayL2(G->Lvl);
+		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		aniUpdate(A, G->Lvl->P1, 1.f);
 
 		sndmUpdate();

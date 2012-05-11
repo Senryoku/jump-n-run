@@ -19,6 +19,7 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlTexFree = &glTexFree;
 	Lvl->lvlDisplayTex = &glDisplayTex;
 	Lvl->lvlDispTexPoly = &glDispTexPoly;
+	Lvl->DistBG = Lvl->DistFG = 1.f;
 	//Lvl->C = NULL;
 }
 
@@ -100,7 +101,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		return FALSE;
 	}
 
-	float width, height;
+	float width, height, DistBG = 1.f, DistFG = 1.f;
 
 	if (fgets(read, 300, f)==NULL)
 	{
@@ -108,7 +109,10 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		return FALSE;
 	}
 	else
-		sscanf(read, "%f, %f", &width, &height);
+		sscanf(read, "%f, %f ; %f, %f", &width, &height, &DistBG, &DistFG);
+
+	lvlSetDistBG(Lvl, DistBG);
+	lvlSetDistFG(Lvl, DistFG);
 
 	if (fgets(read, 300, f)==NULL)
 	{
@@ -120,28 +124,29 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	unsigned int item, nVertex, i;
 	Bool polyFixed; int booly;
 
+	// Chargement des textures de fonds
+	// Si le fichier n'existe pas (ou que la ligne est vide)
+	// Une texture transparente est crée
+
 	//back
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
-	if (strcmp(read, ""))
-		Lvl->Background = (*Lvl->lvlTexLoad)(read);
+	Lvl->Background = (*Lvl->lvlTexLoad)(read);
 
 	//layer 1
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
-	if (strcmp(read, ""))
-		Lvl->Layer1 = (*Lvl->lvlTexLoad)(read);
+	Lvl->Layer1 = (*Lvl->lvlTexLoad)(read);
+
 	//layer 2
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
-	if (strcmp(read, ""))
-		Lvl->Layer2 = (*Lvl->lvlTexLoad)(read);
+	Lvl->Layer2 = (*Lvl->lvlTexLoad)(read);
 
 	//foreground
 	fgets(read, 255, f);
 	*strstr(read, "\n") = '\0';
-	if (strcmp(read, ""))
-		Lvl->Foreground = (*Lvl->lvlTexLoad)(read);
+	Lvl->Foreground = (*Lvl->lvlTexLoad)(read);
 
 
 
@@ -412,7 +417,7 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 
 }
 
-Bool lvlIsGoalReached(Level* L)
+Bool lvlIsGoalReached(const Level* L)
 {
 	BBox B = polyGetBBox(L->P1->Shape);
 	if(B.Left < L->Goal.x && B.Right > L->Goal.x &&
@@ -433,36 +438,142 @@ void lvlDelObject(Level* Lvl, Object * Obj)
 	delObject(Obj);
 }
 
-World* lvlGetWorld(Level* Lvl)
+World* lvlGetWorld(const Level* Lvl)
 {
 	return Lvl->W;
 }
 
-void lvlDisplayBG(Level* Lvl)
+void lvlSetDistBG(Level* Lvl, float F)
 {
-
+	Lvl->DistBG = F;
 }
 
-void lvlDisplayL1(Level* Lvl)
+void lvlSetDistFG(Level* Lvl, float F)
+{
+	Lvl->DistFG = F;
+}
+
+void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H)
+{
+	float wdW = wdGetWidth(lvlGetWorld(Lvl));
+	float wdH = wdGetHeight(lvlGetWorld(Lvl));
+	float X1 = MIN(X, wdW - W);
+	float Y1 = MIN(Y, wdH - H);
+	X1 /= wdW;
+	Y1 /= wdH;
+
+	float X2 = X + W;
+	X2 = MAX(0, MIN(X2, wdW));
+	X2 /= wdW;
+	float Y2 = Y + H;
+	Y2 = MAX(0, MIN(Y2, wdH));
+	Y2 /= wdH;
+
+	float factor = Lvl->DistBG;
+	float AddX = (X1 - X2)*0.5f*factor;
+	float AddY = (Y1 - Y2)*0.5f*factor;
+
+	Vec2 Center = vec2((X1 + X2)/2, (Y1 + Y2)/2);
+	Vec2 vX1 = vec2(Center.x + AddX, Center.y + AddY);
+	Vec2 vX2 = vec2(Center.x - AddX, Center.y - AddY);
+
+	if(vX1.x < 0.f)
+	{
+		vX1.x = 0.f;
+		vX2.x = factor*W/wdW;
+	}
+
+	if(vX1.y < 0.f)
+	{
+		vX1.y = 0.f;
+		vX2.y = factor*H/wdH;
+	}
+
+	if(vX2.x > 1.f)
+	{
+		vX1.x = 1.f - factor*W/wdW;
+		vX2.x = 1.f;
+	}
+
+	if(vX2.y > 1.f)
+	{
+		vX1.y = 1.f - factor*H/wdH;
+		vX2.y = 1.f;
+	}
+
+	(*Lvl->lvlDisplayTex)(Lvl->Background, vX1, vec2(vX2.x, vX1.y), vX2, vec2(vX1.x, vX2.y),
+						vec2(X, Y), vec2(X + W, Y),
+						vec2(X + W, Y + H), vec2(X, Y + H));
+}
+
+void lvlDisplayL1(const Level* Lvl)
 {
 	(*Lvl->lvlDisplayTex)(Lvl->Layer1, vec2(0, 0), vec2(1,0), vec2(1,1), vec2(0,1),
 						vec2(0, 0), vec2(wdGetWidth(lvlGetWorld(Lvl)), 0),
 						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));
 }
 
-void lvlDisplayL2(Level* Lvl)
+void lvlDisplayL2(const Level* Lvl)
 {
 	(*Lvl->lvlDisplayTex)(Lvl->Layer2, vec2(0, 0), vec2(1,0), vec2(1,1), vec2(0,1),
 						vec2(0, 0), vec2(wdGetWidth(lvlGetWorld(Lvl)), 0),
 						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));
 }
 
-void lvlDisplayFG(Level* Lvl)
+void lvlDisplayFG(const Level* Lvl, float X, float Y, float W, float H)
 {
+	float wdW = wdGetWidth(lvlGetWorld(Lvl));
+	float wdH = wdGetHeight(lvlGetWorld(Lvl));
+	float X1 = MIN(X, wdW - W);
+	float Y1 = MIN(Y, wdH - H);
+	X1 /= wdW;
+	Y1 /= wdH;
 
+	float X2 = X + W;
+	X2 = MAX(0, MIN(X2, wdW));
+	X2 /= wdW;
+	float Y2 = Y + H;
+	Y2 = MAX(0, MIN(Y2, wdH));
+	Y2 /= wdH;
+
+	float factor = 1.f/Lvl->DistBG;
+	float AddX = (X1 - X2)*0.5f*factor;
+	float AddY = (Y1 - Y2)*0.5f*factor;
+
+	Vec2 Center = vec2((X1 + X2)/2, (Y1 + Y2)/2);
+	Vec2 vX1 = vec2(Center.x + AddX, Center.y + AddY);
+	Vec2 vX2 = vec2(Center.x - AddX, Center.y - AddY);
+
+	if(vX1.x < 0.f)
+	{
+		vX1.x = 0.f;
+		vX2.x = factor*W/wdW;
+	}
+
+	if(vX1.y < 0.f)
+	{
+		vX1.y = 0.f;
+		vX2.y = factor*H/wdH;
+	}
+
+	if(vX2.x > 1.f)
+	{
+		vX1.x = 1.f - factor*W/wdW;
+		vX2.x = 1.f;
+	}
+
+	if(vX2.y > 1.f)
+	{
+		vX1.y = 1.f - factor*H/wdH;
+		vX2.y = 1.f;
+	}
+
+	(*Lvl->lvlDisplayTex)(Lvl->Foreground, vX1, vec2(vX2.x, vX1.y), vX2, vec2(vX1.x, vX2.y),
+						vec2(X, Y), vec2(X + W, Y),
+						vec2(X + W, Y + H), vec2(X, Y + H));
 }
 
-void lvlDisplayObj(Level* Lvl, Object* Obj)
+void lvlDisplayObj(const Level* Lvl, Object* Obj)
 {
 	(*Lvl->lvlDispTexPoly)(*(Texture*) daGet(&Lvl->Textures, Obj->Tex), Obj->Shape, &Obj->CoordTex);
 }

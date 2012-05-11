@@ -35,7 +35,7 @@ typedef struct
  	DynArr Textures; /**< Liste de textures utilisables par les objets **/
  	List Objects; /**< Liste d'objets texturés **/
  	Player* P1; /** Joueur 1 **/
-	//Cloth* C;
+	float DistBG, DistFG;
 
 	Texture (*lvlTexLoad)(const char* Path); /** Pointeur de fonction servant à charger en mémoire une texture **/
 	void (*lvlTexFree)(Texture Img); /** Pointeur de fonction libèrant une texture **/
@@ -59,6 +59,14 @@ void lvlFree(Level* Lvl);
 /** @brief Destructeur
 **/
 void delLevel(Level* lvl);
+
+/** @brief Mutateur de DistBG
+**/
+void lvlSetDistBG(Level* lvl, float F);
+
+/** @brief Mutateur de DistFG
+**/
+void lvlSetDistFG(Level* lvl, float F);
 
 /** @brief Charge un niveau à partir d'un fichier
  *
@@ -85,31 +93,43 @@ void lvlUpdate(Level* Lvl, Bool Paused);
 /** @brief Retourne vrai si l'objectif est atteint par le joueur
  *
 **/
-Bool lvlIsGoalReached(Level* L);
+Bool lvlIsGoalReached(const Level* L);
 
 /** @brief Accesseur de W
 **/
-World* lvlGetWorld(Level* Lvl);
+World* lvlGetWorld(const Level* Lvl);
 
 /** @brief Affiche le fond
+ *
+ * @param Lvl Niveau à afficher
+ * @param X Coordonnée X du point le plus en haut à gauche affiché
+ * @param Y Coordonnée Y du point le plus en haut à gauche affiché
+ * @param W Largeur de la portion du niveau affichée
+ * @param H Hauteur de la portion du niveau affichée
 **/
-void lvlDisplayBG(Level* Lvl);
+void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H);
 
 /** @brief Affiche la première couche (fond) de décors
 **/
-void lvlDisplayL1(Level* Lvl);
+void lvlDisplayL1(const Level* Lvl);
 
 /** @brief Affiche la deuxième couche (front) de décors
 **/
-void lvlDisplayL2(Level* Lvl);
+void lvlDisplayL2(const Level* Lvl);
 
 /** @brief Affiche le Foreground
+ *
+ * @param Lvl Niveau à afficher
+ * @param X Coordonnée X du point le plus en haut à gauche affiché
+ * @param Y Coordonnée Y du point le plus en haut à gauche affiché
+ * @param W Largeur de la portion du niveau affichée
+ * @param H Hauteur de la portion du niveau affichée
 **/
-void lvlDisplayFG(Level* Lvl);
+void lvlDisplayFG(const Level* Lvl, float X, float Y, float W, float H);
 
 /** @brief Affich un objet texturé
 **/
-void lvlDisplayObj(Level* Lvl, Object* Obj);
+void lvlDisplayObj(const Level* Lvl, Object* Obj);
 
 /** @brief Affiche les objets texturés
 **/
