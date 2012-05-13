@@ -508,7 +508,7 @@ void appRun(LevelEditorApp* App)
 		/* == Mise à jour du niveau == */
 		lvlUpdate(App->Led.Lvl, Paused);
 
-		//sndmUpdate();
+		sndmUpdate();
 
 		/*
 		 //Ça c'est la façon manuelle, j'ai cependant rajouté dans SoundManager des trucs pour faire que ça se fasse seul. Je rajouterai d'autre choses pour le personaliser un peu plus tard

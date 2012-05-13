@@ -15,6 +15,10 @@
 
 
 typedef unsigned short MenuID;
+typedef unsigned short MenuType;
+
+#define MENU_TYPE_DEFAULT 0x00
+#define MENU_TYPE_MESSAGE 0x01
 
 /**
  * @brief Structure définissant un menu
@@ -77,6 +81,8 @@ typedef struct SMenu
 	Bool Active; /**< Dit si le menu est active et si on doit gérer ou pas les entrées. Utilisé lorsqu'on affiche des messages par exemple **/
 	Bool Hide; /**< permet de cacher le menu et le rendre inactif **/
 	void* Arg; /**< Ici sont stockées les donnés utilisées lors de l'appel à une fonction avec argument. Si un malloc a ´té fait il faudrait que la fonction qui est appelé avec l'Item fasse un free **/
+	MenuType Type; /**< type du menu, permet de faire des animations diférentes **/
+	float MessageScale; /**< un scale pour les menus qui apparaissent avec un click **/
 } Menu;
 
 
@@ -91,6 +97,22 @@ void mnInit(Menu* M);
  * @param M Menu à laquelle s'applique la fonction
  **/
 void mnFree(Menu* M);
+
+/** @brief détruit un menu et libère la place occupée par celui-ci
+ *
+ * ATTENTION! Cette fonction fausse les MenuID qui ont été retournées avant l'appel! Elle est utilisée par Message Pour libérer la place utiliser et car on n'a plus besoin de MenuID
+ * @param M Menu à laquelle s'applique la fonction
+ * @param MID ID du menu à supprimer
+ **/
+void mnRemoveMenu(Menu* M, MenuID MID);
+
+/** @brief détruit un menu et libère la place occupée par celui-ci
+ *
+ * ATTENTION! Cette fonction fausse les MenuID qui ont été retournées avant l'appel! Elle est utilisée par Message Pour libérer la place utiliser et car on n'a plus besoin de MenuID
+ * @param M Menu à laquelle s'applique la fonction
+ * @param moi pointeur du menu à supprimer
+ **/
+void mnRemoveMenu(Menu* M, MenuOfItems* moi);
 
 /** @brief Crée un menu
  *
@@ -207,6 +229,12 @@ void mnSetHide(Menu* M, Bool Hide);
  **/
 Bool mnGetHide(const Menu* M);
 
+/** @brief Dit si le menu est encore sur l'écran selon sa taille et sa position
+ * @param M Menu à laquelle s'applique la fonction
+ * @return Vrai si le menu est encore sur l'écran
+ **/
+Bool mnIsVisible(const Menu* M);
+
 /** @brief Mutateur de Active
  *
  * @param M Menu à laquelle s'applique la fonction
@@ -259,6 +287,14 @@ MenuItem* mnGetItem(const Menu* M, MenuID MID, ItemID IID);
  **/
 MenuOfItems* mnGetCurrentMenu(const Menu* M);
 
+/** @brief Donne accès à un menu selon son ID
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @param MID MenuID du menu
+ * @return Le menu actuel
+ **/
+MenuOfItems* mnGetMenuPtr(const Menu* M, MenuID MID);
+
 /** @brief Donne accès aà l'item qui est selectionné
  *
  * @param M Menu à laquelle s'applique la fonction
@@ -287,6 +323,14 @@ void mnSetCursor(Menu* M, Vec2 MousePos);
  **/
 Vec2 mnGetPosition(const Menu* M);
 
+/** @brief Change la position du menu
+ *
+ * Cette fonction n'est utilie que pour les type MENU_TYPE_MESSAGE
+ * @param M Menu à laquelle s'applique la fonction
+ * @param Pos nouvelle position
+ **/
+void mnSetPosition(Menu* M, Vec2 Pos);
+
 /** @brief Gère le menu selon les entrées
  *
  * @param M Menu à laquelle s'applique la fonction
@@ -307,6 +351,13 @@ float mnGetHeight(const Menu* M);
  * @return Données à être utilisées par un Item
  **/
 void* mnGetArg(Menu* M);
+
+/** @brief Accesseur de MenuScale
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @return MessageScale
+ **/
+float mnGetMessageScale(const Menu* M);
 
 /** @brief Mutateur de Arg
  *

@@ -11,7 +11,7 @@
  * @{
  */
 
-typedef MenuID MessageID;
+typedef MenuOfItems* MessageID;
 
 /** @brief Initialise Le manager de Messages
  *
@@ -35,7 +35,7 @@ void msgFree();
  **/
 MessageID msgShow(const char* Title, const char* Text, const char* Button, Bool Force);
 
-void msgUpdate();
+void msgUpdate(const sf::Event& event);
 
 
 

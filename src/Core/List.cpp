@@ -74,6 +74,13 @@ void lstDel(List* L, Elem E)
 	}
 }
 
+void lstPopFront(List* L)
+{
+	Node* it = L->First;
+	if (it != NULL)
+		lstRem(L, it);
+}
+
 Bool lstHaveElem(List* L, Elem E)
 {
 	Node* tmpNode = L->First;

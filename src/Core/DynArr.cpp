@@ -74,6 +74,22 @@ void daDel(DynArr* DA, unsigned int Pos)
 	DA->Size--;
 }
 
+void daRem(DynArr* DA, void* ptr)
+{
+	unsigned int i, j;
+	for(i = 0; i < DA->Size - 1; i++)
+	{
+		if (daGet(DA, i) == ptr)
+		{
+			for (j=i; j< DA->Size-1; j++)
+				DA->First[j] = DA->First[j+1];
+			DA->Size--;
+		}
+	}
+		
+	//Si l'objet n'es pas trouvé rien n'est supprimé
+}
+
 void daFastDel(DynArr* DA, unsigned int Pos)
 {
 	DA->Size--;

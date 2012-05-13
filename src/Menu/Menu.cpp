@@ -17,6 +17,8 @@ void mnInit(Menu* M)
 	M->Force = 0.25f;
 	M->Friction = 0.4f;
 	M->Arg = NULL;
+	M->Type = MENU_TYPE_DEFAULT;
+	M->MessageScale = 0.f;
 }
 
 
@@ -38,6 +40,20 @@ MenuID mnAddMenu(Menu* M, const char* Text, unsigned short ItemCount)
 	daAdd(M->Menus, moi);
 	
 	return daGetSize(M->Menus)-1;
+}
+
+void mnRemoveMenu(Menu* M, MenuID MID)
+{
+	daDel(M->Menus, MID);
+	moiFree((MenuOfItems*)daGet(M->Menus, MID));
+	free(daGet(M->Menus, MID));
+}
+
+void mnRemoveMenu(Menu* M, MenuOfItems* moi)
+{
+	daRem(M->Menus, moi);
+	moiFree(moi);
+	free(moi);
 }
 
 ItemID mnAddItem(Menu* M, MenuID MID, const char* Text, ItemType Type, void (*Function)(void), void* Data)
@@ -108,6 +124,14 @@ Bool mnGetActive(const Menu* M)
 	return M->Active;
 }
 
+Bool mnIsVisible(const Menu* M)
+{
+	if (M->Type == MENU_TYPE_DEFAULT)
+		return (M->MenuY+mnGetHeight(M) < -10.f);
+	else
+		return M->MessageScale>0.05f;
+}
+
 void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 {
 	moiUpdateVisuals((MenuOfItems*)daGet(M->Menus, M->CurrentMenu), M->ItemSelectedZoomFactor, M->ItemNormalZoomFactor);
@@ -118,15 +142,31 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 	
 	if (M->Hide)
 	{
-		Wobble(&M->MenuX, OutPos.x, M->Force, M->Friction, &M->spd[0]);
-		Wobble(&M->MenuY, OutPos.y, M->Force, M->Friction, &M->spd[1]);
+		if (M->Type == MENU_TYPE_DEFAULT)
+		{
+			Wobble(&M->MenuX, OutPos.x, M->Force, M->Friction, &M->spd[0]);
+			Wobble(&M->MenuY, OutPos.y, M->Force, M->Friction, &M->spd[1]);
+		}
+		else //MENU_TYPE_MESSAGE
+		{
+			Wobble(&M->MessageScale, 0.f, M->Force, M->Friction, &M->spd[0]);
+		}
+		
 		return;
 	}
 	
 	if (M->CurrentMenu != M->PreviousMenu)
 	{
-		Wobble(&M->MenuX, OutPos.x, M->Force, M->Friction, &M->spd[0]);
-		Wobble(&M->MenuY, OutPos.y, M->Force, M->Friction, &M->spd[1]);
+		if (M->Type == MENU_TYPE_DEFAULT)
+		{
+			Wobble(&M->MenuX, OutPos.x, M->Force, M->Friction, &M->spd[0]);
+			Wobble(&M->MenuY, OutPos.y, M->Force, M->Friction, &M->spd[1]);
+		}
+		else
+		{
+			Wobble(&M->MessageScale, 0.f, M->Force, M->Friction, &M->spd[0]);
+		}
+		
 		
 		if (ABS(M->MenuX-OutPos.x) < 1.f && ABS(M->MenuY-OutPos.y) < 1.f)
 		{
@@ -139,8 +179,16 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 	}
 	else
 	{
-		Wobble(&M->MenuX, MenuPos.x, M->Force, M->Friction, &M->spd[0]);
-		Wobble(&M->MenuY, MenuPos.y, M->Force, M->Friction, &M->spd[1]);
+		if (M->Type == MENU_TYPE_DEFAULT)
+		{
+			Wobble(&M->MenuX, MenuPos.x, M->Force, M->Friction, &M->spd[0]);
+			Wobble(&M->MenuY, MenuPos.y, M->Force, M->Friction, &M->spd[1]);
+		}
+		else
+		{
+			Wobble(&M->MessageScale, 1.f, M->Force, M->Friction, &M->spd[0]);
+		}
+		
 	}
 }
 
@@ -174,6 +222,11 @@ MenuID mnGetCurrentMenuID(const Menu* M)
 	return M->CurrentMenu;
 }
 
+MenuOfItems* mnGetMenuPtr(const Menu* M, MenuID MID)
+{
+	return (MenuOfItems*)daGet(M->Menus, MID);
+}
+
 MenuOfItems* mnGetCurrentMenu(const Menu* M)
 {
 	return (MenuOfItems*)daGet(M->Menus, M->PreviousMenu);
@@ -203,6 +256,12 @@ void mnSetCursor(Menu* M, Vec2 MousePos)
 Vec2 mnGetPosition(const Menu* M)
 {
 	return vec2(M->MenuX, M->MenuY);
+}
+
+void mnSetPosition(Menu* M, Vec2 Pos)
+{
+	M->MenuX = Pos.x;
+	M->MenuY = Pos.y;
 }
 
 MenuItem* mnGetItem(const Menu* M, MenuID MID, ItemID IID)
@@ -272,4 +331,9 @@ void* mnGetArg(Menu* M)
 void mnSetArg(Menu* M, void* Arg)
 {
 	M->Arg = Arg;
+}
+
+float mnGetMessageScale(const Menu* M)
+{
+	return M->MessageScale;
 }

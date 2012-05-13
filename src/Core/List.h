@@ -59,6 +59,12 @@ void lstAddAtBeginning(List* L, Elem Data);
 **/
 void lstDel(List* L, Elem E);
 
+/** @brief Supprime le premier élément dans la liste
+ *
+ * @param L Liste
+ **/
+void lstPopFront(List* L);
+
 /** @brief Chercher l'existence d'un élément dans la liste
  *
  * Complexité en O(n)

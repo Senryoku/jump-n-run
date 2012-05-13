@@ -71,6 +71,14 @@ void daAdd(DynArr* DA, void* ptr);
 **/
 void daDel(DynArr* DA, unsigned int Pos);
 
+/** @brief Supprime l'élément ptr
+ *
+ * Complexité en O(n - P)
+ * @param DA Le DynArr à modifier
+ * @param ptr élément à supprimer (0 - Size-1)
+ **/
+void daRem(DynArr* DA, void* ptr);
+
 /** @brief Supprime l'élément à la position P d'une manière plus rapide
  *
  * Ne conserve pas l'ordre des objets (important pour certaines applications !)
