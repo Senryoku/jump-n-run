@@ -135,17 +135,23 @@ void msgUpdate(const sf::Event& event)
 	
 	//On fait des update que si des menu existent!
 	if (daGetSize(MM.Menus->Menus) >0)
+	{
 		mnUpdate(MM.Menus, vec2(0.f, 0.f), vec2(0.f, 0.f));
+		mnHandleEvent(MM.Menus, event);
+	}
+		
 	
 	if (daGetSize(MM.Messages->Menus) >0)
 	{
 		float x = 1200.f/2.f - moiGetSize(mnGetCurrentMenu(MM.Messages)).x/2.f;
 		mnUpdate(MM.Messages, vec2(x, 800.f/2.f - moiGetSize(mnGetCurrentMenu(MM.Messages)).y/2.f), vec2(x, -mnGetHeight(MM.Messages) - 100.f));
+		
+		// Messages doit avoir la priorité sur les menus, étant donné qu'on l'a desactivé c'est bon
+		mnHandleEvent(MM.Messages, event);
 	}
 	
 	
-	// Messages doit avoir la priorité sur les menus
-	mnHandleEvent(MM.Messages, event);
+	
 	
 }
 

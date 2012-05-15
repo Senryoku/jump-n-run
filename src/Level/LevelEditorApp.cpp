@@ -100,7 +100,7 @@ void appRun(LevelEditorApp* App)
 
 	/* Code temporel permettant de créer des states d'animation */
 
-	Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
+	/*Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
 
 	vxSetPosition(Base, vec2(150.f, 330.f));
 	Vec2 B = vxGetPosition(Base);
@@ -116,7 +116,7 @@ void appRun(LevelEditorApp* App)
 	vxSetPosition(RightLeg1, vec2Add(vxGetPosition(Base), vec2(0.f, 40.f)));
 	vxSetPosition(RightLeg2, vec2Add(vxGetPosition(Base), vec2(-10.f, 80.f)));
 
-	/*
+	
 	vxSetFixe(Neck, TRUE);
 	vxSetFixe(Base, TRUE);
 	vxSetFixe(LeftArm1, TRUE);
@@ -131,7 +131,7 @@ void appRun(LevelEditorApp* App)
 	vxSetFixe(HeadRight, TRUE);
 	 */
 
-	wdAddVertex(App->Led.Lvl->W, Base);
+	/*wdAddVertex(App->Led.Lvl->W, Base);
 	wdAddVertex(App->Led.Lvl->W, Neck);
 	wdAddVertex(App->Led.Lvl->W, HeadLeft);
 	wdAddVertex(App->Led.Lvl->W, HeadRight);
@@ -174,7 +174,7 @@ void appRun(LevelEditorApp* App)
 	wdAddRigid(App->Led.Lvl->W, RL2);
 	wdAddRigid(App->Led.Lvl->W, H1);
 	wdAddRigid(App->Led.Lvl->W, H2);
-	wdAddRigid(App->Led.Lvl->W, H3);
+	wdAddRigid(App->Led.Lvl->W, H3);*/
 
 	/* Fin du code temporel pour les states des animations */
 	fpsInit(&fps);
@@ -348,7 +348,7 @@ void appRun(LevelEditorApp* App)
 						break;
 
 					/* code de sauvegarde de l'animation */
-				case sf::Keyboard::A :
+				/*case sf::Keyboard::A :
 						FILE* f; Vertex* V; Vec2 Pos; float Angle;
 						f = fopen("animPos.txt", "w");
 						//[nb of states] [AnimType] [Triggers]
@@ -436,6 +436,7 @@ void appRun(LevelEditorApp* App)
 
 						fclose(f);
 						break;
+				 */
 					default:
 						break;
 				}
