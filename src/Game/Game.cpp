@@ -173,6 +173,7 @@ void gmPlay(Game* G)
 
 		if(lvlIsGoalReached(G->Lvl))
 		{
+			G->Lvl->Finished = 1;
 			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score */
 			scInit(&Sc, "Senryoku", G->Lvl->Name, G->Lvl->MD5, Clk.getElapsedTime().asMilliseconds()/10.f);
 			// if(scSend(&Sc) == 1) { MenuErreur } else { MenuEnvoiReussi }
@@ -189,6 +190,7 @@ void gmPlay(Game* G)
 		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
+		lvlDispGoalFlag(G->Lvl);
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		aniUpdate(A, G->Lvl->P1, 1.f);

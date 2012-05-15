@@ -23,7 +23,7 @@ void appInit(LevelEditorApp* App)
 	sndmLoadMusicFile("music2", "data/music2.ogg");
 	sndmLoadMusicFile("music3", "data/music3.ogg");
 	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
-	 
+
 
 	sndmPlayMusic("music3");
 	 */
@@ -116,7 +116,7 @@ void appRun(LevelEditorApp* App)
 	vxSetPosition(RightLeg1, vec2Add(vxGetPosition(Base), vec2(0.f, 40.f)));
 	vxSetPosition(RightLeg2, vec2Add(vxGetPosition(Base), vec2(-10.f, 80.f)));
 
-	
+
 	vxSetFixe(Neck, TRUE);
 	vxSetFixe(Base, TRUE);
 	vxSetFixe(LeftArm1, TRUE);
@@ -279,6 +279,12 @@ void appRun(LevelEditorApp* App)
 						lvledTestLevel(&App->Led);
 						appWindowInit(App);
 						break;
+					case sf::Keyboard::J :
+						lvledSetSpawn(&App->Led);
+						break;
+					case sf::Keyboard::K :
+						lvledSetGoal(&App->Led);
+						break;
 					case sf::Keyboard::Space :
 						ViewWidth = App->WindowWidth;
 						ViewHeight = App->WindowHeight;
@@ -333,9 +339,6 @@ void appRun(LevelEditorApp* App)
 						if (event.key.control)
 							lvledLoad(&App->Led, App->WorkingPath);
 						else DispDebug = !DispDebug;
-						break;
-					case sf::Keyboard::X :
-						plGetUp(App->Led.Lvl->P1);
 						break;
 					case sf::Keyboard::V :
 						DispL1 = !DispL1;
@@ -436,6 +439,7 @@ void appRun(LevelEditorApp* App)
 
 						fclose(f);
 						break;
+>>>>>>> .r230
 				 */
 					default:
 						break;
@@ -563,6 +567,7 @@ void appRun(LevelEditorApp* App)
 
 			if(DispL1) lvlDisplayL1(App->Led.Lvl);
 			if(DispL2) lvlDisplayL2(App->Led.Lvl);
+			lvlDispGoalFlag(App->Led.Lvl);
 			if(DispObjects) lvlDispAllObj(App->Led.Lvl);
 //			glDrawCloth(C, Tx);
 			if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);

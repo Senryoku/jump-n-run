@@ -19,8 +19,10 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlTexFree = &glTexFree;
 	Lvl->lvlDisplayTex = &glDisplayTex;
 	Lvl->lvlDispTexPoly = &glDispTexPoly;
+	Lvl->lvlDispFlag = &glDispFlag;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
-	//Lvl->C = NULL;
+	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/trollface.jpg"), 0);
+	Lvl->Finished = 0;
 }
 
 void lvlFree(Level* Lvl)
@@ -50,6 +52,8 @@ void lvlFree(Level* Lvl)
 		Lvl->lvlTexFree(*((Texture*) daGet(&Lvl->Textures, i))),
 		free((Texture*) daGet(&Lvl->Textures, i));
 	daFree(&Lvl->Textures);
+
+	flFree(&Lvl->GoalFlag);
 }
 
 void delLevel(Level* lvl)
@@ -379,6 +383,7 @@ void lvlLoadedInit(Level* Lvl)
 
 void lvlUpdate(Level* Lvl, Bool Paused)
 {
+	srand(time(NULL));
 	unsigned int i;
 
 	if (!Paused)
@@ -388,6 +393,12 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 
 		wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
 		wdResolveVextex(lvlGetWorld(Lvl));
+
+		if(!Lvl->Finished)
+			flApplyForce(&Lvl->GoalFlag, vec2(0.f, 0.6f), 1);
+		else
+			flApplyForce(&Lvl->GoalFlag, vec2(5.f + (rand()%100)/20, 0.6f), 1);
+		flResolve(&Lvl->GoalFlag, 0.5f, 0.5f);
 
 		wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
 		for(i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
@@ -586,4 +597,9 @@ void lvlDispAllObj(Level* Lvl)
 		lvlDisplayObj(Lvl, (Object*) nodeGetData(it));
 		it = nodeGetNext(it);
 	}
+}
+
+void lvlDispGoalFlag(Level* Lvl)
+{
+	Lvl->lvlDispFlag(&Lvl->GoalFlag, Lvl->Goal.x, Lvl->Goal.y);
 }

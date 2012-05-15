@@ -7,7 +7,7 @@
 #include <string.h>
 #include <Core/md5.h>
 #include <Objects/Object.h>
-#include <Objects/Cloth.h>
+#include <Objects/Flag.h>
 
 /** @defgroup Level
  *
@@ -36,12 +36,15 @@ typedef struct
  	List Objects; /**< Liste d'objets texturés **/
  	Player* P1; /** Joueur 1 **/
 	float DistBG, DistFG;
+	Flag GoalFlag;
+	Bool Finished;
 
 	Texture (*lvlTexLoad)(const char* Path); /** Pointeur de fonction servant à charger en mémoire une texture **/
 	void (*lvlTexFree)(Texture Img); /** Pointeur de fonction libèrant une texture **/
 	void (*lvlDisplayTex)(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
 				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL); /** Pointeur de fonction affichant une texture **/
 	void (*lvlDispTexPoly)(Texture T, Polygon* P, List* L); /** Pointeur de fonction affichant une texture sur un polygon **/
+	void (*lvlDispFlag)(Flag* F, float X, float Y);
 } Level;
 
 /** @brief Constructeur
@@ -134,6 +137,10 @@ void lvlDisplayObj(const Level* Lvl, Object* Obj);
 /** @brief Affiche les objets texturés
 **/
 void lvlDispAllObj(Level* Lvl);
+
+/** @brief Affiche la drapeau marquant la fin du niveau
+**/
+void lvlDispGoalFlag(Level* Lvl);
 
 /** @brief Ajoute un objet texturé
 **/

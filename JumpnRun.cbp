@@ -80,6 +80,8 @@
 		<Unit filename="src\Objects\Animation.h" />
 		<Unit filename="src\Objects\Cloth.cpp" />
 		<Unit filename="src\Objects\Cloth.h" />
+		<Unit filename="src\Objects\Flag.cpp" />
+		<Unit filename="src\Objects\Flag.h" />
 		<Unit filename="src\Objects\Object.cpp" />
 		<Unit filename="src\Objects\Object.h" />
 		<Unit filename="src\Objects\Player.cpp" />

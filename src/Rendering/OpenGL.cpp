@@ -1,5 +1,7 @@
 #include "OpenGL.h"
 
+#include <Objects/Flag.h>
+
 /** @todo Virer ça, non ? **/
 Texture txBoxCorner, txBoxSide, txBoxShadow, txBoxGloss, txBoxBackAnim;
 sf::Font FntMenu;
@@ -184,14 +186,14 @@ void glDispTexPoly(Texture T, Polygon* P, List* L)
 
 void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 {
-	
+
 	MenuOfItems* moi = mnGetCurrentMenu(M);
 	Vec2 Size = moiGetSize(moi),
 	Position = mnGetPosition(M);
-	
+
 	if (Position.y+Size.y+20.f <= 0.f) // Pas besoin de dessiner
 		return;
-	
+
 	unsigned short i;
 	MenuItem* I;
 	float MaxTextWidth = 0.f;
@@ -465,7 +467,49 @@ void glDrawCloth(Cloth* C, Texture T)
 		}
 
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
 
+void glDispFlag(Flag* F, float X, float Y)
+{
+	glPushMatrix();
+	glTranslatef(X, Y - F->H*F->cellH, 0.f);
+	glColor4f(1.f, 1.f, 1.f, 1.f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, F->TexFlag);
+
+	for(unsigned int i = 0; i < F->H - 1; i++)
+	{
+		glBegin(GL_TRIANGLE_STRIP);
+		for(unsigned int j = 0; j < F->W; j++)
+		{
+			Vec2 Pos = vxGetPosition((Vertex*) daGet(&F->Vertices, i*F->W + j));
+			glTexCoord2f((float) j/F->W, (float) i/F->H);
+			glVertex2f((float) Pos.x, (float) Pos.y);
+
+			Pos = vxGetPosition((Vertex*) daGet(&F->Vertices, (i + 1)*F->W + j));
+			glTexCoord2f((float) j/F->W, (float) (i + 1)/F->H);
+			glVertex2f((float) Pos.x, (float) Pos.y);
+		}
+		glEnd();
+	}
+
+
+	glBindTexture(GL_TEXTURE_2D, F->TexPole);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.f, 0.f);
+	Vec2 Pos = vxGetPosition((Vertex*) daGet(&F->Vertices, 0));
+	glVertex2f((float) Pos.x - 5.f, (float) Pos.y);
+	glTexCoord2f(1.f, 0.f);
+	glVertex2f((float) Pos.x + 5.f, (float) Pos.y);
+	glTexCoord2f(1.f, 1.f);
+	glVertex2f((float) Pos.x + 5.f, (float) Pos.y + F->H*F->cellH*2);
+	glTexCoord2f(0.f, 1.f);
+	glVertex2f((float) Pos.x - 5.f, (float) Pos.y + F->H*F->cellH*2);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
 }
 
 void glDrawFPS(sf::RenderTarget& win, const std::string& FPS)

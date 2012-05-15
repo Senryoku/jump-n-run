@@ -8,6 +8,7 @@
 #include <SFML/OpenGL.hpp>
 
 typedef GLuint Texture;
+struct s_Flag;
 
 extern Texture txBoxCorner;
 extern Texture txBoxSide;
@@ -67,5 +68,10 @@ void glDisplayTex(Texture T, Vec2 TexUL, Vec2 TexUR, Vec2 TexDR, Vec2 TexDL,
  * @param L List de Vec2, coordonnées ordonées des points de liaison sur la texture
  **/
 void glDispTexPoly(Texture T, Polygon* P, List* L);
+
+/** @brief Affiche un Flag
+ *
+**/
+void glDispFlag(s_Flag* F, float X, float Y);
 #endif
 
