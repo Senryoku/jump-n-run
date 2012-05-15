@@ -25,6 +25,11 @@ typedef struct
 } Score;
 
 /** @brief Constructeur
+ *
+ * @param Player Pseudo du joueur
+ * @param LvlName Nom du Niveau
+ * @param LvlMD5 MD5 du niveau
+ * @param Time Temps (en centièmes de secondes) réalisé par le joueur
 **/
 Score* newScore(char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time);
 
@@ -39,7 +44,7 @@ void delScore(Score* S);
  * @param S Score à initialiser
  * @param Player Pseudo du joueur
  * @param LvlName Nom du Niveau
- * @param lvlMD5 MD5 du niveau
+ * @param LvlMD5 MD5 du niveau
  * @param Time Temps (en centièmes de secondes) réalisé par le joueur
 **/
 void scInit(Score* S, const char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time);

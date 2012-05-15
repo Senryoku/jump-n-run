@@ -8,7 +8,6 @@
  *
  * Tableau dynamique de void*
  * Préfixe des méthodes : da
- * @todo Test de régression complet
  * @{
 **/
 

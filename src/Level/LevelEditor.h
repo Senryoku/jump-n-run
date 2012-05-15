@@ -9,7 +9,6 @@
  *
  * Permet la création/édition de Niveau
  * Préfixe des méthodes : lvled
- * @todo Ajouter des fonctions pour ajouter des Textures (chemins ?)
  * @todo Ajouter des fonctions de manipulation internes des objets (changement de
  * spring pour les elastics, ajout de contraintes internes pour les polygones... etc)
  * @todo Documentation :]
@@ -21,7 +20,7 @@
 
 typedef struct
 {
-	Level* Lvl;
+	Level* Lvl; ///< Niveau à éditer
 	List tmpLstFixeFromV;
 	List tmpLstDynFromV;
 	List tmpLstFixe;
@@ -36,11 +35,11 @@ typedef struct
 	DynArr TexturesPath;
 
 	/* Fonctions de Callback */
-	void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);
-	void (*vxDraw)(Vertex* V, float R, float G, float B, float A);
-	void (*elDraw)(Elastic* E);
-	void (*rdDraw)(Rigid* R);
-	void (*polyDraw) (Polygon* P);
+	void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A); ///< Fontcion d'affichage de line
+	void (*vxDraw)(Vertex* V, float R, float G, float B, float A); ///< Fontcion d'affichage de Vertex
+	void (*elDraw)(Elastic* E); ///< Fontcion d'affichage d'Elastic
+	void (*rdDraw)(Rigid* R); ///< Fontcion d'affichage de Rigid
+	void (*polyDraw) (Polygon* P); ///< Fontcion d'affichage de Polygon
 } LevelEditor;
 
 void lvledInit(LevelEditor *Led, float Width, float Height);
