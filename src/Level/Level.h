@@ -65,6 +65,46 @@ void lvlFree(Level* Lvl);
 **/
 void delLevel(Level* lvl);
 
+/** @brief Accesseur de Filename
+**/
+const char* lvlGetFilename(const Level* lvl);
+
+/** @brief Accesseur de Name
+**/
+const char* lvlGetName(const Level* lvl);
+
+/** @brief Accesseur de Desc
+**/
+const char* lvlGetDesc(const Level* lvl);
+
+/** @brief Accesseur de MD5
+**/
+const char* lvlGetMD5(const Level* lvl);
+
+/** @brief Accesseur de W
+**/
+World* lvlGetWorld(const Level* Lvl);
+
+/** @brief Accesseur de Spawn
+**/
+Vec2 lvlGetSpawn(const Level* lvl);
+
+/** @brief Accesseur de Goal
+**/
+Vec2 lvlGetGoal(const Level* lvl);
+
+/** @brief Accesseur de P1
+**/
+Player* lvlGetP1(const Level* lvl);
+
+/** @brief Accesseur de Finished
+**/
+Bool lvlIsFinished(const Level* lvl);
+
+/** @brief Mutateur de Finished
+**/
+void lvlSetFinished(Level* Lvl, Bool B);
+
 /** @brief Mutateur de DistBG
 **/
 void lvlSetDistBG(Level* lvl, float F);
@@ -72,6 +112,14 @@ void lvlSetDistBG(Level* lvl, float F);
 /** @brief Mutateur de DistFG
 **/
 void lvlSetDistFG(Level* lvl, float F);
+
+/** @brief Mutateur de Name
+**/
+void lvlSetName(Level* lvl, char* Name);
+
+/** @brief Mutateur de Desc
+**/
+void lvlSetDesc(Level* lvl, char* Desc);
 
 /** @brief Charge un niveau à partir d'un fichier
  *
@@ -99,10 +147,6 @@ void lvlUpdate(Level* Lvl, Bool Paused);
  *
 **/
 Bool lvlIsGoalReached(const Level* L);
-
-/** @brief Accesseur de W
-**/
-World* lvlGetWorld(const Level* Lvl);
 
 /** @brief Affiche le fond
  *

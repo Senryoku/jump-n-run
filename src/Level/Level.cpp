@@ -62,6 +62,50 @@ void delLevel(Level* lvl)
 	free(lvl);
 }
 
+const char* lvlGetFilename(const Level* lvl)
+{
+	return lvl->Filename;
+}
+
+const char* lvlGetName(const Level* lvl)
+{
+	return lvl->Name;
+}
+
+const char* lvlGetDesc(const Level* lvl)
+{
+	return lvl->Desc;
+}
+
+const char* lvlGetMD5(const Level* lvl)
+{
+	return lvl->MD5;
+}
+
+Vec2 lvlGetSpawn(const Level* lvl)
+{
+	return lvl->Spawn;
+}
+
+Vec2 lvlGetGoal(const Level* lvl)
+{
+	return lvl->Goal;
+}
+
+Player* lvlGetP1(const Level* lvl)
+{
+	return lvl->P1;
+}
+
+Bool lvlIsFinished(const Level* lvl)
+{
+	return lvl->Finished;
+}
+
+void lvlSetFinished(Level* Lvl, Bool B)
+{
+	Lvl->Finished = B;
+}
 
 Bool lvlLoad(Level* Lvl, const char* File)
 {
@@ -356,6 +400,16 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	delDynArr(Vx);
 
 	return TRUE;
+}
+
+void lvlSetName(Level* lvl, char* Name)
+{
+	strcpy(lvl->Name, Name);
+}
+
+void lvlSetDesc(Level* lvl, char* Desc)
+{
+	strcpy(lvl->Desc, Desc);
 }
 
 void lvlLoadedInit(Level* Lvl)

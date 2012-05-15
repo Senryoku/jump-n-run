@@ -234,8 +234,6 @@ void appRun(LevelEditorApp* App)
 						mnInit(&App->M);
 						mnSetItemSelectedZoomFactor(&App->M, 1.f);
 						mnSetItemNormalZoomFactor(&App->M, 0.75f);
-						MenuID VxMenu;
-						VxMenu = mnAddMenu(&App->M, "Vertex Edition", 1);
 						mnAddItem(&App->M, 0, "Input a real", ITEM_INPUT_VALUE, NULL, NULL);
 
 						App->MenuUsed = 1;

@@ -118,10 +118,10 @@ void gmPlay(Game* G)
 				switch (event.mouseButton.button)
 				{
 					case sf::Mouse::Right :
-						plGrabR(G->Lvl->P1, lvlGetWorld(G->Lvl), MouseX, MouseY);
+						plGrabR(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl), MouseX, MouseY);
 						break;
 					case sf::Mouse::Left :
-						plGrabL(G->Lvl->P1, lvlGetWorld(G->Lvl), MouseX, MouseY);
+						plGrabL(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl), MouseX, MouseY);
 						break;
 					default :
 						break;
@@ -133,10 +133,10 @@ void gmPlay(Game* G)
 				switch (event.mouseButton.button)
 				{
 					case sf::Mouse::Right :
-						plReleaseR(G->Lvl->P1, lvlGetWorld(G->Lvl));
+						plReleaseR(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl));
 						break;
 					case sf::Mouse::Left :
-						plReleaseL(G->Lvl->P1, lvlGetWorld(G->Lvl));
+						plReleaseL(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl));
 						break;
 					default :
 						break;
@@ -152,37 +152,37 @@ void gmPlay(Game* G)
 		lvlUpdate(G->Lvl, FALSE);
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-            plJump(G->Lvl->P1);
+            plJump(lvlGetP1(G->Lvl));
 		else
-			plResetJump(G->Lvl->P1);
+			plResetJump(lvlGetP1(G->Lvl));
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
-			plGetUp(G->Lvl->P1);
+			plGetUp(lvlGetP1(G->Lvl));
         //if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            plMoveL(G->Lvl->P1);
+            plMoveL(lvlGetP1(G->Lvl));
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            plMoveR(G->Lvl->P1);
+            plMoveR(lvlGetP1(G->Lvl));
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-            plRotateR(G->Lvl->P1);
+            plRotateR(lvlGetP1(G->Lvl));
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-            plRotateL(G->Lvl->P1);
+            plRotateL(lvlGetP1(G->Lvl));
 
 
 		if(lvlIsGoalReached(G->Lvl))
 		{
-			G->Lvl->Finished = 1;
+			lvlSetFinished(G->Lvl, 1);
 			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score */
-			scInit(&Sc, "Senryoku", G->Lvl->Filename, G->Lvl->MD5, Clk.getElapsedTime().asMilliseconds()/10.f);
+			scInit(&Sc, "Senryoku", lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), Clk.getElapsedTime().asMilliseconds()/10.f);
 			// if(scSend(&Sc) == 1) { MenuErreur } else { MenuEnvoiReussi }
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		Center = polyComputeCenter(G->Lvl->P1->Shape);
+		Center = polyComputeCenter(lvlGetP1(G->Lvl)->Shape);
 		ViewX = MAX(0, MIN(Center.x - ViewWidth/2, wdGetWidth(lvlGetWorld(G->Lvl)) - ViewWidth));
 		ViewY = MAX(0, MIN(Center.y - ViewHeight/2, wdGetHeight(lvlGetWorld(G->Lvl)) - ViewHeight));
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
@@ -193,12 +193,12 @@ void gmPlay(Game* G)
 		lvlDispGoalFlag(G->Lvl);
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
-		aniUpdate(A, G->Lvl->P1, 1.f);
+		aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
 
 		sndmUpdate();
 
 		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
-		glDrawPolygon(G->Lvl->P1->Shape);
+		glDrawPolygon(lvlGetP1(G->Lvl)->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
 
 		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&G->GameMenu) - 100.f));
