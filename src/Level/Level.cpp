@@ -78,8 +78,8 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		tmp = strtok(NULL, "/");
 	}
 
-	strcpy(Lvl->Name, Name);
-	printf("Filename : %s\n", Lvl->Name);
+	strcpy(Lvl->Filename, Name);
+	printf("Filename : %s\n", Lvl->Filename);
 
 	strcpy(Lvl->MD5, md5FromFile(File).c_str());
 	printf("MD5 : %s\n", Lvl->MD5);
@@ -98,11 +98,18 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	{
 		printf("Le fichier ne peut pas être lu\n");
 		return FALSE;
+	} else {
+		strcpy(Lvl->Name, lvl);
+		Lvl->Name[strlen(Lvl->Name) - 1] = '\0'; // On enlève le CR
 	}
-	if (fgets(description, 300, f)==NULL)
+
+	if (fgets(description, 255, f)==NULL)
 	{
 		printf("Le fichier ne peut pas être lu\n");
 		return FALSE;
+	} else {
+		strcpy(Lvl->Desc, description);
+		Lvl->Desc[strlen(Lvl->Desc) - 1] = '\0'; // On enlève le CR
 	}
 
 	float width, height, DistBG = 1.f, DistFG = 1.f;

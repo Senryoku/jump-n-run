@@ -23,7 +23,9 @@
 **/
 typedef struct
 {
-	char Name[255]; /**< Nom du fichier chargé **/
+	char Filename[255]; /**< Nom du fichier chargé **/
+	char Name[255]; /**< Nom du Niveau **/
+	char Desc[255]; /**< Description du Niveau**/
 	char MD5[255]; /**< MD5 du fichier chargé **/
 	World* W; /**< Monde physique **/
 	Vec2 Spawn; /**< Point d'apparition du joueur **/

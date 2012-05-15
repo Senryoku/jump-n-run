@@ -175,7 +175,7 @@ void gmPlay(Game* G)
 		{
 			G->Lvl->Finished = 1;
 			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score */
-			scInit(&Sc, "Senryoku", G->Lvl->Name, G->Lvl->MD5, Clk.getElapsedTime().asMilliseconds()/10.f);
+			scInit(&Sc, "Senryoku", G->Lvl->Filename, G->Lvl->MD5, Clk.getElapsedTime().asMilliseconds()/10.f);
 			// if(scSend(&Sc) == 1) { MenuErreur } else { MenuEnvoiReussi }
 		}
 

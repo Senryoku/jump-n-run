@@ -631,8 +631,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	}
 
 	/* Entete du fichier*/
-	char lvl[100]="Niveau Test", description[300]="Ceci est la description du niveau";
-	fprintf(f, "%s\n%s\n%f, %f ; %f, %f\n", lvl, description, lvlGetWorld(Led->Lvl)->Width, lvlGetWorld(Led->Lvl)->Height, Led->Lvl->DistBG, Led->Lvl->DistFG);
+	fprintf(f, "%s\n%s\n%f, %f ; %f, %f\n", Led->Lvl->Name, Led->Lvl->Desc, lvlGetWorld(Led->Lvl)->Width, lvlGetWorld(Led->Lvl)->Height, Led->Lvl->DistBG, Led->Lvl->DistFG);
 	fprintf(f, "%f, %f ; %f, %f\n", Led->Lvl->Spawn.x, Led->Lvl->Spawn.y, Led->Lvl->Goal.x, Led->Lvl->Goal.y);
 	fprintf(f, "%s\n%s\n%s\n%s\n", Led->backPath, Led->layer1Path, Led->layer2Path, Led->forePath);
 
