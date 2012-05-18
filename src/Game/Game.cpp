@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <Objects/Animation.h>
+#include <Game/Message.h>
 
 
 void gmInit(Game* G)
@@ -59,6 +60,7 @@ void gmInit(Game* G)
 	MID=1;
 	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go Back!", 1);
 
+	msgSetMainMenu(&G->GameMenu);
 
 	G->Window->setActive();
 }
@@ -118,7 +120,12 @@ void gmPlay(Game* G)
 				switch (event.mouseButton.button)
 				{
 					case sf::Mouse::Right :
-						plGrabR(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl), MouseX, MouseY);
+						//msgShow("hello!", "ñaaaaa", "Close", 0);
+						msgCreateMessage("test message", 2);
+						msgAddItem("Hello I'm a message!", ITEM_LABEL, NULL, NULL);
+						msgAddItem("Close", ITEM_BUTTON, &CloseMessage, NULL);
+						//msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+						plGrabR(G->Lvl->P1, lvlGetWorld(G->Lvl), MouseX, MouseY);
 						break;
 					case sf::Mouse::Left :
 						plGrabL(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl), MouseX, MouseY);
@@ -147,7 +154,10 @@ void gmPlay(Game* G)
 				mnSetHide(&G->GameMenu, !mnGetHide(&G->GameMenu));
 
 			mnHandleEvent(&G->GameMenu, event);
+			msgHandleEvent(event);
 		}
+		
+		msgUpdate();
 
 		lvlUpdate(G->Lvl, FALSE);
 
@@ -178,6 +188,7 @@ void gmPlay(Game* G)
 			scInit(&Sc, "Senryoku", lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), Clk.getElapsedTime().asMilliseconds()/10.f);
 			// if(scSend(&Sc) == 1) { MenuErreur } else { MenuEnvoiReussi }
 		}
+		
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
@@ -187,6 +198,7 @@ void gmPlay(Game* G)
 		ViewY = MAX(0, MIN(Center.y - ViewHeight/2, wdGetHeight(lvlGetWorld(G->Lvl)) - ViewHeight));
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
 
+		
 		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
@@ -198,15 +210,30 @@ void gmPlay(Game* G)
 		sndmUpdate();
 
 		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
+
 		glDrawPolygon(lvlGetP1(G->Lvl)->Shape);
 		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
 
-		mnUpdate(&G->GameMenu, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&G->GameMenu) - 100.f));
-		glDrawMenu(*G->Window, &G->GameMenu, ViewX, ViewY);
-		glDrawFPS(*G->Window, fpsGetString(&fps));
+		float menuPosx = G->Window->getSize().x/2.f - moiGetSize(mnGetCurrentMenu(&G->GameMenu)).x/2.f;
+		mnUpdate(&G->GameMenu, vec2(menuPosx, 100.f), vec2(menuPosx, -mnGetHeight(&G->GameMenu) - 100.f));
+		glDrawMenuBox(*G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
+		
+		//if (msgCanBeDrawn()) glDrawMenuBox(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
+		
 		fpsStep(&fps);
-
+		
+		//SFML
+		glDrawMenuItems(*G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
+		glDrawFPS(*G->Window, fpsGetString(&fps));
+		
+		
+		//if (msgCanBeDrawn())
+		//	glDrawMenuItems(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
+		
+		
 		G->Window->display();
+		
+		if (msgCanDisplay()) msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 	}
 	delAnimation(A);
 }

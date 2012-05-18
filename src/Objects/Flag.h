@@ -12,8 +12,8 @@
 typedef struct s_Flag
 {
 	DynArr Vertices; ///< Vertices composants le tissu du drapeau
-	float cellH, cellW; ///< Nombre de cellules
-	unsigned int H, W; ///< Dimension des cellules
+	float cellH, cellW; ///< Dimension des cellules
+	unsigned int H, W; ///< Nombre de cellules
 	DynArr Rigids; ///< Rigids composants le tissu du drapeau
 	Texture TexFlag; ///< Texture du drapeau
 	Texture TexPole; ///< Texture du poteau

@@ -19,6 +19,7 @@ void mnInit(Menu* M)
 	M->Arg = NULL;
 	M->Type = MENU_TYPE_DEFAULT;
 	M->MessageScale = 0.f;
+	M->Hide = FALSE;
 }
 
 
@@ -127,13 +128,16 @@ Bool mnGetActive(const Menu* M)
 Bool mnIsVisible(const Menu* M)
 {
 	if (M->Type == MENU_TYPE_DEFAULT)
-		return (M->MenuY+mnGetHeight(M) < -10.f);
+		return !(M->MenuY+mnGetHeight(M) < -10.f);
 	else
 		return M->MessageScale>0.05f;
 }
 
 void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 {
+	if (mnGetCurrentItem(M) != NULL && mniGetType(mnGetCurrentItem(M)) == ITEM_LABEL)
+		mnMoveCursor(M, MENU_GO_DOWN);
+	
 	moiUpdateVisuals((MenuOfItems*)daGet(M->Menus, M->CurrentMenu), M->ItemSelectedZoomFactor, M->ItemNormalZoomFactor);
 	
 	M->SubAnim+=0.35f;

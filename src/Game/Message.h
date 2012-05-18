@@ -11,6 +11,7 @@
  * @{
  */
 
+
 typedef MenuOfItems* MessageID;
 
 /** @brief Initialise Le manager de Messages
@@ -35,13 +36,28 @@ void msgFree();
  **/
 MessageID msgShow(const char* Title, const char* Text, const char* Button, Bool Force);
 
-void msgUpdate(const sf::Event& event);
+void msgSetMainMenu(Menu* M);
+
+void msgCreateMessage(const char* Title, unsigned int ItemCount);
+//Ajoute un item au message qui va ètre montré
+void msgAddItem(const char* Text, ItemType Type, void (*Function)(void), void* Data);
+
+//Montre le message et attend  une réponse. ensuite il est détruit
+void msgDisplay(sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 
 
+void msgUpdate();
+void msgHandleEvent(const sf::Event& event);
+
+Bool msgCanDisplay();
 
 
 void CloseMessage();
+void CloseMessageOLD();
 
+Menu* msgGetMenu();
+
+Bool msgCanBeDrawn();
 
 /**@}**/
 #endif

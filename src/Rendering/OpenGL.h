@@ -26,7 +26,12 @@ void glDrawElastic(Elastic* E);
 void glDrawRigid(Rigid* E);
 void glDrawPolygon(Polygon *P);
 void glDrawCircle(float x, float y, float radius);
-void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY);
+
+//One ne peut pas combiner OGL et SFML correctement donc il faut faire en deux étapes...
+void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
+void glDrawMenuItems(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
+void glDrawMenuBox(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
+
 void glDrawCloth(Cloth* C, Texture T);
 void glDrawFPS(sf::RenderTarget& win, const std::string& FPS);
 void glDrawPolyFromList(List* L, Vec2 MousePos);

@@ -184,9 +184,246 @@ void glDispTexPoly(Texture T, Polygon* P, List* L)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
+void glDrawMenuItems(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
 {
+	MenuOfItems* moi = mnGetCurrentMenu(M);
+	Vec2 Size = moiGetSize(moi),
+	Position = mnGetPosition(M);
 
+	if (Position.y+Size.y+20.f <= 0.f) // Pas besoin de dessiner
+		return;
+	
+	unsigned short i;
+	MenuItem* I;
+	float MaxTextWidth = 0.f;
+	sf::Text ItemText;
+	ItemText.setFont(FntMenu);
+	ItemText.setString(std::string(moiGetText(moi)));
+	float TitleWidth = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+	TitleWidth *= mnGetItemSelectedZoomFactor(M);
+	
+	
+	
+	float heigth = 5.f; //offset
+	for (i=0; i<moiGetItemCount(moi); i++)
+	{
+		I = moiGetItem(moi, i);
+		heigth+=mnGetItemHeight(M)*(*mniGetZoom(I));
+	}
+	
+	
+	Size.x = MAX(TitleWidth+10.f, Size.x);
+	
+	Vec2 TitleSize = vec2(TitleWidth, 60.f);
+	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
+	
+	
+	
+	win.pushGLStates();
+	
+	
+	
+	 if (strcmp(moiGetText(moi), "")!=0)
+	 {
+	 
+	 ItemText.setScale(mnGetItemSelectedZoomFactor(M), mnGetItemSelectedZoomFactor(M));
+	 ItemText.setPosition(TitlePos.x, TitlePos.y+13.f);
+	 
+	 
+	 ItemText.setColor(sf::Color(0,0,0));
+	 win.draw(ItemText);
+	 ItemText.move(0.f, 1.5f);
+	 ItemText.setColor(sf::Color(255,255,255));
+	 win.draw(ItemText);
+	 
+	 }
+	 
+	 
+	 float yoffset = 5.f, selOffset;
+	 for (i=0; i<moiGetItemCount(moi); i++)
+	 {
+	 I = moiGetItem(moi, i);
+	 if (strcmp(mniGetText(I), "")==0)
+	 ItemText.setString(" "); // une chaîne vide donne une erreur 
+	 else
+	 ItemText.setString(std::string(mniGetText(I)));
+	 
+	 switch (mniGetType(I))
+	 {
+	 case ITEM_CHECKBOX:
+	 if (*(Bool*)mniGetData(I))
+	 ItemText.setString(ItemText.getString() + ": Yes");
+	 else
+	 ItemText.setString(ItemText.getString() + ": No");
+	 break;
+	 
+	 case ITEM_INPUT:
+	 case ITEM_INPUT_VALUE:
+	 case ITEM_INPUT_MULTILINE:
+	 ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
+	 /// @todo bug quand on fait backspace alors que la chaine est vide, étrange... 
+	 break;
+	 case ITEM_VALUE:
+	 char ValueText[300];
+	 sprintf(ValueText, ": %.f", *(float*)mniGetData(I));
+	 ItemText.setString(ItemText.getString() + std::string(ValueText));
+	 break;
+	 default:
+	 break;
+	 }
+	 
+	 ItemText.setScale(1.f, 1.f);
+	 ItemText.setPosition(Position.x+5.f, Position.y+yoffset+5.f);
+	 
+	 ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
+	 
+	 if (i != moiGetItemSelectedID(moi))
+	 {
+		 //win.pushGLStates();
+		 ItemText.setColor(sf::Color(0,0,0));
+		 win.draw(ItemText);
+		 ItemText.move(0.f, 1.5f);
+		 ItemText.setColor(sf::Color(255,255,255));
+		 win.draw(ItemText);
+		 //win.popGLStates();
+	 }
+	 else
+	 selOffset = yoffset;
+	 
+	 
+	 yoffset+=((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).y+ItemText.getCharacterSize())*(*mniGetZoom(I));
+	 
+	 float Width;
+	 if (mniGetType(I) != ITEM_INPUT_MULTILINE)
+	 Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+	 else
+	 {
+	 float extrax = 0.f, calc;
+	 //On cherche tous les sauts à la ligne pour trouver la ligne la plus longue
+	 std::size_t pos = ItemText.getString().find("\n"), last_pos = 0;
+	 while (pos != sf::String::InvalidPos)
+	 {
+	 calc = ((ItemText.findCharacterPos(pos)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+	 if (calc > extrax)
+	 extrax = calc;
+	 last_pos = pos;
+	 pos = ItemText.getString().find("\n", last_pos+1);
+	 if (pos == last_pos)
+	 pos = sf::String::InvalidPos;
+	 
+	 }
+	 
+	 calc = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+	 if (calc > extrax)
+	 extrax = calc;
+	 
+	 if (last_pos == 0 && pos == sf::String::InvalidPos) //Pas de saut à la ligne
+	 Width = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+	 else
+	 Width = extrax;
+	 }
+	 if (Width>MaxTextWidth)
+	 MaxTextWidth=Width;
+	 
+	 mnSetItemHeight(M, ItemText.getCharacterSize());
+	 
+	 
+	 
+	 }
+	 Size.y = yoffset+10.f;
+	 
+	 if (moiGetItemSelectedID(moi) != INVALID_ITEM_ID)
+	 {
+	 I = moiGetItemSelected(moi);
+	 if (strcmp(mniGetText(I), "")==0)
+	 ItemText.setString(" "); // une chaîne vide donne une erreur 
+	 else
+	 ItemText.setString(std::string(mniGetText(I)));
+	 
+	 switch (mniGetType(I))
+	 {
+	 case ITEM_CHECKBOX:
+	 if (*(Bool*)mniGetData(I))
+	 ItemText.setString(ItemText.getString() + ": Yes");
+	 else
+	 ItemText.setString(ItemText.getString() + ": No");
+	 break;
+	 
+	 case ITEM_INPUT:
+	 case ITEM_INPUT_VALUE:
+	 case ITEM_INPUT_MULTILINE:
+	 ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
+	 break;
+	 case ITEM_VALUE:
+	 char ValueText[300];
+	 sprintf(ValueText, ": %.f", *(float*)mniGetData(I));
+	 ItemText.setString(ItemText.getString() + std::string(ValueText));
+	 break;
+	 default:
+	 break;
+	 }
+	 
+	 ItemText.setScale(1.f, 1.f);
+	 ItemText.setPosition(Position.x+5.f, Position.y+selOffset+5.f);
+	 
+	 ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
+	 
+	 yoffset+=((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).y+ItemText.getCharacterSize())*(*mniGetZoom(I));
+	 
+	 
+		 //win.pushGLStates();
+		 ItemText.setColor(sf::Color(0,0,0));
+		 win.draw(ItemText);
+		 ItemText.move(0.f, 1.5f);
+		 ItemText.setColor(sf::Color(255,255,255));
+		 win.draw(ItemText);
+		 //win.popGLStates();
+	 
+	 
+	 
+	 float Width;
+	 if (mniGetType(I) != ITEM_INPUT_MULTILINE)
+	 Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+	 else
+	 {
+	 float extrax = 0.f, calc;
+	 //On cherche tous les sauts à la ligne pour trouver la ligne la plus longue
+	 std::size_t pos = ItemText.getString().find("\n"), last_pos = 0;
+	 while (pos != sf::String::InvalidPos)
+	 {
+	 calc = ((ItemText.findCharacterPos(pos)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+	 if (calc > extrax)
+	 extrax = calc;
+	 last_pos = pos;
+	 pos = ItemText.getString().find("\n", last_pos+1);
+	 if (pos == last_pos)
+	 pos = sf::String::InvalidPos;
+	 
+	 }
+	 
+	 calc = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+	 if (calc > extrax)
+	 extrax = calc;
+	 
+	 if (last_pos == 0 && pos == sf::String::InvalidPos) //Pas de saut à la ligne
+	 Width = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
+	 else
+	 Width = extrax;
+	 }
+	 if (Width>MaxTextWidth)
+	 MaxTextWidth=Width;
+	 
+	 }
+	 
+	
+	moiSetSize(moi, vec2(MaxTextWidth+5.f, Size.y));
+	
+	win.popGLStates();
+	
+}
+
+void glDrawMenuBox(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+{
 	MenuOfItems* moi = mnGetCurrentMenu(M);
 	Vec2 Size = moiGetSize(moi),
 	Position = mnGetPosition(M);
@@ -196,11 +433,57 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 
 	unsigned short i;
 	MenuItem* I;
+	sf::Text ItemText;
+	ItemText.setFont(FntMenu);
+	ItemText.setString(std::string(moiGetText(moi)));
+	float TitleWidth = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+	TitleWidth *= mnGetItemSelectedZoomFactor(M);
+	
+	
+	
+	//glPushMatrix();
+	
+	float heigth = 5.f; //offset
+	for (i=0; i<moiGetItemCount(moi); i++)
+	{
+		I = moiGetItem(moi, i);
+		heigth+=mnGetItemHeight(M)*(*mniGetZoom(I));
+	}
+	
+	glTranslatef(ViewX, ViewY, 0.f);
+	glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
+	
+	Size.x = MAX(TitleWidth+10.f, Size.x);
+	
+	Vec2 TitleSize = vec2(TitleWidth, 60.f);
+	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
+	
+	if (strcmp(moiGetText(moi), "")!=0)
+		glDrawTitleBox(TitlePos, TitleSize);
+	
+	glDrawBox(Position, Size, (int)M->SubAnim);
+	
+	//glPopMatrix();
+}
+
+void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+{
+	
+	MenuOfItems* moi = mnGetCurrentMenu(M);
+	Vec2 Size = moiGetSize(moi),
+	Position = mnGetPosition(M);
+	
+	if (Position.y+Size.y+20.f <= 0.f) // Pas besoin de dessiner
+		return;
+	
+	unsigned short i;
+	MenuItem* I;
 	float MaxTextWidth = 0.f;
 	sf::Text ItemText;
 	ItemText.setFont(FntMenu);
 	ItemText.setString(std::string(moiGetText(moi)));
 	float TitleWidth = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
+	TitleWidth *= mnGetItemSelectedZoomFactor(M);
 
 
 
@@ -214,6 +497,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	}
 
 	glTranslatef(ViewX, ViewY, 0.f);
+	glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
 
 	Size.x = MAX(TitleWidth+10.f, Size.x);
 
@@ -224,6 +508,8 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		glDrawTitleBox(TitlePos, TitleSize);
 
 	glDrawBox(Position, Size, (int)M->SubAnim);
+	
+	glPopMatrix();
 
 
 	//glTranslatef(13.f, -13.f, 0.f);
@@ -237,30 +523,35 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	glVertex2f(Position.x, Position.y + heigth);
 	glEnd();*/
 
-
-
+	//glPushAttrib(GL_TRANSFORM_BIT | GL_VIEWPORT_BIT | GL_ENABLE_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	//win.resetGLStates();
+	
+	//glPopAttrib();
+	
+	/*
 	if (strcmp(moiGetText(moi), "")!=0)
 	{
 
 		ItemText.setScale(mnGetItemSelectedZoomFactor(M), mnGetItemSelectedZoomFactor(M));
 		ItemText.setPosition(TitlePos.x, TitlePos.y+13.f);
 
-		win.pushGLStates();
+		
 		ItemText.setColor(sf::Color(0,0,0));
 		win.draw(ItemText);
 		ItemText.move(0.f, 1.5f);
 		ItemText.setColor(sf::Color(255,255,255));
 		win.draw(ItemText);
-		win.popGLStates();
+		
 	}
 
-
+	
 	float yoffset = 5.f, selOffset;
 	for (i=0; i<moiGetItemCount(moi); i++)
 	{
 		I = moiGetItem(moi, i);
 		if (strcmp(mniGetText(I), "")==0)
-			ItemText.setString(" "); /* une chaîne vide donne une erreur */
+			ItemText.setString(" "); // une chaîne vide donne une erreur 
 		else
 			ItemText.setString(std::string(mniGetText(I)));
 
@@ -277,7 +568,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			case ITEM_INPUT_VALUE:
 			case ITEM_INPUT_MULTILINE:
 				ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
-				/** @todo bug quand on fait backspace alors que la chaine est vide, étrange... */
+	 /// @todo bug quand on fait backspace alors que la chaine est vide, étrange... 
 				break;
 			case ITEM_VALUE:
 				char ValueText[300];
@@ -352,7 +643,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 	{
 		I = moiGetItemSelected(moi);
 		if (strcmp(mniGetText(I), "")==0)
-			ItemText.setString(" "); /* une chaîne vide donne une erreur */
+	 ItemText.setString(" "); // une chaîne vide donne une erreur 
 		else
 			ItemText.setString(std::string(mniGetText(I)));
 
@@ -394,6 +685,8 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 		ItemText.setColor(sf::Color(255,255,255));
 		win.draw(ItemText);
 		win.popGLStates();
+	 
+	 
 
 		float Width;
 		if (mniGetType(I) != ITEM_INPUT_MULTILINE)
@@ -428,10 +721,12 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY)
 			MaxTextWidth=Width;
 
 	}
+	 */
 
 	moiSetSize(moi, vec2(MaxTextWidth+5.f, Size.y));
+	
+	//glPopAttrib();
 
-	glPopMatrix();
 }
 
 
@@ -484,12 +779,13 @@ void glDispFlag(Flag* F, float X, float Y)
 		for(unsigned int j = 0; j < F->W; j++)
 		{
 			Vec2 Pos = vxGetPosition((Vertex*) daGet(&F->Vertices, i*F->W + j));
-			glTexCoord2f((float) j/F->W, (float) i/F->H);
+			glTexCoord2f((float) j/(F->W-1), (float) i/(F->H-1));
 			glVertex2f((float) Pos.x, (float) Pos.y);
 
 			Pos = vxGetPosition((Vertex*) daGet(&F->Vertices, (i + 1)*F->W + j));
-			glTexCoord2f((float) j/F->W, (float) (i + 1)/F->H);
+			glTexCoord2f((float) j/(F->W-1), (float) (i + 1)/(F->H-1));
 			glVertex2f((float) Pos.x, (float) Pos.y);
+			
 		}
 		glEnd();
 	}
