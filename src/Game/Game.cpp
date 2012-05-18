@@ -125,7 +125,7 @@ void gmPlay(Game* G)
 						msgAddItem("Hello I'm a message!", ITEM_LABEL, NULL, NULL);
 						msgAddItem("Close", ITEM_BUTTON, &CloseMessage, NULL);
 						//msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
-						plGrabR(G->Lvl->P1, lvlGetWorld(G->Lvl), MouseX, MouseY);
+						plGrabR(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl), MouseX, MouseY);
 						break;
 					case sf::Mouse::Left :
 						plGrabL(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl), MouseX, MouseY);

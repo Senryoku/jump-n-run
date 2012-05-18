@@ -200,10 +200,10 @@ void appRun(LevelEditorApp* App)
 		while (App->Window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
-				return;
+				App->Window.close();
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-				return; /** @todo Faire apparaitre un menu ici **/
+				App->Window.close();; /** @todo Faire apparaitre un menu ici **/
 
 			if (event.type == sf::Event::LostFocus)
 				App->WindowIsActive = FALSE;
@@ -496,6 +496,9 @@ void appRun(LevelEditorApp* App)
 			
 			mnHandleEvent(M, event);
 		}
+		
+		if (!App->Window.isOpen()) //On sort de la boucle si on a fermé la fenêtre
+			break;
 
 		lvledSetMousePosition(&App->Led, MouseX, MouseY);
 		lvledGrabUpdate(&App->Led);

@@ -14,7 +14,6 @@
  *
  * Sert à gèrer les sons en mémoires et les instances de ceux-ci
  * Préfixe: sndm
- * @todo Ajouter des const pour les modes. Certains on ne peux pas car il les fonctions sur les map nécessitent ne pas être const
  * @{
  */
 
