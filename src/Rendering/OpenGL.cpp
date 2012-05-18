@@ -441,7 +441,7 @@ void glDrawMenuBox(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, flo
 	
 	
 	
-	//glPushMatrix();
+	glPushMatrix();
 	
 	float heigth = 5.f; //offset
 	for (i=0; i<moiGetItemCount(moi); i++)
@@ -463,7 +463,7 @@ void glDrawMenuBox(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, flo
 	
 	glDrawBox(Position, Size, (int)M->SubAnim);
 	
-	//glPopMatrix();
+	glPopMatrix();
 }
 
 void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)

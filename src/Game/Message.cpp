@@ -272,21 +272,25 @@ void msgDisplay(sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth
 		glColor4f(1.f, 1.f, 1.f, 1.f);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, Screeny);
+		glPushMatrix();
+		glTranslatef(ViewX, ViewY, 0.f);
+		glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
 		glBegin(GL_QUADS);
-		glTexCoord2f(0.f, 0.f);
+		glTexCoord2i(0, 0);
 		glVertex2f(0.f, 0.f);
-		glTexCoord2f(1.f, 0.f);
+		glTexCoord2i(1, 0);
 		glVertex2f(ViewWidth, 0.f);
-		glTexCoord2f(1.f, 1.f);
+		glTexCoord2i(1, 1);
 		glVertex2f(ViewWidth, ViewHeight);
-		glTexCoord2f(0.f, 1.f);
+		glTexCoord2i(0, 1);
 		glVertex2f(0.f, ViewHeight);
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 		
 		
-		
+		glPopMatrix();
 		glDrawMenuBox(win, MM.Messages, ViewX, ViewY, ViewWidth, ViewHeight);
+		
 		glDrawMenuItems(win, MM.Messages, ViewX, ViewY, ViewWidth, ViewHeight);
 				
 		win.display();
