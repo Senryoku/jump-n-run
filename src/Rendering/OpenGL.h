@@ -20,7 +20,6 @@ void glDrawPolygon(Polygon *P);
 void glDrawCircle(float x, float y, float radius);
 
 //One ne peut pas combiner OGL et SFML correctement donc il faut faire en deux étapes...
-//void glDrawMenu(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 

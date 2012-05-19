@@ -3,8 +3,6 @@
 
 
 
-MessageManager MM;
-
 Menu* msgGetMenu(MessageManager* MM)
 {
 	return MM->Messages;
@@ -22,44 +20,6 @@ void CloseMessage(void* Data)
 	MM->CloseMessage = 1;
 }
 
-void CloseMessageOLD(void* Data)
-{
-	MessageManager* MM = (MessageManager*)Data;
-	//On ferme puis regarde la queue, si elle n'est pas vide on affiche le nouveau sinon on remet le MainMenu en Actif
-	Node* it = lstFirst(MM->QueueID);
-	assert(it!=NULL);
-	MM->ToBeDeleted = (MenuOfItems*)nodeGetData(lstFirst(MM->Queue));
-	it = nodeGetNext(it); //on prends le deuxième élément
-	
-	if (!nodeEnd(it)) //il y a des messages qu attendent dans la queue
-	{
-		//On passe au menu suivant
-		mnGoToMenu(MM->Messages, *(MenuID*)nodeGetData(it));
-		mnSetHide(MM->Messages, FALSE);
-		//mnSetActive(MM->MainMenu, FALSE);
-		mnSetActive(MM->Menus, FALSE);
-		
-		//On supprime de la queue le premier élément
-		free(nodeGetData(lstFirst(MM->QueueID))); //on libère la mémoire
-		lstPopFront(MM->QueueID);
-		lstPopFront(MM->Queue);
-	}
-	else
-	{
-		//On va réactiver les autres menus
-		mnSetHide(MM->Messages, TRUE);
-		//mnSetActive(MM->MainMenu, TRUE);
-		mnSetActive(MM->Menus, TRUE);
-		
-		//On supprime de la queue le premier élément
-		free(nodeGetData(lstFirst(MM->QueueID))); //on libère la mémoire
-		lstPopFront(MM->QueueID);
-		lstPopFront(MM->Queue);
-	}
-}
-
-//Fonction d'aide pour la queue de message
-MenuID* newmnID(MenuID ID);
 
 void msgInit(MessageManager* MM, s_SharedResources* SR)
 {
@@ -94,39 +54,6 @@ void msgFree(MessageManager* MM)
 	free(MM->Menus);
 }
 
-MessageID msgShow(MessageManager* MM, const char* Title, const char* Text, const char* Button, Bool Force)
-{
-	MenuID MID;
-	MID = mnAddMenu(MM->Messages, Title, 2);
-	mnAddItem(MM->Messages, MID, Text, ITEM_LABEL, NULL, NULL);
-	mnAddItemWithArg(MM->Messages, MID, Button, &CloseMessageOLD, MM);
-	
-	if (Force)
-	{
-		lstAddAtBeginning(MM->Queue, mnGetMenuPtr(MM->Messages, MID));
-		lstAddAtBeginning(MM->QueueID, newmnID(MID));
-		//chacher l'autre et changer de menu
-		mnGoToMenu(MM->Messages, MID);
-		mnSetHide(MM->Messages, FALSE);
-		//mnSetActive(MM->MainMenu, FALSE);
-		mnSetActive(MM->Menus, FALSE);
-	}
-	else
-	{
-		lstAdd(MM->Queue, mnGetMenuPtr(MM->Messages, MID));
-		lstAdd(MM->QueueID, newmnID(MID));
-	}
-		
-	
-	return mnGetMenuPtr(MM->Messages, MID);
-}
-
-MenuID* newmnID(MenuID ID)
-{
-	MenuID* MID = (MenuID*)malloc(sizeof(MenuID));
-	*MID = ID;
-	return MID;
-}
 
 void msgHandleEvent(MessageManager* MM, const sf::Event& event)
 {
