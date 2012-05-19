@@ -80,7 +80,6 @@ typedef struct SMenu
 	float ItemNormalZoomFactor; /**< Zoom d'un item quand il n'est pas sélectionné **/
 	Bool Active; /**< Dit si le menu est active et si on doit gérer ou pas les entrées. Utilisé lorsqu'on affiche des messages par exemple **/
 	Bool Hide; /**< permet de cacher le menu et le rendre inactif **/
-	void* Arg; /**< Ici sont stockées les donnés utilisées lors de l'appel à une fonction avec argument. Si un malloc a ´té fait il faudrait que la fonction qui est appelé avec l'Item fasse un free **/
 	MenuType Type; /**< type du menu, permet de faire des animations diférentes **/
 	float MessageScale; /**< un scale pour les menus qui apparaissent avec un click **/
 } Menu;

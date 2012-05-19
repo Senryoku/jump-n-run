@@ -16,7 +16,6 @@ void mnInit(Menu* M)
 	M->SubAnim = 0.f;
 	M->Force = 0.25f;
 	M->Friction = 0.4f;
-	M->Arg = NULL;
 	M->Type = MENU_TYPE_DEFAULT;
 	M->MessageScale = 0.f;
 	M->Hide = FALSE;
@@ -333,16 +332,6 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 float mnGetHeight(const Menu* M)
 {
 	return moiGetSize(mnGetCurrentMenu(M)).y;
-}
-
-void* mnGetArg(Menu* M)
-{
-	return M->Arg;
-}
-
-void mnSetArg(Menu* M, void* Arg)
-{
-	M->Arg = Arg;
 }
 
 float mnGetMessageScale(const Menu* M)
