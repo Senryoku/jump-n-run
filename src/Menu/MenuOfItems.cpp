@@ -43,6 +43,13 @@ void moiAddItem(MenuOfItems* M, const char* Text, ItemType Type, void (*Function
 	M->ItemsAdded++;
 }
 
+void moiAddItemWithArg(MenuOfItems* M, const char* Text, void (*Function)(void*), void* Arg)
+{
+	assert(M->ItemsAdded < M->ItemCount);
+	mniInitWithArg(&M->Items[M->ItemsAdded], Text, Function, Arg);
+	M->ItemsAdded++;
+}
+
 void moiMoveCursor(MenuOfItems* M, MenuDirection Direction)
 {
 	unsigned short moved = 0;

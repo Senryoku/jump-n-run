@@ -135,6 +135,18 @@ MenuID mnAddMenu(Menu* M, const char* Text, unsigned short ItemCount);
  **/
 ItemID mnAddItem(Menu* M, MenuID MID, const char* Text, ItemType Type, void (*Function)(void), void* Data);
 
+/** @brief Crée un item de button qui lance une fonction à argument
+ *
+ * En principe ces l'argument est un pointeur vers une instance
+ * @param M Menu à laquelle s'applique la fonction
+ * @param MID ID du menu auquel on ajoute l'item
+ * @param Text texte de l'item
+ * @param Function fonction associée à l'item
+ * @param Arg argument qui sera passé à la fonction
+ * @return ID de l'item ajouté (c'est l'indice de l'item dans le tableau du menu)
+ **/
+ItemID mnAddItemWithArg(Menu* M, MenuID MID, const char* Text, void (*Function)(void*), void* Arg);
+
 /** @brief Crée un item de ITEM_MENU_SWITCHER pour un menu
  *
  * @param M Menu à laquelle s'applique la fonction

@@ -40,9 +40,10 @@ typedef struct
 	void (*elDraw)(Elastic* E); ///< Fontcion d'affichage d'Elastic
 	void (*rdDraw)(Rigid* R); ///< Fontcion d'affichage de Rigid
 	void (*polyDraw) (Polygon* P); ///< Fontcion d'affichage de Polygon
+	SharedResources* SR; ///< Accès aux resources partagées
 } LevelEditor;
 
-void lvledInit(LevelEditor *Led, float Width, float Height);
+void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR);
 void lvledFree(LevelEditor *Led);
 
 /* Mutateurs */

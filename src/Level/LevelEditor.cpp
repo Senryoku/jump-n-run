@@ -1,8 +1,10 @@
 #include "LevelEditor.h"
 
-void lvledInit(LevelEditor *Led, float Width, float Height)
+void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR)
 {
 	Led->Lvl = newLevel(Width, Height);
+	
+	Led->SR = SR;
 
 	lstInit(&Led->tmpLstFixeFromV);
 	lstInit(&Led->tmpLstDynFromV);
@@ -559,7 +561,7 @@ void lvledTestLevel(LevelEditor *Led)
 {
 	lvledSave(Led, "levels/tmpTest.lvl~");
 	Game G;
-	gmInit(&G);
+	gmInit(&G, Led->SR);
 	gmLoadLvl(&G, "levels/tmpTest.lvl~");
 	gmPlay(&G);
 	gmFree(&G);

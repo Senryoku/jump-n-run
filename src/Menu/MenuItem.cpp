@@ -25,9 +25,9 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 	
 }
 
-void mniInitWithArg(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void*), void* Data)
+void mniInitWithArg(MenuItem* I, const char* Text, void (*Function)(void*), void* Data)
 {
-	mniInit(I, Text, Type, NULL, Data);
+	mniInit(I, Text, ITEM_BUTTON, NULL, Data);
 	I->FunctionArg = Function;
 	
 }
@@ -78,12 +78,12 @@ const std::string& mniGetInput(const MenuItem* I)
 	return *static_cast<std::string*>(I->Data);
 }
 
-void mniRunFunction(MenuItem* I, void* Arg)
+void mniRunFunction(MenuItem* I)
 {
 	if (I->Function != NULL)
 		(*I->Function)();
 	else if (I->FunctionArg != NULL)
-		(*I->FunctionArg)(Arg);
+		(*I->FunctionArg)(I->Data);
 }
 
 void foo(void);
@@ -101,7 +101,7 @@ void mniRegressionTest(void)
 	mniSetText(&I, "Nouveau texte");
 	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
 
-	mniRunFunction(&I2, NULL);
+	mniRunFunction(&I2);
 
 	mniFree(&I);
 	mniFree(&I2);
@@ -112,7 +112,7 @@ void foo(void)
 	printf("foo\n");
 }
 
-void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del, void* Arg)
+void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del)
 {
 	if (I == NULL)
 		return;
@@ -123,7 +123,7 @@ void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsign
 	{
 		case ITEM_BUTTON:
 			if (EnterPressed)
-				mniRunFunction(I, Arg);
+				mniRunFunction(I);
 			break;
 		case ITEM_CHECKBOX:
 			Data = mniGetData(I);

@@ -39,7 +39,7 @@ typedef struct
 	ItemType Type; /**< type d'item bouton, input, percentage **/
 	void (*Function)(void); /**< Fonction de l'item **/
 	void (*FunctionArg)(void*); /**< Fonction avec argument de l'item **/
-	void* Data; /**< Data qui peut être modifié par l'utilisateur **/
+	void* Data; /**< Data qui peut être modifié par l'utilisateur ou argument à passer à la fonction**/
 	float Incr; /**< incrémentation pour les ITEM_VALUE **/
 	float MinValue; /**< Valeur minimale pour les ITEM_VALUE **/
 	float MaxValue; /**< Valeur maximale pour les ITEM_VALUE **/
@@ -60,11 +60,10 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
  * @brief Constructeur
  * @param I MenuItem auquel s'applique la fonction
  * @param Text texte de l'item
- * @param Type type de l'item
  * @param Function fonction avec argument associée à l'item
  * @param Data pointeur vers des données
  */
-void mniInitWithArg(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void*), void* Data);
+void mniInitWithArg(MenuItem* I, const char* Text, void (*Function)(void*), void* Data);
 
 /**
  * @brief Destructeur
@@ -156,7 +155,7 @@ float mniGetInputValue(const MenuItem* I);
  * @brief Lance la fonction associée à l'item
  * @param I MenuItem auquel s'applique la fonction
  */
-void mniRunFunction(MenuItem* I, void* Arg);
+void mniRunFunction(MenuItem* I);
 
 /**
  * @brief gère l'entrée de l'item selon son type
@@ -165,7 +164,7 @@ void mniRunFunction(MenuItem* I, void* Arg);
  * @param I MenuItem aquel s'applique la fonction
  *
  */
-void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del, void* Arg);
+void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del);
 
 void mniRegressionTest(void);
 

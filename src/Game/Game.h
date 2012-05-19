@@ -9,6 +9,7 @@
 #include <Score/Score.h>
 #include "FPSCounter.h"
 #include <Audio/SoundManager.h>
+#include <Game/SharedResources.h>
 
 /** @defgroup Game
  *
@@ -25,6 +26,7 @@ typedef struct
 	float testy;
 	Bool testyBool;
 	float test2;
+	SharedResources* SR; ///< Resources partagŽes
 } Game;
 
 /** @brief Initialise le jeu
@@ -32,7 +34,7 @@ typedef struct
  * Création de la fenêtre, etc...
  * @param G Game
 **/
-void gmInit(Game* G);
+void gmInit(Game* G, SharedResources* SR);
 
 /** @brief Libération des ressources utilisées par Game
  *

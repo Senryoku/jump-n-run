@@ -65,6 +65,14 @@ ItemID mnAddItem(Menu* M, MenuID MID, const char* Text, ItemType Type, void (*Fu
 	return (moi->ItemsAdded-1);
 }
 
+ItemID mnAddItemWithArg(Menu* M, MenuID MID, const char* Text, void (*Function)(void*), void* Arg)
+{
+	MenuOfItems* moi = (MenuOfItems*)daGet(M->Menus, MID);
+	moiAddItemWithArg(moi, Text, Function, Arg);
+	
+	return (moi->ItemsAdded-1);
+}
+
 ItemID mnAddItemMenuSwitcher(Menu* M, MenuID MID, const char* Text, MenuID MIDTo)
 {
 	return mnAddItem(M, MID, Text, ITEM_MENU_SWITCHER, NULL, &MIDTo);
@@ -295,10 +303,10 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 		mnMoveCursor(M, MENU_GO_UP);
 	
 	if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) || (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right))
-		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_LEFT, 0, FALSE, M->Arg);
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_LEFT, 0, FALSE);
 	
 	if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) || (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left))
-		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_RIGHT, 0, FALSE, M->Arg);
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_RIGHT, 0, FALSE);
 	
 	 
 	
@@ -308,17 +316,17 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 		unsigned int c;
 		sf::Utf32::encodeAnsi(event.text.unicode, &c);
 		//if (i>=32 && i<=126) /* printables chars */
-		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_NONE, (unsigned char) c, FALSE, M->Arg);
+		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_NONE, (unsigned char) c, FALSE);
 		//if (mniGetType(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))) == ITEM_INPUT_VALUE)
 		//	printf("value is %f\n", mniGetInputValue(moiGetItemSelected(mnGetCurrentMenu(&G->GameMenu))));
 		//printf("text entered: %c", c);
 	}
 	
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
-		mniUse(M ,mnGetCurrentItem(M), FALSE, MOVE_NONE, 0, TRUE, M->Arg);
+		mniUse(M ,mnGetCurrentItem(M), FALSE, MOVE_NONE, 0, TRUE);
 	
 	if (Enter)
-		mniUse(M, mnGetCurrentItem(M), TRUE, MOVE_NONE, 0, FALSE, M->Arg);
+		mniUse(M, mnGetCurrentItem(M), TRUE, MOVE_NONE, 0, FALSE);
 	
 }
 

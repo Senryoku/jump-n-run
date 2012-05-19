@@ -1,135 +1,124 @@
 #include "Message.h"
 #include <Rendering/OpenGL.h>
 
-typedef struct s_Message {
-	List* Queue, *QueueID; //queue contient les pointeurs vers les menuofitems et queueid contient les id, qui permettent de passer d'un menu à un autre
-	Menu* Messages; //Boites de dialogues
-	Menu* Menus; //Menus de click droit (CD)
-	Menu* MainMenu; //Menu principal pour le rendre inactif
-	float TextAlpha; // Alpha du texte pour les menu de CD
-	MenuOfItems* ToBeDeleted; //MenuId d'un message qui a été montré et qui doit ètre supprimé
-	Bool CloseMessage;
-} MessageManager;
+
 
 MessageManager MM;
 
-Menu* msgGetMenu()
+Menu* msgGetMenu(MessageManager* MM)
 {
-	return MM.Messages;
+	return MM->Messages;
 }
 
-void msgSetMainMenu(Menu* M)
+Bool msgCanBeDrawn(MessageManager* MM)
 {
-	MM.MainMenu = M;
+	return (daGetSize(MM->Messages->Menus) >0);
 }
 
-Bool msgCanBeDrawn()
+void CloseMessage(void* Data)
 {
-	return (daGetSize(MM.Messages->Menus) >0);
+	MessageManager* MM = (MessageManager*)Data;
+	mnSetHide(MM->Messages, TRUE);
+	MM->CloseMessage = 1;
 }
 
-void CloseMessage()
+void CloseMessageOLD(void* Data)
 {
-	mnSetHide(MM.Messages, TRUE);
-	MM.CloseMessage = 1;
-}
-
-void CloseMessageOLD()
-{
+	MessageManager* MM = (MessageManager*)Data;
 	//On ferme puis regarde la queue, si elle n'est pas vide on affiche le nouveau sinon on remet le MainMenu en Actif
-	Node* it = lstFirst(MM.QueueID);
+	Node* it = lstFirst(MM->QueueID);
 	assert(it!=NULL);
-	MM.ToBeDeleted = (MenuOfItems*)nodeGetData(lstFirst(MM.Queue));
+	MM->ToBeDeleted = (MenuOfItems*)nodeGetData(lstFirst(MM->Queue));
 	it = nodeGetNext(it); //on prends le deuxième élément
 	
 	if (!nodeEnd(it)) //il y a des messages qu attendent dans la queue
 	{
 		//On passe au menu suivant
-		mnGoToMenu(MM.Messages, *(MenuID*)nodeGetData(it));
-		mnSetHide(MM.Messages, FALSE);
-		mnSetActive(MM.MainMenu, FALSE);
-		mnSetActive(MM.Menus, FALSE);
+		mnGoToMenu(MM->Messages, *(MenuID*)nodeGetData(it));
+		mnSetHide(MM->Messages, FALSE);
+		//mnSetActive(MM->MainMenu, FALSE);
+		mnSetActive(MM->Menus, FALSE);
 		
 		//On supprime de la queue le premier élément
-		free(nodeGetData(lstFirst(MM.QueueID))); //on libère la mémoire
-		lstPopFront(MM.QueueID);
-		lstPopFront(MM.Queue);
+		free(nodeGetData(lstFirst(MM->QueueID))); //on libère la mémoire
+		lstPopFront(MM->QueueID);
+		lstPopFront(MM->Queue);
 	}
 	else
 	{
 		//On va réactiver les autres menus
-		mnSetHide(MM.Messages, TRUE);
-		mnSetActive(MM.MainMenu, TRUE);
-		mnSetActive(MM.Menus, TRUE);
+		mnSetHide(MM->Messages, TRUE);
+		//mnSetActive(MM->MainMenu, TRUE);
+		mnSetActive(MM->Menus, TRUE);
 		
 		//On supprime de la queue le premier élément
-		free(nodeGetData(lstFirst(MM.QueueID))); //on libère la mémoire
-		lstPopFront(MM.QueueID);
-		lstPopFront(MM.Queue);
+		free(nodeGetData(lstFirst(MM->QueueID))); //on libère la mémoire
+		lstPopFront(MM->QueueID);
+		lstPopFront(MM->Queue);
 	}
 }
 
 //Fonction d'aide pour la queue de message
 MenuID* newmnID(MenuID ID);
 
-void msgInit(Menu* MainMenu)
+void msgInit(MessageManager* MM, s_SharedResources* SR)
 {
-	MM.MainMenu = MainMenu;
-	MM.Queue = newList();
-	MM.QueueID = newList();
-	MM.Messages = (Menu*)malloc(sizeof(Menu));
-	MM.Menus = (Menu*)malloc(sizeof(Menu));
-	MM.TextAlpha = 0.f;
-	MM.ToBeDeleted = NULL;
+	MM->Queue = newList();
+	MM->QueueID = newList();
+	MM->Messages = (Menu*)malloc(sizeof(Menu));
+	MM->Menus = (Menu*)malloc(sizeof(Menu));
+	MM->TextAlpha = 0.f;
+	MM->ToBeDeleted = NULL;
+	MM->SR = SR;
 	
-	mnInit(MM.Menus);
-	mnInit(MM.Messages);
-	MM.Menus->Type = MENU_TYPE_MESSAGE;
+	mnInit(MM->Menus);
+	mnInit(MM->Messages);
+	MM->Menus->Type = MENU_TYPE_MESSAGE;
 }
 
-void msgFree()
+void msgFree(MessageManager* MM)
 {
-	Node* it = lstFirst(MM.QueueID);
+	Node* it = lstFirst(MM->QueueID);
 	while (!nodeEnd(it))
 	{
 		free(nodeGetData(it));
 		it = nodeGetNext(it);
 	}
-	delList(MM.Queue); //Pas besoin de liberer les nodes car ce ne sont que des pointeurs
-	delList(MM.QueueID);
+	delList(MM->Queue); //Pas besoin de liberer les nodes car ce ne sont que des pointeurs
+	delList(MM->QueueID);
 	
-	mnFree(MM.Messages);
-	mnFree(MM.Menus);
+	mnFree(MM->Messages);
+	mnFree(MM->Menus);
 	
-	free(MM.Messages);
-	free(MM.Menus);
+	free(MM->Messages);
+	free(MM->Menus);
 }
 
-MessageID msgShow(const char* Title, const char* Text, const char* Button, Bool Force)
+MessageID msgShow(MessageManager* MM, const char* Title, const char* Text, const char* Button, Bool Force)
 {
 	MenuID MID;
-	MID = mnAddMenu(MM.Messages, Title, 2);
-	mnAddItem(MM.Messages, MID, Text, ITEM_LABEL, NULL, NULL);
-	mnAddItem(MM.Messages, MID, Button, ITEM_BUTTON, &CloseMessageOLD, NULL);
+	MID = mnAddMenu(MM->Messages, Title, 2);
+	mnAddItem(MM->Messages, MID, Text, ITEM_LABEL, NULL, NULL);
+	mnAddItemWithArg(MM->Messages, MID, Button, &CloseMessageOLD, MM);
 	
 	if (Force)
 	{
-		lstAddAtBeginning(MM.Queue, mnGetMenuPtr(MM.Messages, MID));
-		lstAddAtBeginning(MM.QueueID, newmnID(MID));
+		lstAddAtBeginning(MM->Queue, mnGetMenuPtr(MM->Messages, MID));
+		lstAddAtBeginning(MM->QueueID, newmnID(MID));
 		//chacher l'autre et changer de menu
-		mnGoToMenu(MM.Messages, MID);
-		mnSetHide(MM.Messages, FALSE);
-		mnSetActive(MM.MainMenu, FALSE);
-		mnSetActive(MM.Menus, FALSE);
+		mnGoToMenu(MM->Messages, MID);
+		mnSetHide(MM->Messages, FALSE);
+		//mnSetActive(MM->MainMenu, FALSE);
+		mnSetActive(MM->Menus, FALSE);
 	}
 	else
 	{
-		lstAdd(MM.Queue, mnGetMenuPtr(MM.Messages, MID));
-		lstAdd(MM.QueueID, newmnID(MID));
+		lstAdd(MM->Queue, mnGetMenuPtr(MM->Messages, MID));
+		lstAdd(MM->QueueID, newmnID(MID));
 	}
 		
 	
-	return mnGetMenuPtr(MM.Messages, MID);
+	return mnGetMenuPtr(MM->Messages, MID);
 }
 
 MenuID* newmnID(MenuID ID)
@@ -139,54 +128,54 @@ MenuID* newmnID(MenuID ID)
 	return MID;
 }
 
-void msgHandleEvent(const sf::Event& event)
+void msgHandleEvent(MessageManager* MM, const sf::Event& event)
 {
-	if (daGetSize(MM.Menus->Menus) >0)
+	if (daGetSize(MM->Menus->Menus) >0)
 	{
 		
-		mnHandleEvent(MM.Menus, event);
+		mnHandleEvent(MM->Menus, event);
 	}
 	
 	
-	if (daGetSize(MM.Messages->Menus) >0)
+	if (daGetSize(MM->Messages->Menus) >0)
 	{
 		
 		
 		// Messages doit avoir la priorité sur les menus, étant donné qu'on l'a desactivé c'est bon
-		mnHandleEvent(MM.Messages, event);
+		mnHandleEvent(MM->Messages, event);
 	}
 }
 
-void msgUpdate()
+void msgUpdate(MessageManager* MM)
 {
-	if (MM.ToBeDeleted != NULL && !mnIsVisible(MM.Messages)) //un message doit être detruit
+	if (MM->ToBeDeleted != NULL && !mnIsVisible(MM->Messages)) //un message doit être detruit
 	{
-		mnRemoveMenu(MM.Messages, MM.ToBeDeleted);
-		MM.ToBeDeleted = NULL;
+		mnRemoveMenu(MM->Messages, MM->ToBeDeleted);
+		MM->ToBeDeleted = NULL;
 	}
 	
 	
 	//Dégradé de l'opacité du texte
-	if (mnGetMessageScale(MM.Menus)>0.95f)
-		MM.TextAlpha = MIN(1.f, MM.TextAlpha + 0.05f);
+	if (mnGetMessageScale(MM->Menus)>0.95f)
+		MM->TextAlpha = MIN(1.f, MM->TextAlpha + 0.05f);
 	else
-		MM.TextAlpha = MAX(0.f, MM.TextAlpha - 0.05f);
+		MM->TextAlpha = MAX(0.f, MM->TextAlpha - 0.05f);
 	
 	//On fait des update que si des menu existent!
-	if (daGetSize(MM.Menus->Menus) >0)
+	if (daGetSize(MM->Menus->Menus) >0)
 	{
-		mnUpdate(MM.Menus, vec2(0.f, 0.f), vec2(0.f, 0.f));
-		//mnHandleEvent(MM.Menus, event);
+		mnUpdate(MM->Menus, vec2(0.f, 0.f), vec2(0.f, 0.f));
+		//mnHandleEvent(MM->Menus, event);
 	}
 		
 	
-	if (daGetSize(MM.Messages->Menus) >0)
+	if (daGetSize(MM->Messages->Menus) >0)
 	{
-		float x = 1200.f/2.f - moiGetSize(mnGetCurrentMenu(MM.Messages)).x/2.f;
-		mnUpdate(MM.Messages, vec2(x, 800.f/2.f - moiGetSize(mnGetCurrentMenu(MM.Messages)).y/2.f), vec2(x, -mnGetHeight(MM.Messages) - 100.f));
+		float x = 1200.f/2.f - moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f;
+		mnUpdate(MM->Messages, vec2(x, 800.f/2.f - moiGetSize(mnGetCurrentMenu(MM->Messages)).y/2.f), vec2(x, -mnGetHeight(MM->Messages) - 100.f));
 		
 		// Messages doit avoir la priorité sur les menus, étant donné qu'on l'a desactivé c'est bon
-		//mnHandleEvent(MM.Messages, event);
+		//mnHandleEvent(MM->Messages, event);
 	}
 	
 	
@@ -196,27 +185,32 @@ void msgUpdate()
 
 
 
-void msgCreateMessage(const char* Title, unsigned int ItemCount)
+void msgCreateMessage(MessageManager* MM,const char* Title, unsigned int ItemCount)
 {
-	assert(daGetSize(MM.Messages->Menus) == 0);
-	mnAddMenu(MM.Messages, Title, ItemCount);
+	assert(daGetSize(MM->Messages->Menus) == 0);
+	mnAddMenu(MM->Messages, Title, ItemCount);
 }
 
-void msgAddItem(const char* Text, ItemType Type, void (*Function)(void), void* Data)
+void msgAddItem(MessageManager* MM,const char* Text, ItemType Type, void (*Function)(void), void* Data)
 {
-	assert(daGetSize(MM.Messages->Menus) > 0);
+	assert(daGetSize(MM->Messages->Menus) > 0);
 	
-	mnAddItem(MM.Messages, 0, Text, Type, Function, Data);
+	mnAddItem(MM->Messages, 0, Text, Type, Function, Data);
 }
 
-Bool msgCanDisplay()
+void msgAddItemWithArg(MessageManager* MM, const char* Text, void (*Function)(void*), void* Arg)
 {
-	return (daGetSize(MM.Messages->Menus) > 0);
+	mnAddItemWithArg(MM->Messages, 0, Text, Function, Arg);
 }
 
-void msgDisplay(sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+Bool msgCanDisplay(MessageManager* MM)
 {
-	mnSetHide(MM.Messages, FALSE);
+	return (daGetSize(MM->Messages->Menus) > 0);
+}
+
+void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+{
+	mnSetHide(MM->Messages, FALSE);
 	
 	sf::Clock cl;
 	cl.restart();
@@ -224,9 +218,9 @@ void msgDisplay(sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth
 	Screenshot.create(win.getSize().x, win.getSize().y);
 	Screenshot.update(win);
 	float MouseX, MouseY;
-	MM.CloseMessage = FALSE;
-	mnSetPosition(MM.Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM.Messages)).x/2.f, -100.f));
-	mnSetItemNormalZoomFactor(MM.Messages, 0.75f);
+	MM->CloseMessage = FALSE;
+	mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
+	mnSetItemNormalZoomFactor(MM->Messages, 0.75f);
 	
 	//écran de fond
 	img = Screenshot.copyToImage();
@@ -242,9 +236,9 @@ void msgDisplay(sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth
 
 	printf("time: %f\n", cl.getElapsedTime().asSeconds());
 	
-	mnSetPosition(MM.Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM.Messages)).x/2.f, -100.f));
+	mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
 
-	while (mnIsVisible(MM.Messages) || !MM.CloseMessage)
+	while (mnIsVisible(MM->Messages) || !MM->CloseMessage)
 	{
 
 		MouseX = sf::Mouse::getPosition(win).x;
@@ -253,13 +247,13 @@ void msgDisplay(sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth
 		sf::Event event;
 		while (win.pollEvent(event))
 		{
-			mnHandleEvent(MM.Messages, event);
+			mnHandleEvent(MM->Messages, event);
 			
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-				CloseMessage();
+				CloseMessage(MM);
 		}
 		
-		mnUpdate(MM.Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM.Messages)).x/2.f, 100.f), vec2(ViewWidth/4.f-moiGetSize(mnGetCurrentMenu(MM.Messages)).x/2.f, -mnGetHeight(MM.Messages) - 100.f));
+		mnUpdate(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, 100.f), vec2(ViewWidth/4.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -mnGetHeight(MM->Messages) - 100.f));
 		
 		
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -289,16 +283,16 @@ void msgDisplay(sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth
 		
 		
 		glPopMatrix();
-		glDrawMenuBox(win, MM.Messages, ViewX, ViewY, ViewWidth, ViewHeight);
+		glDrawMenuBox(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
 		
-		glDrawMenuItems(win, MM.Messages, ViewX, ViewY, ViewWidth, ViewHeight);
+		glDrawMenuItems(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
 				
 		win.display();
 		
 	}
 	
 	//On libère le menu
-	mnRemoveMenu(MM.Messages, (MenuID)0);
+	mnRemoveMenu(MM->Messages, (MenuID)0);
 	glTexFree(Screeny);
 	
 	printf("Message displayed\n");

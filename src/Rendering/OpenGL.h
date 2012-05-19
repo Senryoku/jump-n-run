@@ -6,18 +6,10 @@
 #include <Objects/Cloth.h>
 #include <Menu/Menu.h>
 #include <SFML/OpenGL.hpp>
+#include <Game/SharedResources.h>
 
 typedef GLuint Texture;
 struct s_Flag;
-
-extern Texture txBoxCorner;
-extern Texture txBoxSide;
-extern Texture txBoxShadow;
-extern Texture txBoxShineSide;
-extern Texture txBoxGloss;
-extern Texture txBoxBackAnim;
-
-extern sf::Font FntMenu;
 
 
 void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);
@@ -28,15 +20,15 @@ void glDrawPolygon(Polygon *P);
 void glDrawCircle(float x, float y, float radius);
 
 //One ne peut pas combiner OGL et SFML correctement donc il faut faire en deux étapes...
-void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
-void glDrawMenuItems(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
-void glDrawMenuBox(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
+//void glDrawMenu(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
+void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
+void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 
 void glDrawCloth(Cloth* C, Texture T);
-void glDrawFPS(sf::RenderTarget& win, const std::string& FPS);
+void glDrawFPS(SharedResources* SR, sf::RenderTarget& win, const std::string& FPS);
 void glDrawPolyFromList(List* L, Vec2 MousePos);
-void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim);
-void glDrawTitleBox(Vec2 Position, Vec2 Size);
+void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim);
+void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size);
 
 /** @brief Charge une texture en mémoire
  *

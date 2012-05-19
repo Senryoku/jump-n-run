@@ -15,14 +15,19 @@ int main(int argc, char** argv)
 
 	//scRegressionTest();
 	
-
+	SharedResources SR;
+	shInit(&SR, &glTexLoad, &glTexFree);
 
 	LevelEditorApp App;
 
-	appInit(&App);
+	appInit(&App, &SR);
+	shLoadTextures(&SR); //Il faut un contexte valid d'OpenGL
+	shLoadFonts(&SR);
+	shLoadAudio(&SR);
 	appRun(&App);
 	appFree(&App);
 
+	shFree(&SR);
 
 	return EXIT_SUCCESS;
 }

@@ -7,6 +7,7 @@
 #include <Audio/SoundManager.h>
 #include <Menu/Menu.h>
 
+
 /** @defgroup LevelEditorApp
  *
  * Interface de LevelEditor
@@ -23,12 +24,13 @@ typedef struct
 	char WorkingPath[255];
 	Menu M;
 	bool MenuUsed;
+	SharedResources* SR; ///< Resources Partagées
 } LevelEditorApp;
 
 /** @brief Initialisation de LelvelEditorApp
  *
 **/
-void appInit(LevelEditorApp* App);
+void appInit(LevelEditorApp* App, SharedResources* SR);
 
 /** @brief Initialistion la fenêtre
  *

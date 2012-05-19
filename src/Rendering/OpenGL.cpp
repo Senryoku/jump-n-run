@@ -2,9 +2,9 @@
 
 #include <Objects/Flag.h>
 
+
 /** @todo Virer ça, non ? **/
-Texture txBoxCorner, txBoxSide, txBoxShadow, txBoxGloss, txBoxBackAnim;
-sf::Font FntMenu;
+
 
 void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A)
 {
@@ -184,7 +184,7 @@ void glDispTexPoly(Texture T, Polygon* P, List* L)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void glDrawMenuItems(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
 {
 	MenuOfItems* moi = mnGetCurrentMenu(M);
 	Vec2 Size = moiGetSize(moi),
@@ -197,7 +197,7 @@ void glDrawMenuItems(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, f
 	MenuItem* I;
 	float MaxTextWidth = 0.f;
 	sf::Text ItemText;
-	ItemText.setFont(FntMenu);
+	ItemText.setFont(shFntMenu(SR));
 	ItemText.setString(std::string(moiGetText(moi)));
 	float TitleWidth = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
 	TitleWidth *= mnGetItemSelectedZoomFactor(M);
@@ -421,7 +421,7 @@ void glDrawMenuItems(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, f
 	
 }
 
-void glDrawMenuBox(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
 {
 	MenuOfItems* moi = mnGetCurrentMenu(M);
 	Vec2 Size = moiGetSize(moi),
@@ -433,7 +433,7 @@ void glDrawMenuBox(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, flo
 	unsigned short i;
 	MenuItem* I;
 	sf::Text ItemText;
-	ItemText.setFont(FntMenu);
+	ItemText.setFont(shFntMenu(SR));
 	ItemText.setString(std::string(moiGetText(moi)));
 	float TitleWidth = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
 	TitleWidth *= mnGetItemSelectedZoomFactor(M);
@@ -458,14 +458,14 @@ void glDrawMenuBox(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, flo
 	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
 	
 	if (strcmp(moiGetText(moi), "")!=0)
-		glDrawTitleBox(TitlePos, TitleSize);
+		glDrawTitleBox(SR, TitlePos, TitleSize);
 	
-	glDrawBox(Position, Size, (int)M->SubAnim);
+	glDrawBox(SR, Position, Size, (int)M->SubAnim);
 	
 	glPopMatrix();
 }
 
-void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+/*void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
 {
 	
 	MenuOfItems* moi = mnGetCurrentMenu(M);
@@ -504,9 +504,9 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float 
 	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
 
 	if (strcmp(moiGetText(moi), "")!=0)
-		glDrawTitleBox(TitlePos, TitleSize);
+		glDrawTitleBox(SR, TitlePos, TitleSize);
 
-	glDrawBox(Position, Size, (int)M->SubAnim);
+	glDrawBox(SR, Position, Size, (int)M->SubAnim);
 	
 	glPopMatrix();
 
@@ -515,7 +515,7 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float 
 
 	//On dessine le carré, ça sera fai avec des images plus tard
 
-	/*glBegin(GL_QUADS);
+	glBegin(GL_QUADS);
 	glVertex2f(Position.x, Position.y-5.f);
 	glVertex2f(Position.x + Size.x, Position.y-5.f);
 	glVertex2f(Position.x +Size.x, Position.y + heigth);
@@ -719,13 +719,13 @@ void glDrawMenu(sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float 
 			MaxTextWidth=Width;
 
 	}
-	 */
+	 
 
 	moiSetSize(moi, vec2(MaxTextWidth+5.f, Size.y));
 	
 	//glPopAttrib();
 
-}
+}*/
 
 
 void glDrawCloth(Cloth* C, Texture T)
@@ -806,10 +806,10 @@ void glDispFlag(Flag* F, float X, float Y)
 	glPopMatrix();
 }
 
-void glDrawFPS(sf::RenderTarget& win, const std::string& FPS)
+void glDrawFPS(SharedResources* SR, sf::RenderTarget& win, const std::string& FPS)
 {
 	sf::Text Text;
-	Text.setFont(FntMenu);
+	Text.setFont(shFntMenu(SR));
 	Text.setString(FPS);
 	Text.setPosition(5.f, 5.f);
 	Text.setColor(sf::Color::Black);
@@ -859,12 +859,12 @@ void glDrawPolyFromList(List* L, Vec2 MousePos)
 }
 
 
-void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
+void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 {
 	//n dessine les 4 corners
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, txBoxCorner);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_corner"));
 
 	//TopLeft
 	glBegin(GL_QUADS);
@@ -929,7 +929,7 @@ void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
 	glEnd();
 
 	//On dessine le Side
-	glBindTexture(GL_TEXTURE_2D, txBoxSide);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_side"));
 
 	//Left
 	glBegin(GL_QUADS);
@@ -995,7 +995,7 @@ void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
 
 	glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
 
-	glBindTexture(GL_TEXTURE_2D, txBoxBackAnim);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_anim"));
 
 	// when texture area is large, bilinear filter the original
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -1021,7 +1021,7 @@ void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
 	glEnd();
 
 	//Back
-	glBindTexture(GL_TEXTURE_2D, txBoxShadow);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_shadow"));
 
 	glBegin(GL_QUADS);
 
@@ -1043,7 +1043,7 @@ void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
 
 	//gloss
 	glColor4f(1.f, 1.f, 1.f, 1.f);
-	glBindTexture(GL_TEXTURE_2D, txBoxGloss);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_gloss"));
 
 	glBegin(GL_QUADS);
 
@@ -1067,12 +1067,12 @@ void glDrawBox(Vec2 Position, Vec2 Size, int SubAnim)
 
 }
 
-void glDrawTitleBox(Vec2 Position, Vec2 Size)
+void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size)
 {
 	//n dessine les 4 corners
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, txBoxCorner);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_corner"));
 
 	//TopLeft
 	glBegin(GL_QUADS);
@@ -1109,7 +1109,7 @@ void glDrawTitleBox(Vec2 Position, Vec2 Size)
 	glEnd();
 
 	//On dessine le Side
-	glBindTexture(GL_TEXTURE_2D, txBoxSide);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_side"));
 
 	//Left
 	glBegin(GL_QUADS);
@@ -1160,7 +1160,7 @@ void glDrawTitleBox(Vec2 Position, Vec2 Size)
 	glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
 
 	//Back
-	glBindTexture(GL_TEXTURE_2D, txBoxShadow);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_shadow"));
 
 	glBegin(GL_QUADS);
 
@@ -1181,7 +1181,7 @@ void glDrawTitleBox(Vec2 Position, Vec2 Size)
 
 	//gloss
 	glColor4f(1.f, 1.f, 1.f, 1.f);
-	glBindTexture(GL_TEXTURE_2D, txBoxGloss);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_gloss"));
 
 	glBegin(GL_QUADS);
 

@@ -3,7 +3,7 @@
 #include <Game/Message.h>
 
 
-void gmInit(Game* G)
+void gmInit(Game* G, SharedResources* SR)
 {
 	Config Cfg = GetConfiguration();
 
@@ -25,6 +25,8 @@ void gmInit(Game* G)
 	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
 
 	G->Lvl = newLevel(0.f, 0.f);
+	
+	G->SR = SR;
 
 	ItemID IID;
 	mnInit(&G->GameMenu);
@@ -60,8 +62,8 @@ void gmInit(Game* G)
 	MID=1;
 	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go Back!", 1);
 
-	msgSetMainMenu(&G->GameMenu);
-
+	mnSetHide(&G->GameMenu, TRUE);
+	
 	G->Window->setActive();
 }
 
@@ -120,11 +122,6 @@ void gmPlay(Game* G)
 				switch (event.mouseButton.button)
 				{
 					case sf::Mouse::Right :
-						//msgShow("hello!", "ñaaaaa", "Close", 0);
-						msgCreateMessage("test message", 2);
-						msgAddItem("Hello I'm a message!", ITEM_LABEL, NULL, NULL);
-						msgAddItem("Close", ITEM_BUTTON, &CloseMessage, NULL);
-						//msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 						plGrabR(lvlGetP1(G->Lvl), lvlGetWorld(G->Lvl), MouseX, MouseY);
 						break;
 					case sf::Mouse::Left :
@@ -152,12 +149,20 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M)
 				mnSetHide(&G->GameMenu, !mnGetHide(&G->GameMenu));
+			
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::J)
+			{
+				msgCreateMessage(shMessageManager(G->SR), "test message", 2);
+				msgAddItem(shMessageManager(G->SR), "Hello I'm a message!", ITEM_LABEL, NULL, NULL);
+				msgAddItemWithArg(shMessageManager(G->SR), "Close", &CloseMessage, shMessageManager(G->SR));
+				msgDisplay(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+			}
 
 			mnHandleEvent(&G->GameMenu, event);
-			msgHandleEvent(event);
+			//msgHandleEvent(event);
 		}
 		
-		msgUpdate();
+		//msgUpdate();
 
 		lvlUpdate(G->Lvl, FALSE);
 
@@ -207,7 +212,7 @@ void gmPlay(Game* G)
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
 
-		sndmUpdate();
+		sndmUpdate(shSoundManager(G->SR));
 
 		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
 
@@ -216,15 +221,15 @@ void gmPlay(Game* G)
 
 		float menuPosx = G->Window->getSize().x/2.f - moiGetSize(mnGetCurrentMenu(&G->GameMenu)).x/2.f;
 		mnUpdate(&G->GameMenu, vec2(menuPosx, 100.f), vec2(menuPosx, -mnGetHeight(&G->GameMenu) - 100.f));
-		glDrawMenuBox(*G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
+		glDrawMenuBox(G->SR, *G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
 		
 		//if (msgCanBeDrawn()) glDrawMenuBox(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
 		
 		fpsStep(&fps);
 		
 		//SFML
-		glDrawMenuItems(*G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
-		glDrawFPS(*G->Window, fpsGetString(&fps));
+		glDrawMenuItems(G->SR, *G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
+		glDrawFPS(G->SR, *G->Window, fpsGetString(&fps));
 		
 		
 		//if (msgCanBeDrawn())
@@ -233,7 +238,7 @@ void gmPlay(Game* G)
 		
 		G->Window->display();
 		
-		if (msgCanDisplay()) msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+		//if (msgCanDisplay()) msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 	}
 	delAnimation(A);
 }

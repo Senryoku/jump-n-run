@@ -59,6 +59,15 @@ void moiFree(MenuOfItems* M);
 void moiAddItem(MenuOfItems* M, const char* Text, ItemType Type, void (*Function)(void), void* Data);
 
 /**
+ * @brief Ajoute un item au menu qui lance une fonction à argument
+ * @param M MenuOfItem auquel s'applique la fonction
+ * @param Text texte de l'item
+ * @param Function fonction associée à l'item
+ * @param Arg argument de la fonction
+ */
+void moiAddItemWithArg(MenuOfItems* M, const char* Text, void (*Function)(void*), void* Arg);
+
+/**
  * @brief Bouger dans le menu
  * @param M MenuOfItem auquel s'applique la fonction
  * @param Direction aller ver le haut ou ver le bas dans le menu

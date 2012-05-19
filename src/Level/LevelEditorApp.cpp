@@ -2,11 +2,11 @@
 #include <Objects/Animation.h>
 #include <Game/Message.h>
 
-void appInit(LevelEditorApp* App)
+void appInit(LevelEditorApp* App, SharedResources* SR)
 {
 	appWindowInit(App);
 
-	lvledInit(&App->Led, 4000.f, 1600.f);
+	lvledInit(&App->Led, 4000.f, 1600.f, SR);
 	lvledSetLineDraw(&App->Led, &glDrawLine);
 	lvledSetVxDraw(&App->Led, &glDrawVertex);
 	lvledSetElDraw(&App->Led, &glDrawElastic);
@@ -15,27 +15,21 @@ void appInit(LevelEditorApp* App)
 	lvledLoad(&App->Led, "levels/tmpEditor.lvl");
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
-	sndmInit();
+	App->SR = SR;
 
 	/*
-	sndmLoadMusicFile("music0", "data/music.ogg");
-	sndmLoadMusicFile("music1", "data/music1.ogg");
-	sndmLoadMusicFile("music2", "data/music2.ogg");
-	sndmLoadMusicFile("music3", "data/music3.ogg");
-	sndmLoadSoundFile("meat", "data/sfx/snd_meat.ogg");
+	sndmLoadMusicFile(shSoundManager(App->SR), "music0", "data/music.ogg");
+	sndmLoadMusicFile(shSoundManager(App->SR), "music1", "data/music1.ogg");
+	sndmLoadMusicFile(shSoundManager(App->SR), "music2", "data/music2.ogg");
+	sndmLoadMusicFile(shSoundManager(App->SR), "music3", "data/music3.ogg");
+	sndmLoadSoundFile(shSoundManager(App->SR), "meat", "data/sfx/snd_meat.ogg");
 
 
-	sndmPlayMusic("music3");
+	sndmPlayMusic(shSoundManager(App->SR), "music3");
 	 */
 
 	//sndmPlay("meat");
 	//Temporel
-	txBoxCorner = glTexLoad("data/s_boxcorner.png");
-	txBoxSide = glTexLoad("data/s_boxside.png");
-	txBoxShadow = glTexLoad("data/s_box_shadow.png");
-	txBoxBackAnim = glTexLoad("data/box_anim_strip20.png");
-	txBoxGloss = glTexLoad("data/s_box_gloss.png");
-	FntMenu.loadFromFile("data/fnt_menu.ttf");
 
 	App->MenuUsed = 0;
 }
@@ -67,14 +61,8 @@ void appWindowInit(LevelEditorApp* App)
 
 void appFree(LevelEditorApp* App)
 {
-	sndmFree();
 	lvledFree(&App->Led);
 	App->Window.close();
-	glTexFree(txBoxSide);
-	glTexFree(txBoxCorner);
-	glTexFree(txBoxShadow);
-	glTexFree(txBoxBackAnim);
-	glTexFree(txBoxGloss);
 }
 
 void appRun(LevelEditorApp* App)
@@ -87,7 +75,6 @@ void appRun(LevelEditorApp* App)
 	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
 	FPSCounter fps;
 	
-	msgInit(NULL);
 	
 	Menu* M = (Menu*)malloc(sizeof(Menu));
 	mnInit(M);
@@ -532,7 +519,7 @@ void appRun(LevelEditorApp* App)
 		/* == Mise à jour du niveau == */
 		lvlUpdate(App->Led.Lvl, Paused);
 
-		sndmUpdate();
+		sndmUpdate(shSoundManager(App->SR));
 
 		/*
 		 //Ça c'est la façon manuelle, j'ai cependant rajouté dans SoundManager des trucs pour faire que ça se fasse seul. Je rajouterai d'autre choses pour le personaliser un peu plus tard
@@ -620,16 +607,17 @@ void appRun(LevelEditorApp* App)
 		if(App->MenuUsed)
 		{
 			mnUpdate(&App->M, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&App->M) - 100.f));
-			glDrawMenu(App->Window, &App->M, ViewX, ViewY, ViewWidth, ViewHeight);
+			//glDrawMenu(App->Window, &App->M, ViewX, ViewY, ViewWidth, ViewHeight);
+			//cette fonction n'est plus valide
 		}
 		fpsStep(&fps);
 		
 		//glDrawMenu(App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
-		glDrawMenuBox(App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
+		glDrawMenuBox(App->SR, App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
 		
-		glDrawMenuItems(App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
+		glDrawMenuItems(App->SR, App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
 		
-		glDrawFPS(App->Window, fpsGetString(&fps));
+		glDrawFPS(App->SR, App->Window, fpsGetString(&fps));
 
 		// Update the App->Window
 		App->Window.display();
@@ -654,7 +642,6 @@ void appRun(LevelEditorApp* App)
 	delVertex(RightLeg2);
 	 */
 	
-	msgFree();
 	
 	mnFree(M);
 	free(M);
