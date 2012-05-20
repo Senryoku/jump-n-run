@@ -152,10 +152,27 @@ void gmPlay(Game* G)
 			
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::J)
 			{
-				msgCreateMessage(shMessageManager(G->SR), "test message", 2);
-				msgAddItem(shMessageManager(G->SR), "Hello I'm a message!", ITEM_LABEL, NULL, NULL);
-				msgAddItemWithArg(shMessageManager(G->SR), "Close", &CloseMessage, shMessageManager(G->SR));
+				msgCreateMessage(shMessageManager(G->SR), "test message", 4);
+				msgAddItem(shMessageManager(G->SR), "Hello I'm a message! Do you like me?", ITEM_LABEL, NULL, NULL);
+				msgAddCloseItem(shMessageManager(G->SR), "Yes");
+				msgAddCloseItem(shMessageManager(G->SR), "Bah...");
+				msgAddCloseItem(shMessageManager(G->SR), "No");
+				//msgAddItemWithArg(shMessageManager(G->SR), "Yes", &CloseMessage, shMessageManager(G->SR));
+				ItemID i = msgGetChoice(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+				msgCreateMessage(shMessageManager(G->SR), "Alert", 2);
+				if (i==1)
+					msgAddItem(shMessageManager(G->SR), "Coool :D!", ITEM_LABEL, NULL, NULL);
+				else if (i==2)
+					msgAddItem(shMessageManager(G->SR), "that makes me sad...", ITEM_LABEL, NULL, NULL);
+				else if (i==3)
+					msgAddItem(shMessageManager(G->SR), "D: You're an orrible person", ITEM_LABEL, NULL, NULL);
+				else
+					msgAddItem(shMessageManager(G->SR), "Y U NO ANSWER?", ITEM_LABEL, NULL, NULL);
+				
+				msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
+				
 				msgDisplay(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+					
 			}
 
 			mnHandleEvent(&G->GameMenu, event);

@@ -18,6 +18,7 @@ void CloseMessage(void* Data)
 	MessageManager* MM = (MessageManager*)Data;
 	mnSetHide(MM->Messages, TRUE);
 	MM->CloseMessage = 1;
+	MM->LastChoice = moiGetItemSelectedID(mnGetCurrentMenu(MM->Messages));
 }
 
 
@@ -30,6 +31,7 @@ void msgInit(MessageManager* MM, s_SharedResources* SR)
 	MM->TextAlpha = 0.f;
 	MM->ToBeDeleted = NULL;
 	MM->SR = SR;
+	MM->LastChoice = 0;
 	
 	mnInit(MM->Menus);
 	mnInit(MM->Messages);
@@ -121,12 +123,18 @@ void msgCreateMessage(MessageManager* MM,const char* Title, unsigned int ItemCou
 void msgAddItem(MessageManager* MM,const char* Text, ItemType Type, void (*Function)(void), void* Data)
 {
 	assert(daGetSize(MM->Messages->Menus) > 0);
-	
 	mnAddItem(MM->Messages, 0, Text, Type, Function, Data);
+}
+
+void msgAddCloseItem(MessageManager* MM, const char* Text)
+{
+	assert(daGetSize(MM->Messages->Menus) > 0);
+	mnAddItemWithArg(MM->Messages, 0, Text, &CloseMessage, MM);
 }
 
 void msgAddItemWithArg(MessageManager* MM, const char* Text, void (*Function)(void*), void* Arg)
 {
+	assert(daGetSize(MM->Messages->Menus) > 0);
 	mnAddItemWithArg(MM->Messages, 0, Text, Function, Arg);
 }
 
@@ -139,8 +147,8 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 {
 	mnSetHide(MM->Messages, FALSE);
 	
-	sf::Clock cl;
-	cl.restart();
+	//sf::Clock cl;
+	//cl.restart();
 	sf::Texture Screenshot; Texture Screeny; sf::Image img;
 	Screenshot.create(win.getSize().x, win.getSize().y);
 	Screenshot.update(win);
@@ -156,12 +164,13 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	glBindTexture(GL_TEXTURE_2D, Screeny);
 	
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Screenshot.getSize().x, Screenshot.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Screenshot.getSize().x, Screenshot.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 
 
-	printf("time: %f\n", cl.getElapsedTime().asSeconds());
+	//c'est un peu lent... 0.03s
+	//printf("time: %f\n", cl.getElapsedTime().asSeconds());
 	
 	mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
 
@@ -176,7 +185,7 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 		{
 			mnHandleEvent(MM->Messages, event);
 			
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+			if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return))
 				CloseMessage(MM);
 		}
 		
@@ -222,5 +231,95 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	mnRemoveMenu(MM->Messages, (MenuID)0);
 	glTexFree(Screeny);
 	
-	printf("Message displayed\n");
+}
+
+ItemID msgGetChoice(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+{
+	mnSetHide(MM->Messages, FALSE);
+	
+	//sf::Clock cl;
+	//cl.restart();
+	sf::Texture Screenshot; Texture Screeny; sf::Image img;
+	Screenshot.create(win.getSize().x, win.getSize().y);
+	Screenshot.update(win);
+	float MouseX, MouseY;
+	MM->CloseMessage = FALSE;
+	mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
+	mnSetItemNormalZoomFactor(MM->Messages, 0.75f);
+	
+	//écran de fond
+	img = Screenshot.copyToImage();
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &Screeny);
+	glBindTexture(GL_TEXTURE_2D, Screeny);
+	
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Screenshot.getSize().x, Screenshot.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	
+	
+	//c'est un peu lent... 0.03s
+	//printf("time: %f\n", cl.getElapsedTime().asSeconds());
+	
+	mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
+	
+	while (mnIsVisible(MM->Messages) || !MM->CloseMessage)
+	{
+		
+		MouseX = sf::Mouse::getPosition(win).x;
+		MouseY = sf::Mouse::getPosition(win).y;
+		
+		sf::Event event;
+		while (win.pollEvent(event))
+		{
+			mnHandleEvent(MM->Messages, event);
+			
+			if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return))
+				CloseMessage(MM);
+		}
+		
+		mnUpdate(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, 100.f), vec2(ViewWidth/4.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -mnGetHeight(MM->Messages) - 100.f));
+		
+		
+		glClear(GL_COLOR_BUFFER_BIT);
+		//glClearColor(0.f, 0.f, 0.f, 0.2f);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
+		
+		
+		glColor4f(1.f, 1.f, 1.f, 1.f);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, Screeny);
+		glPushMatrix();
+		glTranslatef(ViewX, ViewY, 0.f);
+		glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
+		glBegin(GL_QUADS);
+		glTexCoord2i(0, 0);
+		glVertex2f(0.f, 0.f);
+		glTexCoord2i(1, 0);
+		glVertex2f(ViewWidth, 0.f);
+		glTexCoord2i(1, 1);
+		glVertex2f(ViewWidth, ViewHeight);
+		glTexCoord2i(0, 1);
+		glVertex2f(0.f, ViewHeight);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		
+		
+		glPopMatrix();
+		glDrawMenuBox(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
+		
+		glDrawMenuItems(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
+		
+		win.display();
+		
+	}
+	
+	//On libère le menu
+	mnRemoveMenu(MM->Messages, (MenuID)0);
+	glTexFree(Screeny);
+	
+	return MM->LastChoice;
 }

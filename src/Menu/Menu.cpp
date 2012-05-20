@@ -135,7 +135,7 @@ Bool mnGetActive(const Menu* M)
 Bool mnIsVisible(const Menu* M)
 {
 	if (M->Type == MENU_TYPE_DEFAULT)
-		return !(M->MenuY+mnGetHeight(M) < -10.f);
+		return !(M->MenuY+mnGetHeight(M) < -50.f);
 	else
 		return M->MessageScale>0.05f;
 }

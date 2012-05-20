@@ -77,3 +77,13 @@ const sf::Font& shFntMenu(const SharedResources* SR)
 {
 	return SR->FntMenu;
 }
+
+unsigned int shLoadTexture(const SharedResources* SR, const char* Path)
+{
+	return (*SR->LoadTexture)(Path);
+}
+
+void shFreeTexture(const SharedResources* SR, unsigned int T)
+{
+	(*SR->FreeTexture)(T);
+}

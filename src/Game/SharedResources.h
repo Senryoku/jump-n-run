@@ -82,6 +82,24 @@ MessageManager* shMessageManager(SharedResources* SR);
  **/
 const sf::Font& shFntMenu(const SharedResources* SR); 
 
+/** @brief Charge une texture
+ *
+ * Puisque cette fonction est abstraite ça permet d'avoir le même code avec des libraries différentes
+ * @param SR SharedResources auquel s'applique la fonction
+ * @param Path Chemin de la texture à charger
+ **/
+
+unsigned int shLoadTexture(const SharedResources* SR, const char* Path);
+
+/** @brief Libère une texture
+ *
+ * Puisque cette fonction est abstraite ça permet d'avoir le même code avec des libraries différentes
+ * @param SR SharedResources auquel s'applique la fonction
+ * @param T texture à libérer
+ **/
+void shFreeTexture(const SharedResources* SR, unsigned int T); 
+
+
 
 ///@}
 

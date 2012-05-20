@@ -21,6 +21,7 @@ typedef struct s_Message {
 	MenuOfItems* ToBeDeleted; //MenuId d'un message qui a été montré et qui doit ètre supprimé
 	Bool CloseMessage;
 	s_SharedResources* SR;
+	ItemID LastChoice; ///< Contient le dernier choix d'un menu ou d'un message affiché
 } MessageManager;
 
 
@@ -55,9 +56,13 @@ void msgCreateMessage(MessageManager* MM,const char* Title, unsigned int ItemCou
 //Ajoute un item au message qui va ètre montré
 void msgAddItem(MessageManager* MM, const char* Text, ItemType Type, void (*Function)(void), void* Data);
 void msgAddItemWithArg(MessageManager* MM, const char* Text, void (*Function)(void*), void* Arg);
+void msgAddCloseItem(MessageManager* MM, const char* Text);
 
 //Montre le message et attend  une réponse. ensuite il est détruit
 void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
+
+//Montre le message et attend  une réponse. ensuite il est détruit. ceci renvoit l'indice du choix de l'utilisateur
+ItemID msgGetChoice(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 
 
 void msgUpdate(MessageManager* MM);
