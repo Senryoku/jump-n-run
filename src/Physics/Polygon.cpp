@@ -85,7 +85,17 @@ Polygon* cpyPolygon(Polygon* P)
 	if(polyGetCenter(P) != NULL)
 	{
 		newP = polyNGone(*vxList);
-	} else {
+
+		const DynArr* vxDA = polyGetVertexDA(P);
+
+		// Ajout des Internals non lié au centre
+		for(i = 0; i < polyGetInternalRdCount(P); i++)
+		{
+			// Si relié au center, ce sera toujours le deuxième vertice (voir constructeur de N-Gone)
+			if(rdGetV2(polyGetInternalRigid(P, i)) != polyGetCenter(P))
+				polyAddInternal(newP, daGetID(vxDA, rdGetV1(polyGetInternalRigid(P, i))), daGetID(vxDA, rdGetV2(polyGetInternalRigid(P, i))), -1);
+		}
+	} else { // Cas classique
 		newP = newPolygonL(*vxList);
 
 		const DynArr* vxDA = polyGetVertexDA(P);
