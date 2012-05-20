@@ -72,7 +72,7 @@ void appRun(LevelEditorApp* App)
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
 		WindowRatio = App->WindowWidth/App->WindowHeight;
-	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
+	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = TRUE, DispL2 = TRUE, DispObjects = TRUE, DispBack = TRUE, DispFore = TRUE;
 	FPSCounter fps;
 
 
@@ -339,6 +339,21 @@ void appRun(LevelEditorApp* App)
 							lvledLoad(&App->Led, App->WorkingPath);
 						else DispDebug = !DispDebug;
 						break;
+					case sf::Keyboard::F1 :
+						DispBack = !DispBack;
+						break;
+					case sf::Keyboard::F2 :
+						DispL1 = !DispL1;
+						break;
+					case sf::Keyboard::F3 :
+						DispL2 = !DispL2;
+						break;
+					case sf::Keyboard::F4 :
+						DispFore = !DispFore;
+						break;
+					case sf::Keyboard::F :
+						lvledToogleNearestFixe(&App->Led);
+						break;
 					case sf::Keyboard::C :
 						if (event.key.control)
 							lvledCopyObject(&App->Led);
@@ -348,8 +363,6 @@ void appRun(LevelEditorApp* App)
 					case sf::Keyboard::V :
 						if (event.key.control)
 							lvledPasteObject(&App->Led);
-						else
-							DispL1 = !DispL1;
 						break;
 					case sf::Keyboard::M :
 						DispObjects = !DispObjects;
@@ -448,7 +461,6 @@ void appRun(LevelEditorApp* App)
 
 						fclose(f);
 						break;
->>>>>>> .r230
 				 */
 					default:
 						break;
@@ -464,9 +476,6 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Keyboard::E :
 						lvledReleaseEl(&App->Led);
-						break;
-					case sf::Keyboard::F :
-						lvledToogleNearestFixe(&App->Led);
 						break;
 					case sf::Keyboard::O :
 					case sf::Keyboard::Num2 :
@@ -598,13 +607,15 @@ void appRun(LevelEditorApp* App)
 		}
 		*/
 
+		if(DispBack) lvlDisplayBG(App->Led.Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
 		if(DispL1) lvlDisplayL1(App->Led.Lvl);
 		if(DispL2) lvlDisplayL2(App->Led.Lvl);
 		lvlDispGoalFlag(App->Led.Lvl);
 		if(DispObjects) lvlDispAllObj(App->Led.Lvl);
+		if(DispFore) lvlDisplayFG(App->Led.Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
-		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY));
+		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
 		glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
 
 		OldMouseX = MouseX;
