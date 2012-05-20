@@ -108,7 +108,7 @@ unsigned int daGetCapacity(const DynArr* DA);
 /** @brief Cherche une valeur et retourne son index
  *
  **/
-unsigned int daGetID(DynArr* D,const void* ptr);
+unsigned int daGetID(const DynArr* D,const void* ptr);
 
 /** @brief Test de Regression
 **/

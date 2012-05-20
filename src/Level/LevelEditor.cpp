@@ -3,7 +3,7 @@
 void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR)
 {
 	Led->Lvl = newLevel(Width, Height);
-	
+
 	Led->SR = SR;
 
 	lstInit(&Led->tmpLstFixeFromV);
@@ -27,6 +27,8 @@ void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR)
 	Led->layer2Path[0]='\0';
 	Led->forePath[0]='\0';
 	daInit(&Led->TexturesPath);
+
+	Led->objClipboard = NULL;
 }
 
 void lvledFree(LevelEditor *Led)
@@ -46,6 +48,16 @@ void lvledFree(LevelEditor *Led)
 	daFree(&Led->TexturesPath);
 	delVertex(Led->Mouse);
 	delElastic(Led->GrabElastic);
+
+	if(Led->objClipboard != NULL)
+	{
+		for(i = 0; i < polyGetVxCount(objGetShape(Led->objClipboard)); i++)
+		{
+			delVertex(polyGetVertex(objGetShape(Led->objClipboard), i));
+		}
+		delPolygon(objGetShape(Led->objClipboard));
+		delObject(Led->objClipboard);
+	}
 }
 
 void lvledSetLineDraw(LevelEditor* Led, void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A))
@@ -759,5 +771,38 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	return TRUE;
 }
 
+void lvledCopyObject(LevelEditor* Led)
+{
+	unsigned int i = 0;
+	if(Led->objClipboard != NULL)
+	{
+		for(i = 0; i < polyGetVxCount(objGetShape(Led->objClipboard)); i++)
+		{
+			delVertex(polyGetVertex(objGetShape(Led->objClipboard), i));
+		}
+		delPolygon(objGetShape(Led->objClipboard));
+		delObject(Led->objClipboard);
+		Led->objClipboard = NULL;
+	}
 
+	Polygon* Poly = wdGetNearestPoly(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
+	if(Poly != NULL)
+	{
+		Object* Obj = lvlGetObjFromShape(Led->Lvl, Poly);
+		if(Obj != NULL)
+			Led->objClipboard = cpyObject(Obj);
+	}
+}
 
+void lvledPasteObject(LevelEditor* Led)
+{
+	if(Led->objClipboard == NULL) return;
+
+	Object* newObj = cpyObject(Led->objClipboard);
+	Vec2 Translate = vec2Sub(vxGetPosition(Led->Mouse), vxGetPosition(polyGetVertex(objGetShape(newObj), 0)));
+	polyMove(objGetShape(newObj), Translate);
+
+	wdAddVxFromPoly(lvlGetWorld(Led->Lvl), objGetShape(newObj));
+	wdAddPolygon(lvlGetWorld(Led->Lvl), objGetShape(newObj));
+	lvlAddObject(Led->Lvl, newObj);
+}

@@ -30,7 +30,7 @@ void sndmFree(SoundManager* SM)
 	for (std::map<std::string, sf::SoundBuffer*>::iterator it=SM->SoundBuffers.begin(); it!=SM->SoundBuffers.end(); it++)
 		delete it->second;
 	SM->SoundBuffers.clear();
-	
+
 	for (std::map<std::string, sf::Music*>::iterator it=SM->Musics.begin(); it!=SM->Musics.end(); it++)
 		delete it->second;
 	SM->Musics.clear();
@@ -40,7 +40,7 @@ bool sndmLoadSoundFile(SoundManager* SM, const char *Key, const char *File)
 {
 	//On vérifie que la clé n'existe pas déjà
 	assert(SM->SoundBuffers.count(Key)==0);
-	
+
 	SM->SoundBuffers[Key] = new sf::SoundBuffer;
 	if (!SM->SoundBuffers[Key]->loadFromFile(File))
 	{
@@ -58,7 +58,7 @@ bool sndmLoadMusicFile(SoundManager* SM, const char *Key, const char *File)
 {
 	//On vérifie que la clé n'existe pas déjà
 	assert(SM->Musics.count(Key)==0);
-	
+
 	SM->Musics[Key] = new sf::Music;
 	if (!SM->Musics[Key]->openFromFile(File))
 	{
@@ -70,7 +70,7 @@ bool sndmLoadMusicFile(SoundManager* SM, const char *Key, const char *File)
 		printf("Error Loading Music File %s\n", File);
 		return 0;
 	}
-	
+
 	return 1;
 }
 
@@ -78,9 +78,9 @@ void sndmPlay(SoundManager* SM, const char *Key, const Vec2 &Position, float Min
 {
 	std::map<std::string, sf::SoundBuffer*>::iterator it = SM->SoundBuffers.find(Key);
 	assert(it != SM->SoundBuffers.end());
-	
+
 	sf::Sound *snd=new sf::Sound;
-	
+
 	lstAdd(&(SM->Sounds), snd);
 	snd->setBuffer(*(it->second));
 	snd->setPosition(Position.x, Position.y, 0.f);
@@ -94,21 +94,21 @@ void sndmPlay(SoundManager* SM, const char *Key)
 {
 	std::map<std::string, sf::SoundBuffer*>::iterator it = SM->SoundBuffers.find(Key);
 	assert(it != SM->SoundBuffers.end());
-	
+
 	sf::Sound *snd=new sf::Sound;
-	
+
 	lstAdd(&(SM->Sounds), snd);
 	snd->setBuffer(*(it->second));
 	snd->setRelativeToListener(1); //Le son est joué sans tenir compte de la position
 	snd->play();
-	
+
 }
 
 void sndmPlayMusic(SoundManager* SM, const char *Key, bool Loop)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
-	
+
 	it->second->setLoop(Loop);
 	it->second->play();
 	SM->CurrentMusic = it;
@@ -129,7 +129,7 @@ void sndmMusicSetVolume(SoundManager* SM, const char *Key, float Volume)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
-	
+
 	it->second->setVolume(Volume);
 }
 
@@ -137,7 +137,7 @@ void sndmMusicSetPitch(SoundManager* SM, const char *Key, float Pitch)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
-	
+
 	it->second->setPitch(Pitch);
 }
 
@@ -145,7 +145,7 @@ float sndmMusicGetVolume(SoundManager* SM, const char *Key)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
-	
+
 	return it->second->getVolume();
 }
 
@@ -153,7 +153,7 @@ float sndmMusicGetPitch(SoundManager* SM, const char *Key)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
-	
+
 	return it->second->getPitch();
 }
 
@@ -161,9 +161,9 @@ void sndmMusicFade(SoundManager* SM, const char *NextKey, float FadeSpeed, bool 
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(NextKey);
 	assert(it != SM->Musics.end());
-	
+
 	if (SM->IsFading) return; //On est en milieu d'un fade on ne va pas en faire un
-	
+
 	SM->FadeSpeed=FadeSpeed;
 	//SM->IsFading=0;
 	SM->NextMusic=it;
@@ -184,7 +184,7 @@ void sndmUpdate(SoundManager* SM)
 	{
 		Node* snd, *last_snd;
 		snd=lstFirst(&SM->Sounds);
-		
+
 		while (snd!=NULL)
 		{
 			if (((sf::Sound*)nodeGetData(snd))->getStatus()==sf::Sound::Stopped)
@@ -198,7 +198,7 @@ void sndmUpdate(SoundManager* SM)
 				snd=nodeGetNext(snd);
 		}
 	}
-	
+
 	if (SM->CurrentMusic != SM->Musics.end())
 	{
 		// PlayCount
@@ -213,14 +213,14 @@ void sndmUpdate(SoundManager* SM)
 				SM->NextMusic = SM->Musics.begin();
 			SM->FadeSpeed = SM->DefaultFadingSpeed;
 		}
-		
+
 	}
-	
-	
+
+
 	//Fading effect
 	if (!SM->Paused && SM->FadeSpeed>0.f)
 	{
-		
+
 		if (SM->IsFading) //fade vers la nouvelle musique
 		{
 			SM->NextMusic->second->setVolume(MIN(100.f, SM->NextMusic->second->getVolume()+SM->FadeSpeed));
@@ -258,11 +258,11 @@ void sndmUpdate(SoundManager* SM)
 							SM->IsFading=0;
 							SM->FadeSpeed=0.f;
 						}
-						
+
 					}
 				}
 			}
-			
+
 			if (!IsPlaying) //Tout est stoppé!
 			{
 				SM->IsFading=1;
@@ -274,9 +274,9 @@ void sndmUpdate(SoundManager* SM)
 			}
 
 		}
-		
+
 	}
-	
+
 }
 
 void sndmPauseAllSounds(SoundManager* SM)
@@ -285,12 +285,12 @@ void sndmPauseAllSounds(SoundManager* SM)
 		return;
 	Node* snd;
 	snd=lstFirst(&SM->Sounds);
-	
+
 	while (snd!=NULL)
 	{
 		sf::Sound* snd_ptr=((sf::Sound*)nodeGetData(snd));
 		snd_ptr->pause();
-		snd=nodeGetNext(snd);		
+		snd=nodeGetNext(snd);
 	}
 }
 
@@ -300,12 +300,12 @@ void sndmResumeAllSounds(SoundManager* SM)
 		return;
 	Node* snd;
 	snd=lstFirst(&SM->Sounds);
-	
+
 	while (snd!=NULL)
 	{
 		sf::Sound* snd_ptr=((sf::Sound*)nodeGetData(snd));
 		snd_ptr->play();
-		snd=nodeGetNext(snd);		
+		snd=nodeGetNext(snd);
 	}
 }
 
@@ -332,7 +332,7 @@ void sndmStopAll(SoundManager* SM)
 		return;
 	Node* snd, *last_snd;
 	snd=lstFirst(&SM->Sounds);
-	
+
 	while (snd!=NULL)
 	{
 		delete ((sf::Sound*)nodeGetData(snd));
@@ -348,7 +348,7 @@ void sndmStopMusic(SoundManager* SM, const char *Key)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics.find(Key);
 	assert(it != SM->Musics.end());
-	
+
 	it->second->stop();
 }
 

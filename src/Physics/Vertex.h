@@ -27,6 +27,10 @@ typedef struct
 **/
 Vertex* newVertex();
 
+/** @brief Construteur par Copie
+**/
+Vertex* cpyVertex(Vertex* V);
+
 /** @brief Destructeur
 **/
 void delVertex(Vertex* V);
@@ -71,7 +75,7 @@ Bool vxIsFixe(const Vertex* V);
 /** @brief Mutateur de la position
  *
  * Modifie également l'ancienne position !
- * @param V Pointeur vers le vecteur à modifier
+ * @param V Pointeur vers le vertex à modifier
 **/
 void vxSetPosition(Vertex* V, Vec2 newPos);
 

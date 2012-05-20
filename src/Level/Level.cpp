@@ -664,3 +664,15 @@ void lvlDispGoalFlag(Level* Lvl)
 {
 	Lvl->lvlDispFlag(&Lvl->GoalFlag, Lvl->Goal.x, Lvl->Goal.y);
 }
+
+Object* lvlGetObjFromShape(Level* Lvl, Polygon* P)
+{
+	Node* it = lstFirst(&Lvl->Objects);
+	while(!nodeEnd(it))
+	{
+		if(objGetShape((Object*) nodeGetData(it)) == P)
+			return (Object*) nodeGetData(it);
+		it = nodeGetNext(it);
+	}
+	return NULL;
+}

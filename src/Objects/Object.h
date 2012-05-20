@@ -28,6 +28,13 @@ typedef struct {
 **/
 Object* newObject(Polygon* P, Texture T, List CT);
 
+/** @brief Constructeur par Copie
+ *
+ * @param O Object à copier
+ * @return Pointeur vers la copie
+**/
+Object* cpyObject(Object* O);
+
 /** @brief Initialisation
  *
  * @param Obj Objrtect à Initialiser
@@ -49,6 +56,13 @@ void objFree(Object* Obj);
  * Appelle également objFree
 **/
 void delObject(Object* Obj);
+
+/** @brief Accesseur de Shape
+ *
+ * @param Obj Object à accéder
+ * @return Shape
+**/
+Polygon* objGetShape(Object* Obj);
 
 /** @}
 **/

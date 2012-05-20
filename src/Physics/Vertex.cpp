@@ -13,6 +13,17 @@ Vertex* newVertex()
 	}
 }
 
+Vertex* cpyVertex(Vertex* V)
+{
+	Vertex* newV = newVertex();
+	newV->Position = vxGetPosition(V);
+	newV->OldPos = vxGetOldPos(V);
+	newV->Acceleration = vxGetAcceleration(V);
+	newV->Mass = vxGetMass(V);
+	newV->Fixe = vxIsFixe(V);
+	return newV;
+}
+
 void delVertex(Vertex* V)
 {
 	free(V);

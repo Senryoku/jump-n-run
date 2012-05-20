@@ -86,7 +86,7 @@ void daRem(DynArr* DA, void* ptr)
 			DA->Size--;
 		}
 	}
-		
+
 	//Si l'objet n'es pas trouvé rien n'est supprimé
 }
 
@@ -111,7 +111,7 @@ unsigned int daGetCapacity(const DynArr* DA)
 	return DA->Capacity;
 }
 
-unsigned int daGetID(DynArr* D, const void* ptr)
+unsigned int daGetID(const DynArr* D, const void* ptr)
 {
 	unsigned int i = 0;
 

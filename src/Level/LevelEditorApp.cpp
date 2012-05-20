@@ -74,19 +74,19 @@ void appRun(LevelEditorApp* App)
 		WindowRatio = App->WindowWidth/App->WindowHeight;
 	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = FALSE, DispL2 = FALSE, DispObjects = FALSE;//, DispBack = FALSE, DispFore = FALSE;
 	FPSCounter fps;
-	
-	
+
+
 	Menu* M = (Menu*)malloc(sizeof(Menu));
 	mnInit(M);
-	
-	
+
+
 	mnAddMenu(M, "Main Menu", 2);
 	mnAddMenu(M, "menu 2!", 2);
 	mnAddItem(M, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
 	mnAddItemMenuSwitcher(M, 0, "goo", 1);
 	mnAddItem(M, 1, "hooo", ITEM_LABEL, NULL, NULL);
 	mnAddItemMenuSwitcher(M, 1, "gooo2", 0);
-	
+
 //	int clothSize = 15;
 //	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, clothSize, clothSize, 10.f, 10.f);
 //	//clSetPointsMass(C, 0.01f);
@@ -339,8 +339,17 @@ void appRun(LevelEditorApp* App)
 							lvledLoad(&App->Led, App->WorkingPath);
 						else DispDebug = !DispDebug;
 						break;
+					case sf::Keyboard::C :
+						if (event.key.control)
+							lvledCopyObject(&App->Led);
+						else
+							lvledToogleNearestPolyFixe(&App->Led);
+						break;
 					case sf::Keyboard::V :
-						DispL1 = !DispL1;
+						if (event.key.control)
+							lvledPasteObject(&App->Led);
+						else
+							DispL1 = !DispL1;
 						break;
 					case sf::Keyboard::M :
 						DispObjects = !DispObjects;
@@ -348,7 +357,7 @@ void appRun(LevelEditorApp* App)
 					case sf::Keyboard::Comma :
 						Paused = !Paused;
 						break;
-					
+
 
 					/* code de sauvegarde de l'animation */
 				/*case sf::Keyboard::A :
@@ -459,9 +468,6 @@ void appRun(LevelEditorApp* App)
 					case sf::Keyboard::F :
 						lvledToogleNearestFixe(&App->Led);
 						break;
-					case sf::Keyboard::C :
-						lvledToogleNearestPolyFixe(&App->Led);
-						break;
 					case sf::Keyboard::O :
 					case sf::Keyboard::Num2 :
 						lvledNewPolyCreate(&App->Led);
@@ -480,10 +486,10 @@ void appRun(LevelEditorApp* App)
 						break;
 				}
 			}
-			
+
 			mnHandleEvent(M, event);
 		}
-		
+
 		if (!App->Window.isOpen()) //On sort de la boucle si on a fermé la fenêtre
 			break;
 
@@ -541,7 +547,7 @@ void appRun(LevelEditorApp* App)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glViewport(0.f, 0.f, App->WindowWidth, App->WindowHeight);
-		// Quelle portion de la scène afficher ? 
+		// Quelle portion de la scène afficher ?
 		glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
 		/*
@@ -550,9 +556,9 @@ void appRun(LevelEditorApp* App)
 			glLoadIdentity();
 			if(ViewPort == 0)
 			{
-				// Où afficher ? 
+				// Où afficher ?
 				glViewport(0.f, 0.f, App->WindowWidth, App->WindowHeight);
-				// Quelle portion de la scène afficher ? 
+				// Quelle portion de la scène afficher ?
 				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
 
 				// Affichage de la Grille *
@@ -561,10 +567,10 @@ void appRun(LevelEditorApp* App)
 			else if(ViewPort == 1)
 			{
 				glViewport(App->WindowWidth - MapWidth - 10.f, App->WindowHeight - MapHeight - 10.f, MapWidth, MapHeight);
-				// La minimap affiche tout le monde 
+				// La minimap affiche tout le monde
 				glOrtho(0.0, lvlGetWorld(App->Led.Lvl)->Width, lvlGetWorld(App->Led.Lvl)->Height, 0.0, 0.0, 100.0);
 
-				// Rectangle de la vue 
+				// Rectangle de la vue
 				glColor4f(0.5f, 0.5f, 0.5f, 1.f);
 				glLineStipple(1, 0xCCCC);
 				glEnable(GL_LINE_STIPPLE);
@@ -583,15 +589,15 @@ void appRun(LevelEditorApp* App)
 			if(DispObjects) lvlDispAllObj(App->Led.Lvl);
 //			glDrawCloth(C, Tx);
 			if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
-		 // je n'arrive pas à afficher les fps en faisant marcher la vue. J'ai pas tenté trop de trucs mais bon xD 
+		 // je n'arrive pas à afficher les fps en faisant marcher la vue. J'ai pas tenté trop de trucs mais bon xD
 			//if (ViewPort == 0) glDrawFPS(App->Window, fpsGetString(&fps));
 			glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY));
 			glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
-			
+
 
 		}
 		*/
-		
+
 		if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
 		if(DispL1) lvlDisplayL1(App->Led.Lvl);
 		if(DispL2) lvlDisplayL2(App->Led.Lvl);
@@ -611,17 +617,17 @@ void appRun(LevelEditorApp* App)
 			//cette fonction n'est plus valide
 		}
 		fpsStep(&fps);
-		
+
 		//glDrawMenu(App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
 		glDrawMenuBox(App->SR, App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
-		
+
 		glDrawMenuItems(App->SR, App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
-		
+
 		glDrawFPS(App->SR, App->Window, fpsGetString(&fps));
 
 		// Update the App->Window
 		App->Window.display();
-		
+
 		//if (fpsChanged(&fps))
 		//	printf("FPS: %s\n", fpsGetChar(&fps));
 	}
@@ -641,8 +647,8 @@ void appRun(LevelEditorApp* App)
 	delVertex(RightLeg1);
 	delVertex(RightLeg2);
 	 */
-	
-	
+
+
 	mnFree(M);
 	free(M);
 }

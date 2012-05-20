@@ -60,6 +60,14 @@ Polygon* newPolygon(unsigned int nbVx, ...);
 **/
 Polygon* newPolygonL(List L);
 
+/** @brief Constructeur par copie
+ *
+ * Créé une copie du polygon et de ses vertices en mémoire
+ * @param P Polygon ç copier
+ * @return Pointeur vers la copie
+**/
+Polygon* cpyPolygon(Polygon* P);
+
 /** @brief Initialise P
  *
  * @param P Le Polygon à initialiser
@@ -231,6 +239,12 @@ unsigned int polyGetVxCount(const Polygon* P);
 **/
 Vertex* polyGetVertex(const Polygon* P, unsigned int i);
 
+/** @brief Retourne un pointeur vers le tableau des Vertices du polygon
+ *
+ * @param P Polygon
+**/
+const DynArr* polyGetVertexDA(const Polygon* P);
+
 /** @brief Retourne le nombre de Rigids composants le contour du polygone
 **/
 unsigned int polyGetRdCount(const Polygon* P);
@@ -246,6 +260,12 @@ unsigned int polyGetInternalRdCount(const Polygon* P);
 /** @brief Retourne le Rigid interne i
 **/
 Rigid* polyGetInternalRigid(const Polygon* P, unsigned int i);
+
+/** @brief Retourne un pointeur vers le tableau des contraintes internes du polygon
+ *
+ * @param P Polygon
+**/
+const DynArr* polyGetInternalRigidDA(const Polygon* P);
 
 /** @brief Applique une force à tous les vertices du Polygon
  *
@@ -268,6 +288,10 @@ void polySetSpeed(Polygon* P, Vec2 Speed);
  * @return vitesse
  **/
 Vec2 polyGetSpeed(const Polygon* P);
+
+/** @brief Translate un polygon
+**/
+void polyMove(Polygon* P, Vec2 V);
 
 /** @brief Test de régression
  *

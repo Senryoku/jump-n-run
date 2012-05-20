@@ -196,6 +196,14 @@ void lvlAddObject(Level* Lvl, Object * Obj);
 **/
 void lvlDelObject(Level* Lvl, Object * Obj);
 
+/** @brief Recherche un objet texturé de forme P
+ *
+ * @param Lvl Niveau où cherche l'objet
+ * @param P Polygon servant de forme à l'objet recherché
+ * @return Object* si un objet de la forme P est trouvé, NULL sinon
+**/
+Object* lvlGetObjFromShape(Level* Lvl, Polygon* P);
+
 typedef enum enum_objets
 {
 	o_end,

@@ -7,6 +7,11 @@ Object* newObject(Polygon* P, unsigned int T, List CT)
 	return Obj;
 }
 
+Object* cpyObject(Object* O)
+{
+	return newObject(cpyPolygon(O->Shape), O->Tex, O->CoordTex);
+}
+
 void objInit(Object* Obj, Polygon* P, unsigned int T, List CT)
 {
 	Obj->Shape = P;
@@ -32,4 +37,9 @@ void delObject(Object* Obj)
 {
 	objFree(Obj);
 	free(Obj);
+}
+
+Polygon* objGetShape(Object* Obj)
+{
+	return Obj->Shape;
 }

@@ -69,6 +69,40 @@ Polygon* newPolygonL(List L)
 	return newPoly;
 }
 
+Polygon* cpyPolygon(Polygon* P)
+{
+	unsigned int i;
+	Polygon* newP;
+	List* vxList = newList();
+
+	// Copie des Vertices
+	for(i = 0; i < polyGetVxCount(P); i++)
+	{
+		lstAdd(vxList, cpyVertex(polyGetVertex(P, i)));
+	}
+
+	// Cas N-Gone
+	if(polyGetCenter(P) != NULL)
+	{
+		newP = polyNGone(*vxList);
+	} else {
+		newP = newPolygonL(*vxList);
+
+		const DynArr* vxDA = polyGetVertexDA(P);
+
+		for(i = 0; i < polyGetInternalRdCount(P); i++)
+		{
+			polyAddInternal(newP, daGetID(vxDA, rdGetV1(polyGetInternalRigid(P, i))), daGetID(vxDA, rdGetV2(polyGetInternalRigid(P, i))), -1);
+		}
+	}
+
+	newP->Fixe = polyIsFixe(P);
+
+	delList(vxList);
+
+	return newP;
+}
+
 void polyInit(Polygon* P, unsigned int nbVx, ...)
 {
 	unsigned int i;
@@ -412,6 +446,11 @@ Vertex* polyGetVertex(const Polygon* P, unsigned int i)
 	return (Vertex*) daGet(&P->Vertices, i);
 }
 
+const DynArr* polyGetVertexDA(const Polygon* P)
+{
+	return &P->Vertices;
+}
+
 unsigned int polyGetRdCount(const Polygon* P)
 {
 	return daGetSize(&P->Rigids);
@@ -430,6 +469,11 @@ unsigned int polyGetInternalRdCount(const Polygon* P)
 Rigid* polyGetInternalRigid(const Polygon* P, unsigned int i)
 {
 	return (Rigid*) daGet(&P->InternalRigids, i);
+}
+
+const DynArr* polyGetInternalRigidDA(const Polygon* P)
+{
+	return &P->InternalRigids;
 }
 
 void polySetFixe(Polygon* P, Bool B)
@@ -483,6 +527,13 @@ BBox polyGetBBox(const Polygon* P)
 	}
 
 	return B;
+}
+
+void polyMove(Polygon* P, Vec2 V)
+{
+	unsigned int i;
+	for(i = 0; i < polyGetVxCount(P); i++)
+		vxMove(polyGetVertex(P, i), V);
 }
 
 void polyRegressionTest()

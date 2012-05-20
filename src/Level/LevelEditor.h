@@ -34,6 +34,8 @@ typedef struct
 	char backPath[255], layer1Path[255], layer2Path[255], forePath[255];
 	DynArr TexturesPath;
 
+	Object* objClipboard;
+
 	/* Fonctions de Callback */
 	void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A); ///< Fontcion d'affichage de line
 	void (*vxDraw)(Vertex* V, float R, float G, float B, float A); ///< Fontcion d'affichage de Vertex
@@ -236,6 +238,19 @@ Bool lvledLoad(LevelEditor *Led, const char* File);
  * @return Vrai si la sauvegarde est bonne
  **/
 Bool lvledSave(LevelEditor *Led, const char* File);
+
+/** @brief Créé une copie en mémoire de l'objet le plus proche de la souris
+ *
+ * Coller à l'aide de ledPasteObject
+ * @param Led LevelEditor
+**/
+void lvledCopyObject(LevelEditor* Led);
+
+/** @brief Ajoute au niveau une copie de l'object sauvegardé grâce à ledCopyObject()
+ *
+ * @param Led LevelEditor
+**/
+void lvledPasteObject(LevelEditor* Led);
 
 /** @}
 **/
