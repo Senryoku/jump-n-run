@@ -158,22 +158,22 @@ void msgCreateMessage(MessageManager* MM,const char* Title, unsigned int ItemCou
 	mnAddMenu(MM->Messages, Title, ItemCount);
 }
 
-void msgAddItem(MessageManager* MM,const char* Text, ItemType Type, void (*Function)(void), void* Data)
+ItemID msgAddItem(MessageManager* MM,const char* Text, ItemType Type, void (*Function)(void), void* Data)
 {
 	assert(daGetSize(MM->Messages->Menus) > 0);
-	mnAddItem(MM->Messages, 0, Text, Type, Function, Data);
+	return mnAddItem(MM->Messages, 0, Text, Type, Function, Data);
 }
 
-void msgAddCloseItem(MessageManager* MM, const char* Text)
+ItemID msgAddCloseItem(MessageManager* MM, const char* Text)
 {
 	assert(daGetSize(MM->Messages->Menus) > 0);
-	mnAddItemWithArg(MM->Messages, 0, Text, &CloseMessage, MM);
+	return mnAddItemWithArg(MM->Messages, 0, Text, &CloseMessage, MM);
 }
 
-void msgAddItemWithArg(MessageManager* MM, const char* Text, void (*Function)(void*), void* Arg)
+ItemID msgAddItemWithArg(MessageManager* MM, const char* Text, void (*Function)(void*), void* Arg)
 {
 	assert(daGetSize(MM->Messages->Menus) > 0);
-	mnAddItemWithArg(MM->Messages, 0, Text, Function, Arg);
+	return mnAddItemWithArg(MM->Messages, 0, Text, Function, Arg);
 }
 
 Bool msgCanDisplay(MessageManager* MM)

@@ -170,7 +170,14 @@ void gmPlay(Game* G)
 				else
 					msgAddItem(shMessageManager(G->SR), "Y U NO ANSWER?", ITEM_LABEL, NULL, NULL);
 				
-				msgAddItem(shMessageManager(G->SR), "Why", ITEM_INPUT, NULL, NULL);
+				//msgAddItem(shMessageManager(G->SR), "Why", ITEM_INPUT, NULL, NULL);
+				float a=3.f;
+				ItemID IID = msgAddItem(shMessageManager(G->SR), "floty", ITEM_VALUE, NULL, &a);
+				MenuItem* I = mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID);
+				mniSetMinMaxValues(I, -10.f, 10.f);
+				mniSetIncr(I, 0.5f);
+				mniSetFloatPrecision(I, 1); //Toujours à la fin car ça fait la mise à jour sur le texte
+				
 				
 				msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
 				

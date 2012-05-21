@@ -55,9 +55,9 @@ MessageID msgShow(MessageManager* MM, const char* Title, const char* Text, const
 
 void msgCreateMessage(MessageManager* MM,const char* Title, unsigned int ItemCount);
 //Ajoute un item au message qui va ètre montré
-void msgAddItem(MessageManager* MM, const char* Text, ItemType Type, void (*Function)(void), void* Data);
-void msgAddItemWithArg(MessageManager* MM, const char* Text, void (*Function)(void*), void* Arg);
-void msgAddCloseItem(MessageManager* MM, const char* Text);
+ItemID msgAddItem(MessageManager* MM, const char* Text, ItemType Type, void (*Function)(void), void* Data);
+ItemID msgAddItemWithArg(MessageManager* MM, const char* Text, void (*Function)(void*), void* Arg);
+ItemID msgAddCloseItem(MessageManager* MM, const char* Text);
 
 //Montre le message et attend  une réponse. ensuite il est détruit
 void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);

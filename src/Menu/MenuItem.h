@@ -41,7 +41,7 @@ typedef struct
 	void (*FunctionArg)(void*); /**< Fonction avec argument de l'item **/
 	void* Data; /**< Data qui peut être modifié par l'utilisateur ou argument à passer à la fonction**/
 	std::string* Str; /**< Permet de simplifier l'utilisation de ITEM_INPUT_VALUE **/
-	unsigned char Prec; /**< Chiffres après la virgule pour l'affichage des ITEM_INPUT_VALUE **/
+	unsigned char Prec; /**< Chiffres après la virgule pour l'affichage des ITEM_VALUE **/
 	float Incr; /**< incrémentation pour les ITEM_VALUE **/
 	float MinValue; /**< Valeur minimale pour les ITEM_VALUE **/
 	float MaxValue; /**< Valeur maximale pour les ITEM_VALUE **/
@@ -178,7 +178,7 @@ void mniRunFunction(MenuItem* I);
 /**
  * @brief gère l'entrée de l'item selon son type
  *
- * Cette fonction est à implémenter en dehors de ce module car elle est dépendante des libraries utilisées pour le fenêtrage @todo le nom de la fonction est à changer, t'as une idée? xD
+ * Cette fonction est à implémenter en dehors de ce module car elle est dépendante des libraries utilisées pour le fenêtrage
  * @param I MenuItem aquel s'applique la fonction
  *
  */
