@@ -655,7 +655,7 @@ void lvlDispAllObj(Level* Lvl)
 	Node* it = lstFirst(&Lvl->Objects);
 	while(!nodeEnd(it))
 	{
-		lvlDisplayObj(Lvl, (Object*) nodeGetData(it));
+		lvlDisplayObj(Lvl, (Object*) nodeGetData(it)); ///@todo jai un bad access ici en ayant des objets dans l'editeur et en faisant plusieur ^L Des objets non libérés?
 		it = nodeGetNext(it);
 	}
 }

@@ -11,6 +11,7 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 	I->Data = Data;
 	I->Type = Type;
 	I->FunctionArg = NULL;
+	I->Prec = 2;
 	
 	if (I->Type == ITEM_MENU_SWITCHER)
 	{
@@ -18,10 +19,18 @@ void mniInit(MenuItem* I, const char* Text, ItemType Type, void (*Function)(void
 		*(unsigned short*)I->Data = *(unsigned short*)Data;
 	}
 	
-	if (I->Type == ITEM_INPUT_MULTILINE || I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
+	if (I->Type == ITEM_INPUT_MULTILINE || I->Type == ITEM_INPUT)
 		I->Data = new std::string;
 	I->MaxValue = INFINITY;
 	I->MinValue = -INFINITY;
+	
+	if (I->Type == ITEM_INPUT_VALUE)
+	{
+		char input[100];
+		sprintf(input, "%.2f", *(float*)I->Data);
+		I->Str = new std::string;
+		*I->Str = std::string(input);
+	}
 	
 }
 
@@ -35,10 +44,12 @@ void mniInitWithArg(MenuItem* I, const char* Text, void (*Function)(void*), void
 void mniFree(MenuItem* I)
 {
 	free(I->Text);
-	if (I->Type == ITEM_INPUT_MULTILINE || I->Type == ITEM_INPUT || I->Type == ITEM_INPUT_VALUE)
+	if (I->Type == ITEM_INPUT_MULTILINE || I->Type == ITEM_INPUT)
 		delete (std::string*)I->Data;
 	if (I->Type == ITEM_MENU_SWITCHER)
 		free(I->Data);
+	if (I->Type == ITEM_INPUT_VALUE)
+		delete I->Str;
 }
 
 void mniSetText(MenuItem* I, const char* Text)
@@ -51,6 +62,25 @@ void mniSetText(MenuItem* I, const char* Text)
 const char* mniGetText(const MenuItem* I)
 {
 	return I->Text;
+}
+
+void mniSetFloatPrecision(MenuItem* I, unsigned char Prec)
+{
+	I->Prec = Prec;
+	if (I->Type != ITEM_INPUT_VALUE)
+		return;
+	
+	char input[100], tmp[5];
+	sprintf(tmp, "a.%uf", I->Prec);
+	tmp[0]='%';
+	sprintf(input, tmp, *(float*)I->Data);
+	*I->Str = std::string(input);
+}
+
+
+unsigned char mniGetFloatPrecision(const MenuItem* I)
+{
+	return I->Prec;
 }
 
 void mniSetType(MenuItem* I, ItemType Type)
@@ -75,7 +105,22 @@ void* mniGetData(MenuItem* I)
 
 const std::string& mniGetInput(const MenuItem* I)
 {
-	return *static_cast<std::string*>(I->Data);
+	assert(I->Type == ITEM_INPUT_VALUE || I->Type == ITEM_INPUT ||I->Type == ITEM_INPUT_MULTILINE);
+	
+	if (I->Type == ITEM_INPUT_VALUE)
+		return *I->Str;
+	else
+		return *static_cast<std::string*>(I->Data);
+}
+
+const char* mniGetInputChr(const MenuItem* I)
+{
+	assert(I->Type == ITEM_INPUT_VALUE || I->Type == ITEM_INPUT ||I->Type == ITEM_INPUT_MULTILINE);
+	
+	if (I->Type == ITEM_INPUT_VALUE)
+		return I->Str->c_str();
+	else
+		return static_cast<std::string*>(I->Data)->c_str();
 }
 
 void mniRunFunction(MenuItem* I)
@@ -161,17 +206,19 @@ void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsign
 		}
 		case ITEM_INPUT_VALUE:
 		{
-			std::string* str = (std::string*)I->Data;
-			if (Del && str->size()>0)
-				str->resize(str->size() - 1);
+			
+			if (Del && I->Str->size()>0)
+				I->Str->resize(I->Str->size() - 1);
 			else
 			{
 				if (KeyCode == ',')
 					KeyCode = '.';
 				
-				if ((KeyCode >= '0' && KeyCode <= '9') || (KeyCode == '.' && str->find('.') == std::string::npos))
-						str->push_back(KeyCode);
+				if ((KeyCode >= '0' && KeyCode <= '9') || (KeyCode == '.' && I->Str->find('.') == std::string::npos))
+						I->Str->push_back(KeyCode);
 			}
+			
+			sscanf(I->Str->c_str(), "%f", (float*)I->Data);
 				
 			break;
 		}
@@ -215,11 +262,4 @@ void mniSetMinMaxValues(MenuItem* I, float Min, float Max)
 {
 	I->MinValue = Min;
 	I->MaxValue = Max;
-}
-
-float mniGetInputValue(const MenuItem* I)
-{
-	float val;
-	sscanf(((std::string*)I->Data)->c_str(), "%f", &val);
-	return val;
 }

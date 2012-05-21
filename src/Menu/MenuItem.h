@@ -40,6 +40,8 @@ typedef struct
 	void (*Function)(void); /**< Fonction de l'item **/
 	void (*FunctionArg)(void*); /**< Fonction avec argument de l'item **/
 	void* Data; /**< Data qui peut être modifié par l'utilisateur ou argument à passer à la fonction**/
+	std::string* Str; /**< Permet de simplifier l'utilisation de ITEM_INPUT_VALUE **/
+	unsigned char Prec; /**< Chiffres après la virgule pour l'affichage des ITEM_INPUT_VALUE **/
 	float Incr; /**< incrémentation pour les ITEM_VALUE **/
 	float MinValue; /**< Valeur minimale pour les ITEM_VALUE **/
 	float MaxValue; /**< Valeur maximale pour les ITEM_VALUE **/
@@ -77,6 +79,21 @@ void mniFree(MenuItem* I);
  * @param Text nouveau texte
  */
 void mniSetText(MenuItem* I, const char* Text);
+
+/**
+ * @brief Change la précision de l'affichage pour un ITEM_[INPUT_]VALUE
+ * @param I MenuItem auquel s'applique la fonction
+ * @param Prec Nouvelle précision
+ */
+void mniSetFloatPrecision(MenuItem* I, unsigned char Prec);
+
+/**
+ * @brief Donne la précision de l'affichage pour un ITEM_[INPUT_]VALUE
+ * @param I MenuItem auquel s'applique la fonction
+ * @param Prec Nouvelle précision
+ */
+unsigned char mniGetFloatPrecision(const MenuItem* I);
+
 
 /**
  * @brief Accesseur de Text
@@ -145,11 +162,12 @@ void* mniGetData(MenuItem* I);
 const std::string& mniGetInput(const MenuItem* I);
 
 /**
- * @brief Accesseur à la valeur numérique d'un ITEM_INPUT_VALUE
+ * @brief Accesseur au texte rentré pour les ITEM_INPUT et les ITEM_INPUT_VALUE
  * @param I MenuItem auquel s'applique la fonction
- * @return réel
+ * @return pointeur constant ver le texte
  */
-float mniGetInputValue(const MenuItem* I);
+const char* mniGetInputChr(const MenuItem* I);
+
 
 /**
  * @brief Lance la fonction associée à l'item

@@ -258,13 +258,17 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 	 break;
 	 
 	 case ITEM_INPUT:
-	 case ITEM_INPUT_VALUE:
 	 case ITEM_INPUT_MULTILINE:
 	 ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
 	 break;
+	 case ITEM_INPUT_VALUE:
+	 ItemText.setString(ItemText.getString() + ": " + *(I->Str));
+	 break;
 	 case ITEM_VALUE:
-	 char ValueText[300];
-	 sprintf(ValueText, ": %.f", *(float*)mniGetData(I));
+	 char ValueText[300], tmp[5];
+	 sprintf(tmp, ": a.%uf", mniGetFloatPrecision(I));
+	 tmp[2]='%';
+	 sprintf(ValueText, tmp, *(float*)mniGetData(I));
 	 ItemText.setString(ItemText.getString() + std::string(ValueText));
 	 break;
 	 default:
@@ -349,13 +353,17 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 	 break;
 	 
 	 case ITEM_INPUT:
-	 case ITEM_INPUT_VALUE:
 	 case ITEM_INPUT_MULTILINE:
 	 ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
 	 break;
+	 case ITEM_INPUT_VALUE:
+	 ItemText.setString(ItemText.getString() + ": " + *(I->Str));
+	 break;
 	 case ITEM_VALUE:
-	 char ValueText[300];
-	 sprintf(ValueText, ": %.f", *(float*)mniGetData(I));
+	 char ValueText[300], tmp[5];
+	 sprintf(tmp, ": a.%uf", mniGetFloatPrecision(I));
+	 tmp[2]='%';
+	 sprintf(ValueText, tmp, *(float*)mniGetData(I));
 	 ItemText.setString(ItemText.getString() + std::string(ValueText));
 	 break;
 	 default:

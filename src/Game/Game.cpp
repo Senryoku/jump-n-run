@@ -37,12 +37,13 @@ void gmInit(Game* G, SharedResources* SR)
 	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
 	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
 	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10000000.f);
+	mniSetFloatPrecision(mnGetItem(&G->GameMenu, 0, IID), 3);
 	//mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
 	G->testy = 0.f;
 	MenuID MID = 1;
 	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Input multiligne", ITEM_INPUT_MULTILINE, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "Input value", ITEM_INPUT_VALUE, NULL, NULL);
+	mnAddItem(&G->GameMenu, 0, "Input value", ITEM_INPUT_VALUE, NULL, &G->testy);
 	mnAddItemMenuSwitcher(&G->GameMenu, 0, "go to Options", 1);
 	mnAddItem(&G->GameMenu, 0, "Label 1", ITEM_LABEL, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "------\n------", ITEM_LABEL, NULL, NULL);
@@ -159,7 +160,7 @@ void gmPlay(Game* G)
 				msgAddCloseItem(shMessageManager(G->SR), "No");
 				//msgAddItemWithArg(shMessageManager(G->SR), "Yes", &CloseMessage, shMessageManager(G->SR));
 				ItemID i = msgGetChoice(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
-				msgCreateMessage(shMessageManager(G->SR), "Alert", 2);
+				msgCreateMessage(shMessageManager(G->SR), "Alert", 3);
 				if (i==1)
 					msgAddItem(shMessageManager(G->SR), "Coool :D!", ITEM_LABEL, NULL, NULL);
 				else if (i==2)
@@ -169,10 +170,17 @@ void gmPlay(Game* G)
 				else
 					msgAddItem(shMessageManager(G->SR), "Y U NO ANSWER?", ITEM_LABEL, NULL, NULL);
 				
+				msgAddItem(shMessageManager(G->SR), "Why", ITEM_INPUT, NULL, NULL);
+				
 				msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
 				
+				const char* t = msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+				
+				msgCreateMessage(shMessageManager(G->SR), "Alert", 2);
+				msgAddItem(shMessageManager(G->SR), t, ITEM_LABEL, NULL, NULL);
+				msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
 				msgDisplay(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
-					
+				
 			}
 
 			mnHandleEvent(&G->GameMenu, event);

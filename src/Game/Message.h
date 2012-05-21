@@ -22,6 +22,7 @@ typedef struct s_Message {
 	Bool CloseMessage;
 	s_SharedResources* SR;
 	ItemID LastChoice; ///< Contient le dernier choix d'un menu ou d'un message affiché
+	char* LastInput; ///< Contient l'input du dernier message
 } MessageManager;
 
 
@@ -63,6 +64,9 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 
 //Montre le message et attend  une réponse. ensuite il est détruit. ceci renvoit l'indice du choix de l'utilisateur
 ItemID msgGetChoice(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
+
+//montre un message et retourne l'input
+const char* msgGetInput(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 
 
 void msgUpdate(MessageManager* MM);
