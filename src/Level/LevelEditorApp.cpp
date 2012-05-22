@@ -190,7 +190,30 @@ void appRun(LevelEditorApp* App)
 				App->Window.close();
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-				App->Window.close();; /** @todo Faire apparaitre un menu ici **/
+			{
+				msgCreateMessage(shMessageManager(App->SR), "Menu", 4);
+				msgAddCloseItem(shMessageManager(App->SR), "Choix0");
+				msgAddCloseItem(shMessageManager(App->SR), "SetWorkingPath");
+				msgAddCloseItem(shMessageManager(App->SR), "Quitter");
+				msgAddCloseItem(shMessageManager(App->SR), "Retour");
+				ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+				switch (Choice)
+				{
+					case 0 :
+						break;
+					case 1 :
+						msgCreateMessage(shMessageManager(App->SR), "SetWorkingPath", 2);
+						msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
+						msgAddCloseItem(shMessageManager(App->SR), "Ok");
+						strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, ViewX, ViewY, ViewWidth, ViewHeight));
+						break;
+					case 2 :
+						App->Window.close();
+						break;
+					default :
+						break;
+				}
+			}
 
 			if (event.type == sf::Event::LostFocus)
 				App->WindowIsActive = FALSE;
