@@ -1,6 +1,7 @@
 #include "OpenGL.h"
 
 #include <Objects/Flag.h>
+#include <Level/Level.h>
 
 
 /** @todo Virer ça, non ? **/
@@ -763,10 +764,10 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x - 11.f+Size.x, Position.y+11.f);
 
 	glTexCoord2f((SubAnim+1)/20.f, (Size.y-9.f)/40.f);
-	glVertex2f(Position.x - 11.f+Size.x, Position.y +Size.y+2.f);
+	glVertex2f(Position.x - 11.f+Size.x, ceilf(Position.y +Size.y+2.f));
 
 	glTexCoord2f((SubAnim)/20.f, (Size.y-9.f)/40.f);
-	glVertex2f(Position.x-2.f, Position.y +Size.y+2.f);
+	glVertex2f(Position.x-2.f, ceilf(Position.y +Size.y+2.f));
 
 
 
@@ -954,4 +955,43 @@ void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size)
 
 
 	glDisable(GL_TEXTURE_2D);
+}
+
+
+void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+{
+	float sc = 0.05f;
+	glPushMatrix();
+	glTranslatef(ViewX+ViewWidth, ViewY, 0.f);
+	
+	glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
+	
+	glTranslatef(-20.f-wdGetWidth(lvlGetWorld(Lvl))*sc, 20.f, 0.f);
+	
+	glScalef(sc, sc, 1.f);
+	
+	glColor4f(1.f, 1.f, 1.f, 0.2f);
+	glBegin(GL_QUADS);
+	glVertex2f(0.f, 0.f);
+	glVertex2f(wdGetWidth(lvlGetWorld(Lvl)), 0.f);
+	glVertex2f(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl)));
+	glVertex2f(0.f, wdGetHeight(lvlGetWorld(Lvl)));
+	glEnd();
+
+	
+	glColor4f(0.5f, 0.5f, 0.5f, 1.f);
+	glLineStipple(1, 0xCCCC);
+	glEnable(GL_LINE_STIPPLE);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(ViewX, ViewY);
+	glVertex2f((ViewX + ViewWidth), ViewY);
+	glVertex2f((ViewX + ViewWidth), (ViewY + ViewHeight));
+	glVertex2f(ViewX, (ViewY + ViewHeight));
+	glEnd();
+	glDisable(GL_LINE_STIPPLE);
+	
+	lvlDispGoalFlag(Lvl);
+	lvlDispAllObj(Lvl);
+	
+
 }

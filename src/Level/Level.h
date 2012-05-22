@@ -21,7 +21,7 @@
  *
  * Les fonctions de callback dépendent de l'API graphique
 **/
-typedef struct
+typedef struct s_Level
 {
 	char Filename[255]; /**< Nom du fichier chargé **/
 	char Name[255]; /**< Nom du Niveau **/

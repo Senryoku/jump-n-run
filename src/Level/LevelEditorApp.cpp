@@ -71,8 +71,8 @@ void appRun(LevelEditorApp* App)
 	float ViewX = 0.f, ViewY = 0.f, ViewSpeed, MapWidth = App->WindowWidth/10.f, MapHeight = App->WindowHeight/10.f,
 		OldMouseX = 0.f, MouseX, OldMouseY = 0.f, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
-		WindowRatio = App->WindowWidth/App->WindowHeight;
-	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = TRUE, DispL2 = TRUE, DispObjects = TRUE, DispBack = TRUE, DispFore = TRUE;
+		WindowRatio = App->WindowWidth/App->WindowHeight, MouseWinX, MouseWinY;
+	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = TRUE, DispL2 = TRUE, DispObjects = TRUE, DispBack = TRUE, DispFore = TRUE, InsideMiniMap = FALSE;
 	FPSCounter fps;
 
 
@@ -86,6 +86,7 @@ void appRun(LevelEditorApp* App)
 	mnAddItemMenuSwitcher(M, 0, "goo", 1);
 	mnAddItem(M, 1, "hooo", ITEM_LABEL, NULL, NULL);
 	mnAddItemMenuSwitcher(M, 1, "gooo2", 0);
+	mnSetHide(M, TRUE);
 
 //	int clothSize = 15;
 //	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, clothSize, clothSize, 10.f, 10.f);
@@ -176,12 +177,25 @@ void appRun(LevelEditorApp* App)
 	wdAddRigid(App->Led.Lvl->W, H2);
 	wdAddRigid(App->Led.Lvl->W, H3);*/
 
-	/* Fin du code temporel pour les states des animations */
+	/* Fin du code temporaire pour les states des animations */
 	fpsInit(&fps);
 	while (App->Window.isOpen())
 	{
 		MouseX = ViewWidth*sf::Mouse::getPosition(App->Window).x/App->WindowWidth + ViewX;
 		MouseY = ViewHeight*sf::Mouse::getPosition(App->Window).y/App->WindowHeight + ViewY;
+		MouseWinX = sf::Mouse::getPosition(App->Window).x;
+		MouseWinY = sf::Mouse::getPosition(App->Window).y;
+		
+		
+		//On verifie si on a pas mis le curseur sur la minimap
+		float sc = 0.05f;
+		if (MouseWinX >= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl)))*sc &&
+			MouseWinX <= App->WindowWidth-20.f &&
+			MouseWinY >= 20.f &&
+			MouseWinY <= 20.f+wdGetHeight(lvlGetWorld(App->Led.Lvl))*sc)
+			InsideMiniMap = TRUE;
+		else
+			InsideMiniMap = FALSE;
 
 		sf::Event event;
 		while (App->Window.pollEvent(event))
@@ -223,6 +237,8 @@ void appRun(LevelEditorApp* App)
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
 
+			
+			
 			if(event.type == sf::Event::MouseButtonPressed)
 			{
 				switch (event.mouseButton.button)
@@ -243,7 +259,8 @@ void appRun(LevelEditorApp* App)
 						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
 							lvledNewBoxInit(&App->Led);
 						} else {
-							lvledGrab(&App->Led);
+							if (!InsideMiniMap)
+								lvledGrab(&App->Led);
 						}
 						break;
 					case sf::Mouse::Right :
@@ -290,6 +307,8 @@ void appRun(LevelEditorApp* App)
 			{
 				ViewWidth -= event.mouseWheel.delta*WindowRatio*20;
 				ViewHeight -= event.mouseWheel.delta*20;
+				ViewWidth = MAX(App->WindowWidth*0.25f, ViewWidth);
+				ViewHeight = MAX(App->WindowHeight*0.25f, ViewHeight);
 			}
 
 			if (event.type == sf::Event::KeyPressed)
@@ -495,7 +514,8 @@ void appRun(LevelEditorApp* App)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::G :
-						lvledRelease(&App->Led, Paused);
+						if (!InsideMiniMap)
+							lvledRelease(&App->Led, Paused);
 						break;
 					case sf::Keyboard::E :
 						lvledReleaseEl(&App->Led);
@@ -547,6 +567,12 @@ void appRun(LevelEditorApp* App)
 			{
 				toViewX += (OldMouseX - MouseX)*10.f;
 				toViewY += (OldMouseY - MouseY)*10.f;
+			}
+			
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				toViewX = (MouseWinX - (App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl)))*sc))/(wdGetWidth(lvlGetWorld(App->Led.Lvl))*sc)*wdGetWidth(lvlGetWorld(App->Led.Lvl));
+				toViewY = (MouseWinY - 20.f)/(wdGetWidth(lvlGetWorld(App->Led.Lvl))*sc)*wdGetWidth(lvlGetWorld(App->Led.Lvl));
 			}
 		}
 
@@ -640,6 +666,13 @@ void appRun(LevelEditorApp* App)
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
 		glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
+		
+		
+		//Minimap
+		glDrawMinimap(App->Led.Lvl, App->SR, App->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
+
+		glPopMatrix();
 
 		OldMouseX = MouseX;
 		OldMouseY = MouseY;

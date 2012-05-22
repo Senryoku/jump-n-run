@@ -66,7 +66,7 @@ std::string md5FromFile(const std::string &Path)
 {
 	std::ifstream file;
 	std::string	m_sHash;
-	file.open(Path.c_str());
+	file.open(Path.c_str(), std::ifstream::in);
 	
 	if (!file)
 		return "";

@@ -14,6 +14,13 @@ int main(int argc, char** argv)
 	*/
 
 	//scRegressionTest();
+	/*for (int i=0; i<1000; i++)
+	{
+		FILE* f;
+		f = fopen("data/animRun.txt", "r");
+		printf("md5: %s\n", md5FromFile("data/animRun.txt").c_str());
+		fclose(f);
+	}*/
 	
 	SharedResources SR;
 	shInit(&SR, &glTexLoad, &glTexFree);

@@ -10,7 +10,7 @@
 
 typedef GLuint Texture;
 struct s_Flag;
-
+struct s_Level;
 
 void glDrawLine(float X1, float Y1, float X2, float Y2, float R, float G, float B, float A);
 void glDrawVertex(Vertex* V, float R, float G, float B, float A);
@@ -28,6 +28,8 @@ void glDrawFPS(SharedResources* SR, sf::RenderTarget& win, const std::string& FP
 void glDrawPolyFromList(List* L, Vec2 MousePos);
 void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim);
 void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size);
+
+void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 
 /** @brief Charge une texture en mémoire
  *

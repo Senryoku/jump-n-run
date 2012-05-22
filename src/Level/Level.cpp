@@ -436,7 +436,7 @@ void lvlLoadedInit(Level* Lvl)
 
 void lvlUpdate(Level* Lvl, Bool Paused)
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	unsigned int i;
 
 	if (!Paused)
