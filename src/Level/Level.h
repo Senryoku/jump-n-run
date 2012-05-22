@@ -37,9 +37,10 @@ typedef struct
  	DynArr Textures; /**< Liste de textures utilisables par les objets **/
  	List Objects; /**< Liste d'objets texturés **/
  	Player* P1; /** Joueur 1 **/
-	float DistBG, DistFG;
-	Flag GoalFlag;
-	Bool Finished;
+	float DistBG; /** Distance entre les Layer et le Background **/
+	float DistFG; /** Distance entre les Layer et le Foreground **/
+	Flag GoalFlag; /** Drapeau indiquant la fin du niveau **/
+	Bool Finished; /** Vaut vrai si le joueur a atteint le but du niveau **/
 
 	Texture (*lvlTexLoad)(const char* Path); /** Pointeur de fonction servant à charger en mémoire une texture **/
 	void (*lvlTexFree)(Texture Img); /** Pointeur de fonction libèrant une texture **/

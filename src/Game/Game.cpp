@@ -25,7 +25,7 @@ void gmInit(Game* G, SharedResources* SR)
 	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
 
 	G->Lvl = newLevel(0.f, 0.f);
-	
+
 	G->SR = SR;
 
 	ItemID IID;
@@ -38,9 +38,8 @@ void gmInit(Game* G, SharedResources* SR)
 	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
 	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10000000.f);
 	mniSetFloatPrecision(mnGetItem(&G->GameMenu, 0, IID), 3);
-	//mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
+	//mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);&&&&&&&&&&&&&&&&&&&
 	G->testy = 0.f;
-	MenuID MID = 1;
 	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Input multiligne", ITEM_INPUT_MULTILINE, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Input value", ITEM_INPUT_VALUE, NULL, &G->testy);
@@ -52,19 +51,16 @@ void gmInit(Game* G, SharedResources* SR)
 	mnAddMenu(&G->GameMenu, "Options", 4);
 	mnAddItem(&G->GameMenu, 1, "Whaaaaaow", ITEM_BUTTON, NULL, NULL);
 	mnAddItem(&G->GameMenu, 1, "CraAAaAzYy!!", ITEM_BUTTON, NULL, NULL);
-	MID = 2;
 	mnAddItemMenuSwitcher(&G->GameMenu, 1, "A Secreeeet", 2);
-	MID = 0;
 	mnAddItemMenuSwitcher(&G->GameMenu, 1, "Back", 0);
 
 	mnAddMenu(&G->GameMenu, "", 3);
 	mnAddItem(&G->GameMenu, 2, "I HAVE NO TITLE!!!! HA HA HA!", ITEM_LABEL, NULL, NULL);
 	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go to main MENU!!!!!!", 0);
-	MID=1;
 	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go Back!", 1);
 
 	mnSetHide(&G->GameMenu, TRUE);
-	
+
 	G->Window->setActive();
 }
 
@@ -84,6 +80,8 @@ void gmLoadLvl(Game* G, const char* Path)
 
 void gmPlay(Game* G)
 {
+	Bool DispDebug = FALSE;
+
 	if(G->Lvl == NULL) return;
 	Vec2 Center;
 	Score Sc;
@@ -148,53 +146,64 @@ void gmPlay(Game* G)
 				}
 			}
 
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M)
-				mnSetHide(&G->GameMenu, !mnGetHide(&G->GameMenu));
-			
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::J)
+			if (event.type == sf::Event::KeyPressed)
 			{
-				msgCreateMessage(shMessageManager(G->SR), "test message", 4);
-				msgAddItem(shMessageManager(G->SR), "Hello I'm a message! Do you like me?", ITEM_LABEL, NULL, NULL);
-				msgAddCloseItem(shMessageManager(G->SR), "Yes");
-				msgAddCloseItem(shMessageManager(G->SR), "Bah...");
-				msgAddCloseItem(shMessageManager(G->SR), "No");
-				//msgAddItemWithArg(shMessageManager(G->SR), "Yes", &CloseMessage, shMessageManager(G->SR));
-				ItemID i = msgGetChoice(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+				switch(event.key.code)
+				{
+					case sf::Keyboard::Comma :
+						DispDebug = !DispDebug;
+						break;
+					case sf::Keyboard::M :
+						mnSetHide(&G->GameMenu, !mnGetHide(&G->GameMenu));
+						break;
+					case sf::Keyboard::J :
+					{
+						msgCreateMessage(shMessageManager(G->SR), "test message", 4);
+						msgAddItem(shMessageManager(G->SR), "Hello I'm a message! Do you like me?", ITEM_LABEL, NULL, NULL);
+						msgAddCloseItem(shMessageManager(G->SR), "Yes");
+						msgAddCloseItem(shMessageManager(G->SR), "Bah...");
+						msgAddCloseItem(shMessageManager(G->SR), "No");
+						//msgAddItemWithArg(shMessageManager(G->SR), "Yes", &CloseMessage, shMessageManager(G->SR));
+						ItemID i = msgGetChoice(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 
-				msgCreateMessage(shMessageManager(G->SR), "Alert", 3);
-				if (i==1)
-					msgAddItem(shMessageManager(G->SR), "Coool :D!", ITEM_LABEL, NULL, NULL);
-				else if (i==2)
-					msgAddItem(shMessageManager(G->SR), "that makes me sad...", ITEM_LABEL, NULL, NULL);
-				else if (i==3)
-					msgAddItem(shMessageManager(G->SR), "D: You're an orrible person", ITEM_LABEL, NULL, NULL);
-				else
-					msgAddItem(shMessageManager(G->SR), "Y U NO ANSWER?", ITEM_LABEL, NULL, NULL);
-				
-				//msgAddItem(shMessageManager(G->SR), "Why", ITEM_INPUT, NULL, NULL);
-				float a=3.f;
-				ItemID IID = msgAddItem(shMessageManager(G->SR), "floty", ITEM_VALUE, NULL, &a);
-				MenuItem* I = mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID);
-				mniSetMinMaxValues(I, -10.f, 10.f);
-				mniSetIncr(I, 0.5f);
-				mniSetFloatPrecision(I, 1); //Toujours à la fin car ça fait la mise à jour sur le texte
-				
-				
-				msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
+						msgCreateMessage(shMessageManager(G->SR), "Alert", 3);
+						if (i==1)
+							msgAddItem(shMessageManager(G->SR), "Coool :D!", ITEM_LABEL, NULL, NULL);
+						else if (i==2)
+							msgAddItem(shMessageManager(G->SR), "that makes me sad...", ITEM_LABEL, NULL, NULL);
+						else if (i==3)
+							msgAddItem(shMessageManager(G->SR), "D: You're an orrible person", ITEM_LABEL, NULL, NULL);
+						else
+							msgAddItem(shMessageManager(G->SR), "Y U NO ANSWER?", ITEM_LABEL, NULL, NULL);
 
-				const char* t = msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+						//msgAddItem(shMessageManager(G->SR), "Why", ITEM_INPUT, NULL, NULL);
+						float a=3.f;
+						ItemID IID = msgAddItem(shMessageManager(G->SR), "floty", ITEM_VALUE, NULL, &a);
+						MenuItem* I = mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID);
+						mniSetMinMaxValues(I, -10.f, 10.f);
+						mniSetIncr(I, 0.5f);
+						mniSetFloatPrecision(I, 1); //Toujours à la fin car ça fait la mise à jour sur le texte
 
-				msgCreateMessage(shMessageManager(G->SR), "Alert", 2);
-				msgAddItem(shMessageManager(G->SR), t, ITEM_LABEL, NULL, NULL);
-				msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
-				msgDisplay(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
-				
+
+						msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
+
+						const char* t = msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+
+						msgCreateMessage(shMessageManager(G->SR), "Alert", 2);
+						msgAddItem(shMessageManager(G->SR), t, ITEM_LABEL, NULL, NULL);
+						msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
+						msgDisplay(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+						break;
+					}
+					default:
+						break;
+				}
 			}
 
 			mnHandleEvent(&G->GameMenu, event);
 			//msgHandleEvent(event);
 		}
-		
+
 		//msgUpdate();
 
 		lvlUpdate(G->Lvl, FALSE);
@@ -226,7 +235,7 @@ void gmPlay(Game* G)
 			scInit(&Sc, "Senryoku", lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), Clk.getElapsedTime().asMilliseconds()/10.f);
 			// if(scSend(&Sc) == 1) { MenuErreur } else { MenuEnvoiReussi }
 		}
-		
+
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
@@ -236,7 +245,7 @@ void gmPlay(Game* G)
 		ViewY = MAX(0, MIN(Center.y - ViewHeight/2, wdGetHeight(lvlGetWorld(G->Lvl)) - ViewHeight));
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
 
-		
+
 		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight, *G->Window);
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
@@ -247,30 +256,31 @@ void gmPlay(Game* G)
 
 		sndmUpdate(shSoundManager(G->SR));
 
-		/**@todo Temporaire ! A remplacer par les vraies fonctions d'affichage :) */
-
-		glDrawPolygon(lvlGetP1(G->Lvl)->Shape);
-		wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
+		if(DispDebug)
+		{
+			glDrawPolygon(lvlGetP1(G->Lvl)->Shape);
+			wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
+			glDrawFPS(G->SR, *G->Window, fpsGetString(&fps));
+		}
 
 		float menuPosx = G->Window->getSize().x/2.f - moiGetSize(mnGetCurrentMenu(&G->GameMenu)).x/2.f;
 		mnUpdate(&G->GameMenu, vec2(menuPosx, 100.f), vec2(menuPosx, -mnGetHeight(&G->GameMenu) - 100.f));
 		glDrawMenuBox(G->SR, *G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
-		
+
 		//if (msgCanBeDrawn()) glDrawMenuBox(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
-		
+
 		fpsStep(&fps);
-		
+
 		//SFML
 		glDrawMenuItems(G->SR, *G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
-		glDrawFPS(G->SR, *G->Window, fpsGetString(&fps));
-		
-		
+
+
 		//if (msgCanBeDrawn())
 		//	glDrawMenuItems(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
-		
-		
+
+
 		G->Window->display();
-		
+
 		//if (msgCanDisplay()) msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 	}
 	delAnimation(A);

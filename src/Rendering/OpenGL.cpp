@@ -104,15 +104,18 @@ void glDrawCircle(float x, float y, float radius)
 
 Texture glTexLoad(const char* Path)
 {
+	sf::Image image;
 	Bool LoadSuccess = 0;
 	GLuint texture = 0;
 
-	sf::Image image;
-	#ifdef SFML_SYSTEM_MACOS
-	LoadSuccess = image.loadFromFile(Path); //À rajouter ResourcePath selon compilation
-	#else
-	LoadSuccess = image.loadFromFile(Path);
-	#endif
+	if(Path[0] != '\0')
+	{
+		#ifdef SFML_SYSTEM_MACOS
+		LoadSuccess = image.loadFromFile(Path); //À rajouter ResourcePath selon compilation
+		#else
+		LoadSuccess = image.loadFromFile(Path);
+		#endif
+	}
 
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures(1, &texture);
@@ -192,7 +195,7 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 
 	if (Position.y+Size.y+20.f <= 0.f) // Pas besoin de dessiner
 		return;
-	
+
 	unsigned short i;
 	MenuItem* I;
 	float MaxTextWidth = 0.f;
@@ -201,53 +204,53 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 	ItemText.setString(std::string(moiGetText(moi)));
 	float TitleWidth = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
 	TitleWidth *= mnGetItemSelectedZoomFactor(M);
-	
-	
-	
+
+
+
 	float heigth = 5.f; //offset
 	for (i=0; i<moiGetItemCount(moi); i++)
 	{
 		I = moiGetItem(moi, i);
 		heigth+=mnGetItemHeight(M)*(*mniGetZoom(I));
 	}
-	
-	
+
+
 	Size.x = MAX(TitleWidth+10.f, Size.x);
-	
+
 	Vec2 TitleSize = vec2(TitleWidth, 60.f);
 	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
-	
-	
-	
+
+
+
 	win.pushGLStates();
-	
-	
-	
+
+
+
 	 if (strcmp(moiGetText(moi), "")!=0)
 	 {
-	 
+
 		 ItemText.setScale(mnGetItemSelectedZoomFactor(M), mnGetItemSelectedZoomFactor(M));
 		 ItemText.setPosition(TitlePos.x, TitlePos.y+13.f);
-		 
-		 
+
+
 		 ItemText.setColor(sf::Color(0,0,0));
 		 win.draw(ItemText);
 		 ItemText.move(0.f, 1.5f);
 		 ItemText.setColor(sf::Color(255,255,255));
 		 win.draw(ItemText);
-	 
+
 	 }
-	 
-	 
+
+
 	 float yoffset = 5.f, selOffset;
 	 for (i=0; i<moiGetItemCount(moi); i++)
 	 {
 		 I = moiGetItem(moi, i);
 		 if (strcmp(mniGetText(I), "")==0)
-			 ItemText.setString(" "); // une chaîne vide donne une erreur 
+			 ItemText.setString(" "); // une chaîne vide donne une erreur
 		 else
 			 ItemText.setString(std::string(mniGetText(I)));
-		 
+
 		 switch (mniGetType(I))
 		 {
 			 case ITEM_CHECKBOX:
@@ -256,7 +259,7 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 				 else
 					 ItemText.setString(ItemText.getString() + ": No");
 				 break;
-				 
+
 			 case ITEM_INPUT:
 			 case ITEM_INPUT_MULTILINE:
 				 ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
@@ -274,12 +277,12 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 			 default:
 				 break;
 	 }
-	 
+
 	 ItemText.setScale(1.f, 1.f);
 	 ItemText.setPosition(Position.x+5.f, Position.y+yoffset+5.f);
-	 
+
 	 ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
-	 
+
 	 if (i != moiGetItemSelectedID(moi))
 	 {
 		 //win.pushGLStates();
@@ -292,10 +295,10 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 	 }
 	 else
 	 selOffset = yoffset;
-	 
-	 
+
+
 	 yoffset+=((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).y+ItemText.getCharacterSize())*(*mniGetZoom(I));
-	 
+
 	 float Width;
 	 if (mniGetType(I) != ITEM_INPUT_MULTILINE)
 	 Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
@@ -313,13 +316,13 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 			 pos = ItemText.getString().find("\n", last_pos+1);
 			 if (pos == last_pos)
 				 pos = sf::String::InvalidPos;
-			 
+
 		 }
-	 
+
 		 calc = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
 		 if (calc > extrax)
 			 extrax = calc;
-		 
+
 		 if (last_pos == 0 && pos == sf::String::InvalidPos) //Pas de saut à la ligne
 			 Width = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
 		 else
@@ -327,22 +330,22 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 	 }
 	 if (Width>MaxTextWidth)
 		 MaxTextWidth=Width;
-	 
+
 	 mnSetItemHeight(M, ItemText.getCharacterSize());
-	 
-	 
-	 
+
+
+
 	 }
 	 Size.y = yoffset+10.f;
-	 
+
 	 if (moiGetItemSelectedID(moi) != INVALID_ITEM_ID)
 	 {
 		 I = moiGetItemSelected(moi);
 		 if (strcmp(mniGetText(I), "")==0)
-			 ItemText.setString(" "); // une chaîne vide donne une erreur 
+			 ItemText.setString(" "); // une chaîne vide donne une erreur
 		 else
 			 ItemText.setString(std::string(mniGetText(I)));
-	 
+
 		 switch (mniGetType(I))
 		 {
 			 case ITEM_CHECKBOX:
@@ -351,7 +354,7 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 				 else
 					 ItemText.setString(ItemText.getString() + ": No");
 				 break;
-				 
+
 			 case ITEM_INPUT:
 			 case ITEM_INPUT_MULTILINE:
 				 ItemText.setString(ItemText.getString() + ": " + *(std::string*)mniGetData(I));
@@ -369,15 +372,15 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 			 default:
 				 break;
 		 }
-	 
+
 		 ItemText.setScale(1.f, 1.f);
 		 ItemText.setPosition(Position.x+5.f, Position.y+selOffset+5.f);
-		 
+
 		 ItemText.setScale(*mniGetZoom(I), *mniGetZoom(I));
-		 
+
 		 yoffset+=((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).y+ItemText.getCharacterSize())*(*mniGetZoom(I));
-	 
-	 
+
+
 		 //win.pushGLStates();
 		 ItemText.setColor(sf::Color(0,0,0));
 		 win.draw(ItemText);
@@ -385,9 +388,9 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 		 ItemText.setColor(sf::Color(255,255,255));
 		 win.draw(ItemText);
 		 //win.popGLStates();
-	 
-	 
-		 
+
+
+
 		 float Width;
 		 if (mniGetType(I) != ITEM_INPUT_MULTILINE)
 			 Width = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
@@ -405,13 +408,13 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 			 pos = ItemText.getString().find("\n", last_pos+1);
 			 if (pos == last_pos)
 				 pos = sf::String::InvalidPos;
-			 
+
 		 }
-		 
+
 		 calc = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
 		 if (calc > extrax)
 			 extrax = calc;
-		 
+
 		 if (last_pos == 0 && pos == sf::String::InvalidPos) //Pas de saut à la ligne
 			 Width = ((ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize());
 		 else
@@ -419,14 +422,14 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 	 }
 		 if (Width>MaxTextWidth)
 			 MaxTextWidth=Width;
-		 
+
 	 }
-	
-	
+
+
 	moiSetSize(moi, vec2(MaxTextWidth+5.f, Size.y));
-	
+
 	win.popGLStates();
-	
+
 }
 
 void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
@@ -445,34 +448,34 @@ void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float Vi
 	ItemText.setString(std::string(moiGetText(moi)));
 	float TitleWidth = (ItemText.findCharacterPos(ItemText.getString().getSize()-1)-ItemText.findCharacterPos(0)).x+ItemText.getCharacterSize();
 	TitleWidth *= mnGetItemSelectedZoomFactor(M);
-	
-	
-	
+
+
+
 	glPushMatrix();
-	
+
 	float heigth = 5.f; //offset
 	for (i=0; i<moiGetItemCount(moi); i++)
 	{
 		I = moiGetItem(moi, i);
 		heigth+=mnGetItemHeight(M)*(*mniGetZoom(I));
 	}
-	
-	
+
+
 
 	glTranslatef(ViewX, ViewY, 0.f);
 	glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
 
-	
+
 	Size.x = MAX(TitleWidth+10.f, Size.x);
-	
+
 	Vec2 TitleSize = vec2(TitleWidth, 60.f);
 	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
-	
+
 	if (strcmp(moiGetText(moi), "")!=0)
 		glDrawTitleBox(SR, TitlePos, TitleSize);
-	
+
 	glDrawBox(SR, Position, Size, (int)M->SubAnim);
-	
+
 	glPopMatrix();
 }
 
@@ -518,6 +521,20 @@ void glDispFlag(Flag* F, float X, float Y)
 	glTranslatef(X, Y - F->H*F->cellH, 0.f);
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glEnable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, F->TexPole);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.f, 0.f);
+	Vec2 Pos = vxGetPosition((Vertex*) daGet(&F->Vertices, 0));
+	glVertex2f((float) Pos.x - 5.f, (float) Pos.y);
+	glTexCoord2f(1.f, 0.f);
+	glVertex2f((float) Pos.x + 5.f, (float) Pos.y);
+	glTexCoord2f(1.f, 1.f);
+	glVertex2f((float) Pos.x + 5.f, (float) Pos.y + F->H*F->cellH*2);
+	glTexCoord2f(0.f, 1.f);
+	glVertex2f((float) Pos.x - 5.f, (float) Pos.y + F->H*F->cellH*2);
+	glEnd();
+
 	glBindTexture(GL_TEXTURE_2D, F->TexFlag);
 
 	for(unsigned int i = 0; i < F->H - 1; i++)
@@ -532,24 +549,10 @@ void glDispFlag(Flag* F, float X, float Y)
 			Pos = vxGetPosition((Vertex*) daGet(&F->Vertices, (i + 1)*F->W + j));
 			glTexCoord2f((float) j/(F->W-1), (float) (i + 1)/(F->H-1));
 			glVertex2f((float) Pos.x, (float) Pos.y);
-			
+
 		}
 		glEnd();
 	}
-
-
-	glBindTexture(GL_TEXTURE_2D, F->TexPole);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.f, 0.f);
-	Vec2 Pos = vxGetPosition((Vertex*) daGet(&F->Vertices, 0));
-	glVertex2f((float) Pos.x - 5.f, (float) Pos.y);
-	glTexCoord2f(1.f, 0.f);
-	glVertex2f((float) Pos.x + 5.f, (float) Pos.y);
-	glTexCoord2f(1.f, 1.f);
-	glVertex2f((float) Pos.x + 5.f, (float) Pos.y + F->H*F->cellH*2);
-	glTexCoord2f(0.f, 1.f);
-	glVertex2f((float) Pos.x - 5.f, (float) Pos.y + F->H*F->cellH*2);
-	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();

@@ -109,7 +109,7 @@ void lvlSetFinished(Level* Lvl, Bool B)
 
 Bool lvlLoad(Level* Lvl, const char* File)
 {
-	printf("%s::Chargement...\n", File);
+	printf("= Chargement... ========\n", File);
 
 	/* Recherche du nom du fichier */
 	char Path[255], Name[255];
@@ -385,7 +385,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		}
 	}
 
-	printf("Niveau chargé : %s%sw:%f h:%f\n", lvl, description, width, height);
+	printf("Niveau correctement charge : \n%s\n%s\nw:%f h:%f\n========================\n", Lvl->Name, Lvl->Desc, width, height);
 	fclose(f);
 
 	delDynArr(Poly);
