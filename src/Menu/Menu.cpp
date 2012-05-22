@@ -82,6 +82,16 @@ void mnSetItemHeight(Menu* M, float ItemHeight)
 	M->ItemHeight = ItemHeight;
 }
 
+void mnSetType(Menu* M, MenuType MT)
+{
+	M->Type = MT;
+}
+
+MenuType mnGetType(const Menu* M)
+{
+	return M->Type;
+}
+
 float mnGetForce(const Menu* M)
 {
 	return M->Force;

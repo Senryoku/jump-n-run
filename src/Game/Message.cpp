@@ -8,10 +8,6 @@ Menu* msgGetMenu(MessageManager* MM)
 	return MM->Messages;
 }
 
-Bool msgCanBeDrawn(MessageManager* MM)
-{
-	return (daGetSize(MM->Messages->Menus) >0);
-}
 
 void CloseMessage(void* Data)
 {
@@ -62,7 +58,6 @@ void msgInit(MessageManager* MM, s_SharedResources* SR)
 	MM->Queue = newList();
 	MM->QueueID = newList();
 	MM->Messages = (Menu*)malloc(sizeof(Menu));
-	MM->Menus = (Menu*)malloc(sizeof(Menu));
 	MM->TextAlpha = 0.f;
 	MM->ToBeDeleted = NULL;
 	MM->SR = SR;
@@ -70,9 +65,7 @@ void msgInit(MessageManager* MM, s_SharedResources* SR)
 	MM->LastInput = (char*)malloc(sizeof(char));
 	MM->LastInput[0] = '\0';
 	
-	mnInit(MM->Menus);
 	mnInit(MM->Messages);
-	MM->Menus->Type = MENU_TYPE_MESSAGE;
 }
 
 void msgFree(MessageManager* MM)
@@ -87,67 +80,9 @@ void msgFree(MessageManager* MM)
 	delList(MM->QueueID);
 	
 	mnFree(MM->Messages);
-	mnFree(MM->Menus);
 	
 	free(MM->Messages);
-	free(MM->Menus);
 	free(MM->LastInput);
-}
-
-
-void msgHandleEvent(MessageManager* MM, const sf::Event& event)
-{
-	if (daGetSize(MM->Menus->Menus) >0)
-	{
-		
-		mnHandleEvent(MM->Menus, event);
-	}
-	
-	
-	if (daGetSize(MM->Messages->Menus) >0)
-	{
-		
-		
-		// Messages doit avoir la priorité sur les menus, étant donné qu'on l'a desactivé c'est bon
-		mnHandleEvent(MM->Messages, event);
-	}
-}
-
-void msgUpdate(MessageManager* MM)
-{
-	if (MM->ToBeDeleted != NULL && !mnIsVisible(MM->Messages)) //un message doit être detruit
-	{
-		mnRemoveMenu(MM->Messages, MM->ToBeDeleted);
-		MM->ToBeDeleted = NULL;
-	}
-	
-	
-	//Dégradé de l'opacité du texte
-	if (mnGetMessageScale(MM->Menus)>0.95f)
-		MM->TextAlpha = MIN(1.f, MM->TextAlpha + 0.05f);
-	else
-		MM->TextAlpha = MAX(0.f, MM->TextAlpha - 0.05f);
-	
-	//On fait des update que si des menu existent!
-	if (daGetSize(MM->Menus->Menus) >0)
-	{
-		mnUpdate(MM->Menus, vec2(0.f, 0.f), vec2(0.f, 0.f));
-		//mnHandleEvent(MM->Menus, event);
-	}
-		
-	
-	if (daGetSize(MM->Messages->Menus) >0)
-	{
-		float x = 1200.f/2.f - moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f;
-		mnUpdate(MM->Messages, vec2(x, 800.f/2.f - moiGetSize(mnGetCurrentMenu(MM->Messages)).y/2.f), vec2(x, -mnGetHeight(MM->Messages) - 100.f));
-		
-		// Messages doit avoir la priorité sur les menus, étant donné qu'on l'a desactivé c'est bon
-		//mnHandleEvent(MM->Messages, event);
-	}
-	
-	
-	
-	
 }
 
 
@@ -156,6 +91,14 @@ void msgCreateMessage(MessageManager* MM,const char* Title, unsigned int ItemCou
 {
 	assert(daGetSize(MM->Messages->Menus) == 0);
 	mnAddMenu(MM->Messages, Title, ItemCount);
+	mnSetType(MM->Messages, MENU_TYPE_DEFAULT);
+}
+
+void msgCreateMenu(MessageManager* MM, unsigned int ItemCount)
+{
+	assert(daGetSize(MM->Messages->Menus) == 0);
+	mnAddMenu(MM->Messages, "", ItemCount);
+	mnSetType(MM->Messages, MENU_TYPE_RIGHT_CLICK);
 }
 
 ItemID msgAddItem(MessageManager* MM,const char* Text, ItemType Type, void (*Function)(void), void* Data)
@@ -193,6 +136,10 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	Screenshot.create(win.getSize().x, win.getSize().y);
 	Screenshot.update(win);
 	float MouseX, MouseY;
+	MouseX = sf::Mouse::getPosition(win).x;
+	MouseY = sf::Mouse::getPosition(win).y;
+
+	
 	MM->CloseMessage = FALSE;
 	mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
 	mnSetItemNormalZoomFactor(MM->Messages, 0.75f);
@@ -211,14 +158,13 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	
 	//c'est un peu lent... 0.03s
 	//printf("time: %f\n", cl.getElapsedTime().asSeconds());
-	
-	mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
+	if (mnGetType(MM->Messages) == MENU_TYPE_DEFAULT)
+		mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
+	else
+		mnSetPosition(MM->Messages, vec2(MouseX, MouseY));
 	
 	while (mnIsVisible(MM->Messages) || !MM->CloseMessage)
 	{
-		
-		MouseX = sf::Mouse::getPosition(win).x;
-		MouseY = sf::Mouse::getPosition(win).y;
 		
 		sf::Event event;
 		while (win.pollEvent(event))
@@ -235,7 +181,10 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 			
 		}
 		
-		mnUpdate(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, 100.f), vec2(ViewWidth/4.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -mnGetHeight(MM->Messages) - 100.f));
+		if (mnGetType(MM->Messages) == MENU_TYPE_DEFAULT)
+			mnUpdate(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, 100.f), vec2(ViewWidth/4.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -mnGetHeight(MM->Messages) - 100.f));
+		else
+			mnUpdate(MM->Messages, vec2(0.f, 0.f), vec2(0.f, 0.f));
 		
 		
 		glClear(GL_COLOR_BUFFER_BIT);

@@ -156,7 +156,7 @@ Bool lvlIsGoalReached(const Level* L);
  * @param W Largeur de la portion du niveau affichée
  * @param H Hauteur de la portion du niveau affichée
 **/
-void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H);
+void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H, const sf::RenderWindow &win);
 
 /** @brief Affiche la première couche (fond) de décors
 **/

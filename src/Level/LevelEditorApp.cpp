@@ -607,7 +607,7 @@ void appRun(LevelEditorApp* App)
 		}
 		*/
 
-		if(DispBack) lvlDisplayBG(App->Led.Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
+		if(DispBack) lvlDisplayBG(App->Led.Lvl, ViewX, ViewY, ViewWidth, ViewHeight, App->Window);
 		if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
 		if(DispL1) lvlDisplayL1(App->Led.Lvl);
 		if(DispL2) lvlDisplayL2(App->Led.Lvl);

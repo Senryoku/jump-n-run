@@ -17,7 +17,7 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	lstInit(&Lvl->Objects);
 	Lvl->lvlTexLoad = &glTexLoad;
 	Lvl->lvlTexFree = &glTexFree;
-	Lvl->lvlDisplayTex = &glDisplayTex;
+	Lvl->lvlDisplayTex = &glDisplayTex; ///@todo Mettre une fonction our charger ça
 	Lvl->lvlDispTexPoly = &glDispTexPoly;
 	Lvl->lvlDispFlag = &glDispFlag;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
@@ -331,7 +331,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				Vertex *V1, *V2;
 				float Lenght, Spring;
 				fscanf(f, "%u %u %f %f\n", &ID1, &ID2, &Lenght, &Spring);
-				printf("elastic entre %u et %u\n", ID1, ID2);
+				//printf("elastic entre %u et %u\n", ID1, ID2);
 				V1 = (Vertex*)daGet(Vx, ID1);
 				V2 = (Vertex*)daGet(Vx, ID2);
 				Elastic* e = newElastic(V1, V2, Lenght, Spring);
@@ -525,8 +525,11 @@ void lvlSetDistFG(Level* Lvl, float F)
 	Lvl->DistFG = F;
 }
 
-void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H)
+void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H, const sf::RenderWindow &win)
 {
+	//glPushMatrix();
+	//glTranslatef(X, Y, 0.f);
+	//glScalef(W/win.getSize().x, H/win.getSize().y, 1.f);
 	float wdW = wdGetWidth(lvlGetWorld(Lvl));
 	float wdH = wdGetHeight(lvlGetWorld(Lvl));
 	float X1 = MIN(X, wdW - W);
@@ -576,10 +579,12 @@ void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H)
 	(*Lvl->lvlDisplayTex)(Lvl->Background, vX1, vec2(vX2.x, vX1.y), vX2, vec2(vX1.x, vX2.y),
 						vec2(X, Y), vec2(X + W, Y),
 						vec2(X + W, Y + H), vec2(X, Y + H));
+	//glPopMatrix();
 }
 
 void lvlDisplayL1(const Level* Lvl)
 {
+	
 	(*Lvl->lvlDisplayTex)(Lvl->Layer1, vec2(0, 0), vec2(1,0), vec2(1,1), vec2(0,1),
 						vec2(0, 0), vec2(wdGetWidth(lvlGetWorld(Lvl)), 0),
 						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));

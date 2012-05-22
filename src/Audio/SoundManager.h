@@ -19,8 +19,8 @@
 
 typedef struct {
 	List Sounds;
-	std::map<std::string, SoundBuffer*> SoundBuffers;
-	std::map<std::string, Music*> Musics;
+	std::map<std::string, SoundBuffer*>* SoundBuffers;
+	std::map<std::string, Music*>* Musics;
 	SoundListener Listener;
 
 	//Pour le fading entre deux musiques

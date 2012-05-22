@@ -107,6 +107,7 @@ MenuItem* moiGetItem(MenuOfItems* M, ItemID IID);
  * @brief Met à jour le zoom des items
  * @param SelectedFactor Facteur de zoom pour un item sélectioné
  * @param UnselectedFactor Facteur de zoom pour un item non sélectioné
+ * @param Factor Donne un scale à la taille. Utilisé pour les menus de type MENU_TYPE_RIGHT_CLICK
  */
 void moiUpdateVisuals(MenuOfItems* M, float SelectedFactor, float UnselectedFactor);
 

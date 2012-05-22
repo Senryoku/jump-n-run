@@ -18,7 +18,7 @@ typedef unsigned short MenuID;
 typedef unsigned short MenuType;
 
 #define MENU_TYPE_DEFAULT 0x00
-#define MENU_TYPE_MESSAGE 0x01
+#define MENU_TYPE_RIGHT_CLICK 0x01
 
 /**
  * @brief Structure définissant un menu
@@ -104,6 +104,22 @@ void mnFree(Menu* M);
  * @param MID ID du menu à supprimer
  **/
 void mnRemoveMenu(Menu* M, MenuID MID);
+
+/** @brief Change le type de menu
+ *
+ * Cette fonction est utilisée par messagemanager pour créer soit des messages soit des menus
+ * @param M Menu à laquelle s'applique la fonction
+ * @param MT nouveau type du menu
+ **/
+void mnSetType(Menu* M, MenuType MT);
+
+/** @brief Donne le type de menu
+ *
+ * Cette fonction est utilisée par messagemanager
+ * @param M Menu à laquelle s'applique la fonction
+ * @return Type du menu
+ **/
+MenuType mnGetType(const Menu* M);
 
 /** @brief détruit un menu et libère la place occupée par celui-ci
  *
