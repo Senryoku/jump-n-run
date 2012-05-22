@@ -374,12 +374,12 @@ void plUpdate(Player* P, World* W)
 				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
 				P->Normal = vec2Prod(Info.Normal, -1.f);
 				P->State = P->State | PL_HAS_SUPPORT;
-				if(Info.Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
+				if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
 			} else if(Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))	{
 				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
 				P->Normal = Info.Normal;
 				P->State = P->State | PL_HAS_SUPPORT;
-				if(Info.Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
+				if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
 			}
 
 
