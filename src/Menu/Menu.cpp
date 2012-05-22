@@ -261,7 +261,7 @@ void mnMoveCursor(Menu* M, MenuDirection Direction)
 void mnSetCursor(Menu* M, Vec2 MousePos)
 {
 	MousePos.y-=17.f;
-	if (MousePos.y < M->MenuY || MousePos.y > M->MenuY+mnGetHeight(M))
+	if (MousePos.y < M->MenuY || MousePos.y > M->MenuY+mnGetHeight(M) || MousePos.x < M->MenuX || MousePos.x > M->MenuX+moiGetSize(mnGetCurrentMenu(M)).x)
 		mnGetCurrentMenu(M)->ItemSelected = INVALID_ITEM_ID;
 	else
 	{

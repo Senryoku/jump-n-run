@@ -119,12 +119,6 @@ ItemID msgAddItemWithArg(MessageManager* MM, const char* Text, void (*Function)(
 	return mnAddItemWithArg(MM->Messages, 0, Text, Function, Arg);
 }
 
-Bool msgCanDisplay(MessageManager* MM)
-{
-	return (daGetSize(MM->Messages->Menus) > 0);
-}
-
-
 
 void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
 {

@@ -265,7 +265,7 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 				 ItemText.setString(ItemText.getString() + ": " + *(I->Str));
 				 break;
 			 case ITEM_VALUE:
-				 char ValueText[300], tmp[5];
+				 char ValueText[300], tmp[20];
 				 sprintf(tmp, ": a.%uf", mniGetFloatPrecision(I));
 				 tmp[2]='%';
 				 sprintf(ValueText, tmp, *(float*)mniGetData(I));
@@ -360,7 +360,7 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 				 ItemText.setString(ItemText.getString() + ": " + *(I->Str));
 				 break;
 			 case ITEM_VALUE:
-				 char ValueText[300], tmp[5];
+				 char ValueText[300], tmp[20];
 				 sprintf(tmp, ": a.%uf", mniGetFloatPrecision(I));
 				 tmp[2]='%';
 				 sprintf(ValueText, tmp, *(float*)mniGetData(I));

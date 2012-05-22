@@ -160,6 +160,7 @@ void gmPlay(Game* G)
 				msgAddCloseItem(shMessageManager(G->SR), "No");
 				//msgAddItemWithArg(shMessageManager(G->SR), "Yes", &CloseMessage, shMessageManager(G->SR));
 				ItemID i = msgGetChoice(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+
 				msgCreateMessage(shMessageManager(G->SR), "Alert", 3);
 				if (i==1)
 					msgAddItem(shMessageManager(G->SR), "Coool :D!", ITEM_LABEL, NULL, NULL);
@@ -180,9 +181,9 @@ void gmPlay(Game* G)
 				
 				
 				msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
-				
+
 				const char* t = msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
-				
+
 				msgCreateMessage(shMessageManager(G->SR), "Alert", 2);
 				msgAddItem(shMessageManager(G->SR), t, ITEM_LABEL, NULL, NULL);
 				msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
