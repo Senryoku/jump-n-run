@@ -15,7 +15,7 @@ void CloseMessage(void* Data)
 	mnSetHide(MM->Messages, TRUE);
 	MM->CloseMessage = 1;
 	MM->LastChoice = moiGetItemSelectedID(mnGetCurrentMenu(MM->Messages));
-	
+
 	//Pour les input on va prendre l'input du premier item car normalement un message à input n'a qu'un seul input
 	MenuItem* I = NULL;
 	int i;
@@ -27,13 +27,13 @@ void CloseMessage(void* Data)
 			I = mnGetItem(MM->Messages, 0, i);
 			break;
 		}
-			
+
 	}
-	
+
 	if (I == NULL) return;
-	
+
 	ItemType T = mniGetType(I);
-	
+
 	if (T == ITEM_INPUT || T == ITEM_INPUT_MULTILINE || T == ITEM_INPUT_VALUE)
 	{
 		free(MM->LastInput);
@@ -49,7 +49,7 @@ void CloseMessage(void* Data)
 		sprintf(MM->LastInput, "%f",v);
 
 	}
-		
+
 }
 
 
@@ -64,7 +64,7 @@ void msgInit(MessageManager* MM, s_SharedResources* SR)
 	MM->LastChoice = 0;
 	MM->LastInput = (char*)malloc(sizeof(char));
 	MM->LastInput[0] = '\0';
-	
+
 	mnInit(MM->Messages);
 }
 
@@ -78,9 +78,9 @@ void msgFree(MessageManager* MM)
 	}
 	delList(MM->Queue); //Pas besoin de liberer les nodes car ce ne sont que des pointeurs
 	delList(MM->QueueID);
-	
+
 	mnFree(MM->Messages);
-	
+
 	free(MM->Messages);
 	free(MM->LastInput);
 }
@@ -129,7 +129,7 @@ Bool msgCanDisplay(MessageManager* MM)
 void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
 {
 	mnSetHide(MM->Messages, FALSE);
-	
+
 	//sf::Clock cl;
 	//cl.restart();
 	sf::Texture Screenshot; Texture Screeny; sf::Image img;
@@ -139,33 +139,33 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	MouseX = sf::Mouse::getPosition(win).x;
 	MouseY = sf::Mouse::getPosition(win).y;
 
-	
+
 	MM->CloseMessage = FALSE;
 	mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
 	mnSetItemNormalZoomFactor(MM->Messages, 0.75f);
-	
+
 	//écran de fond
 	img = Screenshot.copyToImage();
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures(1, &Screeny);
 	glBindTexture(GL_TEXTURE_2D, Screeny);
-	
-	
+
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Screenshot.getSize().x, Screenshot.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	
-	
+
+
 	//c'est un peu lent... 0.03s
 	//printf("time: %f\n", cl.getElapsedTime().asSeconds());
 	if (mnGetType(MM->Messages) == MENU_TYPE_DEFAULT)
 		mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
 	else
 		mnSetPosition(MM->Messages, vec2(MouseX, MouseY));
-	
+
 	while (mnIsVisible(MM->Messages) || !MM->CloseMessage)
 	{
-		
+
 		sf::Event event;
 		while (win.pollEvent(event))
 		{
@@ -174,26 +174,26 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 				CloseMessage(MM);
 				break; // ça évite de doubler l'event avec les bouttons
 			}
-			
-			
+
+
 			mnHandleEvent(MM->Messages, event);
-			
-			
+
+
 		}
-		
+
 		if (mnGetType(MM->Messages) == MENU_TYPE_DEFAULT)
 			mnUpdate(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, 100.f), vec2(ViewWidth/4.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -mnGetHeight(MM->Messages) - 100.f));
 		else
 			mnUpdate(MM->Messages, vec2(0.f, 0.f), vec2(0.f, 0.f));
-		
-		
+
+
 		glClear(GL_COLOR_BUFFER_BIT);
 		//glClearColor(0.f, 0.f, 0.f, 0.2f);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
-		
-		
+
+
 		glColor4f(1.f, 1.f, 1.f, 1.f);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, Screeny);
@@ -211,31 +211,31 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 		glVertex2f(0.f, ViewHeight);
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
-		
-		
+
+
 		glPopMatrix();
 		glDrawMenuBox(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
-		
+
 		glDrawMenuItems(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
-		
+
 		win.display();
-		
+
 	}
-	
+
 	//On libère le menu
 	mnRemoveMenu(MM->Messages, (MenuID)0);
 	glTexFree(Screeny);
-	
+
 }
 
 ItemID msgGetChoice(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
 {
-	msgDisplay(MM, win, ViewX, ViewY, ViewWidth, ViewHeight);	
+	msgDisplay(MM, win, ViewX, ViewY, ViewWidth, ViewHeight);
 	return MM->LastChoice;
 }
 
 const char* msgGetInput(MessageManager* MM, sf::RenderWindow& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
 {
-	msgDisplay(MM, win, ViewX, ViewY, ViewWidth, ViewHeight);	
+	msgDisplay(MM, win, ViewX, ViewY, ViewWidth, ViewHeight);
 	return MM->LastInput;
 }

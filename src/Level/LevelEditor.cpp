@@ -621,7 +621,6 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 			char *path = (char*)malloc(255*sizeof(char));
 			fscanf(f, "%s\n", path);
 			daAdd(&Led->TexturesPath, path);
-			printf("texture read: %s\n", path);
 		}
 	}
 

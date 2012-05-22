@@ -58,7 +58,7 @@ void plInit(Player* P, World *W)
 	P->VxULStatus = P->VxURStatus = P->VxDRStatus = P->VxDLStatus =
 		P->RdUStatus = P->RdRStatus = P->RdDStatus = P->RdLStatus = nullCollisionInfo();
 	P->Speed = vec2(0.f, 0.f);
-	P->OnGround = FALSE;
+	P->State = PL_NOSTATE;
 	plResetJump(P);
 
 	/* On crée les vertices du personnage, pour l'animation et quand il meurt */
@@ -266,7 +266,7 @@ void plRotateL(Player* P)
 
 void plJump(Player* P)
 {
-	if (P->OnGround && !P->Jumping)
+	if ((P->State & PL_ON_GROUND) && !P->Jumping)
 	{
 		polyApplyForce(P->Shape, vec2Prod(P->Normal, 20.f), 0);
 		P->Jumping = TRUE;
@@ -294,7 +294,7 @@ void plResetJump(Player* P)
 
 void plGetUp(Player* P)
 {
-	if((fabs((vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL))).y) > 30.f) && P->OnGround)
+	if((fabs((vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL))).y) > 30.f) && (P->State & PL_ON_GROUND))
 	{
 		vxApplyForce(P->VxUL, vec2(0.f, -0.2f), 0);
 		vxApplyForce(P->VxUR, vec2(0.f, -0.2f), 0);
@@ -356,7 +356,11 @@ void plUpdate(Player* P, World* W)
 	Node* it;
 	CollisionInfo Info;
 	it = lstFirst(&LExtracted);
-	P->OnGround = (P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL);
+	P->State = PL_NOSTATE;
+//	if(P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL)
+//		P->State = P->State | PL_HAS_SUPPORT;
+//	if((P->VxDLStatus.P1 != NULL && (P->VxDLStatus.Normal.y > 0.5f) || P->VxDRStatus.P1 != NULL && P->VxDRStatus.Normal.y > 0.5f) || (P->RdDStatus.P1 != NULL && P->RdDStatus.Normal.y > 0.5f))
+//		P->State = P->State | PL_ON_GROUND;
 	P->Normal = vec2(0.f, 0.f);
 	while(!nodeEnd(it))
 	{
@@ -369,11 +373,13 @@ void plUpdate(Player* P, World* W)
 			{
 				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
 				P->Normal = vec2Prod(Info.Normal, -1.f);
-				P->OnGround = TRUE;
+				P->State = P->State | PL_HAS_SUPPORT;
+				if(Info.Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
 			} else if(Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))	{
 				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
 				P->Normal = Info.Normal;
-				P->OnGround = TRUE;
+				P->State = P->State | PL_HAS_SUPPORT;
+				if(Info.Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
 			}
 
 

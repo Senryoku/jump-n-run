@@ -13,6 +13,13 @@
 #define DIR_LEFT 0x00
 #define DIR_RIGHT 0x01
 
+#define PL_NOSTATE		0x00
+#define PL_ON_GROUND	0x01
+#define PL_HAS_SUPPORT	0x02
+#define PL_FALLING_R	0x04
+#define PL_FALLING_L	0x08
+#define PL_FACEPLANT	0x10
+
 typedef unsigned char PlayerDirection;
 
 typedef struct SPlayer
@@ -41,7 +48,7 @@ typedef struct SPlayer
 	/* Défini si une partie de la BB est en collision */
 	CollisionInfo VxULStatus, VxURStatus, VxDRStatus, VxDLStatus,
 		RdUStatus, RdRStatus, RdDStatus, RdLStatus;
-	Bool OnGround;
+	unsigned int State;
 } Player;
 
 /** @brief Constructeur

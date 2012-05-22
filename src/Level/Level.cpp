@@ -109,7 +109,7 @@ void lvlSetFinished(Level* Lvl, Bool B)
 
 Bool lvlLoad(Level* Lvl, const char* File)
 {
-	printf("Chargement...\n");
+	printf("%s::Chargement...\n", File);
 
 	/* Recherche du nom du fichier */
 	char Path[255], Name[255];
@@ -121,12 +121,6 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		strcpy(Name, tmp);
 		tmp = strtok(NULL, "/");
 	}
-
-	strcpy(Lvl->Filename, Name);
-	printf("Filename : %s\n", Lvl->Filename);
-
-	strcpy(Lvl->MD5, md5FromFile(File).c_str());
-	printf("MD5 : %s\n", Lvl->MD5);
 
 	FILE* f;
 	f=fopen(File, "r");
@@ -140,38 +134,47 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	char lvl[100], description[300], read[300];
 	if (fgets(lvl, 100, f)==NULL)
 	{
-		printf("Le fichier ne peut pas être lu\n");
+		printf("Le fichier %s ne peut pas être lu (Erreur de lecture du nom)\n", File);
 		return FALSE;
-	} else {
-		strcpy(Lvl->Name, lvl);
-		Lvl->Name[strlen(Lvl->Name) - 1] = '\0'; // On enlève le CR
 	}
 
 	if (fgets(description, 255, f)==NULL)
 	{
-		printf("Le fichier ne peut pas être lu\n");
+		printf("Le fichier %s ne peut pas être lu (Erreur de lecture de la description)\n", File);
 		return FALSE;
-	} else {
-		strcpy(Lvl->Desc, description);
-		Lvl->Desc[strlen(Lvl->Desc) - 1] = '\0'; // On enlève le CR
 	}
 
 	float width, height, DistBG = 1.f, DistFG = 1.f;
 
 	if (fgets(read, 300, f)==NULL)
 	{
-		printf("Le fichier ne peut pas être lu\n");
+		printf("Le fichier %s ne peut pas être lu (Erreur de lecture #3)\n", File);
 		return FALSE;
 	}
 	else
 		sscanf(read, "%f, %f ; %f, %f", &width, &height, &DistBG, &DistFG);
+
+	lvlFree(Lvl);
+
+	lvlInit(Lvl, width, height);
+
+	strcpy(Lvl->Filename, Name);
+	printf("Filename : %s\n", Lvl->Filename);
+
+	strcpy(Lvl->MD5, md5FromFile(File).c_str());
+	printf("MD5 : %s\n", Lvl->MD5);
+
+	strcpy(Lvl->Name, lvl);
+	Lvl->Name[strlen(Lvl->Name) - 1] = '\0'; // On enlève le CR
+	strcpy(Lvl->Desc, description);
+	Lvl->Desc[strlen(Lvl->Desc) - 1] = '\0'; // On enlève le CR
 
 	lvlSetDistBG(Lvl, DistBG);
 	lvlSetDistFG(Lvl, DistFG);
 
 	if (fgets(read, 300, f)==NULL)
 	{
-		printf("Le fichier ne peut pas être lu\n");
+		printf("Le fichier %s ne peut pas être lu (Erreur de lecture #4)\n", File);
 		return FALSE;
 	}
 	else sscanf(read, "%f, %f ; %f, %f", &Lvl->Spawn.x, &Lvl->Spawn.y, &Lvl->Goal.x, &Lvl->Goal.y);
@@ -203,21 +206,12 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	*strstr(read, "\n") = '\0';
 	Lvl->Foreground = (*Lvl->lvlTexLoad)(read);
 
-
-
-	//On libere le monde et on le realloue
-	wdFree(Lvl->W);
-	wdInit(Lvl->W, width, height);
-
-
-
 	//liste des vertex
 	DynArr* Vx = newDynArr();
 	DynArr* Poly = newDynArr();
 
 	while (fgets(read, 300, f)!=NULL)
 	{
-		//printf("Read: %s", read);
 		item=o_end;
 		polyFixed=FALSE;
 		sscanf(read, "%u %u %i #\n", &item, &nVertex, &booly);
@@ -226,7 +220,6 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		switch (item)
 		{
 			case o_poly:
-				//printf("Polygon with %u vertex read\n", nVertex);
 				switch (nVertex)
 				{
 					case 0:
@@ -331,7 +324,6 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				Vertex *V1, *V2;
 				float Lenght, Spring;
 				fscanf(f, "%u %u %f %f\n", &ID1, &ID2, &Lenght, &Spring);
-				//printf("elastic entre %u et %u\n", ID1, ID2);
 				V1 = (Vertex*)daGet(Vx, ID1);
 				V2 = (Vertex*)daGet(Vx, ID2);
 				Elastic* e = newElastic(V1, V2, Lenght, Spring);
@@ -361,9 +353,9 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			case o_texture:
 			{
 				char path[255];
-				printf("Texture lue \n");
+				//printf("Texture lue \n");
 				fscanf(f, "%s\n", path);
-				printf("Chargement de %s", path);
+				//printf("Chargement de %s", path);
 				Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
 				*ptrTex = Lvl->lvlTexLoad(path);
 				daAdd(&Lvl->Textures, ptrTex);
@@ -375,7 +367,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				Polygon* Shape;
 				List lstTex;
 				lstInit(&lstTex); // Les nodes ne seront ppas libérés ici, car utilisés par Object, qui se chargera de les libérer
-				printf("Chargement d'un Objet...\n");
+				//printf("Chargement d'un Objet...\n");
 				fscanf(f, "%u %u\n", &ShapeInt, &Tex);
 				Shape = (Polygon*) daGet(Poly, ShapeInt);
 				for(ShapeInt = 0; ShapeInt < polyGetVxCount(Shape); ShapeInt++)
@@ -584,7 +576,7 @@ void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H, const sf
 
 void lvlDisplayL1(const Level* Lvl)
 {
-	
+
 	(*Lvl->lvlDisplayTex)(Lvl->Layer1, vec2(0, 0), vec2(1,0), vec2(1,1), vec2(0,1),
 						vec2(0, 0), vec2(wdGetWidth(lvlGetWorld(Lvl)), 0),
 						vec2(wdGetWidth(lvlGetWorld(Lvl)), wdGetHeight(lvlGetWorld(Lvl))), vec2(0, wdGetHeight(lvlGetWorld(Lvl))));
