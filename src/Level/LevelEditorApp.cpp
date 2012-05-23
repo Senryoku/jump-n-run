@@ -205,6 +205,7 @@ void appRun(LevelEditorApp* App)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 			{
+				ItemID IID;
 				msgCreateMessage(shMessageManager(App->SR), "Menu", 4);
 				msgAddCloseItem(shMessageManager(App->SR), "Choix0");
 				msgAddCloseItem(shMessageManager(App->SR), "SetWorkingPath");
@@ -217,7 +218,8 @@ void appRun(LevelEditorApp* App)
 						break;
 					case 1 :
 						msgCreateMessage(shMessageManager(App->SR), "SetWorkingPath", 2);
-						msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
+						IID=msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
+						mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), "levels/");
 						msgAddCloseItem(shMessageManager(App->SR), "Ok");
 						strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, ViewX, ViewY, ViewWidth, ViewHeight));
 						break;

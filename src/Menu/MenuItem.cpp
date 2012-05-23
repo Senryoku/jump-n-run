@@ -113,6 +113,17 @@ const std::string& mniGetInput(const MenuItem* I)
 		return *static_cast<std::string*>(I->Data);
 }
 
+void mniSetInput(MenuItem* I, const char* Text)
+{
+	assert(I->Type == ITEM_INPUT_VALUE || I->Type == ITEM_INPUT ||I->Type == ITEM_INPUT_MULTILINE);
+	
+	if (I->Type == ITEM_INPUT_VALUE)
+		*I->Str = Text;
+	else
+		*static_cast<std::string*>(I->Data) = Text;
+	
+}
+
 const char* mniGetInputChr(const MenuItem* I)
 {
 	assert(I->Type == ITEM_INPUT_VALUE || I->Type == ITEM_INPUT ||I->Type == ITEM_INPUT_MULTILINE);

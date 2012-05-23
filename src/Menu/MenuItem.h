@@ -81,6 +81,13 @@ void mniFree(MenuItem* I);
 void mniSetText(MenuItem* I, const char* Text);
 
 /**
+ * @brief Mutateur du text d'un ITEM_INPUT
+ * @param I MenuItem auquel s'applique la fonction
+ * @param Text nouveau texte
+ */
+void mniSetInput(MenuItem* I, const char* Text);
+
+/**
  * @brief Change la précision de l'affichage pour un ITEM_[INPUT_]VALUE
  * @param I MenuItem auquel s'applique la fonction
  * @param Prec Nouvelle précision
