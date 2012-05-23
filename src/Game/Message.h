@@ -61,7 +61,9 @@ const char* msgGetInput(MessageManager* MM, sf::RenderWindow& win, float ViewX, 
 
 void CloseMessage(void* MM);
 
-Menu* msgGetMenu(MessageManager* Data);
+Menu* msgGetMenu(MessageManager* MM);
+
+Bool msgCanDisplay(MessageManager* MM);
 
 
 /**@}**/

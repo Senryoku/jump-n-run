@@ -124,6 +124,8 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 {
 	mnSetHide(MM->Messages, FALSE);
 
+	glPushMatrix();
+	
 	//sf::Clock cl;
 	//cl.restart();
 	sf::Texture Screenshot; Texture Screeny; sf::Image img;
@@ -153,7 +155,7 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	//c'est un peu lent... 0.03s
 	//printf("time: %f\n", cl.getElapsedTime().asSeconds());
 	if (mnGetType(MM->Messages) == MENU_TYPE_DEFAULT)
-		mnSetPosition(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
+		mnSetPosition(MM->Messages, vec2(win.getSize().x/2.f - moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -100.f));
 	else
 		mnSetPosition(MM->Messages, vec2(MouseX, MouseY));
 
@@ -175,8 +177,9 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 
 		}
 
+		float menuPosx = win.getSize().x/2.f - moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f;
 		if (mnGetType(MM->Messages) == MENU_TYPE_DEFAULT)
-			mnUpdate(MM->Messages, vec2(ViewWidth/2.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, 100.f), vec2(ViewWidth/4.f-moiGetSize(mnGetCurrentMenu(MM->Messages)).x/2.f, -mnGetHeight(MM->Messages) - 100.f));
+			mnUpdate(MM->Messages, vec2(menuPosx, 100.f), vec2(menuPosx, -mnGetHeight(MM->Messages) - 100.f));
 		else
 			mnUpdate(MM->Messages, vec2(0.f, 0.f), vec2(0.f, 0.f));
 
@@ -185,15 +188,16 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 		//glClearColor(0.f, 0.f, 0.f, 0.2f);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		//glViewport(0.f, 0.f, win.getSize().x, win.getSize().y);
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
 
-
+		
 		glColor4f(1.f, 1.f, 1.f, 1.f);
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, Screeny);
 		glPushMatrix();
 		glTranslatef(ViewX, ViewY, 0.f);
-		glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
+		//glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
 		glBegin(GL_QUADS);
 		glTexCoord2i(0, 0);
 		glVertex2f(0.f, 0.f);
@@ -206,8 +210,9 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 
-
 		glPopMatrix();
+		
+		
 		glDrawMenuBox(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
 
 		glDrawMenuItems(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
@@ -219,6 +224,8 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	//On libère le menu
 	mnRemoveMenu(MM->Messages, (MenuID)0);
 	glTexFree(Screeny);
+	
+	glPopMatrix();
 
 }
 
@@ -232,4 +239,9 @@ const char* msgGetInput(MessageManager* MM, sf::RenderWindow& win, float ViewX, 
 {
 	msgDisplay(MM, win, ViewX, ViewY, ViewWidth, ViewHeight);
 	return MM->LastInput;
+}
+
+Bool msgCanDisplay(MessageManager* MM)
+{
+	return daGetSize(MM->Messages->Menus) > 0;
 }

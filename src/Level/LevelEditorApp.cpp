@@ -569,7 +569,7 @@ void appRun(LevelEditorApp* App)
 				toViewY += (OldMouseY - MouseY)*10.f;
 			}
 			
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (InsideMiniMap && sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				toViewX = (MouseWinX - (App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl)))*sc))/(wdGetWidth(lvlGetWorld(App->Led.Lvl))*sc)*wdGetWidth(lvlGetWorld(App->Led.Lvl));
 				toViewY = (MouseWinY - 20.f)/(wdGetWidth(lvlGetWorld(App->Led.Lvl))*sc)*wdGetWidth(lvlGetWorld(App->Led.Lvl));
@@ -601,7 +601,7 @@ void appRun(LevelEditorApp* App)
 		/* == Affichage == */
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
-		glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
+		//glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glViewport(0.f, 0.f, App->WindowWidth, App->WindowHeight);

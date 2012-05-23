@@ -462,9 +462,9 @@ void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float Vi
 	}
 
 
-
 	glTranslatef(ViewX, ViewY, 0.f);
 	glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
+	
 
 
 	Size.x = MAX(TitleWidth+10.f, Size.x);
@@ -694,10 +694,10 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x - 2.f, Position.y+11.f);
 
 	glTexCoord2f(1.f, 1.f);
-	glVertex2f(Position.x - 2.f, Position.y +Size.y +2.f);
+	glVertex2f(Position.x - 2.f, ceilf(Position.y +Size.y +2.f));
 
 	glTexCoord2f(0.f, 1.f);
-	glVertex2f(Position.x-13.f, Position.y +Size.y+2.f);
+	glVertex2f(Position.x-13.f, ceilf(Position.y +Size.y+2.f));
 
 	//Right
 	glTexCoord2f(1.f, 0.f);
@@ -707,10 +707,10 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x +Size.x, Position.y+11.f);
 
 	glTexCoord2f(0.f, 1.f);
-	glVertex2f(Position.x +Size.x, Position.y +Size.y +2.f);
+	glVertex2f(Position.x +Size.x, ceilf(Position.y +Size.y +2.f));
 
 	glTexCoord2f(1.f, 1.f);
-	glVertex2f(Position.x-11.f+Size.x, Position.y +Size.y+2.f);
+	glVertex2f(Position.x-11.f+Size.x, ceilf(Position.y +Size.y+2.f));
 
 
 	//Top

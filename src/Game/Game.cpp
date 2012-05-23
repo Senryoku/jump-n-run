@@ -38,7 +38,7 @@ void gmInit(Game* G, SharedResources* SR)
 	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
 	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10000000.f);
 	mniSetFloatPrecision(mnGetItem(&G->GameMenu, 0, IID), 3);
-	//mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);&&&&&&&&&&&&&&&&&&&
+	//mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
 	G->testy = 0.f;
 	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
 	mnAddItem(&G->GameMenu, 0, "Input multiligne", ITEM_INPUT_MULTILINE, NULL, NULL);
@@ -260,7 +260,6 @@ void gmPlay(Game* G)
 		{
 			glDrawPolygon(lvlGetP1(G->Lvl)->Shape);
 			wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
-			glDrawFPS(G->SR, *G->Window, fpsGetString(&fps));
 		}
 
 		float menuPosx = G->Window->getSize().x/2.f - moiGetSize(mnGetCurrentMenu(&G->GameMenu)).x/2.f;
@@ -274,6 +273,8 @@ void gmPlay(Game* G)
 		//SFML
 		glDrawMenuItems(G->SR, *G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
 
+		if (DispDebug)
+			glDrawFPS(G->SR, *G->Window, fpsGetString(&fps));
 
 		//if (msgCanBeDrawn())
 		//	glDrawMenuItems(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
