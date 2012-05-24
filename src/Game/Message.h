@@ -163,6 +163,14 @@ const char* msgGetInput(MessageManager* MM, sf::RenderWindow& win, float ViewX, 
  **/
 Menu* msgGetMenu(MessageManager* MM);
 
+/** @brief Retourn le dernier Choix. Cette fonction est à utiliser quand on veut récuperér en plus d'un input l'ID de l'item qui a fermé le message
+ *
+ * @param[in] MM MessageManager auquel s'applique la fonction
+ * @return ItemID du dernier choix
+ **/
+ItemID msgGetLastChoice(const MessageManager* MM);
+
+
 //Bool msgCanDisplay(MessageManager* MM);
 
 

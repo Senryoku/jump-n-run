@@ -234,14 +234,13 @@ void gmPlay(Game* G)
 			lvlSetFinished(G->Lvl, 1);
 			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score, donc là, ça plante, mais j'imagien que c'ets parce qu'on peut pas récupérer un Input ET un choix :p
 			 * J'vais avoir besion de menu ici quoi ! */
-			ItemID IID;
 			char Name[255];
 			msgCreateMessage(shMessageManager(G->SR), "Bravo !", 4);
 			msgAddItem(shMessageManager(G->SR), "Pseudonyme", ITEM_INPUT, NULL, NULL);
 			msgAddCloseItem(shMessageManager(G->SR), "Envoyer le score");
 			msgAddCloseItem(shMessageManager(G->SR), "Quitter");
 			strcpy(Name, msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight));
-			ItemID Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+			ItemID Choice = msgGetLastChoice(shMessageManager(G->SR));
 			switch (Choice)
 			{
 				case 0 :

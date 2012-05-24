@@ -237,6 +237,11 @@ const char* msgGetInput(MessageManager* MM, sf::RenderWindow& win, float ViewX, 
 	return MM->LastInput;
 }
 
+ItemID msgGetLastChoice(const MessageManager* MM)
+{
+	return MM->LastChoice;
+}
+
 /*Bool msgCanDisplay(MessageManager* MM)
 {
 	return daGetSize(MM->Messages->Menus) > 0;
