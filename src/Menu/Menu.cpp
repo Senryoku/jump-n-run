@@ -306,14 +306,14 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 	if (!mnGetActive(M))
 		return;
 	
-	if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed)
+	if (event.type == sf::Event::MouseButtonPressed)
 		M->UseMouse = TRUE;
 	
 	if (event.type == sf::Event::KeyPressed)
 		M->UseMouse = FALSE;
 	
-	if (event.type == sf::Event::MouseMoved)
-		mnSetCursor(M, vec2(event.mouseMove.x, event.mouseMove.y));
+	if (event.type == sf::Event::MouseMoved && event.mouseMove.x >= M->MenuX && event.mouseMove.x <= M->MenuX+moiGetSize(mnGetCurrentMenu(M)).x && event.mouseMove.y >= M->MenuY && event.mouseMove.y <= M->MenuY+moiGetSize(mnGetCurrentMenu(M)).y)
+		mnSetCursor(M, vec2(event.mouseMove.x, event.mouseMove.y)), M->UseMouse = TRUE;
 	
 	Bool Enter = ((event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return));
 	
