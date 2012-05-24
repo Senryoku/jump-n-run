@@ -53,3 +53,13 @@ Polygon* objGetShape(Object* Obj)
 {
 	return Obj->Shape;
 }
+
+void objSetTexture(Object* Obj, Texture T)
+{
+	Obj->Tex = T;
+}
+
+Texture objGetTexture(const Object* Obj)
+{
+	return Obj->Tex;
+}

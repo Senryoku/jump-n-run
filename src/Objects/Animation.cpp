@@ -378,6 +378,8 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		{
 			vxResolve(P->HeadLeft, prevdt, dt);
 			vxResolve(P->HeadRight, prevdt, dt);
+			vxApplyForce(P->HeadLeft, vec2(0.f, 0.6f), 1.f);
+			vxApplyForce(P->HeadRight, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 			
@@ -390,6 +392,8 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		{
 			vxResolve(P->HeadLeft, prevdt, dt);
 			vxResolve(P->HeadRight, prevdt, dt);
+			vxApplyForce(P->HeadLeft, vec2(0.f, 0.6f), 1.f);
+			vxApplyForce(P->HeadRight, vec2(0.f, 0.6f), 1.f);
 		}
 		
 		VxResolved = FALSE;
@@ -401,6 +405,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->Neck, prevdt, dt);
+			vxApplyForce(P->Neck, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 
@@ -410,9 +415,9 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->Neck, A->Positions.Neck.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->Neck, prevdt, dt);
+			vxResolve(P->Neck, prevdt, dt), vxApplyForce(P->Neck, vec2(0.f, 0.6f), 1.f);;
 		
-		
+		////////////
 		VxResolved = FALSE;
 		if (Pos->LeftArm1.x == Pos->LeftArm1.x)
 		{
@@ -422,6 +427,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->LeftArm1, prevdt, dt);
+			vxApplyForce(P->LeftArm1, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 		
@@ -431,7 +437,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->LeftArm1, A->Positions.LeftArm1.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->LeftArm1, prevdt, dt);
+			vxResolve(P->LeftArm1, prevdt, dt), vxApplyForce(P->LeftArm1, vec2(0.f, 0.6f), 1.f);
 		
 		
 		VxResolved = FALSE;
@@ -443,6 +449,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->LeftArm2, prevdt, dt);
+			vxApplyForce(P->LeftArm2, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 		
@@ -452,7 +459,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->LeftArm2, A->Positions.LeftArm2.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->LeftArm2, prevdt, dt);
+			vxResolve(P->LeftArm2, prevdt, dt), vxApplyForce(P->LeftArm2, vec2(0.f, 0.6f), 1.f);
 		
 		
 		VxResolved = FALSE;
@@ -464,6 +471,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->RightArm1, prevdt, dt);
+			vxApplyForce(P->RightArm1, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 		
@@ -473,7 +481,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->RightArm1, A->Positions.RightArm1.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->RightArm1, prevdt, dt);
+			vxResolve(P->RightArm1, prevdt, dt), vxApplyForce(P->RightArm1, vec2(0.f, 0.6f), 1.f);
 		
 		
 		VxResolved = FALSE;
@@ -485,6 +493,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->RightArm2, prevdt, dt);
+			vxApplyForce(P->RightArm2, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 		
@@ -494,7 +503,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->RightArm2, A->Positions.RightArm2.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->RightArm2, prevdt, dt);
+			vxResolve(P->RightArm2, prevdt, dt), vxApplyForce(P->RightArm2, vec2(0.f, 0.6f), 1.f);
 		
 		
 		VxResolved = FALSE;
@@ -506,6 +515,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->LeftLeg1, prevdt, dt);
+			vxApplyForce(P->LeftLeg1, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 		
@@ -515,7 +525,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->LeftLeg1, A->Positions.LeftLeg1.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->LeftLeg1, prevdt, dt);
+			vxResolve(P->LeftLeg1, prevdt, dt), vxApplyForce(P->LeftLeg1, vec2(0.f, 0.6f), 1.f);
 		
 		
 		VxResolved = FALSE;
@@ -527,6 +537,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->LeftLeg2, prevdt, dt);
+			vxApplyForce(P->LeftLeg2, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 		
@@ -536,7 +547,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->LeftLeg2, A->Positions.LeftLeg2.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->LeftLeg2, prevdt, dt);
+			vxResolve(P->LeftLeg2, prevdt, dt), vxApplyForce(P->LeftLeg2, vec2(0.f, 0.6f), 1.f);
 		
 		
 		VxResolved = FALSE;
@@ -548,6 +559,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->RightLeg1, prevdt, dt);
+			vxApplyForce(P->RightLeg1, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 		
@@ -557,7 +569,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->RightLeg1, A->Positions.RightLeg1.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->RightLeg1, prevdt, dt);
+			vxResolve(P->RightLeg1, prevdt, dt), vxApplyForce(P->RightLeg1, vec2(0.f, 0.6f), 1.f);
 		
 		
 		VxResolved = FALSE;
@@ -569,6 +581,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 		{
 			vxResolve(P->RightLeg2, prevdt, dt);
+			vxApplyForce(P->RightLeg2, vec2(0.f, 0.6f), 1.f);
 			VxResolved = TRUE;
 		}
 		
@@ -578,7 +591,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetY(P->RightLeg2, A->Positions.RightLeg2.y);
 		}
 		else if (!VxResolved)
-			vxResolve(P->RightLeg2, prevdt, dt);
+			vxResolve(P->RightLeg2, prevdt, dt), vxApplyForce(P->RightLeg2, vec2(0.f, 0.6f), 1.f);
 		
 		
 		/* Vérification de l'état de l'animation pour passer à létat suivant */
@@ -642,7 +655,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->Neck, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(60.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.Neck))));
 		}
 		else
-			vxResolve(P->Neck, prevdt, dt);
+			vxResolve(P->Neck, prevdt, dt), vxApplyForce(P->Neck, vec2(0.f, 0.6f), 1.f);;
 			
 		if (Ang->Head == Ang->Head)
 		{
@@ -651,8 +664,8 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		}
 		else
 		{
-			vxResolve(P->HeadLeft, prevdt, dt);
-			vxResolve(P->HeadRight, prevdt, dt);
+			vxResolve(P->HeadLeft, prevdt, dt), vxApplyForce(P->HeadLeft, vec2(0.f, 0.6f), 1.f);;
+			vxResolve(P->HeadRight, prevdt, dt), vxApplyForce(P->HeadRight, vec2(0.f, 0.6f), 1.f);;
 		}
 			
 		
@@ -664,7 +677,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-25.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm1))));
 		}
 		else
-			vxResolve(P->LeftArm1, prevdt, dt);
+			vxResolve(P->LeftArm1, prevdt, dt), vxApplyForce(P->LeftArm1, vec2(0.f, 0.6f), 1.f);
 			
 		if (Ang->LeftArm2 == Ang->LeftArm2)
 		{
@@ -672,7 +685,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->LeftArm1), vec2Rotate(vec2(-25.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm2))));
 		}
 		else
-			vxResolve(P->LeftArm2, prevdt, dt);
+			vxResolve(P->LeftArm2, prevdt, dt), vxApplyForce(P->LeftArm2, vec2(0.f, 0.6f), 1.f);;
 			
 		
 		if (Ang->RightArm1 == Ang->RightArm1)
@@ -681,7 +694,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-25.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm1))));
 		}
 		else
-			vxResolve(P->RightArm1, prevdt, dt);
+			vxResolve(P->RightArm1, prevdt, dt), vxApplyForce(P->RightArm1, vec2(0.f, 0.6f), 1.f);;
 			
 		if (Ang->RightArm2 == Ang->RightArm2)
 		{
@@ -689,7 +702,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->RightArm2, vec2Add(vxGetPosition(P->RightArm1), vec2Rotate(vec2(-25.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm2))));
 		}
 		else
-			vxResolve(P->RightArm2, prevdt, dt);
+			vxResolve(P->RightArm2, prevdt, dt), vxApplyForce(P->RightArm2, vec2(0.f, 0.6f), 1.f);;
 			
 				
 		if (Ang->LeftLeg1 == Ang->LeftLeg1)
@@ -698,7 +711,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->LeftLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-30.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg1))));
 		}
 		else
-			vxResolve(P->LeftLeg1, prevdt, dt);
+			vxResolve(P->LeftLeg1, prevdt, dt), vxApplyForce(P->LeftLeg1, vec2(0.f, 0.6f), 1.f);;
 			
 		if (Ang->LeftLeg2 == Ang->LeftLeg2)
 		{
@@ -706,7 +719,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->LeftLeg1), vec2Rotate(vec2(-30.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg2))));
 		}
 		else
-			vxResolve(P->LeftLeg2, prevdt, dt);
+			vxResolve(P->LeftLeg2, prevdt, dt), vxApplyForce(P->LeftLeg2, vec2(0.f, 0.6f), 1.f);;
 			
 		
 		if (Ang->RightLeg1 == Ang->RightLeg1)
@@ -715,7 +728,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-30.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg1))));
 		}
 		else
-			vxResolve(P->RightLeg1, prevdt, dt);
+			vxResolve(P->RightLeg1, prevdt, dt), vxApplyForce(P->RightLeg1, vec2(0.f, 0.6f), 1.f);;
 			
 		if (Ang->RightLeg2 == Ang->RightLeg2)
 		{
@@ -723,7 +736,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->RightLeg1), vec2Rotate(vec2(-30.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg2))));
 		}
 		else
-			vxResolve(P->RightLeg2, prevdt, dt);
+			vxResolve(P->RightLeg2, prevdt, dt), vxApplyForce(P->RightLeg2, vec2(0.f, 0.6f), 1.f);;
 			
 		
 		

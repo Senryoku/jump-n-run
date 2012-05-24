@@ -64,6 +64,20 @@ void delObject(Object* Obj);
 **/
 Polygon* objGetShape(Object* Obj);
 
+/** @brief Mutateur de la texture
+ *
+ * @param Obj Object auquel s'applique la fonction
+ * @param T nouvelle texture
+ **/
+void objSetTexture(Object* Obj, Texture T);
+
+/** @brief Accesseur de la texture
+ *
+ * @param Obj Object auquel s'applique la fonction
+ * @return Texture de l'objet
+ **/
+Texture objGetTexture(const Object* Obj);
+
 /** @}
 **/
 
