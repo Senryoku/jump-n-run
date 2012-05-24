@@ -8,6 +8,7 @@ Menu* msgGetMenu(MessageManager* MM)
 	return MM->Messages;
 }
 
+void CloseMessage(void* MM);
 
 void CloseMessage(void* Data)
 {
@@ -55,11 +56,7 @@ void CloseMessage(void* Data)
 
 void msgInit(MessageManager* MM, s_SharedResources* SR)
 {
-	MM->Queue = newList();
-	MM->QueueID = newList();
 	MM->Messages = (Menu*)malloc(sizeof(Menu));
-	MM->TextAlpha = 0.f;
-	MM->ToBeDeleted = NULL;
 	MM->SR = SR;
 	MM->LastChoice = 0;
 	MM->LastInput = (char*)malloc(sizeof(char));
@@ -70,15 +67,6 @@ void msgInit(MessageManager* MM, s_SharedResources* SR)
 
 void msgFree(MessageManager* MM)
 {
-	Node* it = lstFirst(MM->QueueID);
-	while (!nodeEnd(it))
-	{
-		free(nodeGetData(it));
-		it = nodeGetNext(it);
-	}
-	delList(MM->Queue); //Pas besoin de liberer les nodes car ce ne sont que des pointeurs
-	delList(MM->QueueID);
-
 	mnFree(MM->Messages);
 
 	free(MM->Messages);
@@ -168,6 +156,8 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 			{
 				CloseMessage(MM);
+				if (event.key.code == sf::Keyboard::Escape)
+					MM->LastChoice = INVALID_ITEM_ID;
 				break; // ça évite de doubler l'event avec les bouttons
 			}
 
@@ -247,7 +237,7 @@ const char* msgGetInput(MessageManager* MM, sf::RenderWindow& win, float ViewX, 
 	return MM->LastInput;
 }
 
-Bool msgCanDisplay(MessageManager* MM)
+/*Bool msgCanDisplay(MessageManager* MM)
 {
 	return daGetSize(MM->Messages->Menus) > 0;
-}
+}*/

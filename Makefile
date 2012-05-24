@@ -48,6 +48,11 @@ ifeq ($(OS), Win)
 	mkdir obj\Core
 	mkdir obj\Audio
 	mkdir obj\Physics
+	mkdir obj\Game
+	mkdir obj\Physics
+	mkdir obj\Score
+	mkdir obj\Rendering
+	mkdir obj\Level
 endif
 .PHONY : dirs
 
