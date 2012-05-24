@@ -317,11 +317,6 @@ void appRun(LevelEditorApp* App)
 				ViewHeight -= event.mouseWheel.delta*20;
 				ViewWidth = MAX(App->WindowWidth*0.25f, ViewWidth);
 				ViewHeight = MAX(App->WindowHeight*0.25f, ViewHeight);
-				
-								
-				//On ajuste la vue
-				toViewX = MIN(MAX(toViewY, App->WindowWidth-20.f-wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale-10.f), wdGetWidth(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewWidth);
-				toViewY = MIN(MAX(toViewY, 10.f), wdGetHeight(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewHeight);
 			}
 
 			if (event.type == sf::Event::KeyPressed)
@@ -595,6 +590,10 @@ void appRun(LevelEditorApp* App)
 			}
 		}
 
+		
+		//On ajuste la vue
+		toViewX = MIN(MAX(toViewX, -wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale), wdGetWidth(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewWidth);
+		toViewY = MIN(MAX(toViewY, -10.f/MiniMapScale), wdGetHeight(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewHeight);
 
 		Wobble(&ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
 		Wobble(&ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
