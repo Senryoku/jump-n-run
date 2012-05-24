@@ -267,7 +267,6 @@ void appRun(LevelEditorApp* App)
 								DragMiniMap = TRUE;
 								MouseMiniMapDragX = (MouseWinX-(App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl))-ViewX)*MiniMapScale));
 								MouseMiniMapDragY = (MouseWinY-(20.f+ViewY*MiniMapScale));
-								//MouseMiniMapDragY = (MouseY-ViewY)*MiniMapScale;
 							}
 						}
 						break;
@@ -319,28 +318,10 @@ void appRun(LevelEditorApp* App)
 				ViewWidth = MAX(App->WindowWidth*0.25f, ViewWidth);
 				ViewHeight = MAX(App->WindowHeight*0.25f, ViewHeight);
 				
-				float w=ViewWidth/App->WindowWidth, h=ViewHeight/App->WindowHeight;
-				
-				if (w<h)
-				{
-					if (ViewWidth > wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale)
-					{
-						ViewWidth = wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale;
-						ViewHeight = w*(wdGetHeight(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale);
-					}
-				}
-				else
-				{
-					if (ViewHeight > wdGetHeight(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale)
-					{
-						ViewHeight = wdGetHeight(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale;
-						ViewWidth = h*(wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale);
-					}
-				}
-				
+								
 				//On ajuste la vue
-				toViewX = MIN(toViewX, wdGetWidth(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewWidth);
-				toViewY = MIN(toViewY, wdGetHeight(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewHeight);
+				toViewX = MIN(MAX(toViewY, App->WindowWidth-20.f-wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale-10.f), wdGetWidth(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewWidth);
+				toViewY = MIN(MAX(toViewY, 10.f), wdGetHeight(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewHeight);
 			}
 
 			if (event.type == sf::Event::KeyPressed)
