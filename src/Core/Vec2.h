@@ -2,6 +2,7 @@
 #define _VEC2_H_
 
 #include <math.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 #include "Tools.h"
@@ -20,6 +21,18 @@ typedef struct
     float x; /**< Coordonnée x **/
     float y; /**< Coordonnée y **/
 } Vec2;
+
+/** @brief Constructeur
+ *
+ * Un nouveau Vec2 alloué dynamiquement
+**/
+Vec2* newVec2();
+
+/** @brief Destructeur
+ *
+ * @param V Vecteur créé à l'aide de newVec2 à détruire
+**/
+void delVec2(Vec2* V);
 
 /** @brief "Constructeur", renvoi le vecteur de coordonées passées en paramètre
  *

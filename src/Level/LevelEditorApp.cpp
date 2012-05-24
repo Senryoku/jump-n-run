@@ -219,7 +219,7 @@ void appRun(LevelEditorApp* App)
 						break;
 					case 1 :
 						msgCreateMessage(shMessageManager(App->SR), "SetWorkingPath", 2);
-						IID=msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
+						IID = msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
 						mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->WorkingPath);
 						msgAddCloseItem(shMessageManager(App->SR), "Ok");
 						strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, ViewX, ViewY, ViewWidth, ViewHeight));
@@ -652,60 +652,11 @@ void appRun(LevelEditorApp* App)
 		/* == Affichage == */
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
-		//glClearColor(0.0f, 0.f, 0.f, 1.f); //Ici optionnel car par défaut couleur est rouge
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glViewport(0.f, 0.f, App->WindowWidth, App->WindowHeight);
 		// Quelle portion de la scène afficher ?
 		glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
-
-		/*
-		for(ViewPort = 0; ViewPort < 2; ViewPort++)
-		{
-			glLoadIdentity();
-			if(ViewPort == 0)
-			{
-				// Où afficher ?
-				glViewport(0.f, 0.f, App->WindowWidth, App->WindowHeight);
-				// Quelle portion de la scène afficher ?
-				glOrtho(0.f+ViewX, ViewWidth+ViewX, ViewHeight+ViewY, 0.f+ViewY, 0.0, 100.0);
-
-				// Affichage de la Grille *
-				if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
-			}
-			else if(ViewPort == 1)
-			{
-				glViewport(App->WindowWidth - MapWidth - 10.f, App->WindowHeight - MapHeight - 10.f, MapWidth, MapHeight);
-				// La minimap affiche tout le monde
-				glOrtho(0.0, lvlGetWorld(App->Led.Lvl)->Width, lvlGetWorld(App->Led.Lvl)->Height, 0.0, 0.0, 100.0);
-
-				// Rectangle de la vue
-				glColor4f(0.5f, 0.5f, 0.5f, 1.f);
-				glLineStipple(1, 0xCCCC);
-				glEnable(GL_LINE_STIPPLE);
-				glBegin(GL_LINE_LOOP);
-					glVertex2f(ViewX, ViewY);
-					glVertex2f(ViewX + ViewWidth, ViewY);
-					glVertex2f(ViewX + ViewWidth, ViewY + ViewHeight);
-					glVertex2f(ViewX, ViewY + ViewHeight);
-				glEnd();
-				glDisable(GL_LINE_STIPPLE);
-			}
-
-			if(DispL1) lvlDisplayL1(App->Led.Lvl);
-			if(DispL2) lvlDisplayL2(App->Led.Lvl);
-			lvlDispGoalFlag(App->Led.Lvl);
-			if(DispObjects) lvlDispAllObj(App->Led.Lvl);
-//			glDrawCloth(C, Tx);
-			if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
-		 // je n'arrive pas à afficher les fps en faisant marcher la vue. J'ai pas tenté trop de trucs mais bon xD
-			//if (ViewPort == 0) glDrawFPS(App->Window, fpsGetString(&fps));
-			glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY));
-			glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
-
-
-		}
-		*/
 
 		if(DispBack) lvlDisplayBG(App->Led.Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
@@ -759,9 +710,6 @@ void appRun(LevelEditorApp* App)
 
 		// Update the App->Window
 		App->Window.display();
-
-		//if (fpsChanged(&fps))
-		//	printf("FPS: %s\n", fpsGetChar(&fps));
 	}
 //	delCloth(C);
 //	glTexFree(Tx);

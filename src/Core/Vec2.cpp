@@ -1,5 +1,15 @@
 #include "Vec2.h"
 
+Vec2* newVec2()
+{
+	return (Vec2*) malloc(sizeof(Vec2));
+}
+
+void delVec2(Vec2* V)
+{
+	free(V);
+}
+
 Vec2 vec2(float x, float y)
 {
 	Vec2 tmp;

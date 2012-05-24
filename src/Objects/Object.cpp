@@ -9,7 +9,17 @@ Object* newObject(Polygon* P, unsigned int T, List CT)
 
 Object* cpyObject(Object* O)
 {
-	return newObject(cpyPolygon(O->Shape), O->Tex, O->CoordTex);
+	List CT;
+	lstInit(&CT);
+	Node* it = lstFirst(&O->CoordTex);
+	while(!nodeEnd(it))
+	{
+		Vec2* CoordTex = newVec2();
+		vec2Cp(CoordTex, *((Vec2*) nodeGetData(it)));
+		lstAdd(&CT, CoordTex);
+		it = nodeGetNext(it);
+	}
+	return newObject(cpyPolygon(O->Shape), O->Tex, CT);
 }
 
 void objInit(Object* Obj, Polygon* P, unsigned int T, List CT)

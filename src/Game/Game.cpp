@@ -230,10 +230,33 @@ void gmPlay(Game* G)
 
 		if(lvlIsGoalReached(G->Lvl))
 		{
+			float Time = Clk.getElapsedTime().asMilliseconds()/10.f;
 			lvlSetFinished(G->Lvl, 1);
-			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score */
-			scInit(&Sc, "Senryoku", lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), Clk.getElapsedTime().asMilliseconds()/10.f);
-			// if(scSend(&Sc) == 1) { MenuErreur } else { MenuEnvoiReussi }
+			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score, donc là, ça plante, mais j'imagien que c'ets parce qu'on peut pas récupérer un Input ET un choix :p
+			 * J'vais avoir besion de menu ici quoi ! */
+			ItemID IID;
+			char Name[255];
+			msgCreateMessage(shMessageManager(G->SR), "Bravo !", 4);
+			msgAddItem(shMessageManager(G->SR), "Pseudonyme", ITEM_INPUT, NULL, NULL);
+			msgAddCloseItem(shMessageManager(G->SR), "Envoyer le score");
+			msgAddCloseItem(shMessageManager(G->SR), "Quitter");
+			strcpy(Name, msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight));
+			ItemID Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
+			switch (Choice)
+			{
+				case 0 :
+					break;
+				case 1 :
+					scInit(&Sc, Name, lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), Time);
+					if(scSend(&Sc) == 1) { printf("Erreur d'envoi\n"); } else { printf("Envoi Réussi\n"); }
+					G->Window->close();
+					break;
+				case 2 :
+					G->Window->close();
+					break;
+				default :
+					break;
+			}
 		}
 
 

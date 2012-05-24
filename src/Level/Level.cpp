@@ -372,7 +372,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				Shape = (Polygon*) daGet(Poly, ShapeInt);
 				for(ShapeInt = 0; ShapeInt < polyGetVxCount(Shape); ShapeInt++)
 				{
-					Vec2* CoordTex = (Vec2*) malloc(sizeof(Vec2));
+					Vec2* CoordTex = newVec2();
 					fscanf(f, "%f %f\n", &CoordTex->x, &CoordTex->y);
 					lstAdd(&lstTex, CoordTex);
 				}
