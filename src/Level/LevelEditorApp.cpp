@@ -758,18 +758,12 @@ void showPolygonMenu(LevelEditorApp* App)
 	switch (i) {
 		case 0:
 		{
-			// Cherche si un objet se base sur ce polygon, si oui, le supprime également
-			Node* it = lstFirst(&App->Led.Lvl->Objects);
-			while(!nodeEnd(it))
-			{
-				Object* Obj = (Object*) nodeGetData(it);
-				if(Obj->Shape == App->NearestPolygon) lvlDelObject(App->Led.Lvl, Obj);
-				it = nodeGetNext(it);
-			}
+			Object* Obj = lvlGetObjFromShape(App->Led.Lvl, App->NearestPolygon);
+			if (Obj != NULL)
+				lvlDelObject(App->Led.Lvl, Obj);
 			wdDelPolygon(lvlGetWorld(App->Led.Lvl), App->NearestPolygon);
 			delPolygon(App->NearestPolygon);
 			App->NearestPolygon = NULL;
-			printf("Polygon deleted\n");
 			break;
 		}
 			
