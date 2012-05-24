@@ -47,6 +47,17 @@ List* gridGetCellList(const Grid* g, unsigned int x, unsigned int y)
 	return &(g->Table[x][y]);
 }
 
+List* gridGetPositionList(const Grid* g, float x,float y)
+{
+	unsigned int i, j;
+	x = MAX(0.f, MIN(g->HCells*g->CellWidth, x));
+	y = MAX(0.f, MIN(g->VCells*g->CellHeight, y));
+	i = x/g->CellWidth;
+	j = y/g->CellHeight;
+	
+	return gridGetCellList(g, i, j);
+}
+
 void gridAddPolygon(Grid* g, Polygon* p) //Non fonctionnelle
 {
 	unsigned int i, j, k;
@@ -193,6 +204,7 @@ void gridRemovePolygonFromCell(Grid* g, Polygon* p, unsigned int x, unsigned int
 		it = nodeGetNext(it);
 	}
 }
+
 
 List gridGetPolygonList(const Grid* g, Polygon* p)
 {

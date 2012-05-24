@@ -86,7 +86,16 @@ void wdDelPolygon(World* W, Polygon* P)
 {
 	/* On retire le centre du polygon de la liste de vertices */
 	if(polyGetCenter(P) != NULL) lstDel(&W->Vertices, polyGetCenter(P));
+	///@todo on enlève tous les vertex du polygone du monde!
+	int i;
+	for (i = 0; i<daGetSize(&P->Vertices); i++)
+	{
+		wdDelVertex(W, (Vertex*)daGet(&P->Vertices, i));
+		delVertex((Vertex*)daGet(&P->Vertices, i));
+	}
 	lstDel(&W->Polygons, P);
+	///@todo l'enlever de la grille!
+	gridRemovePolygonByForce(&W->CollisionGrid, P);
 }
 
 void wdApplyForce(World* W, Vec2 Force)
@@ -292,7 +301,7 @@ Node* wdGetPolyIt(World* W)
 Vertex* wdGetNearest(World* W, float X, float Y)
 {
 	if (lstEmpty(&W->Vertices)) return NULL;
-	float Dist = INFINITY, tmpDist;
+	float Dist = powf(25.f, 2.f), tmpDist;
 	Vertex* Nearest = NULL;
 
 	Node* it = lstFirst(&W->Vertices);
@@ -419,13 +428,17 @@ Rigid* wdGetNearestRigid(World* W, float X, float Y)
 
 Polygon* wdGetNearestPoly(World* W, float X, float Y)
 {
-	unsigned int i;
-	float Dist = INFINITY, tmpDist;
+	//unsigned int i; float Dist = INFINITY, tmpDist;
 	Polygon *Nearest = NULL, *tmpPoly;
-	Node* it = lstFirst(&W->Polygons);
+	
+	List* LExtracted = gridGetPositionList(&W->CollisionGrid, X, Y);
+	Node* it = lstFirst(LExtracted);
 	while(!nodeEnd(it))
 	{
 		tmpPoly = (Polygon*) nodeGetData(it);
+		if (polyIsInside(tmpPoly, vec2(X, Y)))
+			return tmpPoly;
+		/*
 		for(i = 0; i < daGetSize(&tmpPoly->Vertices); i++)
 		{
 			Vec2 VPos = vxGetPosition((Vertex*) daGet(&tmpPoly->Vertices, i));
@@ -437,6 +450,7 @@ Polygon* wdGetNearestPoly(World* W, float X, float Y)
 				Nearest = tmpPoly;
 			}
 		}
+		 */
 		it = nodeGetNext(it);
 	}
 

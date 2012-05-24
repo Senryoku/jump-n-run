@@ -54,6 +54,15 @@ void gridSetCellSize(Grid* g, float Size);
  */
 List* gridGetCellList(const Grid* g, unsigned int x, unsigned int y);
 
+/** @brief Donne accès à la liste d'une cellule de la grille en pasant une position (par exemple le curseur)
+ *
+ * @param[in] g grille à laquelle appliquer la fonction
+ * @param[in] x position x dans le monde
+ * @param[in] y position y dans le monde
+ * @return Un pointeur vers la liste qui est dans la cellule
+ */
+List* gridGetPositionList(const Grid* g, float x,float y);
+
 /** @brief Donne accès à la liste contenant tous les polygones qui sont dans des cellule où se trouve un polygone
  *
  * Cette fonction crée une liste, elle l'initialise, elle doit donc être libérée après l'appel à la fonction.

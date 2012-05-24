@@ -21,10 +21,15 @@ typedef struct
 	Bool WindowIsActive;
 	float WindowWidth;
 	float WindowHeight;
+	float ViewX;
+	float ViewY;
+	float ViewWidth;
+	float ViewHeight;
 	char WorkingPath[255];
 	Menu M;
 	bool MenuUsed;
 	SharedResources* SR; ///< Resources Partagées
+	Polygon* NearestPolygon;
 } LevelEditorApp;
 
 /** @brief Initialisation de LelvelEditorApp

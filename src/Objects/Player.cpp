@@ -64,7 +64,7 @@ void plInit(Player* P, World *W)
 	/* On crée les vertices du personnage, pour l'animation et quand il meurt */
 	P->Neck = newVertex(), P->HeadLeft = newVertex(), P->HeadRight = newVertex(), P->Base = newVertex(), P->LeftArm1 = newVertex(), P->LeftArm2 = newVertex(), P->RightArm1 = newVertex(), P->RightArm2 = newVertex(), P->LeftLeg1 = newVertex(), P->LeftLeg2 = newVertex(), P->RightLeg1 = newVertex(), P->RightLeg2 = newVertex();
 
-	vxSetPosition(P->Base, vec2(0.f, 0.f));
+	vxSetPosition(P->Base, vec2(0.f, 100.f));
 	Vec2 B = vxGetPosition(P->Base);
 	vxSetPosition(P->Neck, vec2(B.x, B.y - 60.f));
 	 vxSetPosition(P->HeadLeft, vec2Add(vxGetPosition(P->Neck), vec2(-20.f, -20.f)));

@@ -406,6 +406,34 @@ Bool polyIsInside(const Polygon* P, const Vertex* V)
 	return true;
 }
 
+Bool polyIsInside(const Polygon* P, Vec2 VPos)
+{
+	unsigned int i;
+	Rigid* Edge;
+	Vec2 Axis;
+	float MinP, MaxP, ProjectV;
+	for(i = 0; i < daGetSize(&P->Rigids); i++)
+	{
+		Edge = (Rigid*)daGet(&P->Rigids, i);
+		/* On évite les faces "nulles" */
+		if(vec2Equal(rdVector(Edge), vec2(0.f, 0.f))) continue;
+		
+		/* On calcule l'axe sur lequel projeter (Normal à la face) */
+		Axis = vec2Normalized(vec2Ortho(rdVector(Edge)));
+		
+		/* Projection */
+		polyProject(P, &MinP, &MaxP, Axis);
+		ProjectV = vec2Dot(VPos, Axis);
+		
+		/* Si la projection du point n'est pas dans l'intervalle
+		 défini par le polygone, pas de collision */
+		if(ProjectV < MinP || ProjectV > MaxP)
+			return false;
+	}
+	/* Toutes les faces ont été testées */
+	return true;
+}
+
 Vec2 polyComputeCenter(const Polygon* P)
 {
 	unsigned int i;

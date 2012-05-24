@@ -189,9 +189,19 @@ void polyHandleCollision(CollisionInfo Info);
 
 /** @brief Test si un Vextex est à l'intérieur d'un Polygon
  *
+ * @param P
+ * @param V
  * @return Vrai si le Vertex est dans le Polygon
 **/
 Bool polyIsInside(const Polygon* P, const Vertex* V);
+
+/** @brief Test si un Vextex est à l'intérieur d'un Polygon
+ *
+ * @param P
+ * @param VPos
+ * @return Vrai si le Vertex est dans le Polygon
+ **/
+Bool polyIsInside(const Polygon* P, Vec2 VPos);
 
 /** @brief Projete un Polygon sur un axe
  *
