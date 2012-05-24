@@ -103,5 +103,13 @@ void aniCountTriggers(Animation* A);
 void aniUpdate(Animation* A, SPlayer* P, float Step);
 
 void aniUpdateForCurrentState(Animation* A);
+
+void aniSetForce(Animation* A, float Force);
+
+float aniGetForce(const Animation* A);
+
+void aniSetFriction(Animation* A, float Friction);
+
+float aniGetFriction(const Animation* A);
  
 #endif

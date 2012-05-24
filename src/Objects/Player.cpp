@@ -64,19 +64,19 @@ void plInit(Player* P, World *W)
 	/* On crée les vertices du personnage, pour l'animation et quand il meurt */
 	P->Neck = newVertex(), P->HeadLeft = newVertex(), P->HeadRight = newVertex(), P->Base = newVertex(), P->LeftArm1 = newVertex(), P->LeftArm2 = newVertex(), P->RightArm1 = newVertex(), P->RightArm2 = newVertex(), P->LeftLeg1 = newVertex(), P->LeftLeg2 = newVertex(), P->RightLeg1 = newVertex(), P->RightLeg2 = newVertex();
 
-	vxSetPosition(P->Base, vec2(0.f, 130.f));
+	vxSetPosition(P->Base, vec2(0.f, 0.f));
 	Vec2 B = vxGetPosition(P->Base);
-	vxSetPosition(P->Neck, vec2(B.x, B.y - 90.f));
-	 vxSetPosition(P->HeadLeft, vec2Add(vxGetPosition(P->Neck), vec2(-30.f, -40.f)));
-	 vxSetPosition(P->HeadRight, vec2Add(vxGetPosition(P->Neck), vec2(30.f, -40.f)));
-	 vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 35.f)));
-	 vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 70.f)));
-	 vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 35.f)));
-	 vxSetPosition(P->RightArm2, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 70.f)));
-	 vxSetPosition(P->LeftLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 40.f)));
-	vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->Base), vec2(10.f, 80.f)));
-	vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 40.f)));
-	vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->Base), vec2(-10.f, 80.f)));
+	vxSetPosition(P->Neck, vec2(B.x, B.y - 60.f));
+	 vxSetPosition(P->HeadLeft, vec2Add(vxGetPosition(P->Neck), vec2(-20.f, -20.f)));
+	 vxSetPosition(P->HeadRight, vec2Add(vxGetPosition(P->Neck), vec2(20.f, -20.f)));
+	 vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 25.f)));
+	 vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 50.f)));
+	 vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 25.f)));
+	 vxSetPosition(P->RightArm2, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 50.f)));
+	 vxSetPosition(P->LeftLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 30.f)));
+	vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->Base), vec2(0.f, 60.f)));
+	vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 30.f)));
+	vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->Base), vec2(0.f, 60.f)));
 
 	Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
 	LA1 = newRigid(P->Neck, P->LeftArm1, -1.f);
@@ -404,7 +404,7 @@ void plUpdate(Player* P, World* W)
 
 	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
 	v = vec2Normalized(v);
-	vxSetPosition(P->Base, vec2Add(P->Center, vec2Prod(v, -25.f)));
+	vxSetPosition(P->Base, vec2Add(P->Center, vec2Prod(v, -15.f)));
 }
 
 void plCreateVertex(Player* P, World* W)
