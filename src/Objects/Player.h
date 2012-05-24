@@ -4,7 +4,7 @@
 #include <Physics/Polygon.h>
 #include <Physics/World.h>
 
-/** @defgroup Player
+/** @defgroup Player Player
  *
  * Décrit un joueur
  * Préfixe des méthodes : pl
@@ -81,7 +81,7 @@ Rigid* plGetRdD(Player* P);
 Rigid* plGetRdL(Player* P);
 
 /* Mutateurs */
-/** @brief Corrigie la position du joueur
+/** @brief Corrige la position du joueur
  *
  * Ne modifie pas la vitesse actuelle
  * @param P Joueur

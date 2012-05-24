@@ -13,7 +13,7 @@ Vertex* newVertex()
 	}
 }
 
-Vertex* cpyVertex(Vertex* V)
+Vertex* cpyVertex(const Vertex* V)
 {
 	Vertex* newV = newVertex();
 	newV->Position = vxGetPosition(V);

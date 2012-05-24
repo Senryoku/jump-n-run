@@ -8,7 +8,7 @@
 #include "Elastic.h"
 #include "Grid.h"
 
-/** @defgroup World
+/** @defgroup World World
  *
  * Liste les objets du monde, appelle les méthodes de mise à jour
  * Préfixe des fonctions : wd
@@ -50,8 +50,9 @@ World* newWorld(float Width, float Height);
 
 /** @brief Initialise le monde
  *
- * @param W Largeur du monde
- * @param H Hauteur du monde
+ * @param W Monde à initialiser
+ * @param Width Largeur du monde
+ * @param Height Hauteur du monde
 **/
 void wdInit(World* W, float Width, float Height);
 
@@ -134,6 +135,7 @@ void wdDelPolygon(World* W, Polygon* P);
  * Ne parcours que la liste Vertices, les vertices faisant partie d'un
  * ensemble plus grand du monde (polygon...) doivent aussi y figurer !
  * @param W Monde à mettre à jour
+ * @param Force Force à appliquer
 **/
 void wdApplyForce(World* W, Vec2 Force);
 
@@ -265,7 +267,7 @@ Polygon* wdGetNearestPoly(World* W, float X, float Y);
  * @param vxDraw Fonction d'affichage d'un vertex
  * @param elDraw Fonction d'affichage d'un Elastic
  * @param rdDraw Fonction d'affichage d'un Rigid
- * @param wdDraw Fonction d'affichage d'un Polygon
+ * @param polyDraw Fonction d'affichage d'un Polygon
 **/
 void wdDraw(World* W, void (*vxDraw)(Vertex* V, float R, float G, float B, float A),
 	void (*elDraw)(Elastic* E),
@@ -295,7 +297,7 @@ void wdUpdateGrid(World *W, Bool Force);
 /** @brief Cherche un polygone contenant un vertice donné
  *
  * @param W World
- * @param Vertex Vertex à rechercher
+ * @param V Vertex à rechercher
  * @return Pointeur vers le Polygone si trouvé, NULL sinon
  **/
 Polygon* wdFindPolygon(World *W, Vertex* V);

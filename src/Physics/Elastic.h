@@ -3,7 +3,7 @@
 
 #include "Vertex.h"
 
-/** @defgroup Elastic
+/** @defgroup Elastic Elastic
  *
  * Liaison élastique entre deux Vertex, implémente la loi de Hooke
  * Attention ! Des liaisons de longueur nulle donneront des résultats

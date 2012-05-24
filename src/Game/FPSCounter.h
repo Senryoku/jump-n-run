@@ -8,7 +8,7 @@
 #include <Core/Tools.h>
 
 /**
- * @defgroup FPSCounter
+ * @defgroup FPSCounter FPSCounter
  * Structure qui gère les fps pour un affichage en debug et test de vitesse
  * préfixe: fps
  * @{

@@ -5,7 +5,7 @@
 #include <Game/Game.h>
 #include <stdio.h>
 
-/** @defgroup LevelEditor
+/** @defgroup LevelEditor LevelEditor
  *
  * Permet la création/édition de Niveau
  * Préfixe des méthodes : lvled

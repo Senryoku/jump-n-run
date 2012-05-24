@@ -464,7 +464,7 @@ void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float Vi
 
 	glTranslatef(ViewX, ViewY, 0.f);
 	glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
-	
+
 
 
 	Size.x = MAX(TitleWidth+10.f, Size.x);
@@ -972,13 +972,13 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 	float sc = 0.05f;
 	glPushMatrix();
 	glTranslatef(ViewX+ViewWidth, ViewY, 0.f);
-	
+
 	glScalef(ViewWidth/win.getSize().x, ViewHeight/win.getSize().y, 1.f);
-	
+
 	glTranslatef(-20.f-wdGetWidth(lvlGetWorld(Lvl))*sc, 20.f, 0.f);
-	
+
 	glScalef(sc, sc, 1.f);
-	
+
 	glColor4f(1.f, 1.f, 1.f, 0.2f);
 	glBegin(GL_QUADS);
 	glVertex2f(0.f, 0.f);
@@ -987,7 +987,7 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 	glVertex2f(0.f, wdGetHeight(lvlGetWorld(Lvl)));
 	glEnd();
 
-	
+
 	glColor4f(0.5f, 0.5f, 0.5f, 1.f);
 	glLineStipple(1, 0xCCCC);
 	glEnable(GL_LINE_STIPPLE);
@@ -998,9 +998,9 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 	glVertex2f(ViewX, (ViewY + ViewHeight));
 	glEnd();
 	glDisable(GL_LINE_STIPPLE);
-	
+
 	lvlDispGoalFlag(Lvl);
 	lvlDispAllObj(Lvl);
-	
+
 
 }

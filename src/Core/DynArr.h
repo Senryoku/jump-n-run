@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-/** @defgroup DynArr
+/** @defgroup DynArr DynamicArray
  *
  * Tableau dynamique de void*
  * Préfixe des méthodes : da
@@ -20,11 +20,13 @@ typedef struct
 
 /** @brief Renvoi un DynArr initialisé
  *
+ * @return Nouveau DynArr
 **/
 DynArr da();
 
 /** @brief Constructeur
  *
+ * @return Pointeur vers un nouveau DynArr
 **/
 DynArr* newDynArr();
 
@@ -42,6 +44,7 @@ void daFree(DynArr* DA);
 
 /** @brief Destructeur
  *
+ * @param DA Le DynArr à détruire
 **/
 void delDynArr(DynArr* DA);
 
@@ -49,7 +52,8 @@ void delDynArr(DynArr* DA);
  *
  * Si Capacity > newCapa, ne fait rien.
  * Complexité en O(n)
- * @param DA Le DynArr à modifier
+ * @param[in,out] DA Le DynArr à modifier
+ * @param[in] newCapa Nouvelle capacité
 **/
 void daReserve(DynArr* DA, unsigned int newCapa);
 
@@ -97,22 +101,32 @@ void* daGet(const DynArr* DA, unsigned int Pos);
 
 /** @brief Accesseur de la taille utilisée
  *
+ * @param[in] DA DynArr auquel accéder
+ * @return Taille
 **/
 unsigned int daGetSize(const DynArr* DA);
 
 /** @brief Accesseur de la capacité
  *
+ * @param[in] DA DynArr auquel accéder
+ * @return Capacité
 **/
 unsigned int daGetCapacity(const DynArr* DA);
 
 /** @brief Cherche une valeur et retourne son index
  *
+ * @param[in] DA DynArr auquel accéder
+ * @param[in] ptr Pointeur vers la donnée recherchée
+ * @return Index de la donnée dans le DynArr
  **/
 unsigned int daGetID(const DynArr* D,const void* ptr);
 
 /** @brief Test de Regression
 **/
 void daRegressionTest();
+
+/** @}
+**/
 
 #endif
 

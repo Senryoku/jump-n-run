@@ -9,7 +9,7 @@
 #include <Objects/Object.h>
 #include <Objects/Flag.h>
 
-/** @defgroup Level
+/** @defgroup Level Level
  *
  * Décrit un niveau de jeu
  * Préfixe des méthodes : lvl
@@ -157,7 +157,7 @@ Bool lvlIsGoalReached(const Level* L);
  * @param W Largeur de la portion du niveau affichée
  * @param H Hauteur de la portion du niveau affichée
 **/
-void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H, const sf::RenderWindow &win);
+void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H);
 
 /** @brief Affiche la première couche (fond) de décors
 **/

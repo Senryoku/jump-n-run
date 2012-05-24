@@ -109,7 +109,7 @@ void lvlSetFinished(Level* Lvl, Bool B)
 
 Bool lvlLoad(Level* Lvl, const char* File)
 {
-	printf("= Chargement... ========\n", File);
+	printf("= Chargement... ========\n");
 
 	/* Recherche du nom du fichier */
 	char Path[255], Name[255];
@@ -517,11 +517,8 @@ void lvlSetDistFG(Level* Lvl, float F)
 	Lvl->DistFG = F;
 }
 
-void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H, const sf::RenderWindow &win)
+void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H)
 {
-	//glPushMatrix();
-	//glTranslatef(X, Y, 0.f);
-	//glScalef(W/win.getSize().x, H/win.getSize().y, 1.f);
 	float wdW = wdGetWidth(lvlGetWorld(Lvl));
 	float wdH = wdGetHeight(lvlGetWorld(Lvl));
 	float X1 = MIN(X, wdW - W);
@@ -571,7 +568,6 @@ void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H, const sf
 	(*Lvl->lvlDisplayTex)(Lvl->Background, vX1, vec2(vX2.x, vX1.y), vX2, vec2(vX1.x, vX2.y),
 						vec2(X, Y), vec2(X + W, Y),
 						vec2(X + W, Y + H), vec2(X, Y + H));
-	//glPopMatrix();
 }
 
 void lvlDisplayL1(const Level* Lvl)

@@ -75,3 +75,26 @@ float rdGetLength(const Rigid* R)
 {
 	return R->Length;
 }
+
+void rdRegressionTest()
+{
+	unsigned int i;
+	float Diff = 0;
+	Vertex* V1 = newVertex();
+	Vertex* V2 = newVertex();
+	Rigid* Rd = newRigid(V1, V2, 50.f);
+
+	printf("========= rdRegressionTest Begin ==============\n");
+	for(i = 0; i < 10000; i++)
+	{
+		vxApplyForce(V1, vec2(1.6487f*(i % 29), 2.6875f), 0);
+		vxApplyForce(V2, vec2(5.4575f*(i % 89), -8.575678f), 0);
+		vxResolve(V1, 0.1f, 0.1f);
+		vxResolve(V2, 0.1f, 0.1f);
+		rdResolve(Rd);
+		Diff = MAX(Diff, fabs(vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))) - rdGetLength(Rd)));
+		// printf("Difference a l'equilibre : %f\n", vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))) - rdGetLength(Rd));
+	}
+	printf("Difference maximale constatee : %f\n", Diff);
+	printf("========= rdRegressionTest End ================\n");
+}

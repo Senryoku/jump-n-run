@@ -9,7 +9,7 @@
 #include <Core/List.h>
 #include "Rigid.h"
 
-/** @defgroup Polygon
+/** @defgroup Polygon Polygon
  *
  * Polygone convexe composé de Vertex reliés par des Rigid
  * Préfixe des méthodes : poly
@@ -117,12 +117,16 @@ Polygon* polyRectangleL(List L);
 void polyAddInternal(Polygon* P, unsigned int V1, unsigned int V2, float Length);
 
 /** @brief Donne si le polygone a collisionné le step en cours ou pas
+ *
+ * @param[in] P Polygon à tester
  * @return collided
  */
 Bool polyHasCollided(const Polygon* P);
 
-/** @brief dit si le polygone a collisionné le step en cours ou pas
- * @param Collided[in] nouvelle valeur
+/** @brief Dit si le polygone a collisionné le step en cours ou pas
+ *
+ * @param[in,out] P Polygon à éditer
+ * @param[in] Collided nouvelle valeur
  */
 void polySetCollided(Polygon* P, Bool Collided);
 

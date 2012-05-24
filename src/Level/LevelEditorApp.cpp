@@ -71,13 +71,13 @@ void appRun(LevelEditorApp* App)
 		 MouseX, MouseY, toViewX = ViewX, toViewY = ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f, ViewWidth = App->WindowWidth, ViewHeight = App->WindowHeight,
 		WindowRatio = App->WindowWidth/App->WindowHeight, MouseWinX, MouseWinY, MiniMapScale = 0.05f, MouseMiniMapDragX = 0.f, MouseMiniMapDragY = 0.f, MouseDragX, MouseDragY;
-	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = TRUE, DispL2 = TRUE, DispObjects = TRUE, DispBack = TRUE, DispFore = TRUE, InsideMiniMap = FALSE, DragMiniMap = FALSE;
+	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = TRUE, DispL2 = TRUE, DispObjects = TRUE, DispBack = FALSE, DispFore = FALSE, InsideMiniMap = FALSE, DragMiniMap = FALSE;
 	FPSCounter fps;
 
 
 	Menu* M = (Menu*)malloc(sizeof(Menu));
 	mnInit(M);
-	
+
 
 	mnAddMenu(M, "Main Menu", 2);
 	mnAddMenu(M, "menu 2!", 2);
@@ -187,8 +187,8 @@ void appRun(LevelEditorApp* App)
 		MouseWinX = sf::Mouse::getPosition(App->Window).x;
 		MouseWinY = sf::Mouse::getPosition(App->Window).y;
 		 */
-		
-		
+
+
 		//On verifie si on a pas mis le curseur sur la minimap
 		if (MouseWinX >= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl)))*MiniMapScale &&
 			MouseWinX <= App->WindowWidth-20.f &&
@@ -220,7 +220,7 @@ void appRun(LevelEditorApp* App)
 					case 1 :
 						msgCreateMessage(shMessageManager(App->SR), "SetWorkingPath", 2);
 						IID=msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
-						mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), "levels/");
+						mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->WorkingPath);
 						msgAddCloseItem(shMessageManager(App->SR), "Ok");
 						strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, ViewX, ViewY, ViewWidth, ViewHeight));
 						break;
@@ -240,8 +240,8 @@ void appRun(LevelEditorApp* App)
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
 
-			
-			
+
+
 			if(event.type == sf::Event::MouseButtonPressed)
 			{
 				switch (event.mouseButton.button)
@@ -281,7 +281,7 @@ void appRun(LevelEditorApp* App)
 									MouseMiniMapDragX = 0.f;
 									MouseMiniMapDragY = 0.f;
 								}
-								
+
 							}
 						}
 						break;
@@ -336,9 +336,9 @@ void appRun(LevelEditorApp* App)
 				ViewHeight -= event.mouseWheel.delta*20;
 				ViewWidth = MAX(App->WindowWidth*0.25f, ViewWidth);
 				ViewHeight = MAX(App->WindowHeight*0.25f, ViewHeight);
-				
+
 				float fc = App->WindowWidth/App->WindowHeight;
-				
+
 				if (ViewWidth > wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale)
 				{
 					ViewWidth = wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale;
@@ -349,7 +349,7 @@ void appRun(LevelEditorApp* App)
 					ViewHeight = wdGetHeight(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale;
 					ViewWidth = ViewHeight*fc;
 				}
-				
+
 			}
 
 			if (event.type == sf::Event::KeyPressed)
@@ -609,21 +609,21 @@ void appRun(LevelEditorApp* App)
 				toViewX += (MouseDragX - MouseX)/5.f;
 				toViewY += (MouseDragY - MouseY)/5.f;
 			}
-			
+
 			if (DragMiniMap && sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				MouseWinX = MIN(MAX(MouseWinX-MouseMiniMapDragX, App->WindowWidth-20.f-wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale-10.f), App->WindowWidth-ViewWidth*MiniMapScale-10.f); 
-				
-				MouseWinY = MIN(MAX(MouseWinY-MouseMiniMapDragY, 10.f), (wdGetHeight(lvlGetWorld(App->Led.Lvl))-ViewHeight)*MiniMapScale+30.f); 
-				
+				MouseWinX = MIN(MAX(MouseWinX-MouseMiniMapDragX, App->WindowWidth-20.f-wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale-10.f), App->WindowWidth-ViewWidth*MiniMapScale-10.f);
+
+				MouseWinY = MIN(MAX(MouseWinY-MouseMiniMapDragY, 10.f), (wdGetHeight(lvlGetWorld(App->Led.Lvl))-ViewHeight)*MiniMapScale+30.f);
+
 				toViewX = (MouseWinX - (App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl)))*MiniMapScale))/(wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale)*wdGetWidth(lvlGetWorld(App->Led.Lvl));
 				toViewY = (MouseWinY - 20.f)/(wdGetHeight(lvlGetWorld(App->Led.Lvl))*MiniMapScale)*wdGetHeight(lvlGetWorld(App->Led.Lvl));
-				
-				
+
+
 			}
 		}
 
-		
+
 		//On ajuste la vue
 		toViewX = MIN(MAX(toViewX, -wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale), wdGetWidth(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewWidth);
 		toViewY = MIN(MAX(toViewY, -10.f/MiniMapScale), wdGetHeight(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-ViewHeight);
@@ -707,7 +707,7 @@ void appRun(LevelEditorApp* App)
 		}
 		*/
 
-		if(DispBack) lvlDisplayBG(App->Led.Lvl, ViewX, ViewY, ViewWidth, ViewHeight, App->Window);
+		if(DispBack) lvlDisplayBG(App->Led.Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
 		if(DispL1) lvlDisplayL1(App->Led.Lvl);
 		if(DispL2) lvlDisplayL2(App->Led.Lvl);
@@ -717,19 +717,19 @@ void appRun(LevelEditorApp* App)
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
 		glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
-		
-		
+
+
 		//Minimap
 		glDrawMinimap(App->Led.Lvl, App->SR, App->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
-		
+
 		glPopMatrix();
-		
+
 		MouseX = ViewWidth*sf::Mouse::getPosition(App->Window).x/App->WindowWidth + ViewX;
 		MouseY = ViewHeight*sf::Mouse::getPosition(App->Window).y/App->WindowHeight + ViewY;
 		MouseWinX = sf::Mouse::getPosition(App->Window).x;
 		MouseWinY = sf::Mouse::getPosition(App->Window).y;
-		
+
 
 		if(App->MenuUsed)
 		{
@@ -745,7 +745,7 @@ void appRun(LevelEditorApp* App)
 		glDrawMenuItems(App->SR, App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
 
 		glDrawFPS(App->SR, App->Window, fpsGetString(&fps));
-		
+
 		if (InsideMiniMap || DragMiniMap)
 		{
 			App->Window.setMouseCursorVisible(0);

@@ -5,7 +5,7 @@
 #include <Core/List.h>
 
 /**
- * @defgroup Message
+ * @defgroup Message Message
  * Module permettant d'afficher des message et des menu de click droit. Ces messages utilisent le module des menu ce qui permet de lire des donnés avec les input. L'affichage est bloquant c'est à dire qu'une boucle est créée à l'attente de la fermeture du message ou du menu
  * préfixe: msg
  * @{

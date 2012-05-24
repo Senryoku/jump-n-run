@@ -8,7 +8,7 @@
 #include <Core/Tools.h>
 #include <Core/DynArr.h>
 
-/** @defgroup Score
+/** @defgroup Score Score
  *
  * Structure permettant la gestion des scores.
  * Collecte et mise à jour depuis un serveur (communication avec un script php)

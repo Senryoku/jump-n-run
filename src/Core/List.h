@@ -5,7 +5,7 @@
 
 #include "Node.h"
 
-/** @defgroup List
+/** @defgroup List List
  *
  * Liste doublement chaînée de void*
  * Préfixe des fonctions : lst

@@ -11,7 +11,7 @@
 #include <Audio/SoundManager.h>
 #include <Game/SharedResources.h>
 
-/** @defgroup Game
+/** @defgroup Game Game
  *
  * Structure du jeu
  * Préfixe des méthodes : gm
@@ -32,6 +32,7 @@ typedef struct
 /** @brief Initialise le jeu
  *
  * Création de la fenêtre, etc...
+ * @param SR SharedRessources
  * @param G Game
 **/
 void gmInit(Game* G, SharedResources* SR);
@@ -57,6 +58,7 @@ void gmPlay(Game* G);
 /** @brief Charge un niveau depuis un fichier
  *
  * @param G Game
+ * @param Path Chemin du fichier de niveau à charger
 **/
 void gmLoadLvl(Game* G, const char* Path);
 

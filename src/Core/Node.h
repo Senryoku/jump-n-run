@@ -5,7 +5,7 @@
 
 #include "Tools.h"
 
-/** @defgroup Node
+/** @defgroup Node Node
  *
  * Elément d'une List (Liste doublement chaînée)
  * Sert également l'itérateur sur ces listes.

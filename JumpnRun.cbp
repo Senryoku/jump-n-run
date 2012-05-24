@@ -31,6 +31,14 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Target title="PhysicsTest">
+				<Option output="PhysicsTest" prefix_auto="1" extension_auto="1" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
@@ -45,9 +53,18 @@
 			<Add option="-lopengl32" />
 			<Add option="-lglu32" />
 		</Linker>
-		<Unit filename="src\Audio\SoundImpl.h" />
-		<Unit filename="src\Audio\SoundManager.cpp" />
-		<Unit filename="src\Audio\SoundManager.h" />
+		<Unit filename="src\Audio\SoundImpl.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Audio\SoundManager.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Audio\SoundManager.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="src\Core\DynArr.cpp" />
 		<Unit filename="src\Core\DynArr.h" />
 		<Unit filename="src\Core\List.cpp" />
@@ -60,46 +77,130 @@
 		<Unit filename="src\Core\Vec2.h" />
 		<Unit filename="src\Core\md5.cpp" />
 		<Unit filename="src\Core\md5.h" />
-		<Unit filename="src\Game\FPSCounter.cpp" />
-		<Unit filename="src\Game\FPSCounter.h" />
-		<Unit filename="src\Game\Game.cpp" />
-		<Unit filename="src\Game\Game.h" />
-		<Unit filename="src\Game\Message.cpp" />
-		<Unit filename="src\Game\Message.h" />
-		<Unit filename="src\Game\SharedResources.cpp" />
-		<Unit filename="src\Game\SharedResources.h" />
-		<Unit filename="src\Level\Level.cpp" />
-		<Unit filename="src\Level\Level.h" />
-		<Unit filename="src\Level\LevelEditor.cpp" />
-		<Unit filename="src\Level\LevelEditor.h" />
-		<Unit filename="src\Level\LevelEditorApp.cpp" />
-		<Unit filename="src\Level\LevelEditorApp.h" />
-		<Unit filename="src\Menu\Menu.cpp" />
-		<Unit filename="src\Menu\Menu.h" />
-		<Unit filename="src\Menu\MenuItem.cpp" />
-		<Unit filename="src\Menu\MenuItem.h" />
-		<Unit filename="src\Menu\MenuOfItems.cpp" />
-		<Unit filename="src\Menu\MenuOfItems.h" />
-		<Unit filename="src\Objects\Animation.cpp" />
-		<Unit filename="src\Objects\Animation.h" />
-		<Unit filename="src\Objects\Cloth.cpp" />
-		<Unit filename="src\Objects\Cloth.h" />
-		<Unit filename="src\Objects\Flag.cpp" />
-		<Unit filename="src\Objects\Flag.h" />
-		<Unit filename="src\Objects\Object.cpp" />
-		<Unit filename="src\Objects\Object.h" />
-		<Unit filename="src\Objects\Player.cpp" />
-		<Unit filename="src\Objects\Player.h" />
-		<Unit filename="src\Physics\Angular.cpp" />
-		<Unit filename="src\Physics\Angular.h" />
+		<Unit filename="src\Game\FPSCounter.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Game\FPSCounter.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Game\Game.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Game\Game.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Game\Message.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Game\Message.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Game\SharedResources.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Game\SharedResources.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Level\Level.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Level\Level.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Level\LevelEditor.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Level\LevelEditor.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Level\LevelEditorApp.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Level\LevelEditorApp.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Menu\Menu.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Menu\Menu.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Menu\MenuItem.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Menu\MenuItem.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Menu\MenuOfItems.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Menu\MenuOfItems.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Animation.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Animation.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Cloth.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Cloth.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Flag.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Flag.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Object.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Object.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Player.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Objects\Player.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="src\Physics\Elastic.cpp" />
 		<Unit filename="src\Physics\Elastic.h" />
 		<Unit filename="src\Physics\Grid.cpp" />
 		<Unit filename="src\Physics\Grid.h" />
-		<Unit filename="src\Physics\Joint.cpp" />
-		<Unit filename="src\Physics\Joint.h" />
-		<Unit filename="src\Physics\Length.cpp" />
-		<Unit filename="src\Physics\Length.h" />
 		<Unit filename="src\Physics\Physics.h" />
 		<Unit filename="src\Physics\Polygon.cpp" />
 		<Unit filename="src\Physics\Polygon.h" />
@@ -109,11 +210,35 @@
 		<Unit filename="src\Physics\Vertex.h" />
 		<Unit filename="src\Physics\World.cpp" />
 		<Unit filename="src\Physics\World.h" />
-		<Unit filename="src\Rendering\OpenGL.cpp" />
-		<Unit filename="src\Rendering\OpenGL.h" />
-		<Unit filename="src\Score\Score.cpp" />
-		<Unit filename="src\Score\Score.h" />
-		<Unit filename="src\Test.cpp" />
+		<Unit filename="src\Rendering\OpenGL.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Rendering\OpenGL.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Score\Score.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Score\Score.h">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="src\Test.cpp">
+			<Option target="Debug" />
+			<Option target="Release" />
+		</Unit>
+		<Unit filename="tests\TestGrid.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="tests\TestPhysics.cpp">
+			<Option target="PhysicsTest" />
+		</Unit>
+		<Unit filename="tests\TestVec2.cpp">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<debugger />

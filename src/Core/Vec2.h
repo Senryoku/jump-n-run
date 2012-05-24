@@ -6,7 +6,7 @@
 
 #include "Tools.h"
 
-/** @defgroup Vec2
+/** @defgroup Vec2 Vector2
  *
  * Opérations sur des vecteurs de R²
  * Préfixe des fonctions : vec2
@@ -80,6 +80,7 @@ void vec2Cp(Vec2* V1, Vec2 V2);
 /** @brief Fait une rotation sur le point V
  *
  * @param V vecteur à modifier
+ * @param Origin Origine de la rotation
  * @param R angle en radians
  **/
 Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R);

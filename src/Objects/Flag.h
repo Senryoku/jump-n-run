@@ -3,7 +3,7 @@
 
 #include <Rendering/OpenGl.h>
 
-/** @defgroup Flag
+/** @defgroup Flag Flag
  *
  * Un drapeau servant à afficher le but du niveau
  * Préfixe des méthodes : fl

@@ -10,7 +10,7 @@
 #include "SoundImpl.h"
 
 /**
- * @defgroup SoundManager
+ * @defgroup SoundManager SoundManager
  *
  * Sert à gèrer les sons en mémoires et les instances de ceux-ci
  * Préfixe: sndm
@@ -50,7 +50,7 @@ void sndmFree(SoundManager* SM);
 
 /**
  * @brief Charge un son en mémoire et l'ajoute avec une clé
- * 
+ *
  * @param SM SoundManager auquel s'applique la fonction
  * @param Key Clé pour accéder au son
  * @param File Adrsse du fichier
@@ -78,7 +78,7 @@ unsigned int sndmGetPlayCount(const SoundManager* SM);
 
 /**
  * @brief Dit si on est en train de faire un Fade sur une chanson
- 
+
  * @param SM SoundManager auquel s'applique la fonction
  * @return Vrai si c'ets le cas
  */

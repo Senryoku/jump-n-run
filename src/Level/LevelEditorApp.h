@@ -8,7 +8,7 @@
 #include <Menu/Menu.h>
 
 
-/** @defgroup LevelEditorApp
+/** @defgroup LevelEditorApp LevelEditorApplication
  *
  * Interface de LevelEditor
  * Préfixe des méthodes : app

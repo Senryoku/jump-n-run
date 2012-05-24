@@ -246,7 +246,7 @@ void gmPlay(Game* G)
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
 
 
-		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight, *G->Window);
+		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
 		lvlDispGoalFlag(G->Lvl);

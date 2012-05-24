@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 /**
- * @defgroup SharedResources
+ * @defgroup SharedResources SharedRessources
  * Structure qui réunit tous les managers et qui est là pour être instancé une seule fois. C'est cette structure qui sera passée de module en module pour partager des resources telles que des managers ou des images
  * préfixe: sh
  * @todo Mettre ici des pointeurs vers les fonction pour charger et liberér les images pour faire ça plus général
@@ -23,14 +23,14 @@ typedef struct s_SharedResources {
 	SoundManager* SM; ///< SoundManager du jeu
 	MessageManager* MM; ///< MessageManager du jeu
 	std::map<std::string, unsigned int> Textures; ///< textures du jeu, accès par clés
-	
+
 	unsigned int (*LoadTexture)(const char*); ///< Fonction de chargement de texture
 	void (*FreeTexture)(unsigned int); ///<Fonction pour libérer une Texture
-	
+
 	sf::Font FntMenu;
 	sf::Texture txCursor;
 	sf::Sprite sprCursor[4];
-	
+
 } SharedResources;
 
 
@@ -105,7 +105,7 @@ sf::Sprite& shGetCursorSprite(SharedResources* SR, unsigned char i);
  *
  * @param SR SharedResources auquel s'applique la fonction
  **/
-const sf::Font& shFntMenu(const SharedResources* SR); 
+const sf::Font& shFntMenu(const SharedResources* SR);
 
 /** @brief Charge une texture
  *
@@ -122,7 +122,7 @@ unsigned int shLoadTexture(const SharedResources* SR, const char* Path);
  * @param SR SharedResources auquel s'applique la fonction
  * @param T texture à libérer
  **/
-void shFreeTexture(const SharedResources* SR, unsigned int T); 
+void shFreeTexture(const SharedResources* SR, unsigned int T);
 
 
 

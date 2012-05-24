@@ -3,7 +3,7 @@
 
 #include "Vertex.h"
 
-/** @defgroup Rigid
+/** @defgroup Rigid Rigid
  *
  * Liaison Rigid entre deux Vertex
  * Attention ! Des liaisons de longueur nulle donneront des résultats
@@ -71,6 +71,11 @@ void rdSetLength(Rigid* R, float newLength);
  *
  **/
 float rdGetLength(const Rigid* R);
+
+/** @brief Test de Régression
+ *
+**/
+void rdRegressionTest();
 
 /** @}
 **/

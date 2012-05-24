@@ -5,7 +5,7 @@
 #include <Rendering/OpenGl.h>
 
 
-/** @defgroup Object
+/** @defgroup Object Object
  *
  * Préfixe des méthodes : obj
  **/
