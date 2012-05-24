@@ -19,6 +19,7 @@ void mnInit(Menu* M)
 	M->Type = MENU_TYPE_DEFAULT;
 	M->MessageScale = 0.f;
 	M->Hide = FALSE;
+	M->UseMouse = FALSE;
 }
 
 
@@ -54,6 +55,11 @@ void mnRemoveMenu(Menu* M, MenuOfItems* moi)
 	daRem(M->Menus, moi);
 	moiFree(moi);
 	free(moi);
+}
+
+Bool mnIsItemSelectedWithCursor(const Menu* M)
+{
+	return (M->UseMouse && mnGetCurrentItem(M) != NULL);
 }
 
 ItemID mnAddItem(Menu* M, MenuID MID, const char* Text, ItemType Type, void (*Function)(void), void* Data)
@@ -299,6 +305,12 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 {
 	if (!mnGetActive(M))
 		return;
+	
+	if (event.type == sf::Event::MouseMoved || event.type == sf::Event::MouseButtonPressed)
+		M->UseMouse = TRUE;
+	
+	if (event.type == sf::Event::KeyPressed)
+		M->UseMouse = FALSE;
 	
 	if (event.type == sf::Event::MouseMoved)
 		mnSetCursor(M, vec2(event.mouseMove.x, event.mouseMove.y));

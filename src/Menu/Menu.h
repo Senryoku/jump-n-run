@@ -81,6 +81,7 @@ typedef struct SMenu
 	Bool Active; /**< Dit si le menu est active et si on doit gérer ou pas les entrées. Utilisé lorsqu'on affiche des messages par exemple **/
 	Bool Hide; /**< permet de cacher le menu et le rendre inactif **/
 	MenuType Type; /**< type du menu, permet de faire des animations diférentes **/
+	Bool UseMouse; /**< Dit si on est en train d'utiliser la souris ou le clavier **/
 	float MessageScale; /**< un scale pour les menus qui apparaissent avec un click **/
 } Menu;
 
@@ -227,6 +228,13 @@ float mnGetForce(const Menu* M);
  * @return Friction des animations des menus
  **/
 float mnGetFriction(const Menu* M);
+
+/** @brief Permet de savoir si le menu est en train d'être utilisé avec le curseur ET s'il y a un item qui est séléctionné
+ *
+ * @param M Menu à laquelle s'applique la fonction
+ * @return Vrai si le menu est en train d'être utilisé avec le curseur et qu'il y a un item selectionné
+ **/
+Bool mnIsItemSelectedWithCursor(const Menu* M);
 
 /** @brief Mutateur de Force
  *

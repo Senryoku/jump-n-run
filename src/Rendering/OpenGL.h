@@ -31,6 +31,9 @@ void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size);
 
 void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 
+void glDrawCursor(sf::RenderTarget& win, float ViewWidth, float ViewHeight, float MouseX, float MouseY, sf::Sprite& sprCursor);
+
+
 /** @brief Charge une texture en mémoire
  *
  * @param Path Chemin du fichier image

@@ -43,7 +43,7 @@ void appWindowInit(LevelEditorApp* App)
 	App->Window.create(sf::VideoMode(App->WindowWidth, App->WindowHeight), "Jump n'Run Level Editor", sf::Style::Default, sf::ContextSettings(32));
 
 	App->Window.setKeyRepeatEnabled(0);
-	App->Window.setMouseCursorVisible(1);
+	App->Window.setMouseCursorVisible(0);
 	/* On ne peut utiliser  qu'une des deux */
 	if(Cfg.VerticalSync == 1.f)
 		App->Window.setVerticalSyncEnabled(1);
@@ -77,7 +77,7 @@ void appRun(LevelEditorApp* App)
 
 	Menu* M = (Menu*)malloc(sizeof(Menu));
 	mnInit(M);
-
+	
 
 	mnAddMenu(M, "Main Menu", 2);
 	mnAddMenu(M, "menu 2!", 2);
@@ -180,10 +180,13 @@ void appRun(LevelEditorApp* App)
 	fpsInit(&fps);
 	while (App->Window.isOpen())
 	{
+		/*
+		App->Window.setMouseCursorVisible(1);
 		MouseX = ViewWidth*sf::Mouse::getPosition(App->Window).x/App->WindowWidth + ViewX;
 		MouseY = ViewHeight*sf::Mouse::getPosition(App->Window).y/App->WindowHeight + ViewY;
 		MouseWinX = sf::Mouse::getPosition(App->Window).x;
 		MouseWinY = sf::Mouse::getPosition(App->Window).y;
+		 */
 		
 		
 		//On verifie si on a pas mis le curseur sur la minimap
@@ -339,7 +342,12 @@ void appRun(LevelEditorApp* App)
 				if (ViewWidth > wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale)
 				{
 					ViewWidth = wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale;
-					//ViewHeight
+					ViewHeight = ViewWidth/fc;
+				}
+				if (ViewHeight > wdGetHeight(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale)
+				{
+					ViewHeight = wdGetHeight(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale;
+					ViewWidth = ViewHeight*fc;
 				}
 				
 			}
@@ -714,8 +722,14 @@ void appRun(LevelEditorApp* App)
 		//Minimap
 		glDrawMinimap(App->Led.Lvl, App->SR, App->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
-
+		
 		glPopMatrix();
+		
+		MouseX = ViewWidth*sf::Mouse::getPosition(App->Window).x/App->WindowWidth + ViewX;
+		MouseY = ViewHeight*sf::Mouse::getPosition(App->Window).y/App->WindowHeight + ViewY;
+		MouseWinX = sf::Mouse::getPosition(App->Window).x;
+		MouseWinY = sf::Mouse::getPosition(App->Window).y;
+		
 
 		if(App->MenuUsed)
 		{
@@ -731,6 +745,17 @@ void appRun(LevelEditorApp* App)
 		glDrawMenuItems(App->SR, App->Window, M, ViewX, ViewY, ViewWidth, ViewHeight);
 
 		glDrawFPS(App->SR, App->Window, fpsGetString(&fps));
+		
+		if (InsideMiniMap || DragMiniMap)
+		{
+			App->Window.setMouseCursorVisible(0);
+			if (DragMiniMap)
+				glDrawCursor(App->Window, ViewWidth, ViewHeight, MouseWinX, MouseWinY, shGetCursorSprite(App->SR, SPR_CURSOR_DRAG));
+			else
+				glDrawCursor(App->Window, ViewWidth, ViewHeight, MouseWinX, MouseWinY, shGetCursorSprite(App->SR, SPR_CURSOR_NORMAL));
+		}
+		else
+			glDrawCursor(App->Window, ViewWidth, ViewHeight, MouseWinX, MouseWinY, shGetCursorSprite(App->SR, SPR_CURSOR));
 
 		// Update the App->Window
 		App->Window.display();

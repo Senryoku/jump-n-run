@@ -480,6 +480,15 @@ void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float Vi
 	glPopMatrix();
 }
 
+void glDrawCursor(sf::RenderTarget& win, float ViewWidth, float ViewHeight, float MouseX, float MouseY, sf::Sprite& sprCursor)
+{
+	//Les states de OpenGl ont déjà été push car le curseur c'est ce qui se dessine en dernier
+	win.pushGLStates();
+	sprCursor.setPosition(MouseX, MouseY);
+	win.draw(sprCursor);
+	win.popGLStates();
+}
+
 
 void glDrawCloth(Cloth* C, Texture T)
 {

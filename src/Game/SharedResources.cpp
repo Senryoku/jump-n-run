@@ -1,7 +1,5 @@
 #include "SharedResources.h"
 
-void shAddTexture(SharedResources* SR, const char* Key, const char* Path);
-
 
 void shInit(SharedResources* SR, unsigned int (*funcLoadTexture)(const char*), void (*funcFreeTexture)(unsigned int))
 {
@@ -37,6 +35,23 @@ void shLoadTextures(SharedResources* SR)
 	shAddTexture(SR, "mn_shadow", "data/s_box_shadow.png");
 	shAddTexture(SR, "mn_gloss", "data/s_box_gloss.png");
 	shAddTexture(SR, "mn_anim", "data/s_box_anim_strip20.png");
+	shAddTexture(SR, "cursor_normal", "data/s_cursor_normal.png");
+	shAddTexture(SR, "cursor_take", "data/s_cursor_take.png");
+	shAddTexture(SR, "cursor", "data/s_cursor.png");
+	shAddTexture(SR, "cursor_hand", "data/s_cursor_hand.png");
+	SR->txCursor.loadFromFile("data/s_cursors.png");
+	
+	for (int i=0; i<4; i++)
+	{
+		SR->sprCursor[i].setTexture(SR->txCursor);
+		SR->sprCursor[i].setTextureRect(sf::IntRect(i*16, 0, 16, 24));
+		SR->sprCursor[i].setOrigin(3.f, 5.f);
+	}
+}
+
+sf::Sprite& shGetCursorSprite(SharedResources* SR, unsigned char i)
+{
+	return SR->sprCursor[i];
 }
 
 void shAddTexture(SharedResources* SR, const char* Key, const char* Path)

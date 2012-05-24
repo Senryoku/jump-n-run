@@ -214,9 +214,15 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 		
 		
 		glDrawMenuBox(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
+	
 
 		glDrawMenuItems(MM->SR, win, MM->Messages, ViewX, ViewY, ViewWidth, ViewHeight);
 
+		if (mnIsItemSelectedWithCursor(MM->Messages))
+			glDrawCursor(win, ViewWidth, ViewHeight, sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y, shGetCursorSprite(MM->SR, SPR_CURSOR_HAND));
+		else
+		glDrawCursor(win, ViewWidth, ViewHeight, sf::Mouse::getPosition(win).x, sf::Mouse::getPosition(win).y, shGetCursorSprite(MM->SR, SPR_CURSOR));
+		
 		win.display();
 
 	}

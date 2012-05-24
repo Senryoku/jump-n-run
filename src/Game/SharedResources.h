@@ -3,6 +3,7 @@
 
 #include <Game/Message.h>
 #include <Audio/SoundManager.h>
+#include <SFML/Graphics.hpp>
 
 /**
  * @defgroup SharedResources
@@ -12,15 +13,23 @@
  * @{
  */
 
+#define SPR_CURSOR 0x00
+#define SPR_CURSOR_HAND 0x01
+#define SPR_CURSOR_NORMAL 0x02
+#define SPR_CURSOR_DRAG 0x03
+
+
 typedef struct s_SharedResources {
 	SoundManager* SM; ///< SoundManager du jeu
 	MessageManager* MM; ///< MessageManager du jeu
-	std::map<std::string, unsigned int> Textures; ///< texture du jeu, accès par clés
+	std::map<std::string, unsigned int> Textures; ///< textures du jeu, accès par clés
 	
 	unsigned int (*LoadTexture)(const char*); ///< Fonction de chargement de texture
 	void (*FreeTexture)(unsigned int); ///<Fonction pour libérer une Texture
 	
 	sf::Font FntMenu;
+	sf::Texture txCursor;
+	sf::Sprite sprCursor[4];
 	
 } SharedResources;
 
@@ -75,6 +84,22 @@ SoundManager* shSoundManager(SharedResources* SR);
  * @param SR SharedResources auquel s'applique la fonction
  **/
 MessageManager* shMessageManager(SharedResources* SR);
+
+/** @brief Charge une texture en mémoire
+ *
+ * @param SR SharedResources auquel s'applique la fonction
+ * @param Key Clé pour accéder à la texture
+ * @param Path chemin où se trouve l'image
+ **/
+void shAddTexture(SharedResources* SR, const char* Key, const char* Path);
+
+/** @brief Charge une texture en mémoire
+ *
+ * @param SR SharedResources auquel s'applique la fonction
+ * @param i curseur @see SPR_CURSOR
+ * @return référence vers le sf::Sprite
+ **/
+sf::Sprite& shGetCursorSprite(SharedResources* SR, unsigned char i);
 
 /** @brief Donne accès à la police pour le menu
  *
