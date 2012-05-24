@@ -539,6 +539,13 @@ BBox polyGetBBox(const Polygon* P)
 	return B;
 }
 
+void polyTranslate(Polygon* P, Vec2 V)
+{
+	unsigned int i;
+	for(i = 0; i < polyGetVxCount(P); i++)
+		vxTranslate(polyGetVertex(P, i), V);
+}
+
 void polyMove(Polygon* P, Vec2 V)
 {
 	unsigned int i;

@@ -53,6 +53,13 @@ void vxSetPosition(Vertex* V, Vec2 newPos)
 	V->OldPos = newPos;
 }
 
+void vxTranslate(Vertex* V, Vec2 addPos)
+{
+	Vec2 spd = vec2Sub(V->Position, V->OldPos);
+	V->Position = vec2Add(V->Position, addPos);
+	V->OldPos = vec2Sub(V->Position, spd);
+}
+
 void vxChangePosition(Vertex* V, Vec2 newPos)
 {
 	Vec2 spd = vec2Sub(V->Position, V->OldPos);

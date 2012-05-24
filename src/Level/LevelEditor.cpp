@@ -799,7 +799,7 @@ void lvledPasteObject(LevelEditor* Led)
 
 	Object* newObj = cpyObject(Led->objClipboard);
 	Vec2 Translate = vec2Sub(vxGetPosition(Led->Mouse), vxGetPosition(polyGetVertex(objGetShape(newObj), 0)));
-	polyMove(objGetShape(newObj), Translate);
+	polyTranslate(objGetShape(newObj), Translate);
 
 	wdAddVxFromPoly(lvlGetWorld(Led->Lvl), objGetShape(newObj));
 	wdAddPolygon(lvlGetWorld(Led->Lvl), objGetShape(newObj));

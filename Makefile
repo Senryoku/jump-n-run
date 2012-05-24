@@ -45,11 +45,11 @@ endif
 #A refaire mais là dessuite j'ai la flemme :D
 ifeq ($(OS), Win) 
 	mkdir bin\
+
 	mkdir obj\Core
 	mkdir obj\Audio
 	mkdir obj\Physics
 	mkdir obj\Game
-	mkdir obj\Physics
 	mkdir obj\Score
 	mkdir obj\Rendering
 	mkdir obj\Level

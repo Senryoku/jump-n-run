@@ -294,6 +294,18 @@ void polySetSpeed(Polygon* P, Vec2 Speed);
 Vec2 polyGetSpeed(const Polygon* P);
 
 /** @brief Translate un polygon
+ *
+ * Modifie également l'ancienne position => Ne modifie pas la vitesse
+ * @param P Polygon
+ * @param V Vecteur de translation
+**/
+void polyTranslate(Polygon* P, Vec2 V);
+
+/** @brief Translate un polygon
+ *
+ * Fait gagner de la vitesse !
+ * @param P Polygon
+ * @param V Vecteur de translation
 **/
 void polyMove(Polygon* P, Vec2 V);
 

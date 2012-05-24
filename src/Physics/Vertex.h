@@ -107,6 +107,14 @@ void vxSetX(Vertex* V, float x);
  **/
 void vxSetY(Vertex* V, float y);
 
+/** @brief Translate le Vertex (<=> Téléportation)
+ *
+ * Conserve la vitesse
+ * @param[in,out] V Pointeur vers le vecteur à modifier
+ * @param[in] addPos Vecteur de Translation
+ **/
+void vxTranslate(Vertex* V, Vec2 addPos);
+
 /** @brief Mutateur de la position qui conserve la vitesse
  *
  * @param[in,out] V Pointeur vers le vecteur à modifier
