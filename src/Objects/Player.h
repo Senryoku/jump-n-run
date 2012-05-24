@@ -6,8 +6,9 @@
 
 /** @defgroup Player Player
  *
- * Décrit un joueur
- * Préfixe des méthodes : pl
+ * DŽcrit un joueur
+ * PrŽfixe des mŽthodes : pl
+  * @{
  **/
 
 #define DIR_LEFT 0x00

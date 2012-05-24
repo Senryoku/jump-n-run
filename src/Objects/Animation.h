@@ -7,11 +7,12 @@
 #include <Core/Tools.h>
 #include <Physics/Vertex.h>
 
-/**
- * @brief 
- * @param
- * @return
- */
+/** @defgroup Animation Animation
+ *
+ * Permet d'animqer un squelette et donc le joueur.
+ * Préfixe des méthodes : ani
+ * @{
+ **/
 
 typedef unsigned char AnimType;
 typedef unsigned short AnimTriggers; /**< Il faut utiliser les flags pour définir quels sont les parties du corps qui vont décider que l'animation doit passer à l'étape suivante **/
@@ -111,5 +112,12 @@ float aniGetForce(const Animation* A);
 void aniSetFriction(Animation* A, float Friction);
 
 float aniGetFriction(const Animation* A);
+
+//normalement cette fonction s'applique sur une animation qui a un seule état car si on modifie l'animation elle même c'ets comme si on animer le modèle...
+void aniSetBodyPartAngle(Animation* A, AnimTriggers BodyPart, float Angle, unsigned int State = 0);
+
+void aniSetBodyPartPosition(Animation* A, AnimTriggers BodyPart, Vec2 Pos, unsigned int State = 0);
+
+///@}
  
 #endif

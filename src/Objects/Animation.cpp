@@ -928,3 +928,73 @@ float aniGetFriction(const Animation* A)
 {
 	return A->Friction;
 }
+
+void aniSetBodyPartAngle(Animation* A, AnimTriggers BodyPart, float Angle, unsigned int State)
+{
+	assert(A->Type == ANIM_ANGLES);
+	
+	AnimAngles* Angles = (AnimAngles*)daGet(A->States, State);
+	
+	if (BodyPart & ANIM_LEFT_ARM1)
+		Angles->LeftArm1 = Angle;
+	
+	if (BodyPart & ANIM_LEFT_ARM2)
+		Angles->LeftArm2 = Angle;
+	
+	if (BodyPart & ANIM_RIGHT_ARM1)
+		Angles->RightArm1 = Angle;
+	
+	if (BodyPart & ANIM_RIGHT_ARM2)
+		Angles->RightArm2 = Angle;
+	
+	if (BodyPart & ANIM_LEFT_LEG1)
+		Angles->LeftLeg1 = Angle;
+	
+	if (BodyPart & ANIM_LEFT_LEG2)
+		Angles->LeftLeg2 = Angle;
+	
+	if (BodyPart & ANIM_RIGHT_LEG1)
+		Angles->RightLeg1 = Angle;
+	
+	if (BodyPart & ANIM_RIGHT_LEG2)
+		Angles->RightLeg2 = Angle;
+	
+	if (BodyPart & ANIM_NECK)
+		Angles->Neck = Angle;
+		
+}
+
+void aniSetBodyPartPosition(Animation* A, AnimTriggers BodyPart, Vec2 Pos, unsigned int State)
+{
+	assert(A->Type == ANIM_POSITIONS);
+	
+	AnimPositions* Positions = (AnimPositions*)daGet(A->States, State);
+	
+	if (BodyPart & ANIM_LEFT_ARM1)
+		Positions->LeftArm1 = Pos;
+	
+	if (BodyPart & ANIM_LEFT_ARM2)
+		Positions->LeftArm2 = Pos;
+	
+	if (BodyPart & ANIM_RIGHT_ARM1)
+		Positions->RightArm1 = Pos;
+	
+	if (BodyPart & ANIM_RIGHT_ARM2)
+		Positions->RightArm2 = Pos;
+	
+	if (BodyPart & ANIM_LEFT_LEG1)
+		Positions->LeftLeg1 = Pos;
+	
+	if (BodyPart & ANIM_LEFT_LEG2)
+		Positions->LeftLeg2 = Pos;
+	
+	if (BodyPart & ANIM_RIGHT_LEG1)
+		Positions->RightLeg1 = Pos;
+	
+	if (BodyPart & ANIM_RIGHT_LEG2)
+		Positions->RightLeg2 = Pos;
+	
+	if (BodyPart & ANIM_NECK)
+		Positions->Neck = Pos;
+}
+// 1000 lignes! HA!
