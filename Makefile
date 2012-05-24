@@ -4,7 +4,7 @@ SRC = src/
 BIN = bin/
 TESTS = tests/
 POINTC = $(wildcard $(SRC)*/*.c) $(wildcard $(SRC)*.c) 
-POINTCPP = $(wildcard $(SRC)*/*.cpp) $(wildcard $(SRC)*.cpp) 
+POINTCPP = $(wildcard $(SRC)*/*.cpp) #$(wildcard $(SRC)*.cpp) 
 POINTOP := $(POINTC:.c=.o) $(POINTCPP:.cpp=.o)
 POINTO = $(patsubst src/%,$(OBJ)%,$(POINTOP)) #$(POINTOP:src=obj)
 
@@ -63,9 +63,13 @@ $(OBJ)%.o : $(SRC)%.cpp
 #$(OBJ)%.o : $(SRC)%.cpp
 #$(C) $(OPT) $^ -c -o $@
 
-test : $(POINTO)
+test : $(POINTO) $(OBJ)test.o
 	@echo "Édition des liens pour $@" ; \
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	
+$(OBJ)test.o : $(SRC)test.cpp
+	@echo "Compilation du fichier $^" ; \
+	$(CXX) $(OPT) $^ -c -o $@
 	
 debug : debug_option all
 
@@ -113,6 +117,22 @@ testVec2 : $(OBJ)Core/Vec2.o $(OBJ)testVec2.o
 	
 $(OBJ)testVec2.o :
 	$(CXX) $(OPT) $(TESTS)TestVec2.cpp -c -o $@
+	
+TestCore : $(OBJ)Core/Vec2.o $(OBJ)Core/DynArr.o $(OBJ)Core/md5.o $(OBJ)Core/List.o $(OBJ)Core/Tools.o $(OBJ)Core/Node.o $(OBJ)TestCore.o
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind --leak-check=full --tool=memcheck ./$(BIN)$@
+	./$(BIN)testVec2
+	
+$(OBJ)TestCore.o :
+	$(CXX) $(OPT) $(TESTS)TestCore.cpp -c -o $@
+	
+TestPhysics : $(POINTO) $(OBJ)TestPhysics.o
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind --leak-check=full --tool=memcheck ./$(BIN)$@
+	./$(BIN)testVec2
+	
+$(OBJ)TestPhysics.o :
+	$(CXX) $(OPT) $(TESTS)TestCore.cpp -c -o $@
 	
 testGrid : $(OBJ)Physics/Grid.o $(OBJ)testGrid.o $(OBJ)Core/List.o $(OBJ)Core/Node.o $(OBJ)Core/DynArr.o $(OBJ)Physics/Polygon.o $(OBJ)Physics/Rigid.o $(OBJ)Physics/Vertex.o $(OBJ)Core/Vec2.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
