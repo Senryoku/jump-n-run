@@ -30,12 +30,12 @@ void shFree(SharedResources* SR)
 void shLoadTextures(SharedResources* SR)
 {
 	//Ici on met toutes les textures à charger
-	shAddTexture(SR, "mn_side", "data/s_boxside.png");
-	shAddTexture(SR, "mn_corner", "data/s_boxcorner.png");
-	shAddTexture(SR, "mn_shadow", "data/s_box_shadow.png");
-	shAddTexture(SR, "mn_gloss", "data/s_box_gloss.png");
-	shAddTexture(SR, "mn_anim", "data/s_box_anim_strip20.png");
-	SR->txCursor.loadFromFile("data/s_cursors.png");
+	shAddTexture(SR, "mn_side", "data/gui/s_boxside.png");
+	shAddTexture(SR, "mn_corner", "data/gui/s_boxcorner.png");
+	shAddTexture(SR, "mn_shadow", "data/gui/s_box_shadow.png");
+	shAddTexture(SR, "mn_gloss", "data/gui/s_box_gloss.png");
+	shAddTexture(SR, "mn_anim", "data/gui/s_box_anim_strip20.png");
+	SR->txCursor.loadFromFile("data/gui/s_cursors.png");
 	
 	for (int i=0; i<4; i++)
 	{
@@ -76,7 +76,7 @@ MessageManager* shMessageManager(SharedResources* SR)
 
 void shLoadFonts(SharedResources* SR)
 {
-	SR->FntMenu.loadFromFile("data/fnt_menu.ttf");
+	SR->FntMenu.loadFromFile("data/gui/fnt_menu.ttf");
 }
 
 void shLoadAudio(SharedResources* SR)
