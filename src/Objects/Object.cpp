@@ -35,7 +35,7 @@ void objFree(Object* Obj)
 	while(lstCount(&Obj->CoordTex) > 0)
 	{
 		N = lstFirst(&Obj->CoordTex);
-		free(nodeGetData(N));
+		delVec2((Vec2*) nodeGetData(N));
 		lstRem(&Obj->CoordTex, N);
 	}
 	lstFree(&Obj->CoordTex); // Peu utile
