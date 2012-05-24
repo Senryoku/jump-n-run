@@ -123,10 +123,12 @@ unsigned int daGetID(const DynArr* D, const void* ptr)
 }
 
 #include <assert.h>
+#include <stdio.h>
 void daRegressionTest()
 {
 	DynArr* DA = newDynArr();
 	unsigned int i;
+	printf("============== daRegressionTest Begin ==============\n");
 	for(i = 0; i < 100; i++)
 	{
 		daAdd(DA, (void*) i);
@@ -154,4 +156,5 @@ void daRegressionTest()
 	}
 	assert(daGetCapacity(DA) == 21);
 	delDynArr(DA);
+	printf("============== daRegressionTest End ================\n");
 }

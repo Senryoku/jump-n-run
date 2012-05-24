@@ -43,7 +43,7 @@ void lstAdd(List* L, Elem Data)
 
 void lstAddAtBeginning(List* L, Elem Data)
 {
-	
+
 	if(L->Count == 0)
 	{
 		Node* node = newNode(Data, L->Last, NULL);
@@ -57,7 +57,7 @@ void lstAddAtBeginning(List* L, Elem Data)
 		L->First = node;
 		First->Prev = node;
 	}
-	
+
 	L->Count++;
 }
 
@@ -139,6 +139,7 @@ unsigned int lstCount(List* L)
 void lstRegressionTest()
 {
 	unsigned int i;
+	printf("============== lstRegressionTest Begin ==============\n");
 	List* L = newList();
 	assert(lstEmpty(L));
 	for(i = 0; i < 500; i++)
@@ -156,4 +157,5 @@ void lstRegressionTest()
 	}
 	assert(lstEmpty(L));
 	delList(L);
+	printf("============== lstRegressionTest End ================\n");
 }
