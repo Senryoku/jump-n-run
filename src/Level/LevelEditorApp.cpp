@@ -789,7 +789,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			break;
 		case 2 :
 			msgCreateMessage(shMessageManager(App->SR), "Set World Height", 2);
-			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &App->Led.Lvl->W->Width);
+			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &App->Led.Lvl->W->Height);
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 			break;
