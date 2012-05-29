@@ -81,7 +81,7 @@ std::string md5FromFile(const std::string &Path)
 	MD5_CTX context;
 	
 	MD5Init(&context);
-	while ((bytes = fread (data, 1, 1024, inFile)) != 0)
+	while ((bytes = fread (data, 1, 1024, inFile)) != 0) //permet lire des fichier de n'importequelle taille
 		MD5Update(&context, data, static_cast<unsigned int>(bytes));
 	MD5Final(m_rawHash, &context);
 	

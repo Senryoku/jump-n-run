@@ -396,8 +396,6 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Keyboard::G :
 						lvledGrab(&App->Led);
-						for (int i=0; i<1; i++)
-							printf("%u.MD5 : %s\n", i, md5FromFile("levels/tmpEditor.lvl").c_str());
 						break;
 					case sf::Keyboard::N :
 						printf("Number of Vertices: %u\nNumber of Polygons: %u\n", lstCount(&lvlGetWorld(App->Led.Lvl)->Vertices), lstCount(&lvlGetWorld(App->Led.Lvl)->Polygons));
