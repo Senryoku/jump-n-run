@@ -36,6 +36,7 @@ void plInit(Player* P, World *W)
 	P->ElBalance = newElastic(P->VxBalance, P->VxUR, -1.f, 0.02f);
 
 	P->Shape = polyRectangle(P->VxUL, P->VxUR, P->VxDR, P->VxDL);
+	wdAddVxFromPoly(W, P->Shape);
 
 	P->GroundAngle = M_PI_2;
 
@@ -216,10 +217,9 @@ void plMoveR(Player* P)
 {
 	if(vec2Sub(vxGetPosition(P->VxUR), vxGetOldPos(P->VxUR)).x > 20.f) return; // Limite de Vitesse
 
-	if(P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL
-		|| P->RdDStatus.P1 != NULL)
+	if(P->State & PL_HAS_SUPPORT)
 	{
-		if((fabs((vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL))).y) < 30.f))
+		if(!(P->State & PL_FALLING))
 		{
 			polyApplyForce(P->Shape, vec2(2.f, 0.f), 0);
 		}
@@ -232,10 +232,9 @@ void plMoveL(Player* P)
 {
 	if(vec2Sub(vxGetPosition(P->VxUR), vxGetOldPos(P->VxUR)).x < -20.f) return;
 
-	if(P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL
-		|| P->RdDStatus.P1 != NULL)
+	if(P->State & PL_HAS_SUPPORT)
 	{
-		if((fabs((vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL))).y) < 30.f))
+		if(!(P->State & PL_FALLING))
 		{
 			polyApplyForce(P->Shape, vec2(-2.f, 0.f), 0);
 		}
@@ -357,10 +356,6 @@ void plUpdate(Player* P, World* W)
 	CollisionInfo Info;
 	it = lstFirst(&LExtracted);
 	P->State = PL_NOSTATE;
-//	if(P->VxDLStatus.P1 != NULL || P->VxDRStatus.P1 != NULL || P->RdDStatus.P1 != NULL)
-//		P->State = P->State | PL_HAS_SUPPORT;
-//	if((P->VxDLStatus.P1 != NULL && (P->VxDLStatus.Normal.y > 0.5f) || P->VxDRStatus.P1 != NULL && P->VxDRStatus.Normal.y > 0.5f) || (P->RdDStatus.P1 != NULL && P->RdDStatus.Normal.y > 0.5f))
-//		P->State = P->State | PL_ON_GROUND;
 	P->Normal = vec2(0.f, 0.f);
 	while(!nodeEnd(it))
 	{
@@ -401,6 +396,27 @@ void plUpdate(Player* P, World* W)
 	lstFree(&LExtracted);
 
 	P->GroundVec = vec2Ortho(P->Normal);
+
+	// Mise à jour quelques States
+	Vec2 RdBottom = vec2Normalized(vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL)));
+
+	if(RdBottom.x < 0.f)
+	{
+		P->State = P->State | PL_UPSIDEDOWN;
+		P->State = P->State | PL_FALLING;
+	} else {
+		if(RdBottom.y < -0.5f)
+		{
+			P->State = P->State | PL_FALLING;
+			P->State = P->State | PL_FALLING_L;
+		} else if(RdBottom.y > 0.5f) {
+			P->State = P->State | PL_FALLING;
+			P->State = P->State | PL_FALLING_R;
+		}
+	}
+
+	if(P->GrabL != NULL) P->State = P->State | PL_GRABL;
+	if(P->GrabR != NULL) P->State = P->State | PL_GRABR;
 
 	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
 	v = vec2Normalized(v);

@@ -412,32 +412,9 @@ void lvlSetDesc(Level* lvl, char* Desc)
 
 void lvlLoadedInit(Level* Lvl)
 {
-	/**@todo A modifier !!!!! Valeurs de test temporaires. Maintenant que j'y pense, il n'y aurai pas des leaks à cause des newqqchose ? car ils allouent la structure mais cette structure n'est pas liberée, non? on en au peut etre fait qqpart, meme si world il fait des del. car je n'ai pas fait tres attention xDD */
-
 	Lvl->P1 = newPlayer(lvlGetWorld(Lvl));
 
-
 	plCorrectPosition(Lvl->P1, Lvl->Spawn);
-	wdAddVxFromPoly(Lvl->W, plGetShape(Lvl->P1));
-
-	/*plCreateVertex(Lvl->P1, lvlGetWorld(Lvl));
-	plCreateRigids(Lvl->P1, lvlGetWorld(Lvl));
-	plSetPosition(Lvl->P1, Lvl->Spawn.x+100.f, Lvl->Spawn.y+150.f);
-	 */
-
-	/*Elastic *ENeck, *EBase;
-	ENeck = newElastic(Lvl->P1->Neck, Stable, -1.f, 1.f);
-	EBase = newElastic(Lvl->P1->Base, Stable, -1.f, 1.f);
-
-	wdAddElastic(Lvl->W, ENeck);
-	wdAddElastic(Lvl->W, EBase);
-	 */
-
-	/*Lvl->C = newCloth(lvlGetWorld(Lvl), 20, 20, 30.f, 30.f);
-	clSetPointsMass(Lvl->C, 0.1f);
-	vxSetFixe(clGetVertex(Lvl->C, 0, 0), 1);
-	vxSetFixe(clGetVertex(Lvl->C, 19, 0), 1);
-	 */
 }
 
 void lvlUpdate(Level* Lvl, Bool Paused)

@@ -14,12 +14,18 @@
 #define DIR_LEFT 0x00
 #define DIR_RIGHT 0x01
 
-#define PL_NOSTATE		0x00
-#define PL_ON_GROUND	0x01
-#define PL_HAS_SUPPORT	0x02
-#define PL_FALLING_R	0x04
-#define PL_FALLING_L	0x08
-#define PL_FACEPLANT	0x10
+#define PL_NOSTATE		0x00000000
+#define PL_ON_GROUND	0x00000001
+#define PL_HAS_SUPPORT	0x00000002
+#define PL_FALLING_R	0x00000004
+#define PL_FALLING_L	0x00000008
+#define PL_FACEPLANT	0x00000010
+#define PL_FALLING 		0x00000020
+#define PL_GRABL		0x00000040
+#define PL_GRABR		0x00000080
+#define PL_GOING_R		0x00000100
+#define PL_GOING_L		0x00000200
+#define PL_UPSIDEDOWN	0x00000400
 
 typedef unsigned char PlayerDirection;
 

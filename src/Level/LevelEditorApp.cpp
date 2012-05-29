@@ -12,7 +12,7 @@ void appInit(LevelEditorApp* App, SharedResources* SR)
 	App->ViewHeight = -1.f;
 	App->SR = SR;
 	App->NearestPolygon = NULL;
-	
+
 	appWindowInit(App);
 
 	lvledInit(&App->Led, 4000.f, 1600.f, SR);
@@ -24,8 +24,8 @@ void appInit(LevelEditorApp* App, SharedResources* SR)
 	lvledLoad(&App->Led, "levels/tmpEditor.lvl");
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
-	
-	
+
+
 
 	/*
 	sndmLoadMusicFile(shSoundManager(App->SR), "music0", "data/music.ogg");
@@ -132,7 +132,7 @@ void appRun(LevelEditorApp* App)
 	vxSetPosition(RightLeg1, vec2Add(vxGetPosition(Base), vec2(0.f, 30.f)));
 	vxSetPosition(RightLeg2, vec2Add(vxGetPosition(Base), vec2(0.f, 60.f)));
 
-	
+
 
 	wdAddVertex(App->Led.Lvl->W, Base);
 	wdAddVertex(App->Led.Lvl->W, Neck);
@@ -674,9 +674,9 @@ void appRun(LevelEditorApp* App)
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
 		glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
+
 		if (App->NearestPolygon != NULL)
 			glDrawPolygon(App->NearestPolygon);
-
 
 		//Minimap
 		glDrawMinimap(App->Led.Lvl, App->SR, App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -752,9 +752,9 @@ void showPolygonMenu(LevelEditorApp* App)
 	msgCreateMenu(shMessageManager(App->SR), 2);
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon");
 	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
-	
+
 	i = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-	
+
 	switch (i) {
 		case 0:
 		{
@@ -767,7 +767,7 @@ void showPolygonMenu(LevelEditorApp* App)
 			App->NearestPolygon = NULL;
 			break;
 		}
-			
+
 		default:
 			break;
 	}
