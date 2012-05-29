@@ -186,6 +186,10 @@ void lvledNewBoxUpdate(LevelEditor *Led);
 **/
 void lvledNewBoxCreate(LevelEditor *Led);
 
+/** @brief Créé une boîte carrée
+**/
+void lvledCreateBox(LevelEditor* Led, float boxSize);
+
 /** @brief Crée ou édite un objet
 **/
 void lvledObject(LevelEditor *Led, Polygon* P, unsigned int T, List CT);

@@ -2,7 +2,10 @@
 #include <Objects/Animation.h>
 #include <Game/Message.h>
 
-void showPolygonMenu(LevelEditorApp* App);
+// Fonctions d'usage interne uniquement
+void appShowEscapeMenu(LevelEditorApp* App);
+void appShowLevelMenu(LevelEditorApp* App);
+void appShowPolygonMenu(LevelEditorApp* App);
 
 void appInit(LevelEditorApp* App, SharedResources* SR)
 {
@@ -183,14 +186,6 @@ void appRun(LevelEditorApp* App)
 	fpsInit(&fps);
 	while (App->Window.isOpen())
 	{
-		/*
-		App->Window.setMouseCursorVisible(1);
-		MouseX = App->App->ViewWidth*sf::Mouse::getPosition(App->Window).x/App->WindowWidth + ViewX;
-		MouseY = App->ViewHeight*sf::Mouse::getPosition(App->Window).y/App->WindowHeight + App->ViewY;
-		MouseWinX = sf::Mouse::getPosition(App->Window).x;
-		MouseWinY = sf::Mouse::getPosition(App->Window).y;
-		 */
-
 		App->NearestPolygon = wdGetNearestPoly(lvlGetWorld(App->Led.Lvl), MouseX, MouseY);
 
 		//On verifie si on a pas mis le curseur sur la minimap
@@ -210,30 +205,7 @@ void appRun(LevelEditorApp* App)
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 			{
-				ItemID IID;
-				msgCreateMessage(shMessageManager(App->SR), "Menu", 4);
-				msgAddCloseItem(shMessageManager(App->SR), "Choix0");
-				msgAddCloseItem(shMessageManager(App->SR), "SetWorkingPath");
-				msgAddCloseItem(shMessageManager(App->SR), "Quitter");
-				msgAddCloseItem(shMessageManager(App->SR), "Retour");
-				ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-				switch (Choice)
-				{
-					case 0 :
-						break;
-					case 1 :
-						msgCreateMessage(shMessageManager(App->SR), "SetWorkingPath", 2);
-						IID = msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
-						mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->WorkingPath);
-						msgAddCloseItem(shMessageManager(App->SR), "Ok");
-						strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
-						break;
-					case 2 :
-						App->Window.close();
-						break;
-					default :
-						break;
-				}
+				appShowEscapeMenu(App);
 			}
 
 			if (event.type == sf::Event::LostFocus)
@@ -243,8 +215,6 @@ void appRun(LevelEditorApp* App)
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
-
-
 
 			if(event.type == sf::Event::MouseButtonPressed)
 			{
@@ -305,7 +275,9 @@ void appRun(LevelEditorApp* App)
 						App->MenuUsed = 1;
 						 */
 						if (App->NearestPolygon != NULL)
-							showPolygonMenu(App);
+							appShowPolygonMenu(App);
+						else
+							appShowLevelMenu(App);
 						break;
 					case sf::Mouse::Middle :
 						MouseDragX = MouseX;
@@ -378,21 +350,7 @@ void appRun(LevelEditorApp* App)
 						App->ViewHeight = App->WindowHeight;
 						break;
 					case sf::Keyboard::B :
-					{
-						float boxSize = 100.f;
-						Vertex *V10, *V11, *V12, *V13;
-						V10 = newVertex();
-						vxSetPosition(V10, vec2(MouseX, MouseY));
-						V11 = newVertex();
-						vxSetPosition(V11, vec2(MouseX+boxSize, MouseY));
-						V12 = newVertex();
-						vxSetPosition(V12, vec2(MouseX+boxSize, MouseY+boxSize));
-						V13 = newVertex();
-						vxSetPosition(V13, vec2(MouseX, MouseY+boxSize));
-						wdAddVertex(lvlGetWorld(App->Led.Lvl), V10); wdAddVertex(lvlGetWorld(App->Led.Lvl), V11); wdAddVertex(lvlGetWorld(App->Led.Lvl), V12); wdAddVertex(lvlGetWorld(App->Led.Lvl), V13);
-						Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
-						wdAddPolygon(lvlGetWorld(App->Led.Lvl), Rectangle2);
-					}
+						lvledCreateBox(&App->Led, 100);
 						break;
 					case sf::Keyboard::G :
 						lvledGrab(&App->Led);
@@ -725,7 +683,7 @@ void appSetWorkingPath(LevelEditorApp* App, const char* Path)
 	strcpy(App->WorkingPath, Path);
 }
 
-void showPolygonMenu(LevelEditorApp* App)
+void appShowPolygonMenu(LevelEditorApp* App)
 {
 	ItemID i;
 	msgCreateMenu(shMessageManager(App->SR), 2);
@@ -737,17 +695,108 @@ void showPolygonMenu(LevelEditorApp* App)
 	switch (i) {
 		case 0:
 		{
-			Object* Obj = lvlGetObjFromShape(App->Led.Lvl, App->NearestPolygon);
-			if (Obj != NULL)
-				lvlDelObject(App->Led.Lvl, Obj);
-			wdDelPolygon(lvlGetWorld(App->Led.Lvl), App->NearestPolygon);
-			delPolygon(App->NearestPolygon);
+			lvledDelPoly(&App->Led);
 			App->Led.Grab = NULL;
 			App->NearestPolygon = NULL;
 			break;
 		}
-
 		default:
+			break;
+	}
+}
+
+void appShowLevelMenu(LevelEditorApp* App)
+{
+	ItemID i;
+	ItemID IID;
+	msgCreateMenu(shMessageManager(App->SR), 6);
+	msgAddCloseItem(shMessageManager(App->SR), "Add a Box (B)");
+	msgAddCloseItem(shMessageManager(App->SR), "Select Background");
+	msgAddCloseItem(shMessageManager(App->SR), "Select Layer1");
+	msgAddCloseItem(shMessageManager(App->SR), "Select Layer2");
+	msgAddCloseItem(shMessageManager(App->SR), "Select Foreground");
+	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+
+	i = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+
+	switch (i) {
+		case 0:
+		{
+			lvledCreateBox(&App->Led, 100);
+			break;
+		}
+		case 1:
+			msgCreateMessage(shMessageManager(App->SR), "Select Background", 3);
+			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
+			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
+			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->Led.backPath);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			strcpy(App->Led.backPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
+			break;
+		case 2:
+			msgCreateMessage(shMessageManager(App->SR), "Select Layer1", 3);
+			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
+			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
+			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->Led.layer1Path);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			strcpy(App->Led.layer1Path, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
+			break;
+		case 3:
+			msgCreateMessage(shMessageManager(App->SR), "Select Layer2", 3);
+			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
+			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
+			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->Led.layer2Path);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			strcpy(App->Led.layer2Path, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
+			break;
+		case 4:
+			msgCreateMessage(shMessageManager(App->SR), "Select Foreground", 3);
+			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
+			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
+			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->Led.forePath);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			strcpy(App->Led.forePath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
+			break;
+		default:
+			break;
+	}
+}
+
+void appShowEscapeMenu(LevelEditorApp* App)
+{
+	ItemID IID;
+	msgCreateMessage(shMessageManager(App->SR), "Menu", 5);
+	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
+	msgAddCloseItem(shMessageManager(App->SR), "Set World Width");
+	msgAddCloseItem(shMessageManager(App->SR), "Set World Height");
+	msgAddCloseItem(shMessageManager(App->SR), "Quit");
+	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+	switch (Choice)
+	{
+		case 0 :
+			msgCreateMessage(shMessageManager(App->SR), "Set Working Path", 2);
+			IID = msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
+			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->WorkingPath);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
+			break;
+		case 1 :
+			msgCreateMessage(shMessageManager(App->SR), "Set World Width", 2);
+			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &App->Led.Lvl->W->Width);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			break;
+		case 2 :
+			msgCreateMessage(shMessageManager(App->SR), "Set World Height", 2);
+			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &App->Led.Lvl->W->Width);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			break;
+		case 3 :
+			App->Window.close();
+			break;
+		default :
 			break;
 	}
 }

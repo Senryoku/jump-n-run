@@ -546,6 +546,24 @@ void lvledNewBoxCreate(LevelEditor *Led)
 	Led->tmpBox1 = Led->tmpBox2 = Led->tmpBox3 = Led->tmpBox4 = NULL;
 }
 
+void lvledCreateBox(LevelEditor* Led, float boxSize)
+{
+	Vertex *V10, *V11, *V12, *V13;
+	float MouseX = vxGetPosition(Led->Mouse).x;
+	float MouseY = vxGetPosition(Led->Mouse).y;
+	V10 = newVertex();
+	vxSetPosition(V10, vec2(MouseX, MouseY));
+	V11 = newVertex();
+	vxSetPosition(V11, vec2(MouseX+boxSize, MouseY));
+	V12 = newVertex();
+	vxSetPosition(V12, vec2(MouseX+boxSize, MouseY+boxSize));
+	V13 = newVertex();
+	vxSetPosition(V13, vec2(MouseX, MouseY+boxSize));
+	wdAddVertex(lvlGetWorld(Led->Lvl), V10); wdAddVertex(lvlGetWorld(Led->Lvl), V11); wdAddVertex(lvlGetWorld(Led->Lvl), V12); wdAddVertex(lvlGetWorld(Led->Lvl), V13);
+	Polygon* Rectangle2 = polyRectangle(V10, V11, V12, V13);
+	wdAddPolygon(lvlGetWorld(Led->Lvl), Rectangle2);
+}
+
 void lvledObject(LevelEditor *Led, Polygon* P, unsigned int T, List CT)
 {
 	if(lstCount(&CT) != polyGetVxCount(P)) return;

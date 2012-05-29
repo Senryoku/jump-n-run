@@ -86,13 +86,6 @@ void wdDelPolygon(World* W, Polygon* P)
 {
 	/* On retire le centre du polygon de la liste de vertices */
 	if(polyGetCenter(P) != NULL) lstDel(&W->Vertices, polyGetCenter(P));
-	///@todo on enlève tous les vertex du polygone du monde!
-	int i;
-	for (i = 0; i<daGetSize(&P->Vertices); i++)
-	{
-		wdDelVertex(W, (Vertex*)daGet(&P->Vertices, i));
-		delVertex((Vertex*)daGet(&P->Vertices, i));
-	}
 	lstDel(&W->Polygons, P);
 	///@todo l'enlever de la grille!
 	gridRemovePolygonByForce(&W->CollisionGrid, P);
@@ -146,12 +139,12 @@ void wdLimitVextexPosition(World* W)
 	Vec2 curPos;
 	Vec2 newPos;
 	Node* it = lstFirst(&W->Vertices);
-	
+
 	while(!nodeEnd(it))
 	{
 		/* Garde le Vertex dans les limites du monde */
 		curPos = vxGetPosition((Vertex*) nodeGetData(it));
-		
+
 		if(curPos.x > W->Width)
 			newPos.x = W->Width;
 		else if(curPos.x < 0.f)
@@ -165,32 +158,32 @@ void wdLimitVextexPosition(World* W)
 		//printf("new pos : %f, %f ; curpos: %f, %f\n", newPos.x, newPos.y, curPos.x, curPos.y);
 		if (curPos.y != newPos.y || curPos.x != newPos.x)
 			vxSetPosition((Vertex*) nodeGetData(it), newPos);
-		
+
 		if (curPos.y != newPos.y || curPos.x != newPos.x)
 			vxSetPosition((Vertex*) nodeGetData(it), newPos);
-		
+
 		it = nodeGetNext(it);
 	}
 }
 
 void wdResolveRigid(World* W)
 {
-        Node* it = lstFirst(&W->Rigids);
+	Node* it = lstFirst(&W->Rigids);
 
-        /* Parcoure les contraintes orphelines */
-        while(!nodeEnd(it))
-        {
-                rdResolve( (Rigid*) nodeGetData(it));
-                it = nodeGetNext(it);
-        }
-
-        /* Parcoure les Polygons */
-        it = lstFirst(&W->Polygons);
-        while(!nodeEnd(it))
-        {
-			polyResolve((Polygon*) nodeGetData(it));
+	/* Parcoure les contraintes orphelines */
+	while(!nodeEnd(it))
+	{
+			rdResolve( (Rigid*) nodeGetData(it));
 			it = nodeGetNext(it);
-        }
+	}
+
+	/* Parcoure les Polygons */
+	it = lstFirst(&W->Polygons);
+	while(!nodeEnd(it))
+	{
+		polyResolve((Polygon*) nodeGetData(it));
+		it = nodeGetNext(it);
+	}
 }
 
 void wdResolveElastic(World* W)
@@ -430,7 +423,7 @@ Polygon* wdGetNearestPoly(World* W, float X, float Y)
 {
 	//unsigned int i; float Dist = INFINITY, tmpDist;
 	Polygon *Nearest = NULL, *tmpPoly;
-	
+
 	List* LExtracted = gridGetPositionList(&W->CollisionGrid, X, Y);
 	Node* it = lstFirst(LExtracted);
 	while(!nodeEnd(it))
@@ -564,7 +557,7 @@ Polygon* wdFindPolygon(World *W, Vertex* V)
 	Node* it;
 	Polygon* P;
 	it = lstFirst(&W->Polygons);
-	
+
 	while(!nodeEnd(it))
 	{
 		P = (Polygon*)nodeGetData(it);
@@ -576,6 +569,6 @@ Polygon* wdFindPolygon(World *W, Vertex* V)
 		}
 		it = nodeGetNext(it);
 	}
-	
+
 	return NULL;
 }
