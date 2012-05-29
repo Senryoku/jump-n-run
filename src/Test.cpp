@@ -22,6 +22,7 @@ int main(int argc, char** argv)
 		fclose(f);
 	}*/
 	
+	
 	SharedResources SR;
 	shInit(&SR, &glTexLoad, &glTexFree);
 

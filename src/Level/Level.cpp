@@ -121,6 +121,10 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		strcpy(Name, tmp);
 		tmp = strtok(NULL, "/");
 	}
+	
+	strcpy(Lvl->MD5, md5FromFile(File).c_str());
+	printf("MD5 : %s\n", Lvl->MD5);
+	
 
 	FILE* f;
 	f=fopen(File, "r");
@@ -161,8 +165,10 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	strcpy(Lvl->Filename, Name);
 	printf("Filename : %s\n", Lvl->Filename);
 
+	/*
 	strcpy(Lvl->MD5, md5FromFile(File).c_str());
 	printf("MD5 : %s\n", Lvl->MD5);
+	 */
 
 	strcpy(Lvl->Name, lvl);
 	Lvl->Name[strlen(Lvl->Name) - 1] = '\0'; // On enlève le CR

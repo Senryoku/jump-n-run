@@ -369,7 +369,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		Bool VxResolved = FALSE;
 		
-		if (Pos->Head.x == Pos->Head.x)
+		if (!ISNAN(Pos->Head.x))
 		{
 			Wobble(&A->Positions.Head.x, Pos->Head.x, A->Force, A->Friction, &A->Spd[0]);
 			//vxsetpos
@@ -384,7 +384,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		}
 			
 			
-		if (Pos->Head.y == Pos->Head.y)
+		if (!ISNAN(Pos->Head.y))
 		{
 			Wobble(&A->Positions.Head.y, Pos->Head.y, A->Force, A->Friction, &A->Spd[1]);
 		}
@@ -397,7 +397,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		}
 		
 		VxResolved = FALSE;
-		if (Pos->Neck.x == Pos->Neck.x)
+		if (!ISNAN(Pos->Neck.x))
 		{
 			Wobble(&A->Positions.Neck.x, Pos->Neck.x, A->Force, A->Friction, &A->Spd[2]);
 			vxSetX(P->Neck, A->Positions.Neck.x);
@@ -409,7 +409,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 
-		if (Pos->Neck.y == Pos->Neck.y)
+		if (!ISNAN(Pos->Neck.y))
 		{
 			Wobble(&A->Positions.Neck.y, Pos->Neck.y, A->Force, A->Friction, &A->Spd[3]);
 			vxSetY(P->Neck, A->Positions.Neck.y);
@@ -419,7 +419,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		////////////
 		VxResolved = FALSE;
-		if (Pos->LeftArm1.x == Pos->LeftArm1.x)
+		if (!ISNAN(Pos->LeftArm1.x))
 		{
 			Wobble(&A->Positions.LeftArm1.x, Pos->LeftArm1.x, A->Force, A->Friction, &A->Spd[4]);
 			vxSetX(P->LeftArm1, A->Positions.LeftArm1.x);
@@ -431,7 +431,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 		
-		if (Pos->LeftArm1.y == Pos->LeftArm1.y)
+		if (!ISNAN(Pos->LeftArm1.y))
 		{
 			Wobble(&A->Positions.LeftArm1.y, Pos->LeftArm1.y, A->Force, A->Friction, &A->Spd[5]);
 			vxSetY(P->LeftArm1, A->Positions.LeftArm1.y);
@@ -441,7 +441,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 		VxResolved = FALSE;
-		if (Pos->LeftArm2.x == Pos->LeftArm2.x)
+		if (!ISNAN(Pos->LeftArm2.x))
 		{
 			Wobble(&A->Positions.LeftArm2.x, Pos->LeftArm2.x, A->Force, A->Friction, &A->Spd[4]);
 			vxSetX(P->LeftArm2, A->Positions.LeftArm2.x);
@@ -453,7 +453,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 		
-		if (Pos->LeftArm2.y == Pos->LeftArm2.y)
+		if (!ISNAN(Pos->LeftArm2.y))
 		{
 			Wobble(&A->Positions.LeftArm2.y, Pos->LeftArm2.y, A->Force, A->Friction, &A->Spd[5]);
 			vxSetY(P->LeftArm2, A->Positions.LeftArm2.y);
@@ -463,7 +463,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 		VxResolved = FALSE;
-		if (Pos->RightArm1.x == Pos->RightArm1.x)
+		if (!ISNAN(Pos->RightArm1.x))
 		{
 			Wobble(&A->Positions.RightArm1.x, Pos->RightArm1.x, A->Force, A->Friction, &A->Spd[4]);
 			vxSetX(P->RightArm1, A->Positions.RightArm1.x);
@@ -475,7 +475,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 		
-		if (Pos->RightArm1.y == Pos->RightArm1.y)
+		if (!ISNAN(Pos->RightArm1.y))
 		{
 			Wobble(&A->Positions.RightArm1.y, Pos->RightArm1.y, A->Force, A->Friction, &A->Spd[5]);
 			vxSetY(P->RightArm1, A->Positions.RightArm1.y);
@@ -485,7 +485,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 		VxResolved = FALSE;
-		if (Pos->RightArm2.x == Pos->RightArm2.x)
+		if (!ISNAN(Pos->RightArm2.x))
 		{
 			Wobble(&A->Positions.RightArm2.x, Pos->RightArm2.x, A->Force, A->Friction, &A->Spd[4]);
 			vxSetX(P->RightArm2, A->Positions.RightArm2.x);
@@ -497,7 +497,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 		
-		if (Pos->RightArm2.y == Pos->RightArm2.y)
+		if (!ISNAN(Pos->RightArm2.y))
 		{
 			Wobble(&A->Positions.RightArm2.y, Pos->RightArm2.y, A->Force, A->Friction, &A->Spd[5]);
 			vxSetY(P->RightArm2, A->Positions.RightArm2.y);
@@ -507,7 +507,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 		VxResolved = FALSE;
-		if (Pos->LeftLeg1.x == Pos->LeftLeg1.x)
+		if (!ISNAN(Pos->LeftLeg1.x))
 		{
 			Wobble(&A->Positions.LeftLeg1.x, Pos->LeftLeg1.x, A->Force, A->Friction, &A->Spd[4]);
 			vxSetX(P->LeftLeg1, A->Positions.LeftLeg1.x);
@@ -519,7 +519,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 		
-		if (Pos->LeftLeg1.y == Pos->LeftLeg1.y)
+		if (!ISNAN(Pos->LeftLeg1.y))
 		{
 			Wobble(&A->Positions.LeftLeg1.y, Pos->LeftLeg1.y, A->Force, A->Friction, &A->Spd[5]);
 			vxSetY(P->LeftLeg1, A->Positions.LeftLeg1.y);
@@ -529,7 +529,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 		VxResolved = FALSE;
-		if (Pos->LeftLeg2.x == Pos->LeftLeg2.x)
+		if (!ISNAN(Pos->LeftLeg2.x))
 		{
 			Wobble(&A->Positions.LeftLeg2.x, Pos->LeftLeg2.x, A->Force, A->Friction, &A->Spd[4]);
 			vxSetX(P->LeftLeg2, A->Positions.LeftLeg2.x);
@@ -541,7 +541,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 		
-		if (Pos->LeftLeg2.y == Pos->LeftLeg2.y)
+		if (!ISNAN(Pos->LeftLeg2.y))
 		{
 			Wobble(&A->Positions.LeftLeg2.y, Pos->LeftLeg2.y, A->Force, A->Friction, &A->Spd[5]);
 			vxSetY(P->LeftLeg2, A->Positions.LeftLeg2.y);
@@ -551,7 +551,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 		VxResolved = FALSE;
-		if (Pos->RightLeg1.x == Pos->RightLeg1.x)
+		if (!ISNAN(Pos->RightLeg1.x))
 		{
 			Wobble(&A->Positions.RightLeg1.x, Pos->RightLeg1.x, A->Force, A->Friction, &A->Spd[4]);
 			vxSetX(P->RightLeg1, A->Positions.RightLeg1.x);
@@ -563,7 +563,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 		
-		if (Pos->RightLeg1.y == Pos->RightLeg1.y)
+		if (!ISNAN(Pos->RightLeg1.y))
 		{
 			Wobble(&A->Positions.RightLeg1.y, Pos->RightLeg1.y, A->Force, A->Friction, &A->Spd[5]);
 			vxSetY(P->RightLeg1, A->Positions.RightLeg1.y);
@@ -573,7 +573,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 		VxResolved = FALSE;
-		if (Pos->RightLeg2.x == Pos->RightLeg2.x)
+		if (!ISNAN(Pos->RightLeg2.x))
 		{
 			Wobble(&A->Positions.RightLeg2.x, Pos->RightLeg2.x, A->Force, A->Friction, &A->Spd[4]);
 			vxSetX(P->RightLeg2, A->Positions.RightLeg2.x);
@@ -585,7 +585,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = TRUE;
 		}
 		
-		if (Pos->RightLeg2.y == Pos->RightLeg2.y)
+		if (!ISNAN(Pos->RightLeg2.y))
 		{
 			Wobble(&A->Positions.RightLeg2.y, Pos->RightLeg2.y, A->Force, A->Friction, &A->Spd[5]);
 			vxSetY(P->RightLeg2, A->Positions.RightLeg2.y);
@@ -649,7 +649,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		/* On change la position des vertex du joueur */
 		
-		if (Ang->Neck == Ang->Neck)
+		if (!ISNAN(Ang->Neck))
 		{
 			Wobble(&A->Angles.Neck, Ang->Neck, A->Force, A->Friction, &A->Spd[1]);
 			vxSetPosition(P->Neck, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(60.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.Neck))));
@@ -657,7 +657,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 			vxResolve(P->Neck, prevdt, dt), vxApplyForce(P->Neck, vec2(0.f, 0.6f), 1.f);;
 			
-		if (Ang->Head == Ang->Head)
+		if (!ISNAN(Ang->Head))
 		{
 			Wobble(&A->Angles.Head, Ang->Head, A->Force, A->Friction, &A->Spd[0]);
 			//la tête est un peu spéciale car on a l'angle du
@@ -671,7 +671,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		
 		
 				
-		if (Ang->LeftArm1 == Ang->LeftArm1)
+		if (!ISNAN(Ang->LeftArm1))
 		{
 			Wobble(&A->Angles.LeftArm1, Ang->LeftArm1, A->Force, A->Friction, &A->Spd[2]);
 			vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-25.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm1))));
@@ -679,7 +679,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 			vxResolve(P->LeftArm1, prevdt, dt), vxApplyForce(P->LeftArm1, vec2(0.f, 0.6f), 1.f);
 			
-		if (Ang->LeftArm2 == Ang->LeftArm2)
+		if (!ISNAN(Ang->LeftArm2))
 		{
 			Wobble(&A->Angles.LeftArm2, Ang->LeftArm2, A->Force, A->Friction, &A->Spd[3]);
 			vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->LeftArm1), vec2Rotate(vec2(-25.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftArm2))));
@@ -688,7 +688,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxResolve(P->LeftArm2, prevdt, dt), vxApplyForce(P->LeftArm2, vec2(0.f, 0.6f), 1.f);;
 			
 		
-		if (Ang->RightArm1 == Ang->RightArm1)
+		if (!ISNAN(Ang->RightArm1))
 		{
 			Wobble(&A->Angles.RightArm1, Ang->RightArm1, A->Force, A->Friction, &A->Spd[4]);
 			vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2Rotate(vec2(-25.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightArm1))));
@@ -705,7 +705,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxResolve(P->RightArm2, prevdt, dt), vxApplyForce(P->RightArm2, vec2(0.f, 0.6f), 1.f);;
 			
 				
-		if (Ang->LeftLeg1 == Ang->LeftLeg1)
+		if (!ISNAN(Ang->LeftLeg1))
 		{
 			Wobble(&A->Angles.LeftLeg1, Ang->LeftLeg1, A->Force, A->Friction, &A->Spd[6]);
 			vxSetPosition(P->LeftLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-30.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg1))));
@@ -713,7 +713,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 			vxResolve(P->LeftLeg1, prevdt, dt), vxApplyForce(P->LeftLeg1, vec2(0.f, 0.6f), 1.f);;
 			
-		if (Ang->LeftLeg2 == Ang->LeftLeg2)
+		if (!ISNAN(Ang->LeftLeg2))
 		{
 			Wobble(&A->Angles.LeftLeg2, Ang->LeftLeg2, A->Force, A->Friction, &A->Spd[7]);
 			vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->LeftLeg1), vec2Rotate(vec2(-30.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.LeftLeg2))));
@@ -722,7 +722,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			vxResolve(P->LeftLeg2, prevdt, dt), vxApplyForce(P->LeftLeg2, vec2(0.f, 0.6f), 1.f);;
 			
 		
-		if (Ang->RightLeg1 == Ang->RightLeg1)
+		if (!ISNAN(Ang->RightLeg1))
 		{
 			Wobble(&A->Angles.RightLeg1, Ang->RightLeg1, A->Force, A->Friction, &A->Spd[8]);
 			vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2Rotate(vec2(-30.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg1))));
@@ -730,7 +730,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		else
 			vxResolve(P->RightLeg1, prevdt, dt), vxApplyForce(P->RightLeg1, vec2(0.f, 0.6f), 1.f);;
 			
-		if (Ang->RightLeg2 == Ang->RightLeg2)
+		if (!ISNAN(Ang->RightLeg2))
 		{
 			Wobble(&A->Angles.RightLeg2, Ang->RightLeg2, A->Force, A->Friction, &A->Spd[9]);
 			vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->RightLeg1), vec2Rotate(vec2(-30.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(A->Angles.RightLeg2))));
@@ -745,35 +745,35 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		/* Vérification de l'état de l'animation pour passer à létat suivant */
 		/* Ang->LeftLeg2!=Ang->LeftLeg2 teste le NaN donc NAN (le vertex n'est pas à tenir en compte) */
 		if (A->Triggers & ANIM_LEFT_LEG2)
-			if (Ang->LeftLeg2!=Ang->LeftLeg2 || ABS(A->Angles.LeftLeg2-Ang->LeftLeg2) < A->Diff)
+			if (ISNAN(Ang->LeftLeg2) || ABS(A->Angles.LeftLeg2-Ang->LeftLeg2) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_LEG2)
-			if (Ang->RightLeg2!=Ang->RightLeg2 || ABS(A->Angles.RightLeg2-Ang->RightLeg2) < A->Diff)
+			if (ISNAN(Ang->RightLeg2) || ABS(A->Angles.RightLeg2-Ang->RightLeg2) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_LEG1)
-			if (Ang->RightLeg1!=Ang->RightLeg1 || ABS(A->Angles.RightLeg1-Ang->RightLeg1) < A->Diff)
+			if (ISNAN(Ang->RightLeg1) || ABS(A->Angles.RightLeg1-Ang->RightLeg1) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_LEG1)
-			if (Ang->LeftLeg1!=Ang->LeftLeg1 || ABS(A->Angles.LeftLeg1-Ang->LeftLeg1) < A->Diff)
+			if (ISNAN(Ang->LeftLeg1) || ABS(A->Angles.LeftLeg1-Ang->LeftLeg1) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_ARM1)
-			if (Ang->LeftArm1!=Ang->LeftArm1 || ABS(A->Angles.LeftArm1-Ang->LeftArm1) < A->Diff)
+			if (ISNAN(Ang->LeftArm1) || ABS(A->Angles.LeftArm1-Ang->LeftArm1) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_LEFT_ARM2)
-			if (Ang->LeftArm2!=Ang->LeftArm2 || ABS(A->Angles.LeftArm2-Ang->LeftArm2) < A->Diff)
+			if (ISNAN(Ang->LeftArm2) || ABS(A->Angles.LeftArm2-Ang->LeftArm2) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_ARM1)
-			if (Ang->RightArm1!=Ang->RightArm1 || ABS(A->Angles.RightArm1-Ang->RightArm1) < A->Diff)
+			if (ISNAN(Ang->RightArm1) || ABS(A->Angles.RightArm1-Ang->RightArm1) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_RIGHT_ARM2)
-			if (Ang->RightArm2!=Ang->RightArm2 || ABS(A->Angles.RightArm2-Ang->RightArm2) < A->Diff)
+			if (ISNAN(Ang->RightArm2) || ABS(A->Angles.RightArm2-Ang->RightArm2) < A->Diff)
 				TriggerCount++;
 		
 		if (A->Triggers & ANIM_NECK)
-			if (Ang->Neck!=Ang->Neck || ABS(A->Angles.Neck-Ang->Neck) < A->Diff)
+			if (ISNAN(Ang->Neck) || ABS(A->Angles.Neck-Ang->Neck) < A->Diff)
 				TriggerCount++;
 		if (A->Triggers & ANIM_HEAD)
-			if (Ang->Head!=Ang->Head || ABS(A->Angles.Head-Ang->Head) < A->Diff)
+			if (ISNAN(Ang->Head) || ABS(A->Angles.Head-Ang->Head) < A->Diff)
 				TriggerCount++;
 		
 		if (TriggerCount >= A->TriggerCount)

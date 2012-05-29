@@ -64,24 +64,38 @@ std::string md5FromText(const std::string &Text)
 
 std::string md5FromFile(const std::string &Path)
 {
-	std::ifstream file;
+	FILE *inFile = fopen (Path.c_str(), "rb");
+	
+	size_t bytes;
+    unsigned char data[1024];
+	
+    if (inFile == NULL)
+	{
+        printf ("%s can't be opened.\n", Path.c_str());
+    }
+
+	
 	std::string	m_sHash;
-	file.open(Path.c_str(), std::ifstream::in);
+	unsigned char m_rawHash[16];
 	
-	if (!file)
-		return "";
-	file.seekg(0, std::ios::end);
-	size_t length = file.tellg();
-	file.seekg(0, std::ios::beg);
+	MD5_CTX context;
 	
-	char* buffer = new char [length];
+	MD5Init(&context);
+	while ((bytes = fread (data, 1, 1024, inFile)) != 0)
+		MD5Update(&context, data, static_cast<unsigned int>(bytes));
+	MD5Final(m_rawHash, &context);
 	
-	file.read(buffer, length);
-	m_sHash = md5FromText(std::string(buffer));
-	//Calculate((unsigned char*) buffer, length);
-	delete [] buffer;
+	fclose(inFile);
 	
-	file.close();
+	m_sHash.clear();
+	m_sHash.reserve(32);
+	char buffer[3];
+	buffer[2] = '\0';
+	for (int i = 0; i < 16; ++i)
+	{
+		sprintf(buffer, "%02x", m_rawHash[i]);
+		m_sHash += buffer;
+	}
 	return m_sHash;
 }
 

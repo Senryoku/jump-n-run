@@ -27,6 +27,7 @@ typedef struct
 #define ABS( X ) ( (X) < 0 ? (-(X)) : (X) ) /* Valeur absolue de X */
 #define RAD2DEG( X ) ( (X) * (180.0/M_PI) ) /* Conversion de radians en degrès */
 #define DEG2RAD( X ) ( (X) * (M_PI/180.0) ) /* Conversion de degrès en radians */
+#define ISNAN( X ) ( (X) != (X) ) /* Permet de savoir si un float est un NaN */
 
 /**
  * @brief Fait une transition enre deux variables
