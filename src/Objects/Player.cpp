@@ -425,41 +425,10 @@ void plUpdate(Player* P, World* W)
 
 void plSetPosition(Player* P, float x, float y)
 {
-	/* Position relative par rapport à la base des vertex */
-	/*Vec2 N, HL, HR, LA1, LA2, RA1, RA2, LL1, LL2, RL1, RL2;
-	N =vec2Sub(vxGetPosition(P->Neck), vxGetPosition(P->Base));
-	HL =vec2Sub(vxGetPosition(P->HeadLeft), vxGetPosition(P->Base));
-	HR =vec2Sub(vxGetPosition(P->HeadRight), vxGetPosition(P->Base));
-	LA1 =vec2Sub(vxGetPosition(P->LeftArm1), vxGetPosition(P->Base));
-	LA2 =vec2Sub(vxGetPosition(P->LeftArm2), vxGetPosition(P->Base));
-	RA1 =vec2Sub(vxGetPosition(P->RightArm1), vxGetPosition(P->Base));
-	RA2 =vec2Sub(vxGetPosition(P->RightArm2), vxGetPosition(P->Base));
-	LL1 =vec2Sub(vxGetPosition(P->LeftLeg1), vxGetPosition(P->Base));
-	LL2 =vec2Sub(vxGetPosition(P->LeftLeg2), vxGetPosition(P->Base));
-	RL1 =vec2Sub(vxGetPosition(P->RightLeg1), vxGetPosition(P->Base));
-	RL2 =vec2Sub(vxGetPosition(P->RightLeg2), vxGetPosition(P->Base));
-
-
-	vxSetPosition(P->Base, vec2(x, y));
-	vxSetPosition(P->Neck, vec2(x+N.x, y+N.y));
-	vxSetPosition(P->HeadLeft, vec2(x+HL.x, y+HL.y));
-	vxSetPosition(P->HeadRight, vec2(x+HR.x, y+HR.y));
-	vxSetPosition(P->LeftArm1, vec2(x+LA1.x, y+LA1.y));
-	vxSetPosition(P->LeftArm2, vec2(x+LA2.x, y+LA2.y));
-	vxSetPosition(P->RightArm1, vec2(x+RA1.x, y+RA1.y));
-	vxSetPosition(P->RightArm2, vec2(x+RA2.x, y+RA2.y));
-	vxSetPosition(P->LeftLeg1, vec2(x+LL1.x, y+LL1.y));
-	vxSetPosition(P->LeftLeg2, vec2(x+LL2.x, y+LL2.y));
-	vxSetPosition(P->RightLeg1, vec2(x+RL1.x, y+RL1.y));
-	vxSetPosition(P->RightLeg2, vec2(x+RL2.x, y+RL2.y));
-	 */
-
 	Vec2 LL2, RL2;
 	LL2 =vec2Sub(vxGetPosition(P->LeftLeg2), vxGetPosition(P->Base));
 	RL2 =vec2Sub(vxGetPosition(P->RightLeg2), vxGetPosition(P->Base));
 	vxSetPosition(P->Base, vec2(x, y));
 	vxSetPosition(P->LeftLeg2, vec2(x+LL2.x, y+LL2.y));
 	vxSetPosition(P->RightLeg2, vec2(x+RL2.x, y+RL2.y));
-
-
 }
