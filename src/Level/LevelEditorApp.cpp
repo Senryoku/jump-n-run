@@ -51,7 +51,7 @@ void appWindowInit(LevelEditorApp* App)
 	App->WindowWidth = Cfg.WindowWidth;
 	App->WindowHeight = Cfg.WindowHeight;
 	App->Window.create(sf::VideoMode(App->WindowWidth, App->WindowHeight), "Jump n'Run Level Editor", sf::Style::Close, sf::ContextSettings(32));
-	printf("v:%f\n", App->ViewWidth);
+
 	if (App->ViewWidth<0.f)
 	{
 		App->ViewWidth = App->WindowWidth;
@@ -642,19 +642,6 @@ void appRun(LevelEditorApp* App)
 
 		sndmUpdate(shSoundManager(App->SR));
 
-		/*
-		 //Ça c'est la façon manuelle, j'ai cependant rajouté dans SoundManager des trucs pour faire que ça se fasse seul. Je rajouterai d'autre choses pour le personaliser un peu plus tard
-		if (!sndmIsInFading() && sndmGetPlayCount() > 0)
-		{
-			CurrentMusic++;
-			if (CurrentMusic>3)
-				CurrentMusic = 0;
-			char Key[30];
-			sprintf(Key, "music%u", CurrentMusic);
-			sndmMusicFade(Key, 2.f);
-		}
-		 */
-
 		/* == Affichage == */
 
 		glClear(GL_COLOR_BUFFER_BIT); //On efface le fond. Color car on est en 2D
@@ -689,16 +676,8 @@ void appRun(LevelEditorApp* App)
 		MouseWinX = sf::Mouse::getPosition(App->Window).x;
 		MouseWinY = sf::Mouse::getPosition(App->Window).y;
 
-
-		if(App->MenuUsed)
-		{
-			mnUpdate(&App->M, vec2(100.f, 100.f), vec2(100.f, -mnGetHeight(&App->M) - 100.f));
-			//glDrawMenu(App->Window, &App->M, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-			//cette fonction n'est plus valide
-		}
 		fpsStep(&fps);
 
-		//glDrawMenu(App->Window, M, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 		glDrawMenuBox(App->SR, App->Window, M, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 
 		glDrawMenuItems(App->SR, App->Window, M, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
