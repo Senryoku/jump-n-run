@@ -190,6 +190,8 @@ void appRun(LevelEditorApp* App)
 			InsideMiniMap = TRUE;
 		else
 			InsideMiniMap = FALSE;
+		
+		lvledUpdateNearestPoly(&App->Led);
 
 		sf::Event event;
 		while (App->Window.pollEvent(event))
@@ -377,8 +379,12 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Keyboard::L :
 						if (event.key.control)
+						{
+							lvledResetNearestPoly(&App->Led);
 							lvledLoad(&App->Led, App->WorkingPath);
-						else DispDebug = !DispDebug;
+						}
+						else
+							DispDebug = !DispDebug;
 						break;
 					case sf::Keyboard::F1 :
 						DispBack = !DispBack;
@@ -513,8 +519,7 @@ void appRun(LevelEditorApp* App)
 				switch(event.key.code)
 				{
 					case sf::Keyboard::G :
-						if (!InsideMiniMap)
-							lvledRelease(&App->Led, Paused);
+						lvledRelease(&App->Led, Paused);
 						break;
 					case sf::Keyboard::E :
 						lvledReleaseEl(&App->Led);

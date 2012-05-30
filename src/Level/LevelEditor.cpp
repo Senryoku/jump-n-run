@@ -830,6 +830,11 @@ void lvledUpdateNearestPoly(LevelEditor* Led)
 	Led->NearestPolygon = wdGetNearestPoly(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
 }
 
+void lvledResetNearestPoly(LevelEditor* Led)
+{
+	Led->NearestPolygon = NULL;
+}
+
 Polygon* lvledGetNearestPoly(LevelEditor* Led)
 {
 	return Led->NearestPolygon;

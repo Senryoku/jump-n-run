@@ -264,6 +264,12 @@ void lvledPasteObject(LevelEditor* Led);
 **/
 void lvledUpdateNearestPoly(LevelEditor* Led);
 
+/** @brief Met à NULL le champ Nearest de LevelEditor
+ *
+ * @param Led LevelEditor
+ **/
+void lvledResetNearestPoly(LevelEditor* Led);
+
 /** @brief Retourne le polygon le plus proche de Mouse
  *
  * @param Led LevelEditor

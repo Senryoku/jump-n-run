@@ -189,6 +189,7 @@ void gridAddPolygonToCell(Grid* g, Polygon* p, unsigned int x, unsigned int y)
 	lstAdd(L, p);
 }
 
+
 void gridRemovePolygonFromCell(Grid* g, Polygon* p, unsigned int x, unsigned int y)
 {
 	List* L=gridGetCellList(g, x, y);
