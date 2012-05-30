@@ -14,7 +14,6 @@ void appInit(LevelEditorApp* App, SharedResources* SR)
 	App->ViewWidth = -1.f;
 	App->ViewHeight = -1.f;
 	App->SR = SR;
-	App->NearestPolygon = NULL;
 
 	appWindowInit(App);
 
@@ -186,7 +185,7 @@ void appRun(LevelEditorApp* App)
 	fpsInit(&fps);
 	while (App->Window.isOpen())
 	{
-		App->NearestPolygon = wdGetNearestPoly(lvlGetWorld(App->Led.Lvl), MouseX, MouseY);
+
 
 		//On verifie si on a pas mis le curseur sur la minimap
 		if (MouseWinX >= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl)))*MiniMapScale &&
@@ -274,7 +273,7 @@ void appRun(LevelEditorApp* App)
 
 						App->MenuUsed = 1;
 						 */
-						if (App->NearestPolygon != NULL)
+						if (lvledGetNearestPoly(&App->Led) != NULL)
 							appShowPolygonMenu(App);
 						else
 							appShowLevelMenu(App);
@@ -620,8 +619,8 @@ void appRun(LevelEditorApp* App)
 		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
 		glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
 
-		if (App->NearestPolygon != NULL)
-			glDrawPolygon(App->NearestPolygon);
+		if (lvledGetNearestPoly(&App->Led) != NULL)
+			glDrawPolygon(lvledGetNearestPoly(&App->Led));
 
 		//Minimap
 		glDrawMinimap(App->Led.Lvl, App->SR, App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -697,7 +696,7 @@ void appShowPolygonMenu(LevelEditorApp* App)
 		{
 			lvledDelPoly(&App->Led);
 			App->Led.Grab = NULL;
-			App->NearestPolygon = NULL;
+			lvledUpdateNearestPoly(&App->Led);
 			break;
 		}
 		default:

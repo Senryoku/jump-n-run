@@ -29,7 +29,6 @@ typedef struct
 	Menu M;
 	bool MenuUsed;
 	SharedResources* SR; ///< Resources Partagées
-	Polygon* NearestPolygon;
 } LevelEditorApp;
 
 /** @brief Initialisation de LelvelEditorApp

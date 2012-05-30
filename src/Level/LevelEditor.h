@@ -43,6 +43,8 @@ typedef struct
 	void (*rdDraw)(Rigid* R); ///< Fontcion d'affichage de Rigid
 	void (*polyDraw) (Polygon* P); ///< Fontcion d'affichage de Polygon
 	SharedResources* SR; ///< Accès aux resources partagées
+
+	Polygon* NearestPolygon;
 } LevelEditor;
 
 void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR);
@@ -255,6 +257,30 @@ void lvledCopyObject(LevelEditor* Led);
  * @param Led LevelEditor
 **/
 void lvledPasteObject(LevelEditor* Led);
+
+/** @brief Met à jour le champ Nearest de LevelEditor
+ *
+ * @param Led LevelEditor
+**/
+void lvledUpdateNearestPoly(LevelEditor* Led);
+
+/** @brief Retourne le polygon le plus proche de Mouse
+ *
+ * @param Led LevelEditor
+**/
+Polygon* lvledGetNearestPoly(LevelEditor* Led);
+
+/** @brief Retourne le rigid le plus proche de Mouse
+ *
+ * @param Led LevelEditor
+**/
+Rigid* lvledGetNearestRigid(LevelEditor* Led);
+
+/** @brief Retourne l'elastic le plus proche de Mouse
+ *
+ * @param Led LevelEditor
+**/
+Elastic* lvledGetNearestElastic(LevelEditor* Led);
 
 /** @}
 **/

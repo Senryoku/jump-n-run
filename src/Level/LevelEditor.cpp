@@ -29,6 +29,7 @@ void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR)
 	daInit(&Led->TexturesPath);
 
 	Led->objClipboard = NULL;
+	Led->NearestPolygon = NULL;
 }
 
 void lvledFree(LevelEditor *Led)
@@ -822,4 +823,29 @@ void lvledPasteObject(LevelEditor* Led)
 	wdAddVxFromPoly(lvlGetWorld(Led->Lvl), objGetShape(newObj));
 	wdAddPolygon(lvlGetWorld(Led->Lvl), objGetShape(newObj));
 	lvlAddObject(Led->Lvl, newObj);
+}
+
+void lvledUpdateNearestPoly(LevelEditor* Led)
+{
+	Led->NearestPolygon = wdGetNearestPoly(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
+}
+
+Polygon* lvledGetNearestPoly(LevelEditor* Led)
+{
+	return Led->NearestPolygon;
+}
+
+Vertex* lvledGetNearest(LevelEditor* Led)
+{
+	return wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
+}
+
+Rigid* lvledGetNearestRigid(LevelEditor* Led)
+{
+	return wdGetNearestRigid(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
+}
+
+Elastic* lvledGetNearestElastic(LevelEditor* Led)
+{
+	return wdGetNearestElastic(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
 }
