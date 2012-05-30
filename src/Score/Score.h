@@ -31,7 +31,7 @@ typedef struct
  * @param LvlMD5 MD5 du niveau
  * @param Time Temps (en centièmes de secondes) réalisé par le joueur
 **/
-Score* newScore(char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time);
+Score* newScore(const char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time);
 
 /** @brief Destructeur
  *
@@ -54,7 +54,7 @@ void scInit(Score* S, const char Player[255], const char LvlName[255], const cha
  * @param S Score à enregistrer
  * @return 0 si tout s'est bien passé
 **/
-Bool scSend(Score *S);
+Bool scSend(const Score *S);
 
 /** @brief Retourne un DynArr* rempli avec les scores du niveau demandé
  *

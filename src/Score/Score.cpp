@@ -1,6 +1,6 @@
 #include "Score.h"
 
-Score* newScore(char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time)
+Score* newScore(const char Player[255], const char LvlName[255], const char LvlMD5[255], unsigned int Time)
 {
 	Score* S = (Score*) malloc(sizeof(Score));
 	scInit(S, Player, LvlName, LvlMD5, Time);
@@ -21,7 +21,7 @@ void scInit(Score* S, const char Player[255], const char LvlName[255], const cha
 	S->Time = Time;
 }
 
-Bool scSend(Score* S)
+Bool scSend(const Score* S)
 {
 	sf::Http http;
 	http.setHost("http://maretverdant.free.fr");

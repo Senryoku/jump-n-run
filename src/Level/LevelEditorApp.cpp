@@ -63,7 +63,7 @@ void appWindowInit(LevelEditorApp* App)
 	App->Window.setKeyRepeatEnabled(0);
 	App->Window.setMouseCursorVisible(0);
 	/* On ne peut utiliser  qu'une des deux */
-	if(Cfg.VerticalSync == 1.f)
+	if(Cfg.VerticalSync != 0.f)
 		App->Window.setVerticalSyncEnabled(1);
 	else
 		App->Window.setFramerateLimit((unsigned int) Cfg.FPSLimit);
@@ -72,8 +72,12 @@ void appWindowInit(LevelEditorApp* App)
 	glEnable(GL_BLEND) ;
 	glEnable(GL_ALPHA_TEST) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
-
+	if(Cfg.AntiAliasing != 0.f)
+	{
+		glEnable(GL_LINE_SMOOTH);
+		glEnable(GL_POLYGON_SMOOTH);
+		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	}
 }
 
 
@@ -104,15 +108,6 @@ void appRun(LevelEditorApp* App)
 	mnAddItem(M, 1, "hooo", ITEM_LABEL, NULL, NULL);
 	mnAddItemMenuSwitcher(M, 1, "gooo2", 0);
 	mnSetHide(M, TRUE);
-
-//	int clothSize = 15;
-//	Cloth* C = newCloth(lvlGetWorld(App->Led.Lvl), CLOTH_RIGID, clothSize, clothSize, 10.f, 10.f);
-//	//clSetPointsMass(C, 0.01f);
-//	vxSetFixe(clGetVertex(C, 0, 0), 1);
-//	vxSetFixe(clGetVertex(C, clothSize-1, 0), 1);
-//	vxSetFixe(clGetVertex(C, 0, clothSize-1), 1);
-//	vxSetFixe(clGetVertex(C, clothSize-1, clothSize-1), 1);
-//	Texture Tx = glTexLoad("data/trollface.jpg");
 
 	//unsigned int CurrentMusic = 0;
 
@@ -655,8 +650,6 @@ void appRun(LevelEditorApp* App)
 		// Update the App->Window
 		App->Window.display();
 	}
-//	delCloth(C);
-//	glTexFree(Tx);
 	/*
 	delVertex(Neck);
 	delVertex(Base);

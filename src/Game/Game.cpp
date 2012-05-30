@@ -14,7 +14,7 @@ void gmInit(Game* G, SharedResources* SR)
 	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
 	/* On ne peut utiliser  qu'une des deux */
-	if(Cfg.VerticalSync == 1.f)
+	if(Cfg.VerticalSync != 0.f)
 		G->Window->setVerticalSyncEnabled(1);
 	else
 		G->Window->setFramerateLimit((unsigned int) Cfg.FPSLimit);
@@ -22,7 +22,12 @@ void gmInit(Game* G, SharedResources* SR)
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	if(Cfg.AntiAliasing == 1.f) glEnable(GL_LINE_SMOOTH);
+	if(Cfg.AntiAliasing != 0.f)
+	{
+		glEnable(GL_LINE_SMOOTH);
+		glEnable(GL_POLYGON_SMOOTH);
+		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	}
 
 	G->Lvl = newLevel(0.f, 0.f);
 

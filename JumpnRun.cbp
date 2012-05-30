@@ -170,14 +170,6 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 		</Unit>
-		<Unit filename="src\Objects\Cloth.cpp">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="src\Objects\Cloth.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
 		<Unit filename="src\Objects\Flag.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
