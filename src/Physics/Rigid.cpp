@@ -42,9 +42,9 @@ void rdResolve(Rigid* R)
 								précédentes, en effet, que faire si les points étaient déjà
 								superposés à la frame précédente ?... */
 
-	if(vxIsFixe(R->V2))
+	if(vxIsFixed(R->V2))
 		vxCorrectPosition(R->V1, vec2Prod(Vect, factor));
-	else if(vxIsFixe(R->V1))
+	else if(vxIsFixed(R->V1))
 		vxCorrectPosition(R->V2, vec2Prod(Vect, -factor));
 	else
 		vxCorrectPosition(R->V2, vec2Prod(Vect, -factor*0.5f)),

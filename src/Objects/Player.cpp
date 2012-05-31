@@ -32,7 +32,7 @@ void plInit(Player* P, World *W)
 
 	P->VxBalance = newVertex();
 	vxSetPosition(P->VxBalance, P->ULPos);
-	vxSetFixe(P->VxBalance, 1);
+	vxSetFixed(P->VxBalance, 1);
 	P->ElBalance = newElastic(P->VxBalance, P->VxUR, -1.f, 0.02f);
 
 	P->Shape = polyRectangle(P->VxUL, P->VxUR, P->VxDR, P->VxDL);
@@ -52,7 +52,7 @@ void plInit(Player* P, World *W)
 
 	unsigned int i=0;
 	for (i=0; i<polyGetVxCount(P->Shape); i++)
-		vxSetFixe(polyGetVertex(P->Shape, i), FALSE);
+		vxSetFixed(polyGetVertex(P->Shape, i), FALSE);
 
 	P->GrabR = NULL;
 	P->GrabL = NULL;

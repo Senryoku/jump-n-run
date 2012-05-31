@@ -6,9 +6,9 @@ void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR)
 
 	Led->SR = SR;
 
-	lstInit(&Led->tmpLstFixeFromV);
+	lstInit(&Led->tmpLstFixedFromV);
 	lstInit(&Led->tmpLstDynFromV);
-	lstInit(&Led->tmpLstFixe);
+	lstInit(&Led->tmpLstFixed);
 	lstInit(&Led->tmpLstDyn);
 
  	Led->Grab = NULL;
@@ -41,9 +41,9 @@ void lvledFree(LevelEditor *Led)
 		free((char*) daGet(&Led->TexturesPath, i));
 	}
 
-	if(lstCount(&Led->tmpLstFixeFromV) != 0) lstFree(&Led->tmpLstFixeFromV);
+	if(lstCount(&Led->tmpLstFixedFromV) != 0) lstFree(&Led->tmpLstFixedFromV);
 	if(lstCount(&Led->tmpLstDynFromV) != 0) lstFree(&Led->tmpLstDynFromV);
-	if(lstCount(&Led->tmpLstFixe) != 0) lstFree(&Led->tmpLstFixe);
+	if(lstCount(&Led->tmpLstFixed) != 0) lstFree(&Led->tmpLstFixed);
 	if(lstCount(&Led->tmpLstDyn) != 0) lstFree(&Led->tmpLstDyn);
 
 	daFree(&Led->TexturesPath);
@@ -228,16 +228,16 @@ void lvledSetSize(LevelEditor* Led, float Width, float Height)
 	gridSetCellSize(&W->CollisionGrid, CellSize);
 }
 
-void lvledToogleNearestFixe(LevelEditor *Led)
+void lvledToogleNearestFixed(LevelEditor *Led)
 {
 	Vertex* tmpVertex = wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
-	if(tmpVertex != NULL) vxSetFixe(tmpVertex, !vxIsFixe(tmpVertex));
+	if(tmpVertex != NULL) vxSetFixed(tmpVertex, !vxIsFixed(tmpVertex));
 }
 
-void lvledToogleNearestPolyFixe(LevelEditor *Led)
+void lvledToogleNearestPolyFixed(LevelEditor *Led)
 {
 	Polygon* tmpPoly = wdGetNearestPoly(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
-	if(tmpPoly != NULL) polySetFixe(tmpPoly, !polyIsFixe(tmpPoly));
+	if(tmpPoly != NULL) polySetFixed(tmpPoly, !polyIsFixed(tmpPoly));
 }
 
 void lvledSetMousePosition(LevelEditor *Led, float x, float y)
@@ -348,7 +348,7 @@ void lvledNewVertex(LevelEditor* Led)
 {
 	Vertex* tmpVertex = newVertex();
 	vxSetPosition(tmpVertex, vxGetPosition(Led->Mouse));
-	vxSetFixe(tmpVertex, 1);
+	vxSetFixed(tmpVertex, 1);
 	wdAddVertex(lvlGetWorld(Led->Lvl), tmpVertex);
 }
 
@@ -380,29 +380,29 @@ void lvledPolyFromVertexCreate(LevelEditor* Led)
 	lstFree(&Led->tmpLstDynFromV);
 }
 
-void lvledPolyFixeFromVertexInit(LevelEditor* Led)
+void lvledPolyFixedFromVertexInit(LevelEditor* Led)
 {
-	lstInit(&Led->tmpLstFixeFromV);
+	lstInit(&Led->tmpLstFixedFromV);
 }
 
-void lvledPolyFixeFromVertexAdd(LevelEditor* Led)
+void lvledPolyFixedFromVertexAdd(LevelEditor* Led)
 {
-	lstAdd(&Led->tmpLstFixeFromV, wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y));
+	lstAdd(&Led->tmpLstFixedFromV, wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y));
 }
 
-void lvledPolyFixeFromVertexCreate(LevelEditor* Led)
+void lvledPolyFixedFromVertexCreate(LevelEditor* Led)
 {
 	Polygon* tmpPoly;
-	if(lstCount(&Led->tmpLstFixeFromV) > 0)
+	if(lstCount(&Led->tmpLstFixedFromV) > 0)
 	{
-		wdAddVxFromList(lvlGetWorld(Led->Lvl), Led->tmpLstFixeFromV);
-		tmpPoly = newPolygonL(Led->tmpLstFixeFromV);
-		polySetFixe(tmpPoly, 1);
+		wdAddVxFromList(lvlGetWorld(Led->Lvl), Led->tmpLstFixedFromV);
+		tmpPoly = newPolygonL(Led->tmpLstFixedFromV);
+		polySetFixed(tmpPoly, 1);
 		wdAddPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
 		//TEMPORAIRE!!!
 		gridAddPolygonByBB(&lvlGetWorld(Led->Lvl)->CollisionGrid, tmpPoly);
 	}
-	lstFree(&Led->tmpLstFixeFromV);
+	lstFree(&Led->tmpLstFixedFromV);
 }
 
 void lvledNewPolyInit(LevelEditor *Led)
@@ -414,7 +414,7 @@ void lvledNewPolyAddV(LevelEditor *Led)
 {
 	Vertex* tmpVertex = newVertex();
 	vxSetPosition(tmpVertex, vxGetPosition(Led->Mouse));
-	vxSetFixe(tmpVertex, 1);
+	vxSetFixed(tmpVertex, 1);
 	lstAdd(&Led->tmpLstDyn, tmpVertex);
 }
 
@@ -438,38 +438,38 @@ void lvledNewPolyCreate(LevelEditor *Led)
 			printf("list size is %u\n", lstCount(&Led->tmpLstDyn));
 			tmpPoly = polyNGone(Led->tmpLstDyn);
 		}
-		polySetFixe(tmpPoly, 0);
+		polySetFixed(tmpPoly, 0);
 		wdAddPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
 	}
 	lstFree(&Led->tmpLstDyn);
 }
 
-void lvledNewPolyFixeInit(LevelEditor *Led)
+void lvledNewPolyFixedInit(LevelEditor *Led)
 {
-	lstInit(&Led->tmpLstFixe);
+	lstInit(&Led->tmpLstFixed);
 }
 
-void lvledNewPolyFixeAddV(LevelEditor *Led)
+void lvledNewPolyFixedAddV(LevelEditor *Led)
 {
 	Vertex* tmpVertex = newVertex();
 	vxSetPosition(tmpVertex, vxGetPosition(Led->Mouse));
-	vxSetFixe(tmpVertex, 1);
-	lstAdd(&Led->tmpLstFixe, tmpVertex);
+	vxSetFixed(tmpVertex, 1);
+	lstAdd(&Led->tmpLstFixed, tmpVertex);
 }
 
-void lvledNewPolyFixeCreate(LevelEditor *Led)
+void lvledNewPolyFixedCreate(LevelEditor *Led)
 {
 	Polygon* tmpPoly;
-	if(lstCount(&Led->tmpLstFixe) > 0)
+	if(lstCount(&Led->tmpLstFixed) > 0)
 	{
-		wdAddVxFromList(lvlGetWorld(Led->Lvl), Led->tmpLstFixe);
-		tmpPoly = newPolygonL(Led->tmpLstFixe);
-		polySetFixe(tmpPoly, 1);
+		wdAddVxFromList(lvlGetWorld(Led->Lvl), Led->tmpLstFixed);
+		tmpPoly = newPolygonL(Led->tmpLstFixed);
+		polySetFixed(tmpPoly, 1);
 		wdAddPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
 		//TEMPORAIRE!!!
 		gridAddPolygonByBB(&lvlGetWorld(Led->Lvl)->CollisionGrid, tmpPoly);
 	}
-	lstFree(&Led->tmpLstFixe);
+	lstFree(&Led->tmpLstFixed);
 }
 
 void lvledNewElasticAddV(LevelEditor *Led)
@@ -699,7 +699,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		if (!lstHaveElem(LCenter, V))
 		{
 			fprintf(f, "%u #Vertex\n", o_vertex);
-			fprintf(f, "%f, %f ; %f ; %i\n", vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), (int) vxIsFixe(V));
+			fprintf(f, "%f, %f ; %f ; %i\n", vxGetPosition(V).x, vxGetPosition(V).y, vxGetMass(V), (int) vxIsFixed(V));
 			daAdd(Vx, V);
 		}
 
@@ -717,7 +717,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		daAdd(Poly, p); //on écrit les polygones dans la dynarr pour leur associer une ID
 		unsigned int nVertex = daGetSize(&p->Vertices), i;
 		//on écrit un identifiant pour dire qu'on lit un polygone
-		fprintf(f, "%u %u %i #Polygon\n", o_poly, nVertex, (int) polyIsFixe(p));
+		fprintf(f, "%u %u %i #Polygon\n", o_poly, nVertex, (int) polyIsFixed(p));
 		//On écrit les vertex du polygone
 		for (i=0; i<nVertex; i++)
 		{

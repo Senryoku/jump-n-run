@@ -54,7 +54,7 @@ List* gridGetPositionList(const Grid* g, float x,float y)
 	y = MAX(0.f, MIN(g->VCells*g->CellHeight, y));
 	i = x/g->CellWidth;
 	j = y/g->CellHeight;
-	
+
 	return gridGetCellList(g, i, j);
 }
 
@@ -273,7 +273,7 @@ void gridRemovePolygons(Grid* g)
 			Node* it = lstFirst(L);
 			while(!nodeEnd(it))
 			{
-				if (!polyIsFixe((Polygon*)nodeGetData(it)))
+				if (!polyIsFixed((Polygon*)nodeGetData(it)))
 					lstRem(L, it), countr++;
 				else
 					count++;

@@ -121,10 +121,10 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		strcpy(Name, tmp);
 		tmp = strtok(NULL, "/");
 	}
-	
+
 	strcpy(Lvl->MD5, md5FromFile(File).c_str());
 	printf("MD5 : %s\n", Lvl->MD5);
-	
+
 
 	FILE* f;
 	f=fopen(File, "r");
@@ -186,7 +186,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	else sscanf(read, "%f, %f ; %f, %f", &Lvl->Spawn.x, &Lvl->Spawn.y, &Lvl->Goal.x, &Lvl->Goal.y);
 
 	unsigned int item, nVertex, i;
-	Bool polyFixed; int booly;
+	Bool polyFixedd; int booly;
 
 	// Chargement des textures de fonds
 	// Si le fichier n'existe pas (ou que la ligne est vide)
@@ -219,9 +219,9 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	while (fgets(read, 300, f)!=NULL)
 	{
 		item=o_end;
-		polyFixed=FALSE;
+		polyFixedd=FALSE;
 		sscanf(read, "%u %u %i #\n", &item, &nVertex, &booly);
-		polyFixed = (Bool)booly;
+		polyFixedd = (Bool)booly;
 
 		switch (item)
 		{
@@ -246,9 +246,9 @@ Bool lvlLoad(Level* Lvl, const char* File)
 						p = newPolygon(2, V[0], V[1]);
 					else
 						p = newPolygon(3, V[0], V[1], V[2]);
-					if (polyFixed)
+					if (polyFixedd)
 					{
-						polySetFixe(p, TRUE);
+						polySetFixed(p, TRUE);
 						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p); ///@todo accesseur
 					}
 
@@ -271,11 +271,11 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					V3 = (Vertex*)daGet(Vx, ID3);
 					V4 = (Vertex*)daGet(Vx, ID4);
 					Polygon* p;
-					if (!polyFixed)
+					if (!polyFixedd)
 						p = polyRectangle(V1, V2, V3, V4);
 					else
 					{
-						p = newPolygon(4, V1, V2, V3, V4), polySetFixe(p, TRUE);
+						p = newPolygon(4, V1, V2, V3, V4), polySetFixed(p, TRUE);
 						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p);
 					}
 
@@ -295,11 +295,11 @@ Bool lvlLoad(Level* Lvl, const char* File)
 						lstAdd(LPoly, (Vertex*)daGet(Vx, ID));
 					}
 					Polygon* p;
-					if (!polyFixed)
+					if (!polyFixedd)
 						p = polyNGone(*LPoly);
 					else
 					{
-						p = newPolygonL(*LPoly), polySetFixe(p, TRUE);
+						p = newPolygonL(*LPoly), polySetFixed(p, TRUE);
 						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p);
 					}
 
@@ -350,7 +350,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
  				wdAddVertex(lvlGetWorld(Lvl), V);
 				vxSetPosition(V, vec2(x, y));
 				vxSetMass(V, mass);
-				vxSetFixe(V, fixe);
+				vxSetFixed(V, fixe);
 				daAdd(Vx, V);
 
 
@@ -425,7 +425,7 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 	if (!Paused)
 	{
 		/* Mise à jour du World */
-		//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
+		//if(Lvl->P1 != NULL) vxSetFixed(Lvl->P1->Stable, 0);
 
 		wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
 		wdResolveVextex(lvlGetWorld(Lvl));
@@ -440,9 +440,9 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 		for(i = 0; i < 4; i++) /* Augmenter Imax pour augmenter la précision */
 		{
 			wdResolveRigid(lvlGetWorld(Lvl));
-			//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 1);
+			//if(Lvl->P1 != NULL) vxSetFixed(Lvl->P1->Stable, 1);
 			wdResolveElastic(lvlGetWorld(Lvl));
-			//if(Lvl->P1 != NULL) vxSetFixe(Lvl->P1->Stable, 0);
+			//if(Lvl->P1 != NULL) vxSetFixed(Lvl->P1->Stable, 0);
 			wdHandleCollision(lvlGetWorld(Lvl));
 
 			if (Lvl->P1 != NULL)

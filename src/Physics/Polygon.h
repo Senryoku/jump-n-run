@@ -39,7 +39,7 @@ typedef struct
 	DynArr Vertices; /**< Vertices composant le polygon **/
 	DynArr Rigids; /**< Limites du polygon, générées automatiquement **/
 	DynArr InternalRigids; /**< Contraintes internes **/
-	Bool Fixe; /**< Indique que tout les Vertices sont fixes **/
+	Bool Fixed; /**< Indique que tout les Vertices sont fixes **/
 	Vertex* Center; /**< Centre, utile pour les polygones de plus de 4 côtés **/
 	GridBBox GridPos; /**<dernier position du polygone dans la grille depuis la mise à jour **/
 	Bool Collided; /**<Détermine si le polygone a déjà collisioné et si on doit dont le fqire collisioner**/
@@ -227,19 +227,19 @@ Vec2 polyComputeCenter(const Polygon* P);
 **/
 void polyResolve(Polygon* P);
 
-/** @brief Accesseur de Fixe
+/** @brief Accesseur de Fixed
  *
  * @param P Polygon
 **/
-Bool polyIsFixe(const Polygon* P);
+Bool polyIsFixed(const Polygon* P);
 
-/** @brief Mutateur de Fixe
+/** @brief Mutateur de Fixed
  *
  * Modifie également l'état de TOUT les vertices de P
  * @param P Polygon à modifier
- * @param B Nouvelle valeur pour Fixe
+ * @param B Nouvelle valeur pour Fixed
 **/
-void polySetFixe(Polygon* P, Bool B);
+void polySetFixed(Polygon* P, Bool B);
 
 /** @brief Accesseur de Center (Contraintes internes)
 **/

@@ -214,7 +214,7 @@ void wdHandleCollision(World* W)
 
         while(!nodeEnd(it))
         {
-			if(0)// (polyIsFixe((Polygon*) nodeGetData(it))) //On saute les collisions si le polygone est fixe
+			if(0)// (polyIsFixed((Polygon*) nodeGetData(it))) //On saute les collisions si le polygone est fixe
 			{
 				it=nodeGetNext(it);
 				continue;
@@ -492,7 +492,7 @@ void wdUpdateGrid(World *W, Bool Force)
 	Node* it = lstFirst(&W->Polygons);
 	while(!nodeEnd(it))
 	{
-		if (Force || !polyIsFixe((Polygon*)nodeGetData(it)))
+		if (Force || !polyIsFixed((Polygon*)nodeGetData(it)))
 			gridUpdatePolygonPositionByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it));
 
 		it=nodeGetNext(it);
@@ -512,7 +512,7 @@ void wdDraw(World* W, void (*vxDraw)(Vertex* V, float R, float G, float B, float
 		it = lstFirst(&W->Vertices);
 		while(!nodeEnd(it))
 		{
-			if(vxIsFixe((Vertex*) nodeGetData(it)))
+			if(vxIsFixed((Vertex*) nodeGetData(it)))
 				(*vxDraw)((Vertex*) nodeGetData(it), 1.f, 0.f, 0.f, 0.3f);
 			else
 				(*vxDraw)((Vertex*) nodeGetData(it), 0.f, 1.f, 0.f, 0.3f);

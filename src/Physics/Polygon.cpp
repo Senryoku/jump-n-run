@@ -15,7 +15,7 @@ Polygon* newPolygon(unsigned int nbVx, ...)
 	daReserve(&newPoly->Rigids, nbVx);
 	daReserve(&newPoly->Vertices, nbVx);
 	newPoly->Center = NULL;
-	newPoly->Fixe = FALSE;
+	newPoly->Fixed = FALSE;
 	newPoly->GridPos.Valid = FALSE;
 	newPoly->Collided = FALSE;
 
@@ -47,7 +47,7 @@ Polygon* newPolygonL(List L)
 	daReserve(&newPoly->Rigids, nbVx);
 	daReserve(&newPoly->Vertices, nbVx);
 	newPoly->Center = NULL;
-	newPoly->Fixe = FALSE;
+	newPoly->Fixed = FALSE;
 	newPoly->GridPos.Valid = FALSE;
 	newPoly->Collided = FALSE;
 
@@ -106,7 +106,7 @@ Polygon* cpyPolygon(Polygon* P)
 		}
 	}
 
-	newP->Fixe = polyIsFixe(P);
+	newP->Fixed = polyIsFixed(P);
 
 	delList(vxList);
 
@@ -125,7 +125,7 @@ void polyInit(Polygon* P, unsigned int nbVx, ...)
 	daReserve(&P->Rigids, nbVx);
 	daReserve(&P->Vertices, nbVx);
 	P->Center = NULL;
-	P->Fixe = FALSE;
+	P->Fixed = FALSE;
 	P->GridPos.Valid = FALSE;
 	P->Collided = FALSE;
 
@@ -417,14 +417,14 @@ Bool polyIsInside(const Polygon* P, Vec2 VPos)
 		Edge = (Rigid*)daGet(&P->Rigids, i);
 		/* On évite les faces "nulles" */
 		if(vec2Equal(rdVector(Edge), vec2(0.f, 0.f))) continue;
-		
+
 		/* On calcule l'axe sur lequel projeter (Normal à la face) */
 		Axis = vec2Normalized(vec2Ortho(rdVector(Edge)));
-		
+
 		/* Projection */
 		polyProject(P, &MinP, &MaxP, Axis);
 		ProjectV = vec2Dot(VPos, Axis);
-		
+
 		/* Si la projection du point n'est pas dans l'intervalle
 		 défini par le polygone, pas de collision */
 		if(ProjectV < MinP || ProjectV > MaxP)
@@ -447,7 +447,7 @@ void polyResolve(Polygon* P)
 {
 	unsigned int i;
 	/* Pas besoin si le polygon est fixe */
-	if(polyIsFixe(P)) return;
+	if(polyIsFixed(P)) return;
 	for(i = 0; i < daGetSize(&P->Rigids); i++)
 		rdResolve((Rigid*)daGet(&P->Rigids, i));
 	for(i = 0; i < daGetSize(&P->InternalRigids); i++)
@@ -464,9 +464,9 @@ void polySetCollided(Polygon* P, Bool Collided)
 	P->Collided=Collided;
 }
 
-Bool polyIsFixe(const Polygon* P)
+Bool polyIsFixed(const Polygon* P)
 {
-	return P->Fixe;
+	return P->Fixed;
 }
 
 Vertex* polyGetCenter(const Polygon* P)
@@ -514,15 +514,15 @@ const DynArr* polyGetInternalRigidDA(const Polygon* P)
 	return &P->InternalRigids;
 }
 
-void polySetFixe(Polygon* P, Bool B)
+void polySetFixed(Polygon* P, Bool B)
 {
 	unsigned int i;
 	for (i = 0; i < daGetSize(&P->Vertices); i++)
 	{
-		vxSetFixe((Vertex*)daGet(&P->Vertices, i), B);
+		vxSetFixed((Vertex*)daGet(&P->Vertices, i), B);
 	}
-	if(polyGetCenter(P) != NULL) vxSetFixe(polyGetCenter(P), B);
-	P->Fixe = B;
+	if(polyGetCenter(P) != NULL) vxSetFixed(polyGetCenter(P), B);
+	P->Fixed = B;
 }
 
 void polyApplyForce(Polygon* P, Vec2 Force, Bool B)

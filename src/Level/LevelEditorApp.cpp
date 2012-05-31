@@ -5,6 +5,9 @@
 // Fonctions d'usage interne uniquement
 void appShowEscapeMenu(LevelEditorApp* App);
 void appShowLevelMenu(LevelEditorApp* App);
+void appShowVertexMenu(LevelEditorApp* App);
+void appShowRigidMenu(LevelEditorApp* App);
+void appShowElasticMenu(LevelEditorApp* App);
 void appShowPolygonMenu(LevelEditorApp* App);
 
 void appInit(LevelEditorApp* App, SharedResources* SR)
@@ -190,7 +193,7 @@ void appRun(LevelEditorApp* App)
 			InsideMiniMap = TRUE;
 		else
 			InsideMiniMap = FALSE;
-		
+
 		lvledUpdateNearestPoly(&App->Led);
 
 		sf::Event event;
@@ -217,9 +220,9 @@ void appRun(LevelEditorApp* App)
 				switch (event.mouseButton.button)
 				{
 					case sf::Mouse::Left :
-						/* Création d'un polygone Fixe */
+						/* Création d'un polygone Fixed */
 						if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
-							lvledNewPolyFixeAddV(&App->Led);
+							lvledNewPolyFixedAddV(&App->Led);
 						/* Création d'un polygone Dynamique */
 						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
 							lvledNewPolyAddV(&App->Led);
@@ -256,24 +259,15 @@ void appRun(LevelEditorApp* App)
 						}
 						break;
 					case sf::Mouse::Right :
-						/** @todo Si une autre touche est appuyé avec le clic droit
-						 * (ex : E pour Elastic), faire appel à wdGetNearestElastic
-						 * et faire apparaître un menu pour l'édition de cet Elastic **/
 						//lvledGrabEl(&App->Led);
-
-						/*if(App->MenuUsed) mnFree(&App->M);
-
-						mnInit(&App->M);
-						mnSetItemSelectedZoomFactor(&App->M, 1.f);
-						mnSetItemNormalZoomFactor(&App->M, 0.75f);
-						mnAddItem(&App->M, 0, "Input a real", ITEM_INPUT_VALUE, NULL, NULL);
-
-						App->MenuUsed = 1;
-						 */
 						if (lvledGetNearestPoly(&App->Led) != NULL)
 							appShowPolygonMenu(App);
-						else
+						else {
 							appShowLevelMenu(App);
+							//appShowVertexMenu(App);
+							//appShowRigidMenu(App);
+							//appShowElasticMenu(App);
+						}
 						break;
 					case sf::Mouse::Middle :
 						MouseDragX = MouseX;
@@ -367,7 +361,7 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Keyboard::P :
 					case sf::Keyboard::Num1 :
-						lvledNewPolyFixeInit(&App->Led);
+						lvledNewPolyFixedInit(&App->Led);
 						break;
 					case sf::Keyboard::O :
 					case sf::Keyboard::Num2 :
@@ -399,13 +393,13 @@ void appRun(LevelEditorApp* App)
 						DispFore = !DispFore;
 						break;
 					case sf::Keyboard::F :
-						lvledToogleNearestFixe(&App->Led);
+						lvledToogleNearestFixed(&App->Led);
 						break;
 					case sf::Keyboard::C :
 						if (event.key.control)
 							lvledCopyObject(&App->Led);
 						else
-							lvledToogleNearestPolyFixe(&App->Led);
+							lvledToogleNearestPolyFixed(&App->Led);
 						break;
 					case sf::Keyboard::V :
 						if (event.key.control)
@@ -428,7 +422,7 @@ void appRun(LevelEditorApp* App)
 						//[ANIM_FREE?] [x] [y] #Part of the body
 						V = Neck;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "Neck");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "Neck");
 
 						Pos = vec2Prod(vec2Add(vec2Add(vxGetPosition(HeadLeft), vxGetPosition(HeadRight)), vxGetPosition(Neck)), 1.f/3.f);
 						Pos = vec2Sub(Pos, vxGetPosition(Base));
@@ -436,28 +430,28 @@ void appRun(LevelEditorApp* App)
 
 						V = LeftArm1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "LeftArm1");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "LeftArm1");
 						V = LeftArm2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "LeftArm2");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "LeftArm2");
 						V = RightArm1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "RightArm1");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "RightArm1");
 						V = RightArm2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "RightArm2");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "RightArm2");
 						V = LeftLeg1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "LeftLeg1");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "LeftLeg1");
 						V = LeftLeg2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "LeftLeg2");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "LeftLeg2");
 						V = RightLeg1;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "RightLeg1");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "RightLeg1");
 						V = RightLeg2;
 						Pos = vec2Sub(vxGetPosition(V), vxGetPosition(Base));
-						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixe(V), Pos.x, (unsigned int)vxIsFixe(V), Pos.y, "RightLeg2");
+						fprintf(f, "%u %f %u %f #%s\n", (unsigned int)vxIsFixed(V), Pos.x, (unsigned int)vxIsFixed(V), Pos.y, "RightLeg2");
 
 						fclose(f);
 
@@ -469,42 +463,42 @@ void appRun(LevelEditorApp* App)
 
 						V1 = Neck; V2 = Base;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "Neck");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "Neck");
 
 						V1 = HeadLeft; V2 = HeadRight;
 						Pos = vec2Prod(vec2Add(vec2Add(vxGetPosition(HeadLeft), vxGetPosition(HeadRight)), vxGetPosition(Neck)), 1.f/3.f);
 						Pos = vec2Sub(Pos, vxGetPosition(Neck));
 						Angle = vec2Angle(Pos);
-						fprintf(f, "%u %f #%s\n", (unsigned int)(vxIsFixe(V1) || !vxIsFixe(V2)), RAD2DEG(Angle), "Head");
+						fprintf(f, "%u %f #%s\n", (unsigned int)(vxIsFixed(V1) || !vxIsFixed(V2)), RAD2DEG(Angle), "Head");
 
 						V1 = LeftArm1; V2 = Neck;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "LeftArm1");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "LeftArm1");
 
 						V1 = LeftArm2; V2 = LeftArm1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "LeftArm2");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "LeftArm2");
 
 						V1 = RightArm1; V2 = Neck;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "RightArm1");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "RightArm1");
 						V1 = RightArm2; V2 = RightArm1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "RightArm2");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "RightArm2");
 
 						V1 = LeftLeg1; V2 = Base;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "LeftLeg1");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "LeftLeg1");
 						V1 = LeftLeg2; V2 = LeftLeg1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "LeftLeg2");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "LeftLeg2");
 
 						V1 = RightLeg1; V2 = Base;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "RightLeg1");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "RightLeg1");
 						V1 = RightLeg2; V2 = RightLeg1;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
-						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixe(V1), RAD2DEG(Angle), "RightLeg2");
+						fprintf(f, "%u %f #%s\n", (unsigned int)vxIsFixed(V1), RAD2DEG(Angle), "RightLeg2");
 
 						fclose(f);
 						break;
@@ -530,7 +524,7 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Keyboard::P :
 					case sf::Keyboard::Num1 :
-						lvledNewPolyFixeCreate(&App->Led);
+						lvledNewPolyFixedCreate(&App->Led);
 						break;
 					case sf::Keyboard::Num3 :
 						lvledNewElasticCreate(&App->Led);
@@ -617,7 +611,7 @@ void appRun(LevelEditorApp* App)
 		if(DispFore) lvlDisplayFG(App->Led.Lvl, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
-		glDrawPolyFromList(&App->Led.tmpLstFixe, vec2(MouseX, MouseY));
+		glDrawPolyFromList(&App->Led.tmpLstFixed, vec2(MouseX, MouseY));
 
 		if (lvledGetNearestPoly(&App->Led) != NULL)
 			glDrawPolygon(lvledGetNearestPoly(&App->Led));
@@ -680,10 +674,102 @@ void appSetWorkingPath(LevelEditorApp* App, const char* Path)
 	strcpy(App->WorkingPath, Path);
 }
 
+void appShowVertexMenu(LevelEditorApp* App)
+{
+	Vertex* V = lvledGetNearest(&App->Led);
+	if(V == NULL) return;
+
+	ItemID IID;
+	msgCreateMenu(shMessageManager(App->SR), 4);
+	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
+	msgAddItem(shMessageManager(App->SR), "Mass", ITEM_INPUT_VALUE, NULL, &V->Mass);
+	msgAddCloseItem(shMessageManager(App->SR), "Delete this Vertex");
+	msgAddCloseItem(shMessageManager(App->SR), "Return");
+
+	IID = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+
+	switch (IID) {
+		case 0:
+			lvledToogleNearestFixed(&App->Led);
+			break;
+		case 1:
+			break;
+		case 2:
+			lvledDelVertex(&App->Led);
+			App->Led.Grab = NULL;
+			V = NULL;
+			break;
+		default:
+			break;
+	}
+}
+
+void appShowRigidMenu(LevelEditorApp* App)
+{
+	Rigid* R = lvledGetNearestRigid(&App->Led);
+	if(R == NULL) return;
+
+	ItemID IID;
+	msgCreateMenu(shMessageManager(App->SR), 3);
+	msgAddItem(shMessageManager(App->SR), "Length", ITEM_INPUT_VALUE, NULL, &R->Length);
+	msgAddCloseItem(shMessageManager(App->SR), "Delete this Rigid");
+	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+
+	IID = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+
+	switch (IID) {
+		case 0:
+			break;
+		case 1:
+		{
+			lvledDelRigid(&App->Led);
+			R = NULL;
+			break;
+		}
+		case 2:
+			break;
+		default:
+			break;
+	}
+}
+
+void appShowElasticMenu(LevelEditorApp* App)
+{
+	Elastic* E = lvledGetNearestElastic(&App->Led);
+	if(E == NULL) return;
+
+	ItemID IID;
+	msgCreateMenu(shMessageManager(App->SR), 4);
+	msgAddItem(shMessageManager(App->SR), "Length", ITEM_INPUT_VALUE, NULL, &E->Length);
+	msgAddItem(shMessageManager(App->SR), "Spring", ITEM_INPUT_VALUE, NULL, &E->Spring);
+	msgAddCloseItem(shMessageManager(App->SR), "Delete this Elastic");
+	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+
+	IID = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+
+	switch (IID) {
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+		{
+			lvledDelElastic(&App->Led);
+			E = NULL;
+			break;
+		}
+		case 3:
+			break;
+		default:
+			break;
+	}
+}
+
 void appShowPolygonMenu(LevelEditorApp* App)
 {
 	ItemID i;
-	msgCreateMenu(shMessageManager(App->SR), 2);
+	msgCreateMenu(shMessageManager(App->SR), 3);
+	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon");
 	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
 
@@ -691,12 +777,17 @@ void appShowPolygonMenu(LevelEditorApp* App)
 
 	switch (i) {
 		case 0:
+			lvledToogleNearestPolyFixed(&App->Led);
+			break;
+		case 1:
 		{
 			lvledDelPoly(&App->Led);
 			App->Led.Grab = NULL;
 			lvledUpdateNearestPoly(&App->Led);
 			break;
 		}
+		case 2:
+			break;
 		default:
 			break;
 	}
@@ -706,8 +797,10 @@ void appShowLevelMenu(LevelEditorApp* App)
 {
 	ItemID i;
 	ItemID IID;
-	msgCreateMenu(shMessageManager(App->SR), 6);
+	msgCreateMenu(shMessageManager(App->SR), 8);
 	msgAddCloseItem(shMessageManager(App->SR), "Add a Box (B)");
+	msgAddCloseItem(shMessageManager(App->SR), "Place Spawning Point Here (J)");
+	msgAddCloseItem(shMessageManager(App->SR), "Place Goal Here (K)");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Background");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Layer1");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Layer2");
@@ -722,7 +815,13 @@ void appShowLevelMenu(LevelEditorApp* App)
 			lvledCreateBox(&App->Led, 100);
 			break;
 		}
-		case 1:
+		case 1 :
+			lvledSetSpawn(&App->Led);
+			break;
+		case 2 :
+			lvledSetGoal(&App->Led);
+			break;
+		case 3:
 			msgCreateMessage(shMessageManager(App->SR), "Select Background", 3);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
@@ -730,7 +829,7 @@ void appShowLevelMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.backPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		case 2:
+		case 4:
 			msgCreateMessage(shMessageManager(App->SR), "Select Layer1", 3);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
@@ -738,7 +837,7 @@ void appShowLevelMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.layer1Path, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		case 3:
+		case 5:
 			msgCreateMessage(shMessageManager(App->SR), "Select Layer2", 3);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
@@ -746,7 +845,7 @@ void appShowLevelMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.layer2Path, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		case 4:
+		case 6:
 			msgCreateMessage(shMessageManager(App->SR), "Select Foreground", 3);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);

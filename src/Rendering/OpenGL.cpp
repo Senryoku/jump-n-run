@@ -69,7 +69,7 @@ void glDrawPolygon(Polygon* P)
 		glDrawRigid((Rigid*)daGet(&P->InternalRigids, i));
 	}
 
-	if(polyIsFixe(P)) glColor4f(1.f, 0.f, 0.f, 1.f); else glColor4f(0.f, 0.f, 1.f, 1.f);
+	if(polyIsFixed(P)) glColor4f(1.f, 0.f, 0.f, 1.f); else glColor4f(0.f, 0.f, 1.f, 1.f);
 	Vec2 Center = polyComputeCenter(P);
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex2f(Center.x, Center.y);

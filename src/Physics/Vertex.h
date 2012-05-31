@@ -20,7 +20,7 @@ typedef struct
 	Vec2 OldPos; /**< Position précédente (Frame) **/
 	Vec2 Acceleration; /**< Valeur de l'accélération pour la frame courante **/
 	float Mass; /**< Mass (Défaut = 1) **/
-	Bool Fixe; /**< Défini si le Vertex est Fixe, si vrai, seul un appel direct à vxSetPosition peut modifier sa position **/
+	Bool Fixed; /**< Défini si le Vertex est Fixed, si vrai, seul un appel direct à vxSetPosition peut modifier sa position **/
 } Vertex;
 
 /** @brief Constructeur
@@ -76,12 +76,12 @@ Vec2 vxGetAcceleration(const Vertex* V);
 **/
 float vxGetMass(const Vertex* V);
 
-/** @brief Accesseur de Fixe
+/** @brief Accesseur de Fixed
  *
  * @param[in] V Pointeur vers le vecteur considéré
  * @return true si le point est fixe
 **/
-Bool vxIsFixe(const Vertex* V);
+Bool vxIsFixed(const Vertex* V);
 
 /** @brief Mutateur de la position
  *
@@ -151,12 +151,12 @@ void vxCorrectSpeed(Vertex* V, Vec2 addSpeed);
 **/
 void vxSetMass(Vertex* V, float newMass);
 
-/** @brief Mutateur de Fixe
+/** @brief Mutateur de Fixed
  *
  * @param[in,out] V Pointeur vers le vecteur à modifier
- * @param[in] B Nouvelle valeur de Fixe
+ * @param[in] B Nouvelle valeur de Fixed
 **/
-void vxSetFixe(Vertex* V, Bool B);
+void vxSetFixed(Vertex* V, Bool B);
 
 /** @brief Mutateur de l'accélération
  *

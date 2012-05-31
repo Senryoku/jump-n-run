@@ -20,7 +20,7 @@ Vertex* cpyVertex(const Vertex* V)
 	newV->OldPos = vxGetOldPos(V);
 	newV->Acceleration = vxGetAcceleration(V);
 	newV->Mass = vxGetMass(V);
-	newV->Fixe = vxIsFixe(V);
+	newV->Fixed = vxIsFixed(V);
 	return newV;
 }
 
@@ -36,7 +36,7 @@ void vxInit(Vertex* V)
 	V->OldPos = vec2Null;
 	V->Acceleration = vec2Null;
 	V->Mass = 1.f;
-	V->Fixe = 0;
+	V->Fixed = 0;
 }
 
 /* Accesseurs */
@@ -44,7 +44,7 @@ Vec2 vxGetPosition(const Vertex* V) { return V->Position; }
 Vec2 vxGetOldPos(const Vertex* V) { return V->OldPos; }
 Vec2 vxGetAcceleration(const Vertex* V) { return V->Acceleration; }
 float vxGetMass(const Vertex* V) { return V->Mass; }
-Bool vxIsFixe(const Vertex* V) { return V->Fixe; }
+Bool vxIsFixed(const Vertex* V) { return V->Fixed; }
 
 
 void vxSetPosition(Vertex* V, Vec2 newPos)
@@ -81,7 +81,7 @@ void vxSetY(Vertex* V, float y)
 
 void vxCorrectPosition(Vertex* V, Vec2 addPos)
 {
-	if(V->Fixe) return;
+	if(V->Fixed) return;
 	V->Position = vec2Add(V->Position, addPos);
 }
 
@@ -106,20 +106,20 @@ void vxSetAcceleration(Vertex* V, Vec2 newAcc)
 	vec2Cp(&(V->Acceleration), newAcc);
 }
 
-void vxSetFixe(Vertex* V, Bool B)
+void vxSetFixed(Vertex* V, Bool B)
 {
-	V->Fixe = B;
+	V->Fixed = B;
 }
 
 void vxApplyForce(Vertex* V, Vec2 addForce, Bool Mass)
 {
-	if(vxIsFixe(V) || vec2SqLength(addForce) < 0.00001f) return;
+	if(vxIsFixed(V) || vec2SqLength(addForce) < 0.00001f) return;
 	V->Acceleration = vec2Add(V->Acceleration, (Mass)? vec2Prod(addForce, V->Mass) : addForce);
 }
 
 void vxResolve(Vertex* V, float prevdt, float dt)
 {
-	if(vxIsFixe(V)) return;
+	if(vxIsFixed(V)) return;
 	Vec2 tmp = V->Position;
 
 	V->Position = vec2Add(V->Position, vec2Add(vec2Prod(vec2Sub(V->Position, V->OldPos), ((dt/prevdt)*0.999f)), vec2Prod(V->Acceleration, dt*dt)));

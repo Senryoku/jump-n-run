@@ -24,7 +24,7 @@ void flInit(Flag* F, float cellH, float cellW, unsigned int H, unsigned int W, T
 	}
 	for(unsigned int i = 0; i < H; i++)
 	{
-		vxSetFixe((Vertex*) daGet(&F->Vertices, i*W), 1);
+		vxSetFixed((Vertex*) daGet(&F->Vertices, i*W), 1);
 	}
 	for(unsigned int i = 0; i < H; i++)
 	{
