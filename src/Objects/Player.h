@@ -61,6 +61,8 @@ typedef struct SPlayer
 	unsigned int State;
 	
 	Bool IsFree; ///< c'est un ragdoll ou pas
+	AnimPositions Positions;
+	AnimAngles Angles;
 } Player;
 
 /** @brief Constructeur
@@ -206,6 +208,10 @@ void plCreateRigids(Player* P, World* W);
  @param y position y
  */
 void plSetPosition(Player* P, float x, float y);
+
+AnimAngles* plGetAnimAnglesState(Player* P);
+
+AnimPositions* plGetAnimPositionsState(Player* P);
 
 /** @}
 **/

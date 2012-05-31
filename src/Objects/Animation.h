@@ -61,25 +61,29 @@ enum BodyParts {
 
 typedef struct {
 	Vec2 Positions[10];
+	unsigned int CurrentState;
+	Bool Ended;
+	float Spd[20];
 } AnimPositions;
 
 typedef struct {
 	float Angles[10];
+	unsigned int CurrentState;
+	Bool Ended;
+	float Spd[10];
 } AnimAngles;
+
+void animAnglesStatesInit(AnimAngles* ang);
+void animPositionsStatesInit(AnimPositions* pos);
 
 struct SPlayer;
 
 typedef struct {
 	AnimType Type;
 	AnimTriggers Triggers;
-	AnimPositions Positions;
-	AnimAngles Angles;
 	unsigned char TriggerCount;
 	DynArr* States;
-	Bool Ended;
 	Bool Repeat;
-	unsigned int CurrentState;
-	float Spd[20];
 	float Friction;
 	float Force;
 	float Diff; /**< Différence absolue qui permet de savoir quand on passe à l'animation suivante **/
@@ -118,7 +122,7 @@ void aniCountTriggers(Animation* A);
 
 void aniUpdate(Animation* A, SPlayer* P, float Step);
 
-void aniUpdateForCurrentState(Animation* A);
+void aniUpdateForCurrentState(Animation* A, SPlayer* P);
 
 void aniSetForce(Animation* A, float Force);
 

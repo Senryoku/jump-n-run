@@ -42,6 +42,9 @@ void plInit(Player* P, World *W)
 	P->GroundAngle = M_PI_2;
 
 	P->Dir = DIR_RIGHT;
+	
+	animAnglesStatesInit(&P->Angles);
+	animPositionsStatesInit(&P->Positions);
 
 	/*
 	vxSetPosition(P->VxUL, vec2Rotate(P->ULPos, polyComputeCenter(P->Shape), P->GroundAngle));
@@ -511,3 +514,13 @@ void plSetPosition(Player* P, float x, float y)
 	vxSetPosition(P->LeftLeg2, vec2(x+LL2.x, y+LL2.y));
 	vxSetPosition(P->RightLeg2, vec2(x+RL2.x, y+RL2.y));
 }*/
+
+AnimAngles* plGetAnimAnglesState(Player* P)
+{
+	return &P->Angles;
+}
+
+AnimPositions* plGetAnimPositionsState(Player* P)
+{
+	return &P->Positions;
+}

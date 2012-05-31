@@ -95,7 +95,7 @@ void gmPlay(Game* G)
 
 	Animation* A = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(A, "data/animRun.txt");
-	aniUpdateForCurrentState(A);
+	aniUpdateForCurrentState(A, lvlGetP1(G->Lvl));
 
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
@@ -285,8 +285,9 @@ void gmPlay(Game* G)
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		if (!G->Lvl->P1->IsFree)
 			aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
-		for (int i=0; i<10; i++)
-			glDrawPolygon(G->Lvl->P1->BodyPolygons[i]);
+
+		
+		glDrawPlayer(lvlGetP1(G->Lvl), G->SR);
 
 		sndmUpdate(shSoundManager(G->SR));
 

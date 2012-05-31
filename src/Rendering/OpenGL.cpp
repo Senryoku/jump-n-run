@@ -1004,3 +1004,105 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 
 
 }
+
+void glDrawPlayer(Player* P, SharedResources* SR)
+{
+	glPushMatrix();
+	
+	//glRotatef(vec2Angle(vec2Sub(vxGetPosition(plGetVxUL(P)), vxGetPosition(plGetVxDL(P)))), 0.f, 0.f, 1.f);
+	//marche pas! je resous ça demain, c'ets juste un changement d'origine
+	
+	Vec2 N;
+	float size = 4.f;
+	Vertex* from, *to;
+	
+	glColor3f(1.f, 1.f, 1.f);
+	//glEnable(GL_TEXTURE_2D);
+	glBegin(GL_QUADS);
+	
+	for (int i=0; i<9; i++)
+	{
+		switch (i) {
+			case bpNeck:
+				from = P->vxBodyParts[bpBase];
+				to = P->vxBodyParts[i];
+				size = 4.f;
+				break;
+			case bpLeftArm1:
+			case bpRightArm1:
+				from = P->vxBodyParts[bpNeck];
+				to = P->vxBodyParts[i];
+				size = 2.5f;
+				break;
+			case bpLeftLeg1:
+			case bpRightLeg1:
+				from = P->vxBodyParts[bpBase];
+				to = P->vxBodyParts[i];
+				size = 2.5f;
+				break;
+			case bpLeftArm2:
+			case bpRightArm2:
+			case bpLeftLeg2:
+			case bpRightLeg2:
+				from = P->vxBodyParts[i-1];
+				to = P->vxBodyParts[i];
+				size = 2.5f;
+				break;
+			case bpHeadLeft:
+				size = 10.f;
+				break;
+				
+			default:
+				break;
+		}
+		
+		N = vec2Sub(vxGetPosition(to), vxGetPosition(from));
+		N = vec2Normalized(vec2Ortho(N));
+		
+		
+		glTexCoord2i(0, 0);
+		glVertex2f(vxGetPosition(from).x-N.x*size, vxGetPosition(from).y-N.y*size);
+		glTexCoord2i(1, 0);
+		glVertex2f(vxGetPosition(to).x-N.x*size, vxGetPosition(to).y-N.y*size);
+		glTexCoord2i(1, 1);
+		glVertex2f(vxGetPosition(to).x+N.x*size, vxGetPosition(to).y+N.y*size);
+		glTexCoord2i(0, 1);
+		glVertex2f(vxGetPosition(from).x+N.x*size, vxGetPosition(from).y+N.y*size);
+	}
+	
+	
+	//tete
+	/*size = 10.f;
+	from = P->vxBodyParts[bpNeck];
+	N = vec2Rotate(vec2(1.f, 0.f), vec2(0.f, 0.f), -DEG2RAD(P->Angles.Angles[bpHeadLeft]));
+	N2 = vec2Ortho(N);
+	printf("N : %f, %f\n", N.x, N.y);
+	
+	glTexCoord2i(0, 0);
+	glVertex2f(vxGetPosition(from).x-N2.x*size, vxGetPosition(from).y-N2.y*size);
+	glTexCoord2i(1, 0);
+	glVertex2f(vxGetPosition(from).x-N2.x*size+N.x*size, vxGetPosition(from).y-N2.y*size);
+	glTexCoord2i(1, 1);
+	glVertex2f(vxGetPosition(from).x+N2.x*size+N.x*size, vxGetPosition(from).y+N2.y*size+N.y*size);
+	glTexCoord2i(0, 1);
+	glVertex2f(vxGetPosition(from).x+N2.x*size, vxGetPosition(from).y+N2.y*size+N.y*size);
+	*/
+	glEnd();
+	
+	glTranslatef(vxGetPosition(P->vxBodyParts[bpNeck]).x, vxGetPosition(P->vxBodyParts[bpNeck]).y, 0.f);
+	glRotatef(P->Angles.Angles[bpHeadLeft], 0.f, 0.f, 1.f);
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(0.5f, 1.f);
+	glVertex2f(0.f, 0.f);
+	glTexCoord2f(0.f, 0.f);
+	glVertex2f(-20.f, -20.f);
+	glTexCoord2f(1.f, 0.f);
+	glVertex2f(-20.f, 20.f);
+	glEnd();
+	 
+	
+	glDisable(GL_TEXTURE_2D);
+	glPopMatrix();
+}
+
+

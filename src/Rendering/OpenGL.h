@@ -7,6 +7,7 @@
 #include <Menu/Menu.h>
 #include <SFML/OpenGL.hpp>
 #include <Game/SharedResources.h>
+#include <Objects/Player.h>
 
 typedef GLuint Texture;
 struct s_Flag;
@@ -32,6 +33,8 @@ void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size);
 void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight);
 
 void glDrawCursor(sf::RenderTarget& win, float ViewWidth, float ViewHeight, float MouseX, float MouseY, sf::Sprite& sprCursor);
+
+void glDrawPlayer(Player* P, SharedResources* SR);
 
 
 /** @brief Charge une texture en mémoire
