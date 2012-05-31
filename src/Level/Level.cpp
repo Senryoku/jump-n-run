@@ -186,7 +186,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	else sscanf(read, "%f, %f ; %f, %f", &Lvl->Spawn.x, &Lvl->Spawn.y, &Lvl->Goal.x, &Lvl->Goal.y);
 
 	unsigned int item, nVertex, i;
-	Bool polyFixedd; int booly;
+	Bool polyFixed; int booly;
 
 	// Chargement des textures de fonds
 	// Si le fichier n'existe pas (ou que la ligne est vide)
@@ -219,9 +219,9 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	while (fgets(read, 300, f)!=NULL)
 	{
 		item=o_end;
-		polyFixedd=FALSE;
+		polyFixed=FALSE;
 		sscanf(read, "%u %u %i #\n", &item, &nVertex, &booly);
-		polyFixedd = (Bool)booly;
+		polyFixed = (Bool)booly;
 
 		switch (item)
 		{
@@ -246,7 +246,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 						p = newPolygon(2, V[0], V[1]);
 					else
 						p = newPolygon(3, V[0], V[1], V[2]);
-					if (polyFixedd)
+					if (polyFixed)
 					{
 						polySetFixed(p, TRUE);
 						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p); ///@todo accesseur
@@ -271,7 +271,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					V3 = (Vertex*)daGet(Vx, ID3);
 					V4 = (Vertex*)daGet(Vx, ID4);
 					Polygon* p;
-					if (!polyFixedd)
+					if (!polyFixed)
 						p = polyRectangle(V1, V2, V3, V4);
 					else
 					{
@@ -295,7 +295,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 						lstAdd(LPoly, (Vertex*)daGet(Vx, ID));
 					}
 					Polygon* p;
-					if (!polyFixedd)
+					if (!polyFixed)
 						p = polyNGone(*LPoly);
 					else
 					{
