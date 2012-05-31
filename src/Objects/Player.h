@@ -3,6 +3,7 @@
 
 #include <Physics/Polygon.h>
 #include <Physics/World.h>
+#include "Animation.h"
 
 /** @defgroup Player Player
  *
@@ -39,7 +40,9 @@ typedef struct SPlayer
 
 	Rigid* GrabR;
 	Rigid* GrabL;
-	Vertex* Neck, *HeadLeft, *HeadRight, *Base, *LeftArm1, *LeftArm2, *RightArm1, *RightArm2, *LeftLeg1, *LeftLeg2, *RightLeg1, *RightLeg2;
+	//Vertex* Neck, *HeadLeft, *HeadRight, *Base, *LeftArm1, *LeftArm2, *RightArm1, *RightArm2, *LeftLeg1, *LeftLeg2, *RightLeg1, *RightLeg2;
+	Vertex* vxBodyParts[12];
+	Polygon *BodyPolygons[10];
 	Vertex* VxBalance;
 	Elastic* ElBalance;
 
@@ -56,6 +59,8 @@ typedef struct SPlayer
 	CollisionInfo VxULStatus, VxURStatus, VxDRStatus, VxDLStatus,
 		RdUStatus, RdRStatus, RdDStatus, RdLStatus;
 	unsigned int State;
+	
+	Bool IsFree; ///< c'est un ragdoll ou pas
 } Player;
 
 /** @brief Constructeur

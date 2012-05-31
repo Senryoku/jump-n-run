@@ -155,6 +155,9 @@ void gmPlay(Game* G)
 			{
 				switch(event.key.code)
 				{
+					case sf::Keyboard::F :
+						G->Lvl->P1->IsFree = !G->Lvl->P1->IsFree;
+						break;
 					case sf::Keyboard::Comma :
 						DispDebug = !DispDebug;
 						break;
@@ -280,7 +283,10 @@ void gmPlay(Game* G)
 		lvlDispGoalFlag(G->Lvl);
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
-		aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
+		if (!G->Lvl->P1->IsFree)
+			aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
+		for (int i=0; i<10; i++)
+			glDrawPolygon(G->Lvl->P1->BodyPolygons[i]);
 
 		sndmUpdate(shSoundManager(G->SR));
 

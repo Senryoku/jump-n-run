@@ -294,6 +294,12 @@ void delWorld(World *W);
  **/
 void wdUpdateGrid(World *W, Bool Force);
 
+/** @brief Reset la grille en la détruisant et la recréant. Ceci est nécessaire si les dimensions du monde changent sans que celui ci soit détruit
+ *
+ * @param W World
+ **/
+void wdResetGrid(World* W);
+
 /** @brief Cherche un polygone contenant un vertice donné
  *
  * @param W World

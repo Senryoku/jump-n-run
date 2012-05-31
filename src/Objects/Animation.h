@@ -32,24 +32,39 @@ typedef unsigned short AnimTriggers; /**< Il faut utiliser les flags pour défin
 
 /* Flags pour décider qui va permettre l'animation d'avancer */
 
-#define ANIM_HEAD 0x0001
-#define ANIM_NECK 0x0002
-#define ANIM_LEFT_ARM1 0x0004
-#define ANIM_LEFT_ARM2 0x0008
-#define ANIM_RIGHT_ARM1 0x0010
-#define ANIM_RIGHT_ARM2 0x0020
-#define ANIM_LEFT_LEG1 0x0040
-#define ANIM_LEFT_LEG2 0x0080
-#define ANIM_RIGHT_LEG1 0x0100
-#define ANIM_RIGHT_LEG2 0x0200
+#define ANIM_NECK 0x0001
+#define ANIM_LEFT_ARM1 0x0002
+#define ANIM_LEFT_ARM2 0x0004
+#define ANIM_RIGHT_ARM1 0x0008
+#define ANIM_RIGHT_ARM2 0x0010
+#define ANIM_LEFT_LEG1 0x0020
+#define ANIM_LEFT_LEG2 0x0040
+#define ANIM_RIGHT_LEG1 0x0080
+#define ANIM_RIGHT_LEG2 0x0100
+#define ANIM_HEAD 0x0200
 #define ANIM_ALL_TRIGGERS 0xffff
 
+enum BodyParts {
+	bpNeck = 0,
+	bpLeftArm1 = 1,
+	bpLeftArm2 = 2,
+	bpRightArm1 = 3,
+	bpRightArm2 = 4,
+	bpLeftLeg1 = 5,
+	bpLeftLeg2 = 6,
+	bpRightLeg1 = 7,
+	bpRightLeg2 = 8,
+	bpHeadLeft = 9, ///<c'est Head pour un polygones et headleft pour les vertex
+	bpHeadRight = 10, ///< que pour les vertex
+	bpBase = 11 ///<que pour les vertex
+	};
+
 typedef struct {
-	Vec2 Head, Neck, LeftArm1, LeftArm2, RightArm1, RightArm2, LeftLeg1, LeftLeg2, RightLeg1, RightLeg2;
+	Vec2 Positions[10];
 } AnimPositions;
 
 typedef struct {
-	float Head, Neck, LeftArm1, LeftArm2, RightArm1, RightArm2, LeftLeg1, LeftLeg2, RightLeg1, RightLeg2;
+	float Angles[10];
 } AnimAngles;
 
 struct SPlayer;

@@ -9,7 +9,8 @@ Player* newPlayer(World* W)
 
 void plInit(Player* P, World *W)
 {
-
+	P->IsFree = FALSE;
+	
 	P->ULPos = vec2(-20.f, -70.f);
 	P->URPos = vec2(20.f, -70.f);
 	P->DLPos = vec2(-35.f, 70.f);
@@ -63,22 +64,38 @@ void plInit(Player* P, World *W)
 	plResetJump(P);
 
 	/* On crée les vertices du personnage, pour l'animation et quand il meurt */
-	P->Neck = newVertex(), P->HeadLeft = newVertex(), P->HeadRight = newVertex(), P->Base = newVertex(), P->LeftArm1 = newVertex(), P->LeftArm2 = newVertex(), P->RightArm1 = newVertex(), P->RightArm2 = newVertex(), P->LeftLeg1 = newVertex(), P->LeftLeg2 = newVertex(), P->RightLeg1 = newVertex(), P->RightLeg2 = newVertex();
+	for (int i=0; i<12; i++)
+		P->vxBodyParts[i] = newVertex();
+	//P->Neck = newVertex(), P->HeadLeft = newVertex(), P->HeadRight = newVertex(), P->Base = newVertex(), P->LeftArm1 = newVertex(), P->LeftArm2 = newVertex(), P->RightArm1 = newVertex(), P->RightArm2 = newVertex(), P->LeftLeg1 = newVertex(), P->LeftLeg2 = newVertex(), P->RightLeg1 = newVertex(), P->RightLeg2 = newVertex();
 
-	vxSetPosition(P->Base, vec2(0.f, 100.f));
-	Vec2 B = vxGetPosition(P->Base);
-	vxSetPosition(P->Neck, vec2(B.x, B.y - 60.f));
-	 vxSetPosition(P->HeadLeft, vec2Add(vxGetPosition(P->Neck), vec2(-20.f, -20.f)));
-	 vxSetPosition(P->HeadRight, vec2Add(vxGetPosition(P->Neck), vec2(20.f, -20.f)));
-	 vxSetPosition(P->LeftArm1, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 25.f)));
-	 vxSetPosition(P->LeftArm2, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 50.f)));
-	 vxSetPosition(P->RightArm1, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 25.f)));
-	 vxSetPosition(P->RightArm2, vec2Add(vxGetPosition(P->Neck), vec2(0.f, 50.f)));
-	 vxSetPosition(P->LeftLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 30.f)));
-	vxSetPosition(P->LeftLeg2, vec2Add(vxGetPosition(P->Base), vec2(0.f, 60.f)));
-	vxSetPosition(P->RightLeg1, vec2Add(vxGetPosition(P->Base), vec2(0.f, 30.f)));
-	vxSetPosition(P->RightLeg2, vec2Add(vxGetPosition(P->Base), vec2(0.f, 60.f)));
+	vxSetPosition(P->vxBodyParts[bpBase], vec2(0.f, 100.f));
+	Vec2 B = vxGetPosition(P->vxBodyParts[bpBase]);
+	vxSetPosition(P->vxBodyParts[bpNeck], vec2(B.x, B.y - 60.f));
+	 vxSetPosition(P->vxBodyParts[bpHeadLeft], vec2Add(vxGetPosition(P->vxBodyParts[bpNeck]), vec2(-20.f, -20.f)));
+	 vxSetPosition(P->vxBodyParts[bpHeadRight], vec2Add(vxGetPosition(P->vxBodyParts[bpNeck]), vec2(20.f, -20.f)));
+	 vxSetPosition(P->vxBodyParts[bpLeftArm1], vec2Add(vxGetPosition(P->vxBodyParts[bpNeck]), vec2(0.f, 25.f)));
+	 vxSetPosition(P->vxBodyParts[bpLeftArm2], vec2Add(vxGetPosition(P->vxBodyParts[bpNeck]), vec2(0.f, 50.f)));
+	 vxSetPosition(P->vxBodyParts[bpRightArm1], vec2Add(vxGetPosition(P->vxBodyParts[bpNeck]), vec2(0.f, 25.f)));
+	 vxSetPosition(P->vxBodyParts[bpRightArm2], vec2Add(vxGetPosition(P->vxBodyParts[bpNeck]), vec2(0.f, 50.f)));
+	 vxSetPosition(P->vxBodyParts[bpLeftLeg1], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 30.f)));
+	vxSetPosition(P->vxBodyParts[bpLeftLeg2], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 60.f)));
+	vxSetPosition(P->vxBodyParts[bpRightLeg1], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 30.f)));
+	vxSetPosition(P->vxBodyParts[bpRightLeg2], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 60.f)));
+	
+	P->BodyPolygons[0] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpBase]);
+	P->BodyPolygons[1] = newPolygon(3, P->vxBodyParts[bpNeck], P->vxBodyParts[bpHeadLeft], P->vxBodyParts[bpHeadRight]);
+	P->BodyPolygons[2] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpLeftArm1]);
+	P->BodyPolygons[3] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpRightArm1]);
+	P->BodyPolygons[4] = newPolygon(2, P->vxBodyParts[bpBase], P->vxBodyParts[bpLeftLeg1]);
+	P->BodyPolygons[5] = newPolygon(2, P->vxBodyParts[bpBase], P->vxBodyParts[bpRightLeg1]);
+	P->BodyPolygons[6] = newPolygon(2, P->vxBodyParts[bpLeftArm1], P->vxBodyParts[bpLeftArm2]);
+	P->BodyPolygons[7] = newPolygon(2, P->vxBodyParts[bpRightArm1], P->vxBodyParts[bpRightArm2]);
+	P->BodyPolygons[8] = newPolygon(2, P->vxBodyParts[bpLeftLeg1], P->vxBodyParts[bpLeftLeg2]);
+	P->BodyPolygons[9] = newPolygon(2, P->vxBodyParts[bpRightLeg1], P->vxBodyParts[bpRightLeg2]);
+	
+	//for (int i=0; i<10; i++) wdAddVxFromPoly(W, P->BodyPolygons[i]);
 
+	/*
 	Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
 	LA1 = newRigid(P->Neck, P->LeftArm1, -1.f);
 	 LA2 = newRigid(P->LeftArm1, P->LeftArm2, -1.f);
@@ -109,6 +126,7 @@ void plInit(Player* P, World *W)
 	wdAddRigid(W, H1);
 	wdAddRigid(W, H2);
 	wdAddRigid(W, H3);
+	 */
 
 }
 
@@ -120,6 +138,10 @@ void plFree(Player* P)
 	if(P->GrabL != NULL) delRigid(P->GrabL);
 	P->GrabR = NULL;
 	P->GrabL = NULL;
+	
+	int i;
+	for (i=0; i<10; i++)
+		delPolygon(P->BodyPolygons[i]);
 
 	delVertex(P->VxBalance);
 	delElastic(P->ElBalance);
@@ -130,19 +152,10 @@ void plFree(Player* P)
 	delVertex(P->VxDL);
 	delVertex(P->VxDR);
 	 */
+	
+	for (int i=0; i<12; i++)
+		delVertex(P->vxBodyParts[i]);
 
-	delVertex(P->Neck);
-	delVertex(P->Base);
-	delVertex(P->HeadLeft);
-	delVertex(P->HeadRight);
-	delVertex(P->LeftArm1);
-	delVertex(P->LeftArm2);
-	delVertex(P->RightArm1);
-	delVertex(P->RightArm2);
-	delVertex(P->LeftLeg1);
-	delVertex(P->LeftLeg2);
-	delVertex(P->RightLeg1);
-	delVertex(P->RightLeg2);
 
 }
 
@@ -343,92 +356,158 @@ void plReleaseL(Player* P, World* W)
 void plUpdate(Player* P, World* W)
 {
 	/* Mise à jour spécifique de Player */
-
+	int i;
 	P->Center = polyComputeCenter(P->Shape);
 
 	P->RdUStatus = P->RdRStatus = P->RdDStatus =
 	P->RdLStatus = P->VxURStatus = P->VxULStatus =
 	P->VxDLStatus = P->VxDRStatus = nullCollisionInfo();
-	polyResolve(plGetShape(P));
-	List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->Shape);
-
-	Node* it;
-	CollisionInfo Info;
-	it = lstFirst(&LExtracted);
-	P->State = PL_NOSTATE;
-	P->Normal = vec2(0.f, 0.f);
-	while(!nodeEnd(it))
+	for (int j=0; j<4; j++)
 	{
-
-		Info = polyCollide(plGetShape(P), (Polygon*) nodeGetData(it));
-		if(Info.P1 != NULL)
+		polyResolve(plGetShape(P));
+		for (i=0; i<10; i++)
+			polyResolve(P->BodyPolygons[i]);
+	}
+	
+	if (!P->IsFree)
+	{
+		List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->Shape);
+		
+		Node* it;
+		CollisionInfo Info;
+		it = lstFirst(&LExtracted);
+		P->State = PL_NOSTATE;
+		P->Normal = vec2(0.f, 0.f);
+		while(!nodeEnd(it))
 		{
-			//printf("Collision\n");
-			if (Info.Edge == plGetRdD(P))
+			
+			Info = polyCollide(plGetShape(P), (Polygon*) nodeGetData(it));
+			if(Info.P1 != NULL)
 			{
-				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
-				P->Normal = vec2Prod(Info.Normal, -1.f);
-				P->State = P->State | PL_HAS_SUPPORT;
-				if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
-			} else if(Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))	{
-				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
-				P->Normal = Info.Normal;
-				P->State = P->State | PL_HAS_SUPPORT;
-				if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
+				//printf("Collision\n");
+				if (Info.Edge == plGetRdD(P))
+				{
+					P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
+					P->Normal = vec2Prod(Info.Normal, -1.f);
+					P->State = P->State | PL_HAS_SUPPORT;
+					if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
+				} else if(Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))	{
+					P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
+					P->Normal = Info.Normal;
+					P->State = P->State | PL_HAS_SUPPORT;
+					if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
+				}
+				
+				
+				/* Test des propriétés de la collision */
+				if(Info.Edge == plGetRdU(P)) P->RdUStatus = Info;
+				else if(Info.Edge == plGetRdR(P)) P->RdRStatus = Info;
+				else if(Info.Edge == plGetRdD(P)) P->RdDStatus = Info;
+				else if(Info.Edge == plGetRdL(P)) P->RdLStatus = Info;
+				if(Info.V == plGetVxUL(P)) P->VxULStatus = Info;
+				else if(Info.V == plGetVxUR(P)) P->VxURStatus = Info;
+				else if(Info.V == plGetVxDR(P)) P->VxDRStatus = Info;
+				else if(Info.V == plGetVxDL(P)) P->VxDLStatus = Info;
+				
+				
+				polyHandleCollision(Info);
 			}
-
-
-			/* Test des propriétés de la collision */
-			if(Info.Edge == plGetRdU(P)) P->RdUStatus = Info;
-			else if(Info.Edge == plGetRdR(P)) P->RdRStatus = Info;
-			else if(Info.Edge == plGetRdD(P)) P->RdDStatus = Info;
-			else if(Info.Edge == plGetRdL(P)) P->RdLStatus = Info;
-			if(Info.V == plGetVxUL(P)) P->VxULStatus = Info;
-			else if(Info.V == plGetVxUR(P)) P->VxURStatus = Info;
-			else if(Info.V == plGetVxDR(P)) P->VxDRStatus = Info;
-			else if(Info.V == plGetVxDL(P)) P->VxDLStatus = Info;
-
-
-			polyHandleCollision(Info);
+			it = nodeGetNext(it);
 		}
-		it = nodeGetNext(it);
-	}
-	lstFree(&LExtracted);
-
-	P->GroundVec = vec2Ortho(P->Normal);
-
-	// Mise à jour quelques States
-	Vec2 RdBottom = vec2Normalized(vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL)));
-
-	if(RdBottom.x < 0.f)
-	{
-		P->State = P->State | PL_UPSIDEDOWN;
-		P->State = P->State | PL_FALLING;
-	} else {
-		if(RdBottom.y < -0.5f)
+		lstFree(&LExtracted);
+		
+		P->GroundVec = vec2Ortho(P->Normal);
+		
+		// Mise à jour quelques States
+		Vec2 RdBottom = vec2Normalized(vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL)));
+		
+		if(RdBottom.x < 0.f)
 		{
+			P->State = P->State | PL_UPSIDEDOWN;
 			P->State = P->State | PL_FALLING;
-			P->State = P->State | PL_FALLING_L;
-		} else if(RdBottom.y > 0.5f) {
-			P->State = P->State | PL_FALLING;
-			P->State = P->State | PL_FALLING_R;
+		} else {
+			if(RdBottom.y < -0.5f)
+			{
+				P->State = P->State | PL_FALLING;
+				P->State = P->State | PL_FALLING_L;
+			} else if(RdBottom.y > 0.5f) {
+				P->State = P->State | PL_FALLING;
+				P->State = P->State | PL_FALLING_R;
+			}
 		}
+		
+		if(P->GrabL != NULL) P->State = P->State | PL_GRABL;
+		if(P->GrabR != NULL) P->State = P->State | PL_GRABR;
+		
+		Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
+		v = vec2Normalized(v);
+		vxSetPosition(P->vxBodyParts[bpBase], vec2Add(P->Center, vec2Prod(v, -15.f)));
 	}
-
-	if(P->GrabL != NULL) P->State = P->State | PL_GRABL;
-	if(P->GrabR != NULL) P->State = P->State | PL_GRABR;
-
-	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
-	v = vec2Normalized(v);
-	vxSetPosition(P->Base, vec2Add(P->Center, vec2Prod(v, -15.f)));
+	else
+	{
+		/*
+		vxApplyForce(P->HeadLeft, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->HeadRight, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->Neck, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->LeftArm1, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->LeftArm2, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->RightArm1, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->RightArm2, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->LeftLeg1, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->LeftLeg2, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->RightLeg1, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->RightLeg2, vec2(0.f, 0.6f), 1.f);
+		vxApplyForce(P->Base, vec2(0.f, 0.6f), 1.f);
+		
+		vxResolve(P->HeadLeft, 0.5f, 0.5f);
+		vxResolve(P->HeadRight, 0.5f, 0.5f);
+		vxResolve(P->LeftArm1, 0.5f, 0.5f);
+		vxResolve(P->LeftArm2, 0.5f, 0.5f);
+		vxResolve(P->RightArm1, 0.5f, 0.5f);
+		vxResolve(P->RightArm2, 0.5f, 0.5f);
+		vxResolve(P->Neck, 0.5f, 0.5f);
+		vxResolve(P->Base, 0.5f, 0.5f);
+		vxResolve(P->LeftLeg1, 0.5f, 0.5f);
+		vxResolve(P->LeftLeg2, 0.5f, 0.5f);
+		vxResolve(P->RightLeg1, 0.5f, 0.5f);
+		vxResolve(P->RightLeg2, 0.5f, 0.5f);
+		*/
+		
+		for (int i=0; i<10; i++)
+		{
+			List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->BodyPolygons[i]);
+			
+			Node* it;
+			CollisionInfo Info;
+			it = lstFirst(&LExtracted);
+			P->State = PL_NOSTATE;
+			P->Normal = vec2(0.f, 0.f);
+			while(!nodeEnd(it))
+			{
+				
+				Info = polyCollide(P->BodyPolygons[i], (Polygon*) nodeGetData(it));
+				if(Info.P1 != NULL)
+				{
+					polyHandleCollision(Info);
+				}
+				it = nodeGetNext(it);
+			}
+			lstFree(&LExtracted);
+		}
+		
+		vxSetPosition(P->VxDL, vxGetPosition(P->vxBodyParts[bpLeftLeg2]));
+	}
+	
+	
 }
 
+/*
 void plSetPosition(Player* P, float x, float y)
 {
 	Vec2 LL2, RL2;
-	LL2 =vec2Sub(vxGetPosition(P->LeftLeg2), vxGetPosition(P->Base));
-	RL2 =vec2Sub(vxGetPosition(P->RightLeg2), vxGetPosition(P->Base));
+	LL2 =vec2Sub(vxGetPosition(P->vxBodyParts[bpLeftLeg2]), vxGetPosition(P->vxBodyParts[bpBase]));
+	RL2 =vec2Sub(vxGetPosition(P->vxBodyParts[bpRightLeg2]), vxGetPosition(P->vxBodyParts[bpBase]));
 	vxSetPosition(P->Base, vec2(x, y));
 	vxSetPosition(P->LeftLeg2, vec2(x+LL2.x, y+LL2.y));
 	vxSetPosition(P->RightLeg2, vec2(x+RL2.x, y+RL2.y));
-}
+}*/

@@ -25,6 +25,16 @@ void wdInit(World* W, float Width, float Height)
 	gridSetCellSize(&W->CollisionGrid, CellSize);
 }
 
+void wdResetGrid(World* W)
+{
+	gridFree(&W->CollisionGrid);
+	float CellSize=128.f;
+	gridInit(&W->CollisionGrid, W->Width/CellSize+1, W->Height/CellSize+1);
+	gridSetCellSize(&W->CollisionGrid, CellSize);
+	
+	wdUpdateGrid(W, TRUE);
+}
+
 void wdAddVertex(World* W, Vertex* V)
 {
 	lstAdd(&W->Vertices, V);

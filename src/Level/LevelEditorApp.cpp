@@ -861,10 +861,9 @@ void appShowLevelMenu(LevelEditorApp* App)
 void appShowEscapeMenu(LevelEditorApp* App)
 {
 	ItemID IID;
-	msgCreateMessage(shMessageManager(App->SR), "Menu", 5);
+	msgCreateMessage(shMessageManager(App->SR), "Menu", 4);
 	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
-	msgAddCloseItem(shMessageManager(App->SR), "Set World Width");
-	msgAddCloseItem(shMessageManager(App->SR), "Set World Height");
+	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
 	msgAddCloseItem(shMessageManager(App->SR), "Quit");
 	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
 	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -878,18 +877,14 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
 		case 1 :
-			msgCreateMessage(shMessageManager(App->SR), "Set World Width", 2);
+			msgCreateMessage(shMessageManager(App->SR), "Set World Width", 3);
 			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &App->Led.Lvl->W->Width);
-			msgAddCloseItem(shMessageManager(App->SR), "Ok");
-			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-			break;
-		case 2 :
-			msgCreateMessage(shMessageManager(App->SR), "Set World Height", 2);
 			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &App->Led.Lvl->W->Height);
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			wdResetGrid(lvlGetWorld(App->Led.Lvl));
 			break;
-		case 3 :
+		case 2 :
 			App->Window.close();
 			break;
 		default :
