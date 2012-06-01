@@ -83,11 +83,36 @@ void gmLoadLvl(Game* G, const char* Path)
 	lvlLoad(G->Lvl, Path);
 }
 
+void gmMenu(Game* G)
+{
+	ItemID IID;
+	msgCreateMessage(shMessageManager(G->SR), "JumpNRun", 3);
+	IID = msgAddItem(shMessageManager(G->SR), "Level", ITEM_INPUT, NULL, NULL);
+	mniSetInput(mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID), "levels/");
+	msgAddCloseItem(shMessageManager(G->SR), "Play");
+	msgAddCloseItem(shMessageManager(G->SR), "Quit");
+	ItemID Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, 0, 0, G->WindowWidth, G->WindowHeight);
+	switch (Choice)
+	{
+		case 0 :
+			break;
+		case 1 :
+			gmLoadLvl(G, msgGetLastInput(shMessageManager(G->SR)));
+			break;
+		case 2 :
+			G->Window->close();
+			break;
+		default :
+			break;
+	}
+}
+
 void gmPlay(Game* G)
 {
 	Bool DispDebug = FALSE;
 
 	if(G->Lvl == NULL) return;
+	while(wdGetWidth(lvlGetWorld(G->Lvl)) == 0.f) gmMenu(G);
 	Vec2 Center;
 	Score Sc;
 
@@ -240,8 +265,6 @@ void gmPlay(Game* G)
 		{
 			float Time = Clk.getElapsedTime().asMilliseconds()/10.f;
 			lvlSetFinished(G->Lvl, 1);
-			/** @todo Menu demandant le Pseudo et la confirmation de l'envoi du score, donc là, ça plante, mais j'imagien que c'ets parce qu'on peut pas récupérer un Input ET un choix :p
-			 * J'vais avoir besion de menu ici quoi ! */
 			char Name[255];
 			msgCreateMessage(shMessageManager(G->SR), "Bravo !", 4);
 			msgAddItem(shMessageManager(G->SR), "Pseudonyme", ITEM_INPUT, NULL, NULL);
@@ -285,7 +308,7 @@ void gmPlay(Game* G)
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
 
-		
+
 		glDrawPlayer(lvlGetP1(G->Lvl), G->SR);
 
 		sndmUpdate(shSoundManager(G->SR));

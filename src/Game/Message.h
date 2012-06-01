@@ -20,14 +20,14 @@
  msgAddItem(MM, "Voilà un message", ITEM_LABEL, NULL, NULL);
  msgAddCloseItem(MM, "Ok");
  msgDisplay(MM, Window, ViewX, ViewY, ViewWidth, ViewHeight);
- 
+
  //Un message d'input
  msgCreateMessage(MM, "Alert", 2);
  msgAddItem(MM, "valeur", ITEM_INPUT, NULL, NULL);
  msgAddCloseItem(MM, "Ok");
  const char* Input = msgGetInput(MM, Window, ViewX, ViewY, ViewWidth, ViewHeight);
  //Si un autre msgGetInput est appelé alors Input ne sera plus valide!m
- 
+
  //un menu de click droit
  msgCreateMenu(MM, 3); //Il faut juste changer cette ligne on on fait apparaître un menu sur la souris
  msgAddCloseItem(MM, "Continue");
@@ -35,7 +35,7 @@
  msgAddCloseItem(MM, "Exit");
  ItemID Choice = msgGetChoice(MM, Window, ViewX, ViewY, ViewWidth, ViewHeight);
  @endcode
- 
+
  * préfixe: msg
  * @{
  */
@@ -170,6 +170,12 @@ Menu* msgGetMenu(MessageManager* MM);
  **/
 ItemID msgGetLastChoice(const MessageManager* MM);
 
+/** @brief Retourn le dernier Input.
+ *
+ * @param[in] MM MessageManager auquel s'applique la fonction
+ * @return Dernier Input
+ **/
+char* msgGetLastInput(const MessageManager* MM);
 
 //Bool msgCanDisplay(MessageManager* MM);
 
