@@ -2,7 +2,7 @@
 #define _OBJECT_H_
 
 #include <Physics/Polygon.h>
-#include <Rendering/OpenGl.h>
+#include <Rendering/OpenGL.h>
 
 
 /** @defgroup Object Object
