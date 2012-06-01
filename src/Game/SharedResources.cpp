@@ -35,6 +35,7 @@ void shLoadTextures(SharedResources* SR)
 	shAddTexture(SR, "mn_shadow", "data/gui/s_box_shadow.png");
 	shAddTexture(SR, "mn_gloss", "data/gui/s_box_gloss.png");
 	shAddTexture(SR, "mn_anim", "data/gui/s_box_anim_strip20.png");
+	shAddTexture(SR, "pl_leg", "data/s_leg.png");
 	SR->txCursor.loadFromFile("data/gui/s_cursors.png");
 	
 	for (int i=0; i<4; i++)

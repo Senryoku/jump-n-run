@@ -283,8 +283,7 @@ void gmPlay(Game* G)
 		lvlDispGoalFlag(G->Lvl);
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
-		if (!G->Lvl->P1->IsFree)
-			aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
+		aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
 
 		
 		glDrawPlayer(lvlGetP1(G->Lvl), G->SR);

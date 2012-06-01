@@ -372,6 +372,12 @@ void plUpdate(Player* P, World* W)
 			polyResolve(P->BodyPolygons[i]);
 	}
 	
+	float dif = vxGetPosition(P->VxDL).x - vxGetOldPos(P->VxDL).x;
+	if (dif >= 0.f && ABS(dif) > 0.2f)
+		P->Dir = DIR_RIGHT;
+	else
+		P->Dir = DIR_LEFT;
+	
 	if (!P->IsFree)
 	{
 		List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->Shape);
