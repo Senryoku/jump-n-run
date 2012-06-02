@@ -445,10 +445,10 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 			//if(Lvl->P1 != NULL) vxSetFixed(Lvl->P1->Stable, 0);
 			wdHandleCollision(lvlGetWorld(Lvl));
 
-			if (Lvl->P1 != NULL)
-				plUpdate(Lvl->P1, lvlGetWorld(Lvl));
-
 		}
+		
+		if (Lvl->P1 != NULL)
+			plUpdate(Lvl->P1, lvlGetWorld(Lvl));
 	}
 	else
 	{

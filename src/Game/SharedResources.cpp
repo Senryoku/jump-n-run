@@ -98,7 +98,6 @@ void shLoadAudio(SharedResources* SR)
 		sndmLoadMusicFile(SR->SM, key, file);
 	}
 	
-	printf("musics:%u\n", SR->SM->Musics->size());
 }
 
 const sf::Font& shFntMenu(const SharedResources* SR)

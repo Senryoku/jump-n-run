@@ -118,11 +118,6 @@ void gmPlay(Game* G)
 
 	lvlLoadedInit(G->Lvl);
 
-	Animation* A = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(A, "data/animPeanut.txt");
-	aniUpdateForCurrentState(A, lvlGetP1(G->Lvl));
-	aniSetForce(A, 0.65f);
-
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
 	sf::Clock Clk;
@@ -306,7 +301,6 @@ void gmPlay(Game* G)
 		lvlDispGoalFlag(G->Lvl);
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
-		aniUpdate(A, lvlGetP1(G->Lvl), 1.f);
 
 
 		glDrawPlayer(lvlGetP1(G->Lvl), G->SR);
@@ -341,7 +335,6 @@ void gmPlay(Game* G)
 
 		//if (msgCanDisplay()) msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 	}
-	delAnimation(A);
 }
 
 

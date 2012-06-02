@@ -183,6 +183,9 @@ void appRun(LevelEditorApp* App)
 	 */
 
 	/* Fin du code temporaire pour les states des animations */
+	
+	
+	
 	fpsInit(&fps);
 	while (App->Window.isOpen())
 	{
@@ -672,6 +675,7 @@ void appRun(LevelEditorApp* App)
 
 	mnFree(M);
 	free(M);
+	
 }
 
 void appSetWorkingPath(LevelEditorApp* App, const char* Path)

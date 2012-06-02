@@ -45,6 +45,24 @@ void plInit(Player* P, World *W)
 	
 	animAnglesStatesInit(&P->Angles);
 	animPositionsStatesInit(&P->Positions);
+	
+	P->aniRun = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
+	aniLoadFromFile(P->aniRun, "data/animRun.txt");
+	//aniSetForce(P->aniRun, 0.65f);
+	
+	P->aniJump = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
+	aniLoadFromFile(P->aniJump, "data/animJump.txt");
+	aniSetForce(P->aniJump, 0.65f);
+	
+	P->aniFall = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
+	aniLoadFromFile(P->aniFall, "data/animFall.txt");
+	
+	P->aniHello = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
+	aniLoadFromFile(P->aniHello, "data/animHello.txt");
+	printf("ani load\n");
+	
+	aniUpdateForCurrentState(P->aniRun, P);
+	
 
 	/*
 	vxSetPosition(P->VxUL, vec2Rotate(P->ULPos, polyComputeCenter(P->Shape), P->GroundAngle));
@@ -159,6 +177,10 @@ void plFree(Player* P)
 	for (int i=0; i<12; i++)
 		delVertex(P->vxBodyParts[i]);
 
+	delAnimation(P->aniFall);
+	delAnimation(P->aniJump);
+	delAnimation(P->aniRun);
+	delAnimation(P->aniHello);
 
 }
 
@@ -378,15 +400,17 @@ void plUpdate(Player* P, World* W)
 	else
 		P->Dir = DIR_LEFT;
 	
-	if (!P->IsFree)
+
+	List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->Shape);
+	
+	Node* it;
+	CollisionInfo Info;
+	
+	P->State = PL_NOSTATE;
+	P->Normal = vec2(0.f, 0.f);
+	for (int i=0; i<4; i++)
 	{
-		List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->Shape);
-		
-		Node* it;
-		CollisionInfo Info;
 		it = lstFirst(&LExtracted);
-		P->State = PL_NOSTATE;
-		P->Normal = vec2(0.f, 0.f);
 		while(!nodeEnd(it))
 		{
 			
@@ -451,62 +475,13 @@ void plUpdate(Player* P, World* W)
 		Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
 		v = vec2Normalized(v);
 		vxSetPosition(P->vxBodyParts[bpBase], vec2Add(P->Center, vec2Prod(v, -15.f)));
-	}
-	else
-	{
-		/*
-		vxApplyForce(P->HeadLeft, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->HeadRight, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->Neck, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->LeftArm1, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->LeftArm2, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->RightArm1, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->RightArm2, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->LeftLeg1, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->LeftLeg2, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->RightLeg1, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->RightLeg2, vec2(0.f, 0.6f), 1.f);
-		vxApplyForce(P->Base, vec2(0.f, 0.6f), 1.f);
 		
-		vxResolve(P->HeadLeft, 0.5f, 0.5f);
-		vxResolve(P->HeadRight, 0.5f, 0.5f);
-		vxResolve(P->LeftArm1, 0.5f, 0.5f);
-		vxResolve(P->LeftArm2, 0.5f, 0.5f);
-		vxResolve(P->RightArm1, 0.5f, 0.5f);
-		vxResolve(P->RightArm2, 0.5f, 0.5f);
-		vxResolve(P->Neck, 0.5f, 0.5f);
-		vxResolve(P->Base, 0.5f, 0.5f);
-		vxResolve(P->LeftLeg1, 0.5f, 0.5f);
-		vxResolve(P->LeftLeg2, 0.5f, 0.5f);
-		vxResolve(P->RightLeg1, 0.5f, 0.5f);
-		vxResolve(P->RightLeg2, 0.5f, 0.5f);
-		*/
-		
-		for (int i=0; i<10; i++)
-		{
-			List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->BodyPolygons[i]);
-			
-			Node* it;
-			CollisionInfo Info;
-			it = lstFirst(&LExtracted);
-			P->State = PL_NOSTATE;
-			P->Normal = vec2(0.f, 0.f);
-			while(!nodeEnd(it))
-			{
-				
-				Info = polyCollide(P->BodyPolygons[i], (Polygon*) nodeGetData(it));
-				if(Info.P1 != NULL)
-				{
-					polyHandleCollision(Info);
-				}
-				it = nodeGetNext(it);
-			}
-			lstFree(&LExtracted);
-		}
-		
-		vxSetPosition(P->VxDL, vxGetPosition(P->vxBodyParts[bpLeftLeg2]));
 	}
 	
+		
+	
+	///@todo ajouter states
+	aniUpdate(P->aniRun, P, 1.f);
 	
 }
 

@@ -63,6 +63,7 @@ typedef struct SPlayer
 	Bool IsFree; ///< c'est un ragdoll ou pas
 	AnimPositions Positions;
 	AnimAngles Angles;
+	Animation* aniJump, *aniRun, *aniFall, *aniHello;
 } Player;
 
 /** @brief Constructeur

@@ -239,7 +239,11 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 		
 	}
 	else
+	{
+		printf("Erreur de lecture pour le fichier %s\n", File);
 		return TRUE;
+	}
+		
 	
 	fclose(f);
 	aniCountTriggers(A);
