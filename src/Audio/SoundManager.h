@@ -74,7 +74,16 @@ bool sndmLoadMusicFile(SoundManager* SM, const char *Key, const char *File);
  * @param SM SoundManager auquel s'applique la fonction
  * @return PlayCount
  */
-unsigned int sndmGetPlayCount(const SoundManager* SM);
+int sndmGetPlayCount(const SoundManager* SM);
+
+/**
+ * @brief Donne le MaxPlayCount pour changer de musique
+ *
+ * Un MaxPlayCount négatif veut dire Loop infini
+ * @param SM SoundManager auquel s'applique la fonction
+ * @param MaxPlayCount
+ */
+void sndmSetMaxPlayCount(SoundManager* SM, int MaxPlayCount);
 
 /**
  * @brief Dit si on est en train de faire un Fade sur une chanson
@@ -111,6 +120,14 @@ void sndmPlay(SoundManager* SM, const char *Key);
  * @param Loop looper la chanson ou pas
  */
 void sndmPlayMusic(SoundManager* SM, const char *Key, bool Loop=1);
+
+/**
+ * @brief Joue la première musique
+ 
+ * @param SM SoundManager auquel s'applique la fonction
+ * @param Loop looper la chanson ou pas
+ */
+void sndmPlayMusic(SoundManager* SM, bool Loop=1);
 
 /**
  * @brief Change le volume d'une musique
@@ -156,6 +173,14 @@ float sndmMusicGetPitch(SoundManager* SM, const char *Key);
  * @param FadeSpeed vitesse du fading 100 = tout le volume d'un coup
  */
 void sndmMusicFade(SoundManager* SM, const char *NextKey, float FadeSpeed, bool Loop=1);
+
+/**
+ * @brief Fait un effet de Fade entre deux musiques
+ 
+ * @param SM SoundManager auquel s'applique la fonction
+ * @param FadeSpeed vitesse du fading 100 = tout le volume d'un coup
+ */
+void sndmMusicFadeToNext(SoundManager* SM, float FadeSpeed, bool Loop=1);
 
 /**
  * @brief Fait un effet de Fade et stoppe la musique à la fin

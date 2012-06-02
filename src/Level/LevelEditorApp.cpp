@@ -70,6 +70,8 @@ void appWindowInit(LevelEditorApp* App)
 		App->Window.setVerticalSyncEnabled(1);
 	else
 		App->Window.setFramerateLimit((unsigned int) Cfg.FPSLimit);
+	
+	if (Cfg.PlayMusic != 0.f) sndmPlayMusic(shSoundManager(App->SR)), sndmMusicFadeToNext(shSoundManager(App->SR), 1.f);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
@@ -116,7 +118,7 @@ void appRun(LevelEditorApp* App)
 
 	/* Code temporel permettant de créer des states d'animation */
 
-	Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
+	/*Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
 
 	vxSetPosition(Base, vec2(150.f, 330.f));
 	Vec2 B = vxGetPosition(Base);
@@ -178,6 +180,7 @@ void appRun(LevelEditorApp* App)
 	wdAddRigid(App->Led.Lvl->W, H1);
 	wdAddRigid(App->Led.Lvl->W, H2);
 	wdAddRigid(App->Led.Lvl->W, H3);
+	 */
 
 	/* Fin du code temporaire pour les states des animations */
 	fpsInit(&fps);
@@ -412,9 +415,9 @@ void appRun(LevelEditorApp* App)
 						Paused = !Paused;
 						break;
 
-
 					/* code de sauvegarde de l'animation */
-				case sf::Keyboard::A :
+						/*
+					case sf::Keyboard::A :
 						FILE* f; Vertex* V; Vec2 Pos; float Angle;
 						f = fopen("animPos.txt", "w");
 						//[nb of states] [AnimType] [Triggers]
@@ -502,6 +505,7 @@ void appRun(LevelEditorApp* App)
 
 						fclose(f);
 						break;
+						*/
 				 
 					default:
 						break;

@@ -63,11 +63,12 @@ Config GetConfiguration()
 	float value;
 
 	/* Options par défaut */
-	Cfg.WindowWidth = 800.f;
-	Cfg.WindowHeight = 600.f;
+	Cfg.WindowWidth = 1200.f;
+	Cfg.WindowHeight = 800.f;
 	Cfg.FPSLimit = 60.f;
 	Cfg.AntiAliasing = 1.f;
 	Cfg.VerticalSync = 1.f;
+	Cfg.PlayMusic = 0.f;
 
 	FILE* f;
 	f = fopen("Config.cfg", "r");
@@ -82,13 +83,14 @@ Config GetConfiguration()
 			if(strcmp(id, "FPSLimit") == 0) Cfg.FPSLimit = value;
 			if(strcmp(id, "AntiAliasing") == 0) Cfg.AntiAliasing = value;
 			if(strcmp(id, "VerticalSync") == 0) Cfg.VerticalSync = value;
+			if(strcmp(id, "Music") == 0) Cfg.PlayMusic = value;
 		}
 	} else {
 		/* Création d'un fichier de configuration par défaut */
 		f = fopen("Config.cfg", "w");
 
 		if (f != NULL)
-			fprintf(f, "WindowWidth %f\nWindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\n", Cfg.WindowWidth, Cfg.WindowHeight, Cfg.FPSLimit, Cfg.AntiAliasing, Cfg.VerticalSync);
+			fprintf(f, "WindowWidth %f\nWindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\nMusic %f\n", Cfg.WindowWidth, Cfg.WindowHeight, Cfg.FPSLimit, Cfg.AntiAliasing, Cfg.VerticalSync, Cfg.PlayMusic);
 		else
 			printf("Erreur d'écriture du fichier de configuration par défaut\n");
 	}

@@ -14,7 +14,7 @@ void sndmInit(SoundManager* SM)
 	SM->Loop=1;
 	SM->Paused=0;
 	SM->PlayCount = 0;
-	SM->MaxPlayCount = 1;
+	SM->MaxPlayCount = -1;
 	SM->LastTimeOffset = 0.f;
 	SM->CurrentTimeOffset = 0.f;
 	SM->DefaultFadingSpeed = 5.f;
@@ -120,7 +120,18 @@ void sndmPlayMusic(SoundManager* SM, const char *Key, bool Loop)
 	SM->PlayCount = 0;
 }
 
-unsigned int sndmGetPlayCount(const SoundManager* SM)
+void sndmPlayMusic(SoundManager* SM, bool Loop)
+{
+	std::map<std::string, sf::Music*>::iterator it = SM->Musics->begin();
+	assert(it != SM->Musics->end());
+	
+	it->second->setLoop(Loop);
+	it->second->play();
+	SM->CurrentMusic = it;
+	SM->PlayCount = 0;
+}
+
+int sndmGetPlayCount(const SoundManager* SM)
 {
 	return SM->PlayCount;
 }
@@ -175,12 +186,30 @@ void sndmMusicFade(SoundManager* SM, const char *NextKey, float FadeSpeed, bool 
 	SM->Loop=Loop;
 }
 
+void sndmMusicFadeToNext(SoundManager* SM, float FadeSpeed, bool Loop)
+{
+	if (SM->IsFading) return; //On est en milieu d'un fade on ne va pas en faire un
+	
+	SM->NextMusic = ++SM->CurrentMusic;
+	if (SM->NextMusic == SM->Musics->end())
+		SM->NextMusic = SM->Musics->begin();
+	SM->FadeSpeed = SM->DefaultFadingSpeed;
+	
+	SM->FadeSpeed=FadeSpeed;
+	SM->Loop=Loop;
+}
+
 void sndmMusicFadeToStop(SoundManager* SM, float FadeSpeed)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics->end();
 	SM->FadeSpeed=FadeSpeed;
 	SM->IsFading=0;
 	SM->NextMusic=it;
+}
+
+void sndmSetMaxPlayCount(SoundManager* SM, int MaxPlayCount)
+{
+	SM->MaxPlayCount = MaxPlayCount;
 }
 
 void sndmUpdate(SoundManager* SM)

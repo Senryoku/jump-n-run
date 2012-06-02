@@ -19,6 +19,7 @@ typedef struct
 	float FPSLimit;
 	float AntiAliasing;
 	float VerticalSync;
+	float PlayMusic;
 } Config;
 
 #define MIN( X, Y ) ( (X) < (Y) ? (X) : (Y) ) /* Deux macros qui déterminent le min et le max */

@@ -261,9 +261,6 @@ void gmPlay(Game* G)
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
             plRotateL(lvlGetP1(G->Lvl));
 
-		for (int i=0; i<10; i++)
-			glDrawPolygon(G->Lvl->P1->BodyPolygons[i]);
-
 		if(lvlIsGoalReached(G->Lvl))
 		{
 			float Time = Clk.getElapsedTime().asMilliseconds()/10.f;

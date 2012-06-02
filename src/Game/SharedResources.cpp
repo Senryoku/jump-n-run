@@ -88,6 +88,17 @@ void shLoadAudio(SharedResources* SR)
 	sndmLoadSoundFile(SR->SM, "snd_msg", "data/sfx/snd_msg.ogg");
 	sndmLoadSoundFile(SR->SM, "snd_step1", "data/sfx/snd_step1.ogg");
 	sndmLoadSoundFile(SR->SM, "snd_step2", "data/sfx/snd_step2.ogg");
+	
+	char file[255], key[20];
+	
+	for (int i=1; i<=11; i++)
+	{
+		sprintf(file, "data/music/music%u.ogg",i);
+		sprintf(key, "music%u",i);
+		sndmLoadMusicFile(SR->SM, key, file);
+	}
+	
+	printf("musics:%u\n", SR->SM->Musics->size());
 }
 
 const sf::Font& shFntMenu(const SharedResources* SR)
