@@ -264,6 +264,28 @@ void lvledDelPoly(LevelEditor *Led)
 	}
 }
 
+void lvledDelPolyAndVertex(LevelEditor *Led)
+{
+	unsigned int i;
+	Polygon* tmpPoly;
+	tmpPoly = wdGetNearestPoly(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
+	if(tmpPoly != NULL)
+	{
+		wdDelPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
+		for(i = 0; i < polyGetVxCount(tmpPoly); i++)
+			lvledDelVertexPointer(Led, polyGetVertex(tmpPoly, i));
+		delPolygon(tmpPoly);
+		// Cherche si un objet se base sur ce polygon, si oui, le supprime également
+		Node* it = lstFirst(&Led->Lvl->Objects);
+		while(!nodeEnd(it))
+		{
+			Object* Obj = (Object*) nodeGetData(it);
+			if(Obj->Shape == tmpPoly) lvlDelObject(Led->Lvl, Obj);
+			it = nodeGetNext(it);
+		}
+	}
+}
+
 void lvledDelElastic(LevelEditor *Led)
 {
 	Elastic* tmpElastic = wdGetNearestElastic(lvlGetWorld(Led->Lvl),
@@ -304,10 +326,15 @@ void lvledDelRigid(LevelEditor *Led)
 
 void lvledDelVertex(LevelEditor *Led)
 {
-	Bool IsLonely = 1;
-	unsigned int i;
 	Vertex* tmpVertex = wdGetNearest(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x,
 									vxGetPosition(Led->Mouse).y);
+	lvledDelVertexPointer(Led, tmpVertex);
+}
+
+void lvledDelVertexPointer(LevelEditor *Led, Vertex* tmpVertex)
+{
+	Bool IsLonely = 1;
+	unsigned int i;
 	if(tmpVertex != NULL)
 	{
 		/* On s'assure que le Vertex ne fait partie d'aucune structure plus grande */

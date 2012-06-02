@@ -266,13 +266,17 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Mouse::Right :
 						//lvledGrabEl(&App->Led);
-						if (lvledGetNearestPoly(&App->Led) != NULL)
+						if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+						{
+							appShowElasticMenu(App);
+						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+							appShowRigidMenu(App);
+						} else if(sf::Keyboard::isKeyPressed(sf::Keyboard::V)) {
+							appShowVertexMenu(App);
+						} else if (lvledGetNearestPoly(&App->Led) != NULL)
 							appShowPolygonMenu(App);
 						else {
 							appShowLevelMenu(App);
-							//appShowVertexMenu(App);
-							//appShowRigidMenu(App);
-							//appShowElasticMenu(App);
 						}
 						break;
 					case sf::Mouse::Middle :
@@ -777,9 +781,10 @@ void appShowElasticMenu(LevelEditorApp* App)
 void appShowPolygonMenu(LevelEditorApp* App)
 {
 	ItemID i;
-	msgCreateMenu(shMessageManager(App->SR), 3);
+	msgCreateMenu(shMessageManager(App->SR), 4);
 	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon");
+	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon and Vertices");
 	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
 
 	i = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -796,6 +801,13 @@ void appShowPolygonMenu(LevelEditorApp* App)
 			break;
 		}
 		case 2:
+		{
+			lvledDelPolyAndVertex(&App->Led);
+			App->Led.Grab = NULL;
+			lvledUpdateNearestPoly(&App->Led);
+			break;
+		}
+		case 3:
 			break;
 		default:
 			break;

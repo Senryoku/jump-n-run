@@ -202,6 +202,12 @@ void lvledObject(LevelEditor *Led, Polygon* P, unsigned int T, List CT);
 **/
 void lvledDelPoly(LevelEditor *Led);
 
+/** @brief Supprime le polygone le plus proche de Mouse ainsi que les Vertices rendus orphelins
+ *
+ * @param Led LevelEditor
+**/
+void lvledDelPolyAndVertex(LevelEditor *Led);
+
 /** @brief Supprime le Elastic le plus proche de Mouse
  *
  * Test s'il ne fait pas partie d'un polygone avant de le supprimer
@@ -222,6 +228,14 @@ void lvledDelRigid(LevelEditor *Led);
  * @param Led LevelEditor
 **/
 void lvledDelVertex(LevelEditor *Led);
+
+/** @brief Supprime le vertex passé en paramètre
+ *
+ * Fait toute les vérifications avant de supprimer
+ * @param Led LevelEditor
+ * @param tmpVertex Vertex à supprimer
+**/
+void lvledDelVertexPointer(LevelEditor *Led, Vertex* tmpVertex);
 
 /** @brief Lance le jeu sur le niveau en cours d'édition
  *
