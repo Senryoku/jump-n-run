@@ -48,7 +48,7 @@ typedef struct SPlayer
 
 	Vec2 Speed;
 	Vec2 Normal, GroundVec;
-	Vec2 Center;
+	Vec2 Center, PrevCenter;
 	Vec2 ULPos, URPos, DLPos, DRPos;
 	float GroundAngle;
 	Bool Jumping;
@@ -63,7 +63,7 @@ typedef struct SPlayer
 	Bool IsFree; ///< c'est un ragdoll ou pas
 	AnimPositions Positions;
 	AnimAngles Angles;
-	Animation* aniJump, *aniRun, *aniFall, *aniHello;
+	Animation* aniJump, *aniRun, *aniFall, *aniHello, *aniStand;
 } Player;
 
 /** @brief Constructeur

@@ -59,9 +59,11 @@ void plInit(Player* P, World *W)
 	
 	P->aniHello = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniHello, "data/animHello.txt");
-	printf("ani load\n");
 	
-	aniUpdateForCurrentState(P->aniRun, P);
+	P->aniStand = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
+	aniLoadFromFile(P->aniStand, "data/animStand.txt");
+	
+	aniUpdateForCurrentState(P->aniStand, P);
 	
 
 	/*
@@ -181,6 +183,7 @@ void plFree(Player* P)
 	delAnimation(P->aniJump);
 	delAnimation(P->aniRun);
 	delAnimation(P->aniHello);
+	delAnimation(P->aniStand);
 
 }
 
@@ -382,7 +385,6 @@ void plUpdate(Player* P, World* W)
 {
 	/* Mise à jour spécifique de Player */
 	int i;
-	P->Center = polyComputeCenter(P->Shape);
 
 	P->RdUStatus = P->RdRStatus = P->RdDStatus =
 	P->RdLStatus = P->VxURStatus = P->VxULStatus =
@@ -476,12 +478,34 @@ void plUpdate(Player* P, World* W)
 	if(P->GrabR != NULL) P->State = P->State | PL_GRABR;
 	
 	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
+	P->PrevCenter = P->Center;
+	P->Center = polyComputeCenter(P->Shape);
 	v = vec2Normalized(v);
 	vxSetPosition(P->vxBodyParts[bpBase], vec2Add(P->Center, vec2Prod(v, -15.f)));
 		
 	
-	///@todo ajouter states
-	aniUpdate(P->aniRun, P);
+	Vec2 speed = vec2Sub(P->Center, P->PrevCenter);
+	//printf("speed:%f,%f\n",speed.x, speed.y);
+	
+	Animation* CurrentA;
+	
+	if (!(P->State & PL_ON_GROUND) && ABS(speed.y) > 0.1f)
+	{
+		if (speed.y<2.f)
+			CurrentA = P->aniJump;
+		else
+			CurrentA = P->aniFall;
+			
+	}
+	else
+	{
+		if (ABS(speed.x) > 1.f)
+			CurrentA = P->aniRun;
+		else
+			CurrentA = P->aniStand;
+	}
+	
+	aniUpdate(CurrentA, P);
 	
 }
 

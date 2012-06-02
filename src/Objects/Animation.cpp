@@ -193,6 +193,8 @@ void aniUpdate(Animation* A, SPlayer* P)
 	if (A->Type == ANIM_POSITIONS)
 	{
 		AnimPositions* Pos;
+		if (plGetAnimPositionsState(P)->CurrentState >= aniGetStatesCount(A))
+			plGetAnimPositionsState(P)->CurrentState = 0;
 		Pos = (AnimPositions*) daGet(A->States, plGetAnimPositionsState(P)->CurrentState);
 		
 		Bool VxResolved;
@@ -266,7 +268,10 @@ void aniUpdate(Animation* A, SPlayer* P)
 	else
 	{
 		AnimAngles* Ang;
+		if (plGetAnimAnglesState(P)->CurrentState >= aniGetStatesCount(A))
+			plGetAnimAnglesState(P)->CurrentState = 0;
 		Ang = (AnimAngles*) daGet(A->States, plGetAnimAnglesState(P)->CurrentState);
+		
 		
 		/* On change la position des vertex du joueur */
 		for (int i=0; i<10; i++)
