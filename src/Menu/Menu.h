@@ -64,6 +64,8 @@ mnFree(M);
  * @see MenuOfItems
  */
 
+struct s_SharedResources;
+
 typedef struct SMenu
 {
 	DynArr* Menus; /**< Tableau contenant tous les menus **/
@@ -83,6 +85,7 @@ typedef struct SMenu
 	MenuType Type; /**< type du menu, permet de faire des animations diférentes **/
 	Bool UseMouse; /**< Dit si on est en train d'utiliser la souris ou le clavier **/
 	float MessageScale; /**< un scale pour les menus qui apparaissent avec un click **/
+	s_SharedResources* SR; ///< Pointeur vers les resources
 } Menu;
 
 
@@ -90,7 +93,7 @@ typedef struct SMenu
  *
  * @param M Menu à laquelle s'applique la fonction
  **/
-void mnInit(Menu* M);
+void mnInit(Menu* M, s_SharedResources* SR);
 
 /** @brief Libère un menu
  *

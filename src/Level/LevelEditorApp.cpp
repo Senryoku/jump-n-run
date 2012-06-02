@@ -101,7 +101,7 @@ void appRun(LevelEditorApp* App)
 
 
 	Menu* M = (Menu*)malloc(sizeof(Menu));
-	mnInit(M);
+	mnInit(M, App->SR);
 
 
 	mnAddMenu(M, "Main Menu", 2);
@@ -116,7 +116,7 @@ void appRun(LevelEditorApp* App)
 
 	/* Code temporel permettant de créer des states d'animation */
 
-	/*Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
+	Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
 
 	vxSetPosition(Base, vec2(150.f, 330.f));
 	Vec2 B = vxGetPosition(Base);
@@ -177,7 +177,7 @@ void appRun(LevelEditorApp* App)
 	wdAddRigid(App->Led.Lvl->W, RL2);
 	wdAddRigid(App->Led.Lvl->W, H1);
 	wdAddRigid(App->Led.Lvl->W, H2);
-	wdAddRigid(App->Led.Lvl->W, H3);*/
+	wdAddRigid(App->Led.Lvl->W, H3);
 
 	/* Fin du code temporaire pour les states des animations */
 	fpsInit(&fps);
@@ -414,7 +414,7 @@ void appRun(LevelEditorApp* App)
 
 
 					/* code de sauvegarde de l'animation */
-				/*case sf::Keyboard::A :
+				case sf::Keyboard::A :
 						FILE* f; Vertex* V; Vec2 Pos; float Angle;
 						f = fopen("animPos.txt", "w");
 						//[nb of states] [AnimType] [Triggers]
@@ -469,7 +469,7 @@ void appRun(LevelEditorApp* App)
 						Pos = vec2Prod(vec2Add(vec2Add(vxGetPosition(HeadLeft), vxGetPosition(HeadRight)), vxGetPosition(Neck)), 1.f/3.f);
 						Pos = vec2Sub(Pos, vxGetPosition(Neck));
 						Angle = vec2Angle(Pos);
-						fprintf(f, "%u %f #%s\n", (unsigned int)(vxIsFixed(V1) || !vxIsFixed(V2)), RAD2DEG(Angle), "Head");
+						fprintf(f, "%u %f #%s\n", (unsigned int)(vxIsFixed(V1) || vxIsFixed(V2)), RAD2DEG(Angle), "Head");
 
 						V1 = LeftArm1; V2 = Neck;
 						Angle = vec2Angle(vec2Sub(vxGetPosition(V1), vxGetPosition(V2)));
@@ -502,7 +502,7 @@ void appRun(LevelEditorApp* App)
 
 						fclose(f);
 						break;
-				 */
+				 
 					default:
 						break;
 				}
@@ -649,6 +649,7 @@ void appRun(LevelEditorApp* App)
 		// Update the App->Window
 		App->Window.display();
 	}
+	
 	/*
 	delVertex(Neck);
 	delVertex(Base);
@@ -662,7 +663,7 @@ void appRun(LevelEditorApp* App)
 	delVertex(LeftLeg2);
 	delVertex(RightLeg1);
 	delVertex(RightLeg2);
-	 */
+	*/
 
 
 	mnFree(M);

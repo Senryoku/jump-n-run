@@ -1,6 +1,7 @@
 #include "Menu.h"
+#include <Game/SharedResources.h>
 
-void mnInit(Menu* M)
+void mnInit(Menu* M, s_SharedResources* SR)
 {
 	M->Menus = newDynArr();
 	M->CurrentMenu = 0;
@@ -20,6 +21,7 @@ void mnInit(Menu* M)
 	M->MessageScale = 0.f;
 	M->Hide = FALSE;
 	M->UseMouse = FALSE;
+	M->SR = SR;
 }
 
 
@@ -202,6 +204,7 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 			/* On va aller chercher le premier élement du menu qui peut être sélectioné */
 			if (mniGetType(moiGetItemSelected(mnGetCurrentMenu(M))) == ITEM_LABEL)
 				moiMoveCursor(mnGetCurrentMenu(M), MENU_GO_DOWN);
+			sndmPlay(shSoundManager(M->SR), "snd_menu");
 		}
 	}
 	else
@@ -221,6 +224,8 @@ void mnUpdate(Menu* M, Vec2 MenuPos, Vec2 OutPos)
 
 void mnSetActive(Menu* M, Bool Active)
 {
+	if (Active != M->Active && M->Type == MENU_TYPE_DEFAULT)
+		sndmPlay(shSoundManager(M->SR), "snd_menu");
 	M->Active = Active;
 }
 
@@ -228,10 +233,13 @@ void mnGoToMenu(Menu* M, MenuID MID)
 {
 	M->CurrentMenu = MID;
 	M->Active = FALSE;
+	sndmPlay(shSoundManager(M->SR), "snd_menu");
 }
 
 void mnSetHide(Menu* M, Bool Hide)
 {
+	if (Hide != M->Hide && M->Type == MENU_TYPE_DEFAULT)
+		sndmPlay(shSoundManager(M->SR), "snd_menu");
 	M->Hide = Hide;
 	if (Hide == TRUE)
 		M->Active = FALSE;
@@ -305,6 +313,7 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 {
 	if (!mnGetActive(M))
 		return;
+	MenuItem* I = mnGetCurrentItem(M);
 	
 	if (event.type == sf::Event::MouseButtonPressed)
 		M->UseMouse = TRUE;
@@ -348,6 +357,9 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 	
 	if (Enter)
 		mniUse(M, mnGetCurrentItem(M), TRUE, MOVE_NONE, 0, FALSE);
+	
+	if (I != mnGetCurrentItem(M))
+		sndmPlay(shSoundManager(M->SR), "snd_select");
 	
 }
 

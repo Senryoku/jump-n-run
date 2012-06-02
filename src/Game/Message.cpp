@@ -62,7 +62,7 @@ void msgInit(MessageManager* MM, s_SharedResources* SR)
 	MM->LastInput = (char*)malloc(sizeof(char));
 	MM->LastInput[0] = '\0';
 
-	mnInit(MM->Messages);
+	mnInit(MM->Messages, SR);
 }
 
 void msgFree(MessageManager* MM)

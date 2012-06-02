@@ -82,7 +82,12 @@ void shLoadFonts(SharedResources* SR)
 
 void shLoadAudio(SharedResources* SR)
 {
-	
+	sndmLoadSoundFile(SR->SM, "snd_button", "data/sfx/snd_button.ogg");
+	sndmLoadSoundFile(SR->SM, "snd_menu", "data/sfx/snd_menu.ogg");
+	sndmLoadSoundFile(SR->SM, "snd_select", "data/sfx/snd_select.ogg");
+	sndmLoadSoundFile(SR->SM, "snd_msg", "data/sfx/snd_msg.ogg");
+	sndmLoadSoundFile(SR->SM, "snd_step1", "data/sfx/snd_step1.ogg");
+	sndmLoadSoundFile(SR->SM, "snd_step2", "data/sfx/snd_step2.ogg");
 }
 
 const sf::Font& shFntMenu(const SharedResources* SR)

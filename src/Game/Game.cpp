@@ -34,7 +34,7 @@ void gmInit(Game* G, SharedResources* SR)
 	G->SR = SR;
 
 	ItemID IID;
-	mnInit(&G->GameMenu);
+	mnInit(&G->GameMenu, G->SR);
 	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
 	mnSetItemNormalZoomFactor(&G->GameMenu, 0.75f);
 
@@ -119,8 +119,9 @@ void gmPlay(Game* G)
 	lvlLoadedInit(G->Lvl);
 
 	Animation* A = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(A, "data/animRun.txt");
+	aniLoadFromFile(A, "data/animPeanut.txt");
 	aniUpdateForCurrentState(A, lvlGetP1(G->Lvl));
+	aniSetForce(A, 0.65f);
 
 	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
@@ -260,6 +261,8 @@ void gmPlay(Game* G)
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
             plRotateL(lvlGetP1(G->Lvl));
 
+		for (int i=0; i<10; i++)
+			glDrawPolygon(G->Lvl->P1->BodyPolygons[i]);
 
 		if(lvlIsGoalReached(G->Lvl))
 		{
