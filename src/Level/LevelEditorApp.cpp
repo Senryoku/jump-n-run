@@ -726,7 +726,7 @@ void appShowRigidMenu(LevelEditorApp* App)
 	msgCreateMenu(shMessageManager(App->SR), 3);
 	msgAddItem(shMessageManager(App->SR), "Length", ITEM_INPUT_VALUE, NULL, &R->Length);
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Rigid");
-	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+	msgAddCloseItem(shMessageManager(App->SR), "Ok");
 
 	IID = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 
@@ -756,7 +756,7 @@ void appShowElasticMenu(LevelEditorApp* App)
 	msgAddItem(shMessageManager(App->SR), "Length", ITEM_INPUT_VALUE, NULL, &E->Length);
 	msgAddItem(shMessageManager(App->SR), "Spring", ITEM_INPUT_VALUE, NULL, &E->Spring);
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Elastic");
-	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+	msgAddCloseItem(shMessageManager(App->SR), "Ok");
 
 	IID = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 
