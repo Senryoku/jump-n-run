@@ -63,7 +63,11 @@ void plInit(Player* P, World *W)
 	P->aniStand = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniStand, "data/animStand.txt");
 	
+	for (int i=0; i<10; i++)
+		printf("angle %u:%f\n", i, P->Angles.Angles[i]);
 	aniUpdateForCurrentState(P->aniStand, P);
+	for (int i=0; i<10; i++)
+		printf("angle %u:%f\n", i, P->Angles.Angles[i]);
 	
 
 	/*
@@ -381,79 +385,9 @@ void plReleaseL(Player* P, World* W)
 	P->GrabL = NULL;
 }
 
-void plUpdate(Player* P, World* W)
+void plUpdate(Player* P)
 {
-	/* Mise à jour spécifique de Player */
-	int i;
-
-	P->RdUStatus = P->RdRStatus = P->RdDStatus =
-	P->RdLStatus = P->VxURStatus = P->VxULStatus =
-	P->VxDLStatus = P->VxDRStatus = nullCollisionInfo();
-	for (int j=0; j<4; j++)
-	{
-		polyResolve(plGetShape(P));
-		for (i=0; i<10; i++)
-			polyResolve(P->BodyPolygons[i]);
-	}
-	
-	float dif = vxGetPosition(P->VxDL).x - vxGetOldPos(P->VxDL).x;
-	if (dif >= 0.f && ABS(dif) > 0.2f)
-		P->Dir = DIR_RIGHT;
-	else
-		P->Dir = DIR_LEFT;
-	
-
-	List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->Shape);
-	
-	Node* it;
-	CollisionInfo Info;
-	
-	P->State = PL_NOSTATE;
-	P->Normal = vec2(0.f, 0.f);
-	for (int i=0; i<4; i++)
-	{
-		it = lstFirst(&LExtracted);
-		while(!nodeEnd(it))
-		{
-			
-			Info = polyCollide(plGetShape(P), (Polygon*) nodeGetData(it));
-			if(Info.P1 != NULL)
-			{
-				//printf("Collision\n");
-				if (Info.Edge == plGetRdD(P))
-				{
-					P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
-					P->Normal = vec2Prod(Info.Normal, -1.f);
-					P->State = P->State | PL_HAS_SUPPORT;
-					if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
-				} else if(Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))	{
-					P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
-					P->Normal = Info.Normal;
-					P->State = P->State | PL_HAS_SUPPORT;
-					if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
-				}
-				
-				
-				/* Test des propriétés de la collision */
-				if(Info.Edge == plGetRdU(P)) P->RdUStatus = Info;
-				else if(Info.Edge == plGetRdR(P)) P->RdRStatus = Info;
-				else if(Info.Edge == plGetRdD(P)) P->RdDStatus = Info;
-				else if(Info.Edge == plGetRdL(P)) P->RdLStatus = Info;
-				if(Info.V == plGetVxUL(P)) P->VxULStatus = Info;
-				else if(Info.V == plGetVxUR(P)) P->VxURStatus = Info;
-				else if(Info.V == plGetVxDR(P)) P->VxDRStatus = Info;
-				else if(Info.V == plGetVxDL(P)) P->VxDLStatus = Info;
-				
-				
-				polyHandleCollision(Info);
-			}
-			it = nodeGetNext(it);
-		}
-		lstFree(&LExtracted);
-	
 		
-	}
-	
 	P->GroundVec = vec2Ortho(P->Normal);
 	
 	// Mise à jour quelques States
@@ -505,8 +439,79 @@ void plUpdate(Player* P, World* W)
 			CurrentA = P->aniStand;
 	}
 	
-	aniUpdate(CurrentA, P);
+	if (ABS(speed.x) > 1.f)
+	{
+		float spp = vec2Length(speed);
+		aniUpdate(CurrentA, P, MAX(0.25f, spp/15.f));
+	}
+	else
+		aniUpdate(CurrentA, P, 1.f);
+}
+
+void plPhysics(Player* P, World* W)
+{
+	/* Mise à jour spécifique de Player */
+	int i;
 	
+	P->RdUStatus = P->RdRStatus = P->RdDStatus =
+	P->RdLStatus = P->VxURStatus = P->VxULStatus =
+	P->VxDLStatus = P->VxDRStatus = nullCollisionInfo();
+	polyResolve(plGetShape(P));
+	for (i=0; i<10; i++)
+		polyResolve(P->BodyPolygons[i]);
+	
+	float dif = vxGetPosition(P->VxDL).x - vxGetOldPos(P->VxDL).x;
+	if (dif >= 0.f && ABS(dif) > 0.2f)
+		P->Dir = DIR_RIGHT;
+	else
+		P->Dir = DIR_LEFT;
+	
+	List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->Shape);
+	
+	Node* it;
+	CollisionInfo Info;
+	
+	P->State = PL_NOSTATE;
+	P->Normal = vec2(0.f, 0.f);
+	
+	it = lstFirst(&LExtracted);
+	while(!nodeEnd(it))
+	{
+		
+		Info = polyCollide(plGetShape(P), (Polygon*) nodeGetData(it));
+		if(Info.P1 != NULL)
+		{
+			//printf("Collision\n");
+			if (Info.Edge == plGetRdD(P))
+			{
+				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
+				P->Normal = vec2Prod(Info.Normal, -1.f);
+				P->State = P->State | PL_HAS_SUPPORT;
+				if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
+			} else if(Info.V == plGetVxDL(P) || Info.V == plGetVxDR(P))	{
+				P->GroundAngle = vec2Angle(Info.Normal)-M_PI_2;
+				P->Normal = Info.Normal;
+				P->State = P->State | PL_HAS_SUPPORT;
+				if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
+			}
+			
+			
+			/* Test des propriétés de la collision */
+			if(Info.Edge == plGetRdU(P)) P->RdUStatus = Info;
+			else if(Info.Edge == plGetRdR(P)) P->RdRStatus = Info;
+			else if(Info.Edge == plGetRdD(P)) P->RdDStatus = Info;
+			else if(Info.Edge == plGetRdL(P)) P->RdLStatus = Info;
+			if(Info.V == plGetVxUL(P)) P->VxULStatus = Info;
+			else if(Info.V == plGetVxUR(P)) P->VxURStatus = Info;
+			else if(Info.V == plGetVxDR(P)) P->VxDRStatus = Info;
+			else if(Info.V == plGetVxDL(P)) P->VxDLStatus = Info;
+			
+			
+			polyHandleCollision(Info);
+		}
+		it = nodeGetNext(it);
+	}
+	lstFree(&LExtracted);
 }
 
 /*

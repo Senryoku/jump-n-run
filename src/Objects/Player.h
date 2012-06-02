@@ -115,7 +115,9 @@ void plSetShape(Player* P, Polygon* Shape);
  * @param P Joueur
  * @param W Monde physique dans lequel évolue le joueur
 **/
-void plUpdate(Player* P, World* W);
+void plUpdate(Player* P);
+
+void plPhysics(Player* P, World* W);
 
 /** @brief Déplacement vers la droite
  *

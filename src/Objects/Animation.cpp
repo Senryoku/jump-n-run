@@ -180,7 +180,7 @@ void aniAddAngleState(Animation* A, const AnimAngles* Angles)
 	daAdd(A->States, Ang);
 }
 
-void aniUpdate(Animation* A, SPlayer* P)
+void aniUpdate(Animation* A, SPlayer* P, float Step)
 {
 	unsigned char TriggerCount = 0;
 	AnimTriggers Triggering = ANIM_NECK; // = 1
@@ -204,7 +204,7 @@ void aniUpdate(Animation* A, SPlayer* P)
 			VxResolved = FALSE;
 			if (!ISNAN(Pos->Positions[i].x))
 			{
-				Wobble(&P->Positions.Positions[i].x, Pos->Positions[i].x, A->Force, A->Friction, &plGetAnimPositionsState(P)->Spd[i]);
+				Wobble(&P->Positions.Positions[i].x, Pos->Positions[i].x, A->Force*Step, A->Friction, &plGetAnimPositionsState(P)->Spd[i]);
 				if (i<bpHeadLeft)
 					vxSetX(P->vxBodyParts[i], P->Positions.Positions[i].x);
 			}
@@ -224,7 +224,7 @@ void aniUpdate(Animation* A, SPlayer* P)
 			
 			if (!ISNAN(Pos->Positions[i].y))
 			{
-				Wobble(&P->Positions.Positions[i].y, Pos->Positions[i].y, A->Force, A->Friction, &plGetAnimPositionsState(P)->Spd[i*2]);
+				Wobble(&P->Positions.Positions[i].y, Pos->Positions[i].y, A->Force*Step, A->Friction, &plGetAnimPositionsState(P)->Spd[i*2]);
 				if (i<bpHeadLeft)
 					vxSetY(P->vxBodyParts[i], P->Positions.Positions[i].y);
 			}
@@ -278,7 +278,7 @@ void aniUpdate(Animation* A, SPlayer* P)
 		{
 			if (!ISNAN(Ang->Angles[i]))
 			{
-				Wobble(&P->Angles.Angles[i], Ang->Angles[i], A->Force, A->Friction, &plGetAnimAnglesState(P)->Spd[i]);
+				Wobble(&P->Angles.Angles[i], Ang->Angles[i], A->Force*Step, A->Friction, &plGetAnimAnglesState(P)->Spd[i]);
 				if (i<bpHeadLeft)
 				{
 					Vertex* from;
@@ -415,7 +415,7 @@ void aniUpdateForCurrentState(Animation* A, SPlayer* P)
 		
 		for (int i=0; i<10; i++)
 			if (!ISNAN(Ang->Angles[i]))
-				P->Angles.Angles[i] = Ang->Angles[i];
+				plGetAnimAnglesState(P)->Angles[i] = Ang->Angles[i];
 	}
 }
 

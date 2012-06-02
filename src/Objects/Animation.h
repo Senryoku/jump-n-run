@@ -230,8 +230,9 @@ void aniCountTriggers(Animation* A);
  * cette fonction crée une copie
  * @param[in,out] A Animation à laquelle s'applique la fonction
  * @param[in,out] Player auquel s'applique l'animation
+ * @param[in] Step change la vitesse de l'animation (va de 0 à 1)
  */
-void aniUpdate(Animation* A, SPlayer* P);
+void aniUpdate(Animation* A, SPlayer* P, float Step);
 
 /** @brief Fait une mise à jour d'un Joueur à partir du currentstate de l'animation
  *

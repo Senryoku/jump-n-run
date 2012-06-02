@@ -446,11 +446,14 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 			wdResolveElastic(lvlGetWorld(Lvl));
 			//if(Lvl->P1 != NULL) vxSetFixed(Lvl->P1->Stable, 0);
 			wdHandleCollision(lvlGetWorld(Lvl));
+			
+			if (Lvl->P1 != NULL)
+				plPhysics(Lvl->P1, lvlGetWorld(Lvl));
 
 		}
 		
 		if (Lvl->P1 != NULL)
-			plUpdate(Lvl->P1, lvlGetWorld(Lvl));
+			plUpdate(Lvl->P1);
 	}
 	else
 	{
