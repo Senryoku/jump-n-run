@@ -70,8 +70,8 @@ void appWindowInit(LevelEditorApp* App)
 		App->Window.setVerticalSyncEnabled(1);
 	else
 		App->Window.setFramerateLimit((unsigned int) Cfg.FPSLimit);
-	
-	if (Cfg.PlayMusic != 0.f) sndmPlayMusic(shSoundManager(App->SR)), sndmMusicFadeToNext(shSoundManager(App->SR), 1.f);
+
+	if (Cfg.PlayMusic != 0.f) sndmPlayMusic(shSoundManager(App->SR));
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;
@@ -183,9 +183,9 @@ void appRun(LevelEditorApp* App)
 	 */
 
 	/* Fin du code temporaire pour les states des animations */
-	
-	
-	
+
+
+
 	fpsInit(&fps);
 	while (App->Window.isOpen())
 	{
@@ -509,7 +509,7 @@ void appRun(LevelEditorApp* App)
 						fclose(f);
 						break;
 						*/
-				 
+
 					default:
 						break;
 				}
@@ -656,7 +656,7 @@ void appRun(LevelEditorApp* App)
 		// Update the App->Window
 		App->Window.display();
 	}
-	
+
 	/*
 	delVertex(Neck);
 	delVertex(Base);
@@ -675,7 +675,7 @@ void appRun(LevelEditorApp* App)
 
 	mnFree(M);
 	free(M);
-	
+
 }
 
 void appSetWorkingPath(LevelEditorApp* App, const char* Path)
