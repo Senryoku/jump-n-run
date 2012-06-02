@@ -448,40 +448,40 @@ void plUpdate(Player* P, World* W)
 			it = nodeGetNext(it);
 		}
 		lstFree(&LExtracted);
-		
-		P->GroundVec = vec2Ortho(P->Normal);
-		
-		// Mise à jour quelques States
-		Vec2 RdBottom = vec2Normalized(vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL)));
-		
-		if(RdBottom.x < 0.f)
-		{
-			P->State = P->State | PL_UPSIDEDOWN;
-			P->State = P->State | PL_FALLING;
-		} else {
-			if(RdBottom.y < -0.5f)
-			{
-				P->State = P->State | PL_FALLING;
-				P->State = P->State | PL_FALLING_L;
-			} else if(RdBottom.y > 0.5f) {
-				P->State = P->State | PL_FALLING;
-				P->State = P->State | PL_FALLING_R;
-			}
-		}
-		
-		if(P->GrabL != NULL) P->State = P->State | PL_GRABL;
-		if(P->GrabR != NULL) P->State = P->State | PL_GRABR;
-		
-		Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
-		v = vec2Normalized(v);
-		vxSetPosition(P->vxBodyParts[bpBase], vec2Add(P->Center, vec2Prod(v, -15.f)));
+	
 		
 	}
 	
+	P->GroundVec = vec2Ortho(P->Normal);
+	
+	// Mise à jour quelques States
+	Vec2 RdBottom = vec2Normalized(vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL)));
+	
+	if(RdBottom.x < 0.f)
+	{
+		P->State = P->State | PL_UPSIDEDOWN;
+		P->State = P->State | PL_FALLING;
+	} else {
+		if(RdBottom.y < -0.5f)
+		{
+			P->State = P->State | PL_FALLING;
+			P->State = P->State | PL_FALLING_L;
+		} else if(RdBottom.y > 0.5f) {
+			P->State = P->State | PL_FALLING;
+			P->State = P->State | PL_FALLING_R;
+		}
+	}
+	
+	if(P->GrabL != NULL) P->State = P->State | PL_GRABL;
+	if(P->GrabR != NULL) P->State = P->State | PL_GRABR;
+	
+	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
+	v = vec2Normalized(v);
+	vxSetPosition(P->vxBodyParts[bpBase], vec2Add(P->Center, vec2Prod(v, -15.f)));
 		
 	
 	///@todo ajouter states
-	aniUpdate(P->aniRun, P, 1.f);
+	aniUpdate(P->aniRun, P);
 	
 }
 

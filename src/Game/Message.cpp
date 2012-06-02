@@ -147,6 +147,8 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	else
 		mnSetPosition(MM->Messages, vec2(MouseX, MouseY));
 
+	win.setKeyRepeatEnabled(1);
+	
 	while (mnIsVisible(MM->Messages) || !MM->CloseMessage)
 	{
 
@@ -226,6 +228,7 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 	glTexFree(Screeny);
 
 	glPopMatrix();
+	win.setKeyRepeatEnabled(0);
 
 }
 

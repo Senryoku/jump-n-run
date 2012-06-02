@@ -1,7 +1,6 @@
 #ifndef _LEVEL_H_
 #define _LEVEL_H_
 
-#include <Rendering/OpenGL.h> // Pour le type Texture (adapté à l'API)
 #include <Physics/Physics.h>
 #include <Objects/Player.h>
 #include <string.h>
@@ -16,6 +15,8 @@
  *
  * Voir FormatLvl.txt pour des informations sur le format de fichier lvl
  **/
+
+struct s_SharedResources;
 
 /** @brief Structure définissant un niveau de jeu
  *
@@ -48,6 +49,8 @@ typedef struct s_Level
 				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL); /** Pointeur de fonction affichant une texture **/
 	void (*lvlDispTexPoly)(Texture T, Polygon* P, List* L); /** Pointeur de fonction affichant une texture sur un polygon **/
 	void (*lvlDispFlag)(Flag* F, float X, float Y);
+	
+	void (*lvlDispPlayer)(Player* P, s_SharedResources* SR);
 } Level;
 
 /** @brief Constructeur
@@ -148,6 +151,12 @@ void lvlUpdate(Level* Lvl, Bool Paused);
  *
 **/
 Bool lvlIsGoalReached(const Level* L);
+
+/** @brief Affiche le joueur
+ * @param Lvl Level auquel s'applique la fonction
+ * @param
+ **/
+void lvlDisplayPlayer(const Level* Lvl, s_SharedResources* SR);
 
 /** @brief Affiche le fond
  *

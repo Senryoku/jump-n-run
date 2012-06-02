@@ -302,8 +302,7 @@ void gmPlay(Game* G)
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 
-
-		glDrawPlayer(lvlGetP1(G->Lvl), G->SR);
+		lvlDisplayPlayer(G->Lvl, G->SR);
 
 		sndmUpdate(shSoundManager(G->SR));
 

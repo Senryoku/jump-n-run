@@ -1,4 +1,5 @@
 #include "Level.h"
+#include <Rendering/OpenGL.h> // Pour le type Texture (adapté à l'API)
 
 
 Level* newLevel(float Width, float Height)
@@ -20,6 +21,7 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlDisplayTex = &glDisplayTex; ///@todo Mettre une fonction our charger ça
 	Lvl->lvlDispTexPoly = &glDispTexPoly;
 	Lvl->lvlDispFlag = &glDispFlag;
+	Lvl->lvlDispPlayer = &glDispPlayer;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
 	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/trollface.jpg"), 0);
 	Lvl->Finished = 0;
@@ -551,6 +553,11 @@ void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H)
 	(*Lvl->lvlDisplayTex)(Lvl->Background, vX1, vec2(vX2.x, vX1.y), vX2, vec2(vX1.x, vX2.y),
 						vec2(X, Y), vec2(X + W, Y),
 						vec2(X + W, Y + H), vec2(X, Y + H));
+}
+
+void lvlDisplayPlayer(const Level* Lvl, s_SharedResources* SR)
+{
+	(*Lvl->lvlDispPlayer)(Lvl->P1, SR);
 }
 
 void lvlDisplayL1(const Level* Lvl)

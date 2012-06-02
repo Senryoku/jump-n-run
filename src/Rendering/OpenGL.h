@@ -34,7 +34,7 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 
 void glDrawCursor(sf::RenderTarget& win, float ViewWidth, float ViewHeight, float MouseX, float MouseY, sf::Sprite& sprCursor);
 
-void glDrawPlayer(Player* P, SharedResources* SR);
+void glDispPlayer(Player* P, SharedResources* SR);
 
 
 /** @brief Charge une texture en mémoire

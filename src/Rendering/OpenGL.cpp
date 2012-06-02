@@ -1005,7 +1005,7 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 
 }
 
-void glDrawPlayer(Player* P, SharedResources* SR)
+void glDispPlayer(Player* P, SharedResources* SR)
 {
 	glPushMatrix();
 	

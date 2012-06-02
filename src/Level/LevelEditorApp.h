@@ -1,8 +1,7 @@
 #ifndef _LEVELEDITORAPP_H_
 #define _LEVELEDITORAPP_H_
 
-#include <Rendering/OpenGL.h>
-#include <Level/LevelEditor.h>
+#include "LevelEditor.h"
 #include <Game/FPSCounter.h>
 #include <Audio/SoundManager.h>
 #include <Menu/Menu.h>

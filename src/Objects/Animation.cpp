@@ -101,76 +101,18 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 				AnimPositions Pos; unsigned int free, free2;
 				
 				Vec2* vec;
+				char read[100];
 				
-				vec = &Pos.Positions[bpNeck];
-				fscanf(f, "%u %f %u %f #Neck\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpHeadLeft];
-				fscanf(f, "%u %f %u %f #Head\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpLeftArm1];
-				fscanf(f, "%u %f %u %f #LeftArm1\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpLeftArm2];
-				fscanf(f, "%u %f %u %f #LeftArm2\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpRightArm1];
-				fscanf(f, "%u %f %u %f #RightArm1\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpRightArm2];
-				fscanf(f, "%u %f %u %f #RightArm2\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpLeftLeg1];
-				fscanf(f, "%u %f %u %f #LeftLeg1\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpLeftLeg2];
-				fscanf(f, "%u %f %u %f #LeftLeg2\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpRightLeg1];
-				fscanf(f, "%u %f %u %f #RightLeg1\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
-				
-				vec = &Pos.Positions[bpRightLeg2];
-				fscanf(f, "%u %f %u %f #RightLeg2\n",&free, &vec->x, &free2, &vec->y);
-				if (free)
-					vec->x = NAN;
-				if (free2)
-					vec->y = NAN;
+				for (int i=0; i<10; i++)
+				{
+					fgets(read, 100, f);
+					vec = &Pos.Positions[i];
+					sscanf(read, "%u %f %u %f", &free, &vec->x, &free2, &vec->y);
+					if (free)
+						vec->x = NAN;
+					if (free2)
+						vec->y = NAN;
+				}
 				
 				aniAddPositionState(A, &Pos);
 			}
@@ -179,56 +121,16 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 				AnimAngles Ang; unsigned int free;
 				
 				float* a;
+				char read[100];
 				
-				a = &Ang.Angles[bpNeck];
-				fscanf(f, "%u %f #Neck\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpHeadLeft];
-				fscanf(f, "%u %f #Head\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpLeftArm1];
-				fscanf(f, "%u %f #LeftArm1\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpLeftArm2];
-				fscanf(f, "%u %f #LeftArm2\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpRightArm1];
-				fscanf(f, "%u %f #RightArm1\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpRightArm2];
-				fscanf(f, "%u %f #RightArm2\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpLeftLeg1];
-				fscanf(f, "%u %f #LeftLeg1\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpLeftLeg2];
-				fscanf(f, "%u %f #LeftLeg2\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpRightLeg1];
-				fscanf(f, "%u %f #RightLeg1\n",&free, a);
-				if (free)
-					*a = NAN;
-				
-				a = &Ang.Angles[bpRightLeg2];
-				fscanf(f, "%u %f #RightLeg2\n",&free, a);
-				if (free)
-					*a = NAN;
+				for (int i=0; i<10; i++)
+				{
+					fgets(read, 100, f);
+					a = &Ang.Angles[i];
+					sscanf(read, "%u %f", &free, a);
+					if (free)
+						*a = NAN;
+				}
 				
 				aniAddAngleState(A, &Ang);
 
@@ -256,26 +158,6 @@ unsigned int aniGetStatesCount(const Animation* A)
 	return daGetSize(A->States);
 }
 
-
-void aniAddPositionState(Animation* A, Vec2 Head, Vec2 Neck, Vec2 LeftArm1, Vec2 LeftArm2, Vec2 RightArm1, Vec2 RightArm2, Vec2 LeftLeg1, Vec2 LeftLeg2, Vec2 RightLeg1, Vec2 RightLeg2)
-{
-	assert(A->Type == ANIM_POSITIONS);
-	
-	AnimPositions* Pos;
-	Pos = (AnimPositions*) malloc(sizeof(AnimPositions));
-	Pos->Positions[bpHeadLeft] = Head;
-	Pos->Positions[bpNeck] = Neck;
-	Pos->Positions[bpLeftArm1] = LeftArm1;
-	Pos->Positions[bpLeftArm2] = LeftArm2;
-	Pos->Positions[bpRightArm1] = RightArm1;
-	Pos->Positions[bpRightArm2] = RightArm2;
-	Pos->Positions[bpLeftLeg1] = LeftLeg1;
-	Pos->Positions[bpLeftLeg2] = LeftLeg2;
-	Pos->Positions[bpRightLeg1] = RightLeg1;
-	Pos->Positions[bpRightLeg2] = RightLeg2;
-	daAdd(A->States, Pos);
-}
-
 void aniAddPositionState(Animation* A, const AnimPositions* Positions)
 {
 	assert(A->Type == ANIM_POSITIONS);
@@ -285,25 +167,6 @@ void aniAddPositionState(Animation* A, const AnimPositions* Positions)
 	for (int i=0; i<10; i++)
 		Pos->Positions[i] = Positions->Positions[i];
 	daAdd(A->States, Pos);
-}
-
-void aniAddAngleState(Animation* A, float Head, float Neck, float LeftArm1, float LeftArm2, float RightArm1, float RightArm2, float LeftLeg1, float LeftLeg2, float RightLeg1, float RightLeg2)
-{
-	assert(A->Type == ANIM_ANGLES);
-	
-	AnimAngles* Ang;
-	Ang = (AnimAngles*) malloc(sizeof(AnimAngles));
-	Ang->Angles[bpHeadLeft] = Head;
-	Ang->Angles[bpNeck] = Neck;
-	Ang->Angles[bpLeftArm1] = LeftArm1;
-	Ang->Angles[bpLeftArm2] = LeftArm2;
-	Ang->Angles[bpRightArm1] = RightArm1;
-	Ang->Angles[bpRightArm2] = RightArm2;
-	Ang->Angles[bpLeftLeg1] = LeftLeg1;
-	Ang->Angles[bpLeftLeg2] = LeftLeg2;
-	Ang->Angles[bpRightLeg1] = RightLeg1;
-	Ang->Angles[bpRightLeg2] = RightLeg2;
-	daAdd(A->States, Ang);
 }
 
 void aniAddAngleState(Animation* A, const AnimAngles* Angles)
@@ -317,7 +180,7 @@ void aniAddAngleState(Animation* A, const AnimAngles* Angles)
 	daAdd(A->States, Ang);
 }
 
-void aniUpdate(Animation* A, SPlayer* P, float Step)
+void aniUpdate(Animation* A, SPlayer* P)
 {
 	unsigned char TriggerCount = 0;
 	AnimTriggers Triggering = ANIM_NECK; // = 1
