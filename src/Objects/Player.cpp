@@ -63,12 +63,6 @@ void plInit(Player* P, World *W)
 	P->aniStand = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniStand, "data/animStand.txt");
 	
-	for (int i=0; i<10; i++)
-		printf("angle %u:%f\n", i, P->Angles.Angles[i]);
-	aniUpdateForCurrentState(P->aniStand, P);
-	for (int i=0; i<10; i++)
-		printf("angle %u:%f\n", i, P->Angles.Angles[i]);
-	
 
 	/*
 	vxSetPosition(P->VxUL, vec2Rotate(P->ULPos, polyComputeCenter(P->Shape), P->GroundAngle));
@@ -109,16 +103,49 @@ void plInit(Player* P, World *W)
 	vxSetPosition(P->vxBodyParts[bpRightLeg1], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 30.f)));
 	vxSetPosition(P->vxBodyParts[bpRightLeg2], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 60.f)));
 	
+	/*
 	P->BodyPolygons[0] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpBase]);
-	P->BodyPolygons[1] = newPolygon(3, P->vxBodyParts[bpNeck], P->vxBodyParts[bpHeadLeft], P->vxBodyParts[bpHeadRight]);
-	P->BodyPolygons[2] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpLeftArm1]);
-	P->BodyPolygons[3] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpRightArm1]);
-	P->BodyPolygons[4] = newPolygon(2, P->vxBodyParts[bpBase], P->vxBodyParts[bpLeftLeg1]);
-	P->BodyPolygons[5] = newPolygon(2, P->vxBodyParts[bpBase], P->vxBodyParts[bpRightLeg1]);
-	P->BodyPolygons[6] = newPolygon(2, P->vxBodyParts[bpLeftArm1], P->vxBodyParts[bpLeftArm2]);
-	P->BodyPolygons[7] = newPolygon(2, P->vxBodyParts[bpRightArm1], P->vxBodyParts[bpRightArm2]);
-	P->BodyPolygons[8] = newPolygon(2, P->vxBodyParts[bpLeftLeg1], P->vxBodyParts[bpLeftLeg2]);
-	P->BodyPolygons[9] = newPolygon(2, P->vxBodyParts[bpRightLeg1], P->vxBodyParts[bpRightLeg2]);
+	P->BodyPolygons[9] = newPolygon(3, P->vxBodyParts[bpNeck], P->vxBodyParts[bpHeadLeft], P->vxBodyParts[bpHeadRight]);
+	P->BodyPolygons[1] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpLeftArm1]);
+	P->BodyPolygons[2] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpRightArm1]);
+	P->BodyPolygons[3] = newPolygon(2, P->vxBodyParts[bpBase], P->vxBodyParts[bpLeftLeg1]);
+	P->BodyPolygons[4] = newPolygon(2, P->vxBodyParts[bpBase], P->vxBodyParts[bpRightLeg1]);
+	P->BodyPolygons[5] = newPolygon(2, P->vxBodyParts[bpLeftArm1], P->vxBodyParts[bpLeftArm2]);
+	P->BodyPolygons[6] = newPolygon(2, P->vxBodyParts[bpRightArm1], P->vxBodyParts[bpRightArm2]);
+	P->BodyPolygons[7] = newPolygon(2, P->vxBodyParts[bpLeftLeg1], P->vxBodyParts[bpLeftLeg2]);
+	P->BodyPolygons[8] = newPolygon(2, P->vxBodyParts[bpRightLeg1], P->vxBodyParts[bpRightLeg2]);
+	 */
+	
+	Rigid *R[12];
+	
+	for (int i=0; i<12; i++)
+	{
+		switch (i) {
+			case bpNeck:
+			case bpLeftLeg1:
+			case bpRightLeg1:
+				R[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[bpBase], -1.f);
+				break;
+			case bpLeftArm1:
+			case bpRightArm1:
+			case bpHeadLeft:
+			case bpHeadRight:
+				R[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[bpNeck], -1.f);
+				break;
+			case bpLeftArm2:
+			case bpRightArm2:
+			case bpLeftLeg2:
+			case bpRightLeg2:
+				R[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[i-1], -1.f);
+				break;
+			case bpBase:
+				R[i] = newRigid(P->vxBodyParts[bpHeadLeft], P->vxBodyParts[bpHeadRight], -1.f);
+				break;
+			default:
+				break;
+		}
+		wdAddRigid(W, R[i]);
+	}
 	
 	//for (int i=0; i<10; i++) wdAddVxFromPoly(W, P->BodyPolygons[i]);
 
@@ -154,6 +181,13 @@ void plInit(Player* P, World *W)
 	wdAddRigid(W, H2);
 	wdAddRigid(W, H3);
 	 */
+	
+	for (int i=0; i<10; i++)
+		printf("angle %u:%f\n", i, P->Angles.Angles[i]);
+	aniUpdateForCurrentState(P->aniStand, P);
+	for (int i=0; i<10; i++)
+		printf("angle %u:%u\n", i, P->Angles.Angles[i]==((AnimAngles*)daGet(P->aniStand->States, 0))->Angles[i]);
+	aniUpdate(P->aniStand, P, 1.f);
 
 }
 
@@ -166,9 +200,8 @@ void plFree(Player* P)
 	P->GrabR = NULL;
 	P->GrabL = NULL;
 	
-	int i;
-	for (i=0; i<10; i++)
-		delPolygon(P->BodyPolygons[i]);
+	
+	//for (int i=0; i<10; i++) delPolygon(P->BodyPolygons[i]);
 
 	delVertex(P->VxBalance);
 	delElastic(P->ElBalance);
@@ -451,14 +484,14 @@ void plUpdate(Player* P)
 void plPhysics(Player* P, World* W)
 {
 	/* Mise à jour spécifique de Player */
-	int i;
 	
 	P->RdUStatus = P->RdRStatus = P->RdDStatus =
 	P->RdLStatus = P->VxURStatus = P->VxULStatus =
 	P->VxDLStatus = P->VxDRStatus = nullCollisionInfo();
 	polyResolve(plGetShape(P));
-	for (i=0; i<10; i++)
-		polyResolve(P->BodyPolygons[i]);
+	
+	//for (i=0; i<10; i++) polyResolve(P->BodyPolygons[i]);
+	for (int i=0; i<12; i++) vxResolve(P->vxBodyParts[i], 0.5f, 0.5f);
 	
 	float dif = vxGetPosition(P->VxDL).x - vxGetOldPos(P->VxDL).x;
 	if (dif >= 0.f && ABS(dif) > 0.2f)

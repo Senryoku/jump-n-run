@@ -112,24 +112,21 @@ MODULES = "Core/Vec2 Physics/Vertex Physics/Polygon"
 
 testVec2 : $(OBJ)Core/Vec2.o $(OBJ)testVec2.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	#valgrind --leak-check=full --tool=memcheck ./$(BIN)testVec2
-	./$(BIN)testVec2
+	valgrind --leak-check=full --tool=memcheck ./$(BIN)testVec2
 	
 $(OBJ)testVec2.o :
 	$(CXX) $(OPT) $(TESTS)TestVec2.cpp -c -o $@
 	
 TestCore : $(OBJ)Core/Vec2.o $(OBJ)Core/DynArr.o $(OBJ)Core/md5.o $(OBJ)Core/List.o $(OBJ)Core/Tools.o $(OBJ)Core/Node.o $(OBJ)TestCore.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	valgrind --leak-check=full --tool=memcheck ./$(BIN)$@
-	./$(BIN)testVec2
+	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
 	
 $(OBJ)TestCore.o :
 	$(CXX) $(OPT) $(TESTS)TestCore.cpp -c -o $@
 	
 TestPhysics : $(POINTO) $(OBJ)TestPhysics.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	valgrind --leak-check=full --tool=memcheck ./$(BIN)$@
-	./$(BIN)testVec2
+	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
 	
 $(OBJ)TestPhysics.o :
 	$(CXX) $(OPT) $(TESTS)TestCore.cpp -c -o $@

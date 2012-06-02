@@ -644,6 +644,8 @@ void lvlDispAllObj(Level* Lvl)
 		lvlDisplayObj(Lvl, (Object*) nodeGetData(it)); ///@todo jai un bad access ici en ayant des objets dans l'editeur et en faisant plusieur ^L Des objets non libérés?
 		it = nodeGetNext(it);
 	}
+	for (int i=0; i<0; i++)
+		glDrawPolygon(Lvl->P1->BodyPolygons[i]);
 }
 
 void lvlDispGoalFlag(Level* Lvl)
