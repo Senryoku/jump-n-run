@@ -4,6 +4,7 @@
 #include <Physics/Polygon.h>
 #include <Physics/World.h>
 #include "Animation.h"
+#include <SFML/System/Clock.hpp>
 
 /** @defgroup Player Player
  *
@@ -37,6 +38,8 @@ typedef struct SPlayer
 	/* char* Texture */
 
 	PlayerDirection Dir;
+	
+	sf::Clock timer;
 
 	Rigid* GrabR;
 	Rigid* GrabL;

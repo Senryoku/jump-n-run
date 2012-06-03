@@ -22,6 +22,8 @@ int main(int argc, char** argv)
 		fclose(f);
 	}*/
 	
+	srand((unsigned int)time(NULL));
+	
 	sf::Context Context;
 	Context.setActive(1);
 	SharedResources SR;
@@ -41,5 +43,7 @@ int main(int argc, char** argv)
 
 	return EXIT_SUCCESS;
 }
+
+
 
 

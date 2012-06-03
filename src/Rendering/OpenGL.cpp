@@ -638,10 +638,10 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x - 2.f, Position.y);
 
 	glTexCoord2f(1.f, 1.f);
-	glVertex2f(Position.x - 2.f, Position.y + 11.f);
+	glVertex2f(Position.x - 2.f, ceilf(Position.y + 11.f));
 
 	glTexCoord2f(0.f, 1.f);
-	glVertex2f(Position.x-13.f, Position.y + 11.f);
+	glVertex2f(Position.x-13.f, ceilf(Position.y + 11.f));
 
 
 	//TopRight
@@ -653,10 +653,10 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x + Size.x - 11.f, Position.y);
 
 	glTexCoord2f(0.f, 1.f);
-	glVertex2f(Position.x + Size.x - 11.f, Position.y + 11.f);
+	glVertex2f(Position.x + Size.x - 11.f, ceilf(Position.y + 11.f));
 
 	glTexCoord2f(-1.f, 1.f);
-	glVertex2f(Position.x + Size.x, Position.y + 11.f);
+	glVertex2f(Position.x + Size.x, ceilf(Position.y + 11.f));
 
 
 	//BottomLeft
@@ -730,10 +730,10 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y);
 
 	glTexCoord2f(1.f, 0.f);
-	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y +11.f);
+	glVertex2f(ceilf(Position.x - 11.f+Size.x), ceilf(Position.y +11.f));
 
 	glTexCoord2f(1.f, 1.f);
-	glVertex2f(Position.x-2.f, Position.y +11.f);
+	glVertex2f(Position.x-2.f, ceilf(Position.y +11.f));
 
 	//Bottom
 	glTexCoord2f(1.f, 0.f);
@@ -846,10 +846,10 @@ void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size)
 	glVertex2f(Position.x - 2.f, Position.y);
 
 	glTexCoord2f(1.f, 1.f);
-	glVertex2f(Position.x - 2.f, Position.y + 11.f);
+	glVertex2f(Position.x - 2.f, ceilf(Position.y + 11.f));
 
 	glTexCoord2f(0.f, 1.f);
-	glVertex2f(Position.x-13.f, Position.y + 11.f);
+	glVertex2f(Position.x-13.f, ceilf(Position.y + 11.f));
 
 
 	//TopRight
@@ -861,10 +861,10 @@ void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size)
 	glVertex2f(Position.x + Size.x - 11.f, Position.y);
 
 	glTexCoord2f(0.f, 1.f);
-	glVertex2f(Position.x + Size.x - 11.f, Position.y + 11.f);
+	glVertex2f(Position.x + Size.x - 11.f, ceilf(Position.y + 11.f));
 
 	glTexCoord2f(-1.f, 1.f);
-	glVertex2f(Position.x + Size.x, Position.y + 11.f);
+	glVertex2f(Position.x + Size.x, ceilf(Position.y + 11.f));
 
 
 
@@ -910,10 +910,10 @@ void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size)
 	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y);
 
 	glTexCoord2f(1.f, 0.f);
-	glVertex2f(ceilf(Position.x - 11.f+Size.x), Position.y +11.f);
+	glVertex2f(ceilf(Position.x - 11.f+Size.x), ceilf(Position.y +11.f));
 
 	glTexCoord2f(1.f, 1.f);
-	glVertex2f(Position.x-2.f, Position.y +11.f);
+	glVertex2f(Position.x-2.f, ceilf(Position.y +11.f));
 
 	glEnd();
 

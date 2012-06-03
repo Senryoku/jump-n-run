@@ -16,7 +16,8 @@ void plInit(Player* P, World *W)
 	P->DLPos = vec2(-35.f, 70.f);
 	P->DRPos = vec2(35.f, 70.f);
 
-
+	P->timer.restart();
+	
 	P->VxUL = newVertex();
 	vxSetPosition(P->VxUL, P->ULPos);
 	P->VxUR = newVertex();
@@ -275,15 +276,24 @@ Rigid* plGetRdL(Player* P)
 	return polyGetRigid(P->Shape, 3);
 }
 
-void plCorrectPosition(Player* Pl, Vec2 Pos)
+void plCorrectPosition(Player* P, Vec2 Pos)
 {
-	if(Pl->Shape != NULL)
+	if(P->Shape != NULL)
 	{
-		vxSetPosition(Pl->VxUL, vec2Add(vxGetPosition(Pl->VxUL), Pos));
-		vxSetPosition(Pl->VxUR, vec2Add(vxGetPosition(Pl->VxUR), Pos));
-		vxSetPosition(Pl->VxDL, vec2Add(vxGetPosition(Pl->VxDL), Pos));
-		vxSetPosition(Pl->VxDR, vec2Add(vxGetPosition(Pl->VxDR), Pos));
+		vxSetPosition(P->VxUL, vec2Add(vxGetPosition(P->VxUL), Pos));
+		vxSetPosition(P->VxUR, vec2Add(vxGetPosition(P->VxUR), Pos));
+		vxSetPosition(P->VxDL, vec2Add(vxGetPosition(P->VxDL), Pos));
+		vxSetPosition(P->VxDR, vec2Add(vxGetPosition(P->VxDR), Pos));
 	}
+	
+	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
+	P->PrevCenter = P->Center;
+	P->Center = polyComputeCenter(P->Shape);
+	v = vec2Normalized(v);
+	vxSetPosition(P->vxBodyParts[bpBase], vec2Add(P->Center, vec2Prod(v, -15.f)));
+	
+	aniUpdateForCurrentState(P->aniStand, P);
+	aniUpdate(P->aniStand, P, 1.f);
 }
 
 void plSetShape(Player* P, Polygon* Shape)
@@ -462,14 +472,16 @@ void plUpdate(Player* P)
 			CurrentA = P->aniJump;
 		else
 			CurrentA = P->aniFall;
-			
+		P->timer.restart();
 	}
 	else
 	{
 		if (ABS(speed.x) > 1.f)
-			CurrentA = P->aniRun;
-		else
+			CurrentA = P->aniRun, P->timer.restart();
+		else if (P->timer.getElapsedTime().asSeconds() < 5.f)
 			CurrentA = P->aniStand;
+		else
+			CurrentA = P->aniHello;
 	}
 	
 	if (ABS(speed.x) > 1.f)

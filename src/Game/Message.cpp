@@ -158,9 +158,15 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 			{
 				CloseMessage(MM);
-				if (event.key.code == sf::Keyboard::Escape)
-					MM->LastChoice = INVALID_ITEM_ID;
+				MM->LastChoice = INVALID_ITEM_ID;
 				break; // ça évite de doubler l'event avec les bouttons
+			}
+			
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && mnGetCurrentItem(MM->Messages) == NULL)
+			{
+				CloseMessage(MM);
+				MM->LastChoice = INVALID_ITEM_ID;
+				break;
 			}
 
 
@@ -173,7 +179,14 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 		if (mnGetType(MM->Messages) == MENU_TYPE_DEFAULT)
 			mnUpdate(MM->Messages, vec2(menuPosx, 100.f), vec2(menuPosx, -mnGetHeight(MM->Messages) - 100.f));
 		else
+		{
 			mnUpdate(MM->Messages, vec2(0.f, 0.f), vec2(0.f, 0.f));
+			if (mnGetHeight(MM->Messages)+MouseY+22.f > win.getSize().y)
+				mnSetPosition(MM->Messages, vec2(mnGetPosition(MM->Messages).x, win.getSize().y-mnGetHeight(MM->Messages)-22.f));
+			
+			if (moiGetSize(mnGetCurrentMenu(MM->Messages)).x+MouseX+22.f > win.getSize().x)
+				mnSetPosition(MM->Messages, vec2(win.getSize().x-moiGetSize(mnGetCurrentMenu(MM->Messages)).x-22.f, mnGetPosition(MM->Messages).y));
+		}
 
 
 		glClear(GL_COLOR_BUFFER_BIT);

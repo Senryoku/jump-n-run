@@ -254,13 +254,10 @@ void lvledDelPoly(LevelEditor *Led)
 		wdDelPolygon(lvlGetWorld(Led->Lvl), tmpPoly);
 		delPolygon(tmpPoly);
 		// Cherche si un objet se base sur ce polygon, si oui, le supprime également
-		Node* it = lstFirst(&Led->Lvl->Objects);
-		while(!nodeEnd(it))
-		{
-			Object* Obj = (Object*) nodeGetData(it);
-			if(Obj->Shape == tmpPoly) lvlDelObject(Led->Lvl, Obj);
-			it = nodeGetNext(it);
-		}
+		Object* Obj = lvlGetObjFromShape(Led->Lvl, tmpPoly);
+		if(Obj->Shape == tmpPoly)
+			lvlDelObject(Led->Lvl, Obj);
+
 	}
 }
 
@@ -276,13 +273,9 @@ void lvledDelPolyAndVertex(LevelEditor *Led)
 			lvledDelVertexPointer(Led, polyGetVertex(tmpPoly, i));
 		delPolygon(tmpPoly);
 		// Cherche si un objet se base sur ce polygon, si oui, le supprime également
-		Node* it = lstFirst(&Led->Lvl->Objects);
-		while(!nodeEnd(it))
-		{
-			Object* Obj = (Object*) nodeGetData(it);
-			if(Obj->Shape == tmpPoly) lvlDelObject(Led->Lvl, Obj);
-			it = nodeGetNext(it);
-		}
+		Object* Obj = lvlGetObjFromShape(Led->Lvl, tmpPoly);
+		if(Obj->Shape == tmpPoly)
+			lvlDelObject(Led->Lvl, Obj);
 	}
 }
 
@@ -662,7 +655,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	while (fgets(read, 300, f)!=NULL)
 	{
 		sscanf(read, "%u", &item);
-		if (read[2]=='#' && item == o_texture)
+		if (read[2] == '#' && item == o_texture) //on utilise le # pour reperer une ligne avec commentaire après l'espace!
 		{
 			char *path = (char*)malloc(255*sizeof(char));
 			fscanf(f, "%s\n", path);
@@ -671,8 +664,12 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	}
 
 	fclose(f);
+	
+	Bool r = lvlLoad(Led->Lvl, File);
+	
+	
 
-	return lvlLoad(Led->Lvl, File);
+	return r;
 }
 
 
@@ -784,6 +781,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		it = nodeGetNext(it);
 	}
 
+	//On écrit les textures
 	unsigned int i;
 	for (i=0; i<daGetSize(&Led->TexturesPath); i++)
 	{
@@ -791,11 +789,12 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	}
 
 	/** @todo Debuger */
+	//On écrit les objects
 	it = lstFirst(&Led->Lvl->Objects);
 	while(!nodeEnd(it))
 	{
 		Object* Obj = (Object*) nodeGetData(it);
-		fprintf(f, "%u #Object\n%u %u\n", o_object, daGetID(Poly, Obj->Shape), Obj->Tex);
+		fprintf(f, "%u %u %u #Object\n1\n", o_object, daGetID(Poly, Obj->Shape), Obj->Tex);
 		Node* it2 = lstFirst(&Obj->CoordTex);
 		while(!nodeEnd(it2))
 		{
@@ -803,8 +802,10 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 			fprintf(f, "%f %f\n", V->x, V->y);
 			it2 = nodeGetNext(it2);
 		}
-
+			
+			
 		it = nodeGetNext(it);
+		
 	}
 
 	fclose(f);

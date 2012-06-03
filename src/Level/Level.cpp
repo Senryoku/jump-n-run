@@ -1,6 +1,7 @@
 #include "Level.h"
 #include <Rendering/OpenGL.h> // Pour le type Texture (adapté à l'API)
 
+void lvlCreateTexListForPolygon(Polygon* P, List* l);
 
 Level* newLevel(float Width, float Height)
 {
@@ -25,16 +26,22 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->DistBG = Lvl->DistFG = 1.f;
 	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/trollface.jpg"), 0);
 	Lvl->Finished = 0;
+	Lvl->VoidTex = Lvl->lvlTexLoad("");
+	Lvl->Background = Lvl->VoidTex;
+	Lvl->Foreground = Lvl->VoidTex;
+	Lvl->Layer1 = Lvl->VoidTex;
+	Lvl->Layer2 = Lvl->VoidTex;
 }
 
 void lvlFree(Level* Lvl)
 {
 	unsigned int i;
 	if(Lvl->P1 != NULL) delPlayer(Lvl->P1);
-	(*Lvl->lvlTexFree)(Lvl->Background);
-	(*Lvl->lvlTexFree)(Lvl->Layer1);
-	(*Lvl->lvlTexFree)(Lvl->Layer2);
-	(*Lvl->lvlTexFree)(Lvl->Foreground);
+	if (Lvl->Background != Lvl->VoidTex) (*Lvl->lvlTexFree)(Lvl->Background);
+	if (Lvl->Layer1 != Lvl->VoidTex) (*Lvl->lvlTexFree)(Lvl->Layer1);
+	if (Lvl->Layer2 != Lvl->VoidTex) (*Lvl->lvlTexFree)(Lvl->Layer2);
+	if (Lvl->Foreground != Lvl->VoidTex) (*Lvl->lvlTexFree)(Lvl->Foreground);
+	(*Lvl->lvlTexFree)(Lvl->VoidTex);
 
 	delWorld(Lvl->W);
 	/*if (Lvl->C != NULL)
@@ -51,10 +58,10 @@ void lvlFree(Level* Lvl)
 	lstFree(&Lvl->Objects);
 
 	for(i = 0; i < daGetSize(&Lvl->Textures); i++)
-		Lvl->lvlTexFree(*((Texture*) daGet(&Lvl->Textures, i))),
+		(*Lvl->lvlTexFree)(*((Texture*) daGet(&Lvl->Textures, i))),
 		free((Texture*) daGet(&Lvl->Textures, i));
 	daFree(&Lvl->Textures);
-
+	
 	flFree(&Lvl->GoalFlag);
 }
 
@@ -134,6 +141,8 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	if (f==NULL)
 	{
 		printf("Erreur de chargement du fichier %s\n", File);
+		//On met des texture vide pour éviter une texture blanche (non initialisée)
+		
 		return FALSE;
 	}
 
@@ -166,11 +175,6 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 	strcpy(Lvl->Filename, Name);
 	printf("Filename : %s\n", Lvl->Filename);
-
-	/*
-	strcpy(Lvl->MD5, md5FromFile(File).c_str());
-	printf("MD5 : %s\n", Lvl->MD5);
-	 */
 
 	strcpy(Lvl->Name, lvl);
 	Lvl->Name[strlen(Lvl->Name) - 1] = '\0'; // On enlève le CR
@@ -371,21 +375,30 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			}
 			case o_object:
 			{
-				unsigned int ShapeInt, Tex;
+				unsigned int UserDefTexCoord;
 				Polygon* Shape;
 				List lstTex;
-				lstInit(&lstTex); // Les nodes ne seront ppas libérés ici, car utilisés par Object, qui se chargera de les libérer
-				//printf("Chargement d'un Objet...\n");
-				fscanf(f, "%u %u\n", &ShapeInt, &Tex);
-				Shape = (Polygon*) daGet(Poly, ShapeInt);
-				for(ShapeInt = 0; ShapeInt < polyGetVxCount(Shape); ShapeInt++)
+
+				fscanf(f, "%u\n", &UserDefTexCoord);
+				Shape = (Polygon*) daGet(Poly, nVertex); //dans ce cas la variable contient l'index du polygone commencent à 0
+				if (UserDefTexCoord==1)
 				{
-					Vec2* CoordTex = newVec2();
-					fscanf(f, "%f %f\n", &CoordTex->x, &CoordTex->y);
-					lstAdd(&lstTex, CoordTex);
+					lstInit(&lstTex); // Les nodes ne seront ppas libérés ici, car utilisés par Object, qui se chargera de les libérer
+					for(int i = 0; i < polyGetVxCount(Shape); i++)
+					{
+						Vec2* CoordTex = newVec2();
+						fscanf(f, "%f %f\n", &CoordTex->x, &CoordTex->y);
+						lstAdd(&lstTex, CoordTex);
+					}
 				}
-				Object* Obj = newObject(Shape, Tex, lstTex);
+				else
+					lvlCreateTexListForPolygon(Shape, &lstTex);
+				
+				Object* Obj = newObject(Shape, booly, lstTex); //booly est l'indice de la texture
 				lstAdd(&Lvl->Objects, Obj);
+				Object* o2 = (Object*) nodeGetData(lstFirst(&Lvl->Objects));
+				if (o2 == Obj)
+					printf("object added, size is:%u\n", lstCount(&Lvl->Objects));
 				break;
 			}
 			default:
@@ -402,12 +415,46 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	return TRUE;
 }
 
-void lvlSetName(Level* lvl, char* Name)
+void lvlCreateTexListForPolygon(Polygon* P, List* l)
+{
+	if (polyGetVxCount(P) == 4) //cas du rectangle
+	{
+		lstInit(l);
+		Vec2* V;
+		for (int i=0; i<4; i++)
+		{
+			V = newVec2();
+			
+			V->x = (i == 1 || i == 2);
+			V->y = (i>1);
+			printf("v added: %f,%f\n", V->x, V->y);
+			
+			lstAdd(l, V);
+		}
+		
+		return;
+	}
+	//On cacule la bounding box
+	BBox B = polyGetBBox(P);
+	float w = B.Right - B.Left;
+	float h = B.Bottom - B.Top;
+	lstInit(l);
+	Vec2 *V;
+	for (int i=0; i<polyGetVxCount(P); i++)
+	{
+		V = newVec2();
+		V->x = (vxGetPosition(polyGetVertex(P, i)).x-B.Left)/w;
+		V->y = (vxGetPosition(polyGetVertex(P, i)).y-B.Top)/h;
+		lstAdd(l, V);
+	}
+}
+
+void lvlSetName(Level* lvl, const char* Name)
 {
 	strcpy(lvl->Name, Name);
 }
 
-void lvlSetDesc(Level* lvl, char* Desc)
+void lvlSetDesc(Level* lvl, const char* Desc)
 {
 	strcpy(lvl->Desc, Desc);
 }
@@ -421,7 +468,6 @@ void lvlLoadedInit(Level* Lvl)
 
 void lvlUpdate(Level* Lvl, Bool Paused)
 {
-	srand((unsigned int)time(NULL));
 	unsigned int i;
 
 	if (!Paused)
@@ -641,11 +687,9 @@ void lvlDispAllObj(Level* Lvl)
 	Node* it = lstFirst(&Lvl->Objects);
 	while(!nodeEnd(it))
 	{
-		lvlDisplayObj(Lvl, (Object*) nodeGetData(it)); ///@todo jai un bad access ici en ayant des objets dans l'editeur et en faisant plusieur ^L Des objets non libérés?
+		lvlDisplayObj(Lvl, (Object*) nodeGetData(it));
 		it = nodeGetNext(it);
 	}
-	for (int i=0; i<0; i++)
-		glDrawPolygon(Lvl->P1->BodyPolygons[i]);
 }
 
 void lvlDispGoalFlag(Level* Lvl)

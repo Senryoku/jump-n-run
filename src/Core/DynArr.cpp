@@ -143,7 +143,6 @@ void daRegressionTest()
 	assert(daGet(DA, 50) == (void*) 99);
 	assert(daGetSize(DA) == i - 2);
 	delDynArr(DA);
-	assert(daGetSize(DA) == 0);
 
 	DA = newDynArr();
 	daReserve(DA, 21);

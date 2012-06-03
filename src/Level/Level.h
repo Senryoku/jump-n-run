@@ -36,6 +36,7 @@ typedef struct s_Level
 	Texture Layer2; /**< Texture située immédiatement devant les objets dynamiques **/
  	Texture Foreground; /**< Texture servant de premier plan **/
  	DynArr Textures; /**< Liste de textures utilisables par les objets **/
+	Texture VoidTex; ///<Texture vide utilisée par défaut
  	List Objects; /**< Liste d'objets texturés **/
  	Player* P1; /** Joueur 1 **/
 	float DistBG; /** Distance entre les Layer et le Background **/
@@ -119,11 +120,11 @@ void lvlSetDistFG(Level* lvl, float F);
 
 /** @brief Mutateur de Name
 **/
-void lvlSetName(Level* lvl, char* Name);
+void lvlSetName(Level* lvl, const char* Name);
 
 /** @brief Mutateur de Desc
 **/
-void lvlSetDesc(Level* lvl, char* Desc);
+void lvlSetDesc(Level* lvl, const char* Desc);
 
 /** @brief Charge un niveau à partir d'un fichier
  *

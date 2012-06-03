@@ -89,6 +89,10 @@ clean:
 	@$(RM) -vf $(OBJ)*.o $(OBJ)*/*.o $(BIN)test $(BIN)testvec2
 .PHONY : clean
 
+cleanTest:
+	@$(RM) -vf $(OBJ)*.o $(BIN)Test*
+.PHONY : clean
+
 doc:
 	doxygen doc/Doxyfile ; \
 	chmod u+x doc/html/index.html ; \
@@ -129,7 +133,7 @@ TestPhysics : $(POINTO) $(OBJ)TestPhysics.o
 	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
 	
 $(OBJ)TestPhysics.o :
-	$(CXX) $(OPT) $(TESTS)TestCore.cpp -c -o $@
+	$(CXX) $(OPT) $(TESTS)TestPhysics.cpp -c -o $@
 	
 testGrid : $(OBJ)Physics/Grid.o $(OBJ)testGrid.o $(OBJ)Core/List.o $(OBJ)Core/Node.o $(OBJ)Core/DynArr.o $(OBJ)Physics/Polygon.o $(OBJ)Physics/Rigid.o $(OBJ)Physics/Vertex.o $(OBJ)Core/Vec2.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
@@ -146,5 +150,13 @@ testMenuItem : $(OBJ)Menu/MenuItem.o $(OBJ)Core/Tools.o $(OBJ)Core/Vec2.o $(OBJ)
 $(OBJ)testMenuItem.o :
 	$(CXX) $(OPT) $(TESTS)TestMenuItem.cpp -c -o $@
 
+
+TestLevel : $(POINTO) $(OBJ)TestLevel.o
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
+	#./$(BIN)$@
+	
+$(OBJ)TestLevel.o :
+	$(CXX) $(OPT) $(TESTS)TestLevel.cpp -c -o $@
 
  
