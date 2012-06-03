@@ -255,7 +255,7 @@ void lvledDelPoly(LevelEditor *Led)
 		delPolygon(tmpPoly);
 		// Cherche si un objet se base sur ce polygon, si oui, le supprime également
 		Object* Obj = lvlGetObjFromShape(Led->Lvl, tmpPoly);
-		if(Obj->Shape == tmpPoly)
+		if(Obj != NULL && Obj->Shape == tmpPoly)
 			lvlDelObject(Led->Lvl, Obj);
 
 	}
@@ -274,7 +274,7 @@ void lvledDelPolyAndVertex(LevelEditor *Led)
 		delPolygon(tmpPoly);
 		// Cherche si un objet se base sur ce polygon, si oui, le supprime également
 		Object* Obj = lvlGetObjFromShape(Led->Lvl, tmpPoly);
-		if(Obj->Shape == tmpPoly)
+		if(Obj != NULL && Obj->Shape == tmpPoly)
 			lvlDelObject(Led->Lvl, Obj);
 	}
 }
