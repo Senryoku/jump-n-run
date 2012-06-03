@@ -141,7 +141,6 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	if (f==NULL)
 	{
 		printf("Erreur de chargement du fichier %s\n", File);
-		//On met des texture vide pour éviter une texture blanche (non initialisée)
 		
 		return FALSE;
 	}
@@ -396,9 +395,6 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				
 				Object* Obj = newObject(Shape, booly, lstTex); //booly est l'indice de la texture
 				lstAdd(&Lvl->Objects, Obj);
-				Object* o2 = (Object*) nodeGetData(lstFirst(&Lvl->Objects));
-				if (o2 == Obj)
-					printf("object added, size is:%u\n", lstCount(&Lvl->Objects));
 				break;
 			}
 			default:

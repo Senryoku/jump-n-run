@@ -183,11 +183,7 @@ void plInit(Player* P, World *W)
 	wdAddRigid(W, H3);
 	 */
 	
-	for (int i=0; i<10; i++)
-		printf("angle %u:%f\n", i, P->Angles.Angles[i]);
 	aniUpdateForCurrentState(P->aniStand, P);
-	for (int i=0; i<10; i++)
-		printf("angle %u:%u\n", i, P->Angles.Angles[i]==((AnimAngles*)daGet(P->aniStand->States, 0))->Angles[i]);
 	aniUpdate(P->aniStand, P, 1.f);
 
 }
@@ -483,6 +479,10 @@ void plUpdate(Player* P)
 		else
 			CurrentA = P->aniHello;
 	}
+	
+	if (P->timer.getElapsedTime().asSeconds() > 20.f)
+		P->timer.restart();
+	
 	
 	if (ABS(speed.x) > 1.f)
 	{

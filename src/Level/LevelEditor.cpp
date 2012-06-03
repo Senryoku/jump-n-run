@@ -665,11 +665,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 
 	fclose(f);
 	
-	Bool r = lvlLoad(Led->Lvl, File);
-	
-	
-
-	return r;
+	return lvlLoad(Led->Lvl, File);
 }
 
 
