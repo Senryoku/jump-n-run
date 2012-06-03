@@ -30,23 +30,6 @@ void appInit(LevelEditorApp* App, SharedResources* SR)
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
 
-
-
-	/*
-	sndmLoadMusicFile(shSoundManager(App->SR), "music0", "data/music.ogg");
-	sndmLoadMusicFile(shSoundManager(App->SR), "music1", "data/music1.ogg");
-	sndmLoadMusicFile(shSoundManager(App->SR), "music2", "data/music2.ogg");
-	sndmLoadMusicFile(shSoundManager(App->SR), "music3", "data/music3.ogg");
-	sndmLoadSoundFile(shSoundManager(App->SR), "meat", "data/sfx/snd_meat.ogg");
-
-
-	sndmPlayMusic(shSoundManager(App->SR), "music3");
-	 */
-
-	//sndmPlay("meat");
-	//Temporel
-
-	App->MenuUsed = 0;
 }
 
 void appWindowInit(LevelEditorApp* App)
@@ -101,20 +84,6 @@ void appRun(LevelEditorApp* App)
 	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = TRUE, DispL2 = TRUE, DispObjects = TRUE, DispBack = FALSE, DispFore = FALSE, InsideMiniMap = FALSE, DragMiniMap = FALSE;
 	FPSCounter fps;
 
-
-	Menu* M = (Menu*)malloc(sizeof(Menu));
-	mnInit(M, App->SR);
-
-
-	mnAddMenu(M, "Main Menu", 2);
-	mnAddMenu(M, "menu 2!", 2);
-	mnAddItem(M, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
-	mnAddItemMenuSwitcher(M, 0, "goo", 1);
-	mnAddItem(M, 1, "hooo", ITEM_LABEL, NULL, NULL);
-	mnAddItemMenuSwitcher(M, 1, "gooo2", 0);
-	mnSetHide(M, TRUE);
-
-	//unsigned int CurrentMusic = 0;
 
 	/* Code temporel permettant de créer des states d'animation */
 
@@ -548,7 +517,7 @@ void appRun(LevelEditorApp* App)
 				}
 			}
 
-			mnHandleEvent(M, event);
+			//mnHandleEvent(App->M, event);
 		}
 
 		if (!App->Window.isOpen()) //On sort de la boucle si on a fermé la fenêtre
@@ -557,7 +526,7 @@ void appRun(LevelEditorApp* App)
 		lvledSetMousePosition(&App->Led, MouseX, MouseY);
 		lvledGrabUpdate(&App->Led);
 		lvledNewBoxUpdate(&App->Led);
-		mnUpdate(M, vec2(100.f, 100.f), vec2(-300.f, 100.f));
+		//mnUpdate(App->M, vec2(100.f, 100.f), vec2(-300.f, 100.f));
 
 		/* Déplacement de la vue */
 		(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) ? ViewSpeed = 30.f : ViewSpeed = 15.f;
@@ -648,9 +617,9 @@ void appRun(LevelEditorApp* App)
 
 		fpsStep(&fps);
 
-		glDrawMenuBox(App->SR, App->Window, M, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+		//glDrawMenuBox(App->SR, App->Window, App->M, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 
-		glDrawMenuItems(App->SR, App->Window, M, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+		//glDrawMenuItems(App->SR, App->Window, App->M, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 
 		glDrawFPS(App->SR, App->Window, fpsGetString(&fps));
 
@@ -683,10 +652,6 @@ void appRun(LevelEditorApp* App)
 	delVertex(RightLeg1);
 	delVertex(RightLeg2);
 	*/
-
-
-	mnFree(M);
-	free(M);
 
 }
 
@@ -810,7 +775,7 @@ void appShowPolygonMenu(LevelEditorApp* App)
 		msgAddCloseItem(shMessageManager(App->SR), "Transform into object");
 	}
 	
-	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+	msgAddCloseItem(shMessageManager(App->SR), "Return");
 
 	i = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 	
@@ -862,7 +827,7 @@ void appShowLevelMenu(LevelEditorApp* App)
 	msgAddCloseItem(shMessageManager(App->SR), "Select Layer1");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Layer2");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Foreground");
-	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+	msgAddCloseItem(shMessageManager(App->SR), "Return");
 
 	i = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 
@@ -923,7 +888,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
 	msgAddCloseItem(shMessageManager(App->SR), "Add a texture");
 	msgAddCloseItem(shMessageManager(App->SR), "Quit");
-	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+	msgAddCloseItem(shMessageManager(App->SR), "Return");
 	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 	switch (Choice)
 	{

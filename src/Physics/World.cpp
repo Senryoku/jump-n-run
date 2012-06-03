@@ -32,7 +32,13 @@ void wdResetGrid(World* W)
 	gridInit(&W->CollisionGrid, W->Width/CellSize+1, W->Height/CellSize+1);
 	gridSetCellSize(&W->CollisionGrid, CellSize);
 	
-	wdUpdateGrid(W, TRUE);
+	Node* it = lstFirst(&W->Polygons);
+	while(!nodeEnd(it))
+	{
+		gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it));
+		
+		it=nodeGetNext(it);
+	}
 }
 
 void wdAddVertex(World* W, Vertex* V)

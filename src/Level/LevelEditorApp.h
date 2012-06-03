@@ -25,8 +25,7 @@ typedef struct
 	float ViewWidth;
 	float ViewHeight;
 	char WorkingPath[255];
-	Menu M;
-	bool MenuUsed;
+	Menu* M;
 	SharedResources* SR; ///< Resources Partagées
 } LevelEditorApp;
 

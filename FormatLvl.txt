@@ -1,13 +1,13 @@
 Format .lvl
 ============================================
 
-Fichier Texte. Les commentaires (ligne) sont délimités par #.
-String désigne une suite de caractères (sans retour chariot ni caractère de fin de chaîne C).
-Les valeurs numériques sont en décimal (float, int...).
-Image désigne un chemin relatif vers un fichier image (jpg, png, bmp...).
-Par convention, les Vertices d'un Polygon sont décrit en suivant l'ordre des aiguilles d'une montre.
+Fichier Texte. Les commentaires (ligne) sont dÃ©limitÃ©s par #.
+String dÃˆsigne une suite de caractÃ‹res (sans retour chariot ni caractÃ¨re de fin de chaÃ®ne C).
+Les valeurs numÃ©riques sont en dÃ©cimal (float, int...).
+Image dÃ©signe un chemin relatif vers un fichier image (jpg, png, bmp...).
+Par convention, les Vertices d'un Polygon sont dÃ©crit en suivant l'ordre des aiguilles d'une montre.
 
-Entête (8 lignes) formée de :
+EntÃte (8 lignes) formÃ©e de :
 Nom(string)
 Description(string)
 Largeur(float), Hauteur(float) ; DistBG(float), DistFG(float)
@@ -17,10 +17,10 @@ Chemin_Layer1(Image)
 Chemin_Layer2(Image)
 Chemin_Foreground(Image)
 
-Suivi de groupes de lignes délimités par un identifiant de structure,
-chaque groupe est identifié par l'ordre de définition dans le fichier.
+Suivi de groupes de lignes dÃˆlimitÃˆs par un identifiant de structure,
+chaque groupe est identifiÃˆ par l'ordre de dÃˆfinition dans le fichier.
 2/ Vertex, 
-	CoordonnéeX(float), CoordonnéeY(float) ; Mass(float) ; Fixe(bool)
+	CoordonnÃˆeX(float), CoordonnÃˆeY(float) ; Mass(float) ; Fixe(bool)
 
 	Exemple : 
 	2 #Vertex
@@ -52,20 +52,19 @@ chaque groupe est identifié par l'ordre de définition dans le fichier.
 	4 #Elastic
 	0 1 90.000000 0.100000
 	
-5/ Texture
+5/ Texture # Il faut obligatoirement mettre la marque # de commentaire (chargement plus rapide grÃ¢ce Ã  Ã§a). Par dÃ©faut lors de l'enregistrement il y a toujours le commentaire
 	CheminTexture(Image)
 	
 	Exemple :
 	5 #Texture
 	data/texture.jpg
 
-6/ Objet
-	IndentifiantPolygon(int) IdentifiantTexture(int)
-	CoordonnéeTextureX CoordonnéeTextureY #Une ligne par Vertex du Polygon
+6/ IndentifiantPolygon(int) IdentifiantTexture(int)Objet
+	TexCoord dÃ©finies(bool) # Si == 1 les texcoord vont Ãªtre lues sinon elles seront gÃ©nÃ©rÃ©es automatiquement MAIS il ne doit pas avoir de texCoord aprÃ¨s car peuvent foirer le chargement
+	CoordonnÃˆeTextureX CoordonnÃˆeTextureY #Une ligne par Vertex du Polygon
 	
 	Exemple :
-	6 #Object
-	0 0
+	6 0 0 #Object
 	0 0
 	0 1
 	1 1

@@ -388,7 +388,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				if (UserDefTexCoord==1)
 				{
 					lstInit(&lstTex); // Les nodes ne seront ppas libérés ici, car utilisés par Object, qui se chargera de les libérer
-					for(int i = 0; i < polyGetVxCount(Shape); i++)
+					for(unsigned int i = 0; i < polyGetVxCount(Shape); i++)
 					{
 						Vec2* CoordTex = newVec2();
 						fscanf(f, "%f %f\n", &CoordTex->x, &CoordTex->y);
@@ -441,7 +441,7 @@ void lvlCreateTexListForPolygon(Polygon* P, List* l)
 	float h = B.Bottom - B.Top;
 	lstInit(l);
 	Vec2 *V;
-	for (int i=0; i<polyGetVxCount(P); i++)
+	for (unsigned int i=0; i<polyGetVxCount(P); i++)
 	{
 		V = newVec2();
 		V->x = (vxGetPosition(polyGetVertex(P, i)).x-B.Left)/w;
