@@ -1151,7 +1151,7 @@ void glDispPlayer(Player* P, SharedResources* SR)
 }
 
 
-void glDispGrass(Polygon* P, Texture txGrass)
+void glDispGrass(Polygon* P, SharedResources* SR)
 {
 	if (polyGetVxCount(P) < 2) return;
 	Vertex *V1 = polyGetVertex(P, 0), *V2 = polyGetVertex(P, 1);
@@ -1159,7 +1159,7 @@ void glDispGrass(Polygon* P, Texture txGrass)
 	float l = vec2Length(vec2Sub(vxGetPosition(V2), vxGetPosition(V1)));
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, txGrass); //66x18
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "gr_grass")); //66x18
 	
 	glBegin(GL_QUADS);
 
@@ -1175,6 +1175,66 @@ void glDispGrass(Polygon* P, Texture txGrass)
 	
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(vxGetPosition(V1).x+N.x*18.f, vxGetPosition(V1).y+N.y*18.f);
+	
+	
+	glEnd();
+	
+	glDisable(GL_TEXTURE_2D);
+}
+
+void glDispRope(const Elastic* E, SharedResources* SR)
+{
+	Vertex *V1 = elGetV1(E), *V2 = elGetV2(E);
+	Vec2 N = vec2Normalized(vec2Ortho(vec2Sub(vxGetPosition(V2), vxGetPosition(V1))));
+	float elLenght = elGetLength(E);
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "el_rope")); //84x84; je veux de la taille 15
+	
+	glBegin(GL_QUADS);
+	
+	glTexCoord2i(0, 0);
+	glVertex2f(vxGetPosition(V1).x-N.x*5.f, vxGetPosition(V1).y-N.y*5.f);
+	
+	glTexCoord2f(elLenght/10.f, 0);
+	glVertex2f(vxGetPosition(V2).x-N.x*5.f, vxGetPosition(V2).y-N.y*5.f);
+	
+	glTexCoord2f(elLenght/10.f, 1.f);
+	glVertex2f(vxGetPosition(V2).x+N.x*5.f, vxGetPosition(V2).y+N.y*5.f);
+	
+	
+	glTexCoord2f(0.f, 1.f);
+	glVertex2f(vxGetPosition(V1).x+N.x*5.f, vxGetPosition(V1).y+N.y*5.f);
+	
+	
+	glEnd();
+	
+	glDisable(GL_TEXTURE_2D);
+}
+
+void glDispChain(const Rigid* R, SharedResources* SR)
+{
+	Vertex *V1 = rdGetV1(R), *V2 = rdGetV2(R);
+	Vec2 N = vec2Normalized(vec2Ortho(vec2Sub(vxGetPosition(V2), vxGetPosition(V1))));
+	float elLenght = rdGetLength(R);
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "rd_chain")); //84x84; je veux de la taille 10
+	
+	glBegin(GL_QUADS);
+	
+	glTexCoord2i(0, 0);
+	glVertex2f(vxGetPosition(V1).x-N.x*5.f, vxGetPosition(V1).y-N.y*7.5f);
+	
+	glTexCoord2f(elLenght/15.f, 0);
+	glVertex2f(vxGetPosition(V2).x-N.x*7.5f, vxGetPosition(V2).y-N.y*7.5f);
+	
+	glTexCoord2f(elLenght/15.f, 1.f);
+	glVertex2f(vxGetPosition(V2).x+N.x*7.5f, vxGetPosition(V2).y+N.y*7.5f);
+	
+	
+	glTexCoord2f(0.f, 1.f);
+	glVertex2f(vxGetPosition(V1).x+N.x*7.5f, vxGetPosition(V1).y+N.y*7.5f);
 	
 	
 	glEnd();

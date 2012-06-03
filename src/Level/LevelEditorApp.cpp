@@ -617,8 +617,16 @@ void appRun(LevelEditorApp* App)
 		if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
 		if(DispL1) lvlDisplayL1(App->Led.Lvl);
 		if(DispL2) lvlDisplayL2(App->Led.Lvl);
+		
+		if(DispObjects)
+		{
+			lvlDispAllObj(App->Led.Lvl);
+			lvlDisplayGrass(App->Led.Lvl, App->SR);
+			lvlDisplayElastics(App->Led.Lvl, App->SR);
+			lvlDisplayRigids(App->Led.Lvl, App->SR);
+		}
+		
 		lvlDispGoalFlag(App->Led.Lvl);
-		if(DispObjects) lvlDispAllObj(App->Led.Lvl), lvlDispGrass(App->Led.Lvl);
 		if(DispFore) lvlDisplayFG(App->Led.Lvl, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
@@ -781,13 +789,33 @@ void appShowElasticMenu(LevelEditorApp* App)
 void appShowPolygonMenu(LevelEditorApp* App)
 {
 	ItemID i;
-	msgCreateMenu(shMessageManager(App->SR), 4);
+	msgCreateMenu(shMessageManager(App->SR), 5);
 	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon");
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon and Vertices");
+	
+	float tmp;
+	Object* Obj = lvlGetObjFromShape(App->Led.Lvl, lvledGetNearestPoly(&App->Led));
+	if(Obj != NULL)
+	{
+		ItemID IID;
+		tmp = objGetTexture(Obj);
+		IID = msgAddItem(shMessageManager(App->SR), "Object Texture Index", ITEM_VALUE, NULL, &tmp);
+		mniSetIncr(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 1.f);
+		mniSetMinMaxValues(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0, daGetSize(&App->Led.Lvl->Textures)-1);
+		mniSetFloatPrecision(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0);
+	}
+	else
+	{
+		msgAddCloseItem(shMessageManager(App->SR), "Transform into object");
+	}
+	
 	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
 
 	i = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+	
+	if (Obj != NULL)
+		objSetTexture(Obj, (unsigned int)tmp);
 
 	switch (i) {
 		case 0:
@@ -808,6 +836,14 @@ void appShowPolygonMenu(LevelEditorApp* App)
 			break;
 		}
 		case 3:
+		{
+			List lstTex;
+			
+			lvlCreateTexListForPolygon(lvledGetNearestPoly(&App->Led), &lstTex);
+			
+			Object* Obj = newObject(lvledGetNearestPoly(&App->Led), 0, lstTex);
+			lstAdd(&App->Led.Lvl->Objects, Obj);
+		}
 			break;
 		default:
 			break;
@@ -882,9 +918,10 @@ void appShowLevelMenu(LevelEditorApp* App)
 void appShowEscapeMenu(LevelEditorApp* App)
 {
 	ItemID IID;
-	msgCreateMessage(shMessageManager(App->SR), "Menu", 4);
+	msgCreateMessage(shMessageManager(App->SR), "Menu", 5);
 	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
 	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
+	msgAddCloseItem(shMessageManager(App->SR), "Add a texture");
 	msgAddCloseItem(shMessageManager(App->SR), "Quit");
 	msgAddCloseItem(shMessageManager(App->SR), "Cancel");
 	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -906,6 +943,17 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			wdResetGrid(lvlGetWorld(App->Led.Lvl));
 			break;
 		case 2 :
+		{
+			msgCreateMessage(shMessageManager(App->SR), "", 3);
+			msgAddItem(shMessageManager(App->SR), "Enter the path to the image file", ITEM_LABEL, NULL, NULL);
+			msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			const char* file = msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			lvledAddTexture(&App->Led, file);
+			
+			break;
+		}
+		case 3 :
 			App->Window.close();
 			break;
 		default :

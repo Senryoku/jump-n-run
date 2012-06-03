@@ -1,7 +1,6 @@
 #include "Level.h"
 #include <Rendering/OpenGL.h> // Pour le type Texture (adapté à l'API)
 
-void lvlCreateTexListForPolygon(Polygon* P, List* l);
 
 Level* newLevel(float Width, float Height)
 {
@@ -24,6 +23,8 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlDispFlag = &glDispFlag;
 	Lvl->lvlDispPlayer = &glDispPlayer;
 	Lvl->lvlDispGrass = &glDispGrass;
+	Lvl->lvlDispRope = &glDispRope;
+	Lvl->lvlDispChain = &glDispChain;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
 	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/trollface.jpg"), 0);
 	Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
@@ -35,7 +36,6 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->Foreground = Lvl->VoidTex;
 	Lvl->Layer1 = Lvl->VoidTex;
 	Lvl->Layer2 = Lvl->VoidTex;
-	Lvl->txGrass = (*Lvl->lvlTexLoad)("data/s_ground_grass.png");
 }
 
 void lvlFree(Level* Lvl)
@@ -47,7 +47,6 @@ void lvlFree(Level* Lvl)
 	if (Lvl->Layer2 != Lvl->VoidTex) (*Lvl->lvlTexFree)(Lvl->Layer2);
 	if (Lvl->Foreground != Lvl->VoidTex) (*Lvl->lvlTexFree)(Lvl->Foreground);
 	(*Lvl->lvlTexFree)(Lvl->VoidTex);
-	(*Lvl->lvlTexFree)(Lvl->txGrass);
 
 	delWorld(Lvl->W);
 	/*if (Lvl->C != NULL)
@@ -694,15 +693,43 @@ void lvlDispAllObj(Level* Lvl)
 	}
 }
 
+void lvlDisplayElastics(const Level* Lvl, s_SharedResources* SR)
+{
+	Node* it;
+	Elastic* E;
+	it = lstFirst(&Lvl->W->Elastics);
+	
+	while (!nodeEnd(it))
+	{
+		E = (Elastic*)nodeGetData(it);
+		(*Lvl->lvlDispRope)(E, SR);
+		it = nodeGetNext(it);
+	}
+}
 
-void lvlDispGrass(Level* Lvl)
+void lvlDisplayRigids(const Level* Lvl, s_SharedResources* SR)
+{
+	Node* it;
+	Rigid* R;
+	it = lstFirst(&Lvl->W->Rigids);
+	
+	while (!nodeEnd(it))
+	{
+		R = (Rigid*)nodeGetData(it);
+		(*Lvl->lvlDispChain)(R, SR);
+		it = nodeGetNext(it);
+	}
+}
+
+
+void lvlDisplayGrass(Level* Lvl, s_SharedResources* SR)
 {
 	Node* it = lstFirst(&Lvl->Objects);
 	while(!nodeEnd(it))
 	{
 		Object* Obj = (Object*)nodeGetData(it);
 		if (Obj->Tex == 0)
-			(*Lvl->lvlDispGrass)(objGetShape(Obj), Lvl->txGrass);
+			(*Lvl->lvlDispGrass)(objGetShape(Obj), SR);
 		it = nodeGetNext(it);
 	}
 }
@@ -722,4 +749,11 @@ Object* lvlGetObjFromShape(Level* Lvl, Polygon* P)
 		it = nodeGetNext(it);
 	}
 	return NULL;
+}
+
+void lvlAddTexture(Level* Lvl, Texture T)
+{
+	Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
+	*ptrTex = T;
+	daAdd(&Lvl->Textures, ptrTex);
 }

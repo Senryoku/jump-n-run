@@ -298,10 +298,12 @@ void gmPlay(Game* G)
 		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
+		lvlDisplayElastics(G->Lvl, G->SR);
+		lvlDisplayRigids(G->Lvl, G->SR);
 
 		lvlDisplayPlayer(G->Lvl, G->SR);
 		
-		lvlDispGrass(G->Lvl);
+		lvlDisplayGrass(G->Lvl, G->SR);
 		
 		lvlDispGoalFlag(G->Lvl);
 		lvlDisplayL2(G->Lvl);

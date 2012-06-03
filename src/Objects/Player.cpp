@@ -117,7 +117,6 @@ void plInit(Player* P, World *W)
 	P->BodyPolygons[8] = newPolygon(2, P->vxBodyParts[bpRightLeg1], P->vxBodyParts[bpRightLeg2]);
 	 */
 	
-	Rigid *R[12];
 	
 	for (int i=0; i<12; i++)
 	{
@@ -125,27 +124,27 @@ void plInit(Player* P, World *W)
 			case bpNeck:
 			case bpLeftLeg1:
 			case bpRightLeg1:
-				R[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[bpBase], -1.f);
+				P->BodyRigids[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[bpBase], -1.f);
 				break;
 			case bpLeftArm1:
 			case bpRightArm1:
 			case bpHeadLeft:
 			case bpHeadRight:
-				R[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[bpNeck], -1.f);
+				P->BodyRigids[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[bpNeck], -1.f);
 				break;
 			case bpLeftArm2:
 			case bpRightArm2:
 			case bpLeftLeg2:
 			case bpRightLeg2:
-				R[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[i-1], -1.f);
+				P->BodyRigids[i] = newRigid(P->vxBodyParts[i], P->vxBodyParts[i-1], -1.f);
 				break;
 			case bpBase:
-				R[i] = newRigid(P->vxBodyParts[bpHeadLeft], P->vxBodyParts[bpHeadRight], -1.f);
+				P->BodyRigids[i] = newRigid(P->vxBodyParts[bpHeadLeft], P->vxBodyParts[bpHeadRight], -1.f);
 				break;
 			default:
 				break;
 		}
-		wdAddRigid(W, R[i]);
+		//wdAddRigid(W, P->BodyRigids[i]);
 	}
 	
 	//for (int i=0; i<10; i++) wdAddVxFromPoly(W, P->BodyPolygons[i]);
@@ -211,7 +210,8 @@ void plFree(Player* P)
 	 */
 	
 	for (int i=0; i<12; i++)
-		delVertex(P->vxBodyParts[i]);
+		delVertex(P->vxBodyParts[i]),
+		delRigid(P->BodyRigids[i]);
 
 	delAnimation(P->aniFall);
 	delAnimation(P->aniJump);
@@ -503,7 +503,11 @@ void plPhysics(Player* P, World* W)
 	polyResolve(plGetShape(P));
 	
 	//for (i=0; i<10; i++) polyResolve(P->BodyPolygons[i]);
-	for (int i=0; i<12; i++) vxResolve(P->vxBodyParts[i], 0.5f, 0.5f);
+	for (int i=0; i<12; i++)
+	{
+		vxResolve(P->vxBodyParts[i], 0.5f, 0.5f);
+		rdResolve(P->BodyRigids[i]);
+	}
 	
 	float dif = vxGetPosition(P->VxDL).x - vxGetOldPos(P->VxDL).x;
 	if (dif >= 0.f && ABS(dif) > 0.2f)

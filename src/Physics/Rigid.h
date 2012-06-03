@@ -55,12 +55,12 @@ Vec2 rdVector(Rigid* R);
 /** @brief Accesseur de V1
  *
 **/
-Vertex* rdGetV1(Rigid* R);
+Vertex* rdGetV1(const Rigid* R);
 
 /** @brief Accesseur de V2
  *
 **/
-Vertex* rdGetV2(Rigid* R);
+Vertex* rdGetV2(const Rigid* R);
 
 /** @brief Mutateur de Length
  *

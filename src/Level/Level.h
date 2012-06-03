@@ -37,7 +37,6 @@ typedef struct s_Level
  	Texture Foreground; /**< Texture servant de premier plan **/
  	DynArr Textures; /**< Liste de textures utilisables par les objets **/
 	Texture VoidTex; ///<Texture vide utilisée par défaut
-	Texture txGrass; ///< texture du gason pour les objetcs de ground par défaut
  	List Objects; /**< Liste d'objets texturés **/
  	Player* P1; /** Joueur 1 **/
 	float DistBG; /** Distance entre les Layer et le Background **/
@@ -53,7 +52,9 @@ typedef struct s_Level
 	void (*lvlDispFlag)(Flag* F, float X, float Y);
 	
 	void (*lvlDispPlayer)(Player* P, s_SharedResources* SR);
-	void (*lvlDispGrass)(Polygon* P, Texture tx);
+	void (*lvlDispGrass)(Polygon* P, s_SharedResources* SR);
+	void (*lvlDispRope)(const Elastic* E, s_SharedResources* SR);
+	void (*lvlDispChain)(const Rigid* R, s_SharedResources* SR);
 } Level;
 
 /** @brief Constructeur
@@ -157,9 +158,21 @@ Bool lvlIsGoalReached(const Level* L);
 
 /** @brief Affiche le joueur
  * @param Lvl Level auquel s'applique la fonction
- * @param
+ * @param SR Resources partagées
  **/
 void lvlDisplayPlayer(const Level* Lvl, s_SharedResources* SR);
+
+/** @brief Affiche les elastics avec une image
+ * @param Lvl Level auquel s'applique la fonction
+ * @param SR Resources partagées
+ **/
+void lvlDisplayElastics(const Level* Lvl, s_SharedResources* SR);
+
+/** @brief Affiche les Rigids avec une image
+ * @param Lvl Level auquel s'applique la fonction
+ * @param SR Resources partagées
+ **/
+void lvlDisplayRigids(const Level* Lvl, s_SharedResources* SR);
 
 /** @brief Affiche le fond
  *
@@ -199,7 +212,7 @@ void lvlDispAllObj(Level* Lvl);
 
 /** @brief Affiche l'herbe sur les object qui utilisent la texture par défaut s_ground
  **/
-void lvlDispGrass(Level* Lvl);
+void lvlDisplayGrass(Level* Lvl, s_SharedResources* SR);
 
 /** @brief Affiche la drapeau marquant la fin du niveau
  **/
@@ -220,6 +233,10 @@ void lvlDelObject(Level* Lvl, Object * Obj);
  * @return Object* si un objet de la forme P est trouvé, NULL sinon
 **/
 Object* lvlGetObjFromShape(Level* Lvl, Polygon* P);
+
+void lvlCreateTexListForPolygon(Polygon* P, List* l);
+
+void lvlAddTexture(Level* Lvl, Texture T);
 
 typedef enum enum_objets
 {

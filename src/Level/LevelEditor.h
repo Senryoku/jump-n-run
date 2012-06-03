@@ -308,6 +308,13 @@ Rigid* lvledGetNearestRigid(LevelEditor* Led);
 **/
 Elastic* lvledGetNearestElastic(LevelEditor* Led);
 
+/**
+ *
+ * La texture es ajouté au niveau aussi (elle est donc chargée en mémoire)
+ */
+
+void lvledAddTexture(LevelEditor* Led, const char* Path);
+
 /** @}
 **/
 
