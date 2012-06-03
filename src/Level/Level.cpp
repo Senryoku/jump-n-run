@@ -23,14 +23,19 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlDispTexPoly = &glDispTexPoly;
 	Lvl->lvlDispFlag = &glDispFlag;
 	Lvl->lvlDispPlayer = &glDispPlayer;
+	Lvl->lvlDispGrass = &glDispGrass;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
 	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/trollface.jpg"), 0);
+	Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
+	*ptrTex = Lvl->lvlTexLoad("data/s_ground.png");
+	daAdd(&Lvl->Textures, ptrTex);
 	Lvl->Finished = 0;
-	Lvl->VoidTex = Lvl->lvlTexLoad("");
+	Lvl->VoidTex = (*Lvl->lvlTexLoad)("");
 	Lvl->Background = Lvl->VoidTex;
 	Lvl->Foreground = Lvl->VoidTex;
 	Lvl->Layer1 = Lvl->VoidTex;
 	Lvl->Layer2 = Lvl->VoidTex;
+	Lvl->txGrass = (*Lvl->lvlTexLoad)("data/s_ground_grass.png");
 }
 
 void lvlFree(Level* Lvl)
@@ -42,6 +47,7 @@ void lvlFree(Level* Lvl)
 	if (Lvl->Layer2 != Lvl->VoidTex) (*Lvl->lvlTexFree)(Lvl->Layer2);
 	if (Lvl->Foreground != Lvl->VoidTex) (*Lvl->lvlTexFree)(Lvl->Foreground);
 	(*Lvl->lvlTexFree)(Lvl->VoidTex);
+	(*Lvl->lvlTexFree)(Lvl->txGrass);
 
 	delWorld(Lvl->W);
 	/*if (Lvl->C != NULL)
@@ -675,7 +681,7 @@ void lvlDisplayFG(const Level* Lvl, float X, float Y, float W, float H)
 
 void lvlDisplayObj(const Level* Lvl, Object* Obj)
 {
-	(*Lvl->lvlDispTexPoly)(*(Texture*) daGet(&Lvl->Textures, Obj->Tex), Obj->Shape, &Obj->CoordTex);
+	(*Lvl->lvlDispTexPoly)(*(Texture*) daGet(&Lvl->Textures, objGetTexture(Obj)), objGetShape(Obj), &Obj->CoordTex);
 }
 
 void lvlDispAllObj(Level* Lvl)
@@ -684,6 +690,19 @@ void lvlDispAllObj(Level* Lvl)
 	while(!nodeEnd(it))
 	{
 		lvlDisplayObj(Lvl, (Object*) nodeGetData(it));
+		it = nodeGetNext(it);
+	}
+}
+
+
+void lvlDispGrass(Level* Lvl)
+{
+	Node* it = lstFirst(&Lvl->Objects);
+	while(!nodeEnd(it))
+	{
+		Object* Obj = (Object*)nodeGetData(it);
+		if (Obj->Tex == 0)
+			(*Lvl->lvlDispGrass)(objGetShape(Obj), Lvl->txGrass);
 		it = nodeGetNext(it);
 	}
 }

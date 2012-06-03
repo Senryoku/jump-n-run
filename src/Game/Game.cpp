@@ -298,11 +298,14 @@ void gmPlay(Game* G)
 		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		lvlDisplayL1(G->Lvl);
 		lvlDispAllObj(G->Lvl);
+
+		lvlDisplayPlayer(G->Lvl, G->SR);
+		
+		lvlDispGrass(G->Lvl);
+		
 		lvlDispGoalFlag(G->Lvl);
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
-
-		lvlDisplayPlayer(G->Lvl, G->SR);
 
 		sndmUpdate(shSoundManager(G->SR));
 

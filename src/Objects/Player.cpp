@@ -487,7 +487,7 @@ void plUpdate(Player* P)
 	if (ABS(speed.x) > 1.f)
 	{
 		float spp = vec2Length(speed);
-		aniUpdate(CurrentA, P, MAX(0.25f, spp/15.f));
+		aniUpdate(CurrentA, P, MAX(0.25f, spp/10.f));
 	}
 	else
 		aniUpdate(CurrentA, P, 1.f);

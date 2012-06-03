@@ -37,6 +37,7 @@ typedef struct s_Level
  	Texture Foreground; /**< Texture servant de premier plan **/
  	DynArr Textures; /**< Liste de textures utilisables par les objets **/
 	Texture VoidTex; ///<Texture vide utilisée par défaut
+	Texture txGrass; ///< texture du gason pour les objetcs de ground par défaut
  	List Objects; /**< Liste d'objets texturés **/
  	Player* P1; /** Joueur 1 **/
 	float DistBG; /** Distance entre les Layer et le Background **/
@@ -52,6 +53,7 @@ typedef struct s_Level
 	void (*lvlDispFlag)(Flag* F, float X, float Y);
 	
 	void (*lvlDispPlayer)(Player* P, s_SharedResources* SR);
+	void (*lvlDispGrass)(Polygon* P, Texture tx);
 } Level;
 
 /** @brief Constructeur
@@ -195,8 +197,12 @@ void lvlDisplayObj(const Level* Lvl, Object* Obj);
 **/
 void lvlDispAllObj(Level* Lvl);
 
+/** @brief Affiche l'herbe sur les object qui utilisent la texture par défaut s_ground
+ **/
+void lvlDispGrass(Level* Lvl);
+
 /** @brief Affiche la drapeau marquant la fin du niveau
-**/
+ **/
 void lvlDispGoalFlag(Level* Lvl);
 
 /** @brief Ajoute un objet texturé

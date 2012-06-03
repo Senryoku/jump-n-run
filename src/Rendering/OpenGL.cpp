@@ -987,6 +987,8 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 	glVertex2f(0.f, wdGetHeight(lvlGetWorld(Lvl)));
 	glEnd();
 
+	lvlDispGoalFlag(Lvl);
+	lvlDispAllObj(Lvl);
 
 	glColor4f(0.5f, 0.5f, 0.5f, 1.f);
 	glLineStipple(1, 0xCCCC);
@@ -998,10 +1000,6 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 	glVertex2f(ViewX, (ViewY + ViewHeight));
 	glEnd();
 	glDisable(GL_LINE_STIPPLE);
-
-	lvlDispGoalFlag(Lvl);
-	lvlDispAllObj(Lvl);
-
 
 }
 
@@ -1152,4 +1150,35 @@ void glDispPlayer(Player* P, SharedResources* SR)
 	glPopMatrix();
 }
 
+
+void glDispGrass(Polygon* P, Texture txGrass)
+{
+	if (polyGetVxCount(P) < 2) return;
+	Vertex *V1 = polyGetVertex(P, 0), *V2 = polyGetVertex(P, 1);
+	Vec2 N = vec2Normalized(vec2Ortho(vec2Sub(vxGetPosition(V2), vxGetPosition(V1))));
+	float l = vec2Length(vec2Sub(vxGetPosition(V2), vxGetPosition(V1)));
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, txGrass); //66x18
+	
+	glBegin(GL_QUADS);
+
+	glTexCoord2i(0, 0);
+	glVertex2f(vxGetPosition(V1).x-N.x*18.f, vxGetPosition(V1).y-N.y*18.f);
+	
+	glTexCoord2f(l/66.f, 0);
+	glVertex2f(vxGetPosition(V2).x-N.x*18.f, vxGetPosition(V2).y-N.y*18.f);
+	
+	glTexCoord2f(l/66.f, 1.f);
+	glVertex2f(vxGetPosition(V2).x+N.x*18.f, vxGetPosition(V2).y+N.y*18.f);
+	
+	
+	glTexCoord2f(0.f, 1.f);
+	glVertex2f(vxGetPosition(V1).x+N.x*18.f, vxGetPosition(V1).y+N.y*18.f);
+	
+	
+	glEnd();
+	
+	glDisable(GL_TEXTURE_2D);
+}
 

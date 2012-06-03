@@ -204,7 +204,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			VxResolved = FALSE;
 			if (!ISNAN(Pos->Positions[i].x))
 			{
-				Wobble(&P->Positions.Positions[i].x, Pos->Positions[i].x, A->Force*Step, A->Friction, &plGetAnimPositionsState(P)->Spd[i]);
+				Wobble(&P->Positions.Positions[i].x, Pos->Positions[i].x, A->Force*Step, A->Friction*(1.f-Step), &plGetAnimPositionsState(P)->Spd[i]);
 				if (i<bpHeadLeft)
 					vxSetX(P->vxBodyParts[i], P->Positions.Positions[i].x);
 			}
@@ -224,7 +224,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			
 			if (!ISNAN(Pos->Positions[i].y))
 			{
-				Wobble(&P->Positions.Positions[i].y, Pos->Positions[i].y, A->Force*Step, A->Friction, &plGetAnimPositionsState(P)->Spd[i*2]);
+				Wobble(&P->Positions.Positions[i].y, Pos->Positions[i].y, A->Force*Step, A->Friction*(1.f-Step), &plGetAnimPositionsState(P)->Spd[i*2]);
 				if (i<bpHeadLeft)
 					vxSetY(P->vxBodyParts[i], P->Positions.Positions[i].y);
 			}
@@ -278,7 +278,7 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 		{
 			if (!ISNAN(Ang->Angles[i]))
 			{
-				Wobble(&P->Angles.Angles[i], Ang->Angles[i], A->Force*Step, A->Friction, &plGetAnimAnglesState(P)->Spd[i]);
+				Wobble(&P->Angles.Angles[i], Ang->Angles[i], A->Force*Step, A->Friction*MAX(1.f,1.f-Step), &plGetAnimAnglesState(P)->Spd[i]);
 				if (i<bpHeadLeft)
 				{
 					Vertex* from;

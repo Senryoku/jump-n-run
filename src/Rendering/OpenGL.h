@@ -36,6 +36,8 @@ void glDrawCursor(sf::RenderTarget& win, float ViewWidth, float ViewHeight, floa
 
 void glDispPlayer(Player* P, SharedResources* SR);
 
+void glDispGrass(Polygon* P, Texture txGrass);
+
 
 /** @brief Charge une texture en mémoire
  *
