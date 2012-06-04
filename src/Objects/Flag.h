@@ -1,7 +1,7 @@
 #ifndef _FLAG_H_
 #define _FLAG_H_
 
-#include <Rendering/OpenGl.h>
+#include <Rendering/OpenGL.h>
 
 /** @defgroup Flag Flag
  *

@@ -19,7 +19,7 @@ endif
 
 ifeq ($(OS), Linux)
 RM = rm
-LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+LIBS := -lsfml-network -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-network -GL -lsfml-system
 endif
 ifeq ($(OS), Darwin)
 RM = rm
@@ -27,7 +27,7 @@ LIBS := -framework sfml-system -framework sfml-window -framework sfml-graphics -
 endif
 ifeq ($(OS), Win)
 RM = del
-LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lopengl32
+LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-network -lsfml-system -lopengl32
 endif
 
 all : dirs test 
