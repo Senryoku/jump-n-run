@@ -80,9 +80,9 @@ void appFree(LevelEditorApp* App)
 void appRun(LevelEditorApp* App)
 {
 	float ViewSpeed,
-		 MouseX, MouseY, toViewX = App->ViewX, toViewY = App->ViewY,
+		 MouseX = 0.f, MouseY = 0.f, toViewX = App->ViewX, toViewY = App->ViewY,
 		ViewXSpeed = 0.f, ViewYSpeed = 0.f,
-		WindowRatio = App->WindowWidth/App->WindowHeight, MouseWinX, MouseWinY, MiniMapScale = 0.05f, MouseMiniMapDragX = 0.f, MouseMiniMapDragY = 0.f, MouseDragX, MouseDragY;
+		WindowRatio = App->WindowWidth/App->WindowHeight, MouseWinX = 0.f, MouseWinY = 0.f, MiniMapScale = 0.05f, MouseMiniMapDragX = 0.f, MouseMiniMapDragY = 0.f, MouseDragX = 0.f, MouseDragY = 0.f;
 	Bool Paused = TRUE, DispDebug = TRUE, DispL1 = TRUE, DispL2 = TRUE, DispObjects = TRUE, DispBack = FALSE, DispFore = FALSE, InsideMiniMap = FALSE, DragMiniMap = FALSE;
 	FPSCounter fps;
 

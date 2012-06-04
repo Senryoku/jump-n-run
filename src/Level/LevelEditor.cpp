@@ -636,11 +636,11 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	char read[300];
 	unsigned int i;
 	for (i=0; i<4; i++)
-		fgets(read, 300, f);
-	fgets(Led->backPath, 255, f);
-	fgets(Led->layer1Path, 255, f);
-	fgets(Led->layer2Path, 255, f);
-	fgets(Led->forePath, 255, f);
+		if (fgets(read, 300, f) == NULL) ERROR();
+	if (fgets(Led->backPath, 255, f) == NULL) ERROR();
+	if (fgets(Led->layer1Path, 255, f) == NULL) ERROR();
+	if (fgets(Led->layer2Path, 255, f) == NULL) ERROR();
+	if (fgets(Led->forePath, 255, f) == NULL) ERROR();
 	*strstr(Led->backPath, "\n") = '\0';
 	*strstr(Led->layer1Path, "\n") = '\0';
 	*strstr(Led->layer2Path, "\n") = '\0';
@@ -661,7 +661,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 		if (read[2] == '#' && item == o_texture) //on utilise le # pour reperer une ligne avec commentaire après l'espace!
 		{
 			char *path = (char*)malloc(255*sizeof(char));
-			fscanf(f, "%s\n", path);
+			if (fscanf(f, "%s\n", path) != 1) ERROR();
 			daAdd(&Led->TexturesPath, path);
 		}
 	}

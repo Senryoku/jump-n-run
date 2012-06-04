@@ -219,22 +219,22 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	// Une texture transparente est crée
 
 	//back
-	fgets(read, 255, f);
+	if (fgets(read, 255, f) == NULL) ERROR();
 	*strstr(read, "\n") = '\0';
 	Lvl->Background = (*Lvl->lvlTexLoad)(read);
 
 	//layer 1
-	fgets(read, 255, f);
+	if (fgets(read, 255, f) == NULL) ERROR();
 	*strstr(read, "\n") = '\0';
 	Lvl->Layer1 = (*Lvl->lvlTexLoad)(read);
 
 	//layer 2
-	fgets(read, 255, f);
+	if (fgets(read, 255, f) == NULL) ERROR();
 	*strstr(read, "\n") = '\0';
 	Lvl->Layer2 = (*Lvl->lvlTexLoad)(read);
 
 	//foreground
-	fgets(read, 255, f);
+	if (fgets(read, 255, f) == NULL) ERROR();
 	*strstr(read, "\n") = '\0';
 	Lvl->Foreground = (*Lvl->lvlTexLoad)(read);
 
@@ -264,7 +264,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					unsigned int ID;
 					for (i=0; i<nVertex; i++)
 					{
-						fscanf(f, "%u\n", &ID);
+						if (fscanf(f, "%u\n", &ID) != 1) ERROR();
 						V[i]=(Vertex*)daGet(Vx, ID);
 					}
 					Polygon* p;
@@ -288,10 +288,10 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					{
 					Vertex *V1, *V2, *V3, *V4;
 					unsigned int ID1, ID2, ID3, ID4;
-					fscanf(f, "%u\n", &ID1);
-					fscanf(f, "%u\n", &ID2);
-					fscanf(f, "%u\n", &ID3);
-					fscanf(f, "%u\n", &ID4);
+					if (fscanf(f, "%u\n", &ID1) != 1) ERROR();
+					if (fscanf(f, "%u\n", &ID2) != 1) ERROR();
+					if (fscanf(f, "%u\n", &ID3) != 1) ERROR();
+					if (fscanf(f, "%u\n", &ID4) != 1) ERROR();
 						V1 = (Vertex*)daGet(Vx, ID1);
 					V2 = (Vertex*)daGet(Vx, ID2);
 					V3 = (Vertex*)daGet(Vx, ID3);
@@ -317,7 +317,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					for (i=0; i<nVertex; i++)
 					{
 						unsigned int ID;
-						fscanf(f, "%u\n", &ID);
+						if (fscanf(f, "%u\n", &ID) != 1) ERROR();
 						lstAdd(LPoly, (Vertex*)daGet(Vx, ID));
 					}
 					Polygon* p;
@@ -343,7 +343,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				unsigned int ID1, ID2;
 				Vertex *V1, *V2;
 				float Lenght;
-				fscanf(f, "%u %u %f\n", &ID1, &ID2, &Lenght);
+				if (fscanf(f, "%u %u %f\n", &ID1, &ID2, &Lenght) != 3) ERROR();
 				V1 = (Vertex*)daGet(Vx, ID1);
 				V2 = (Vertex*)daGet(Vx, ID2);
 				Rigid* r = newRigid(V1, V2, Lenght);
@@ -355,7 +355,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				unsigned int ID1, ID2;
 				Vertex *V1, *V2;
 				float Lenght, Spring;
-				fscanf(f, "%u %u %f %f\n", &ID1, &ID2, &Lenght, &Spring);
+				if (fscanf(f, "%u %u %f %f\n", &ID1, &ID2, &Lenght, &Spring) != 4) ERROR();
 				V1 = (Vertex*)daGet(Vx, ID1);
 				V2 = (Vertex*)daGet(Vx, ID2);
 				Elastic* e = newElastic(V1, V2, Lenght, Spring);
@@ -368,7 +368,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				float x, y, mass;
 				int booly;
 				Bool fixe;
-				fscanf(f, "%f, %f ; %f ; %i\n", &x, &y, &mass, &booly);
+				if (fscanf(f, "%f, %f ; %f ; %i\n", &x, &y, &mass, &booly) != 4) ERROR();
 				fixe=(Bool)booly;
 				//printf("données lues: %f, %f ; %f; %i\n", x, y, mass, booly);
 				//on ajoute le vertex dans la liste
@@ -386,7 +386,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 			{
 				char path[255];
 				//printf("Texture lue \n");
-				fscanf(f, "%s\n", path);
+				if (fscanf(f, "%s\n", path) != 1) ERROR();
 				//printf("Chargement de %s", path);
 				Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
 				*ptrTex = Lvl->lvlTexLoad(path);
@@ -399,7 +399,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				Polygon* Shape;
 				List lstTex;
 
-				fscanf(f, "%u\n", &UserDefTexCoord);
+				if (fscanf(f, "%u\n", &UserDefTexCoord) != 1) ERROR();
 				Shape = (Polygon*) daGet(Poly, nVertex); //dans ce cas la variable contient l'index du polygone commencent à 0
 				if (UserDefTexCoord==1)
 				{
@@ -407,7 +407,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					for(unsigned int i = 0; i < polyGetVxCount(Shape); i++)
 					{
 						Vec2* CoordTex = newVec2();
-						fscanf(f, "%f %f\n", &CoordTex->x, &CoordTex->y);
+						if (fscanf(f, "%f %f\n", &CoordTex->x, &CoordTex->y) != 2) ERROR();
 						lstAdd(&lstTex, CoordTex);
 					}
 				}

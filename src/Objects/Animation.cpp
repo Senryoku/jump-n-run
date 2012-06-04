@@ -87,7 +87,7 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 	{
 		//[nb of states] [AnimType] [Triggers] [repeat]
 		unsigned int type, count, triggers, repeat;
-		fscanf(f, "%u %u %u %u\n", &count, &type, &triggers, &repeat);
+		if (fscanf(f, "%u %u %u %u\n", &count, &type, &triggers, &repeat) !=4) ERROR();
 		A->Type = (AnimType)type;
 		A->Triggers = (AnimTriggers)triggers;
 		A->Repeat = (Bool)repeat;
@@ -105,7 +105,7 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 				
 				for (int i=0; i<10; i++)
 				{
-					fgets(read, 100, f);
+					if (fgets(read, 100, f) == NULL) ERROR();
 					vec = &Pos.Positions[i];
 					sscanf(read, "%u %f %u %f", &free, &vec->x, &free2, &vec->y);
 					if (free)
@@ -125,7 +125,7 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 				
 				for (int i=0; i<10; i++)
 				{
-					fgets(read, 100, f);
+					if (fgets(read, 100, f) == NULL) ERROR();
 					a = &Ang.Angles[i];
 					sscanf(read, "%u %f", &free, a);
 					if (free)

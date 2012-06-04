@@ -30,6 +30,13 @@ typedef struct
 #define DEG2RAD( X ) ( (X) * (M_PI/180.0) ) /* Conversion de degrès en radians */
 #define ISNAN( X ) ( (X) != (X) ) /* Permet de savoir si un float est un NaN */
 
+
+void printError(const char *func, const char *file, int line);
+
+
+#define ERROR() printError(__func__, __FILE__, __LINE__)
+
+
 /**
  * @brief Fait une transition enre deux variables
  * @param CurrentPosition pointeur sur la valeur qui va être modifié
@@ -44,5 +51,7 @@ Bool DirectoryExists(const char* Dir);
 Bool CreateDirectory(const char* Dir);
 
 Config GetConfiguration();
+
+
 
 #endif

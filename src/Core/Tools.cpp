@@ -98,3 +98,10 @@ Config GetConfiguration()
 
 	return Cfg;
 }
+
+void printError(const char *func, const char *file, int line)
+{
+	char tmp[300];
+	sprintf(tmp, "Error at function %s. In file %s at line %d", func, file, line);
+	perror(tmp);
+}

@@ -118,7 +118,7 @@ void gmPlay(Game* G)
 
 	lvlLoadedInit(G->Lvl);
 
-	float ViewX = 0.f, ViewY = 0.f, MouseX, MouseY, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
+	float ViewX = 0.f, ViewY = 0.f, MouseX = 0.f, MouseY = 0.f, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
 	sf::Clock Clk;
 	FPSCounter fps;
