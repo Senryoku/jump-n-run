@@ -468,13 +468,11 @@ void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float Vi
 
 	Vec2 TitleSize = vec2(TitleWidth, 60.f);
 	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
-
-	
-
-	glDrawBox(SR, Position, Size, (int)M->SubAnim);
 	
 	if (strcmp(moiGetText(moi), "")!=0)
 		glDrawTitleBox(SR, TitlePos, TitleSize);
+	
+	glDrawBox(SR, Position, Size, (int)M->SubAnim);
 
 	glPopMatrix();
 }
