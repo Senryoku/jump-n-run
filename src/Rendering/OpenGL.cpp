@@ -968,6 +968,9 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 
 	lvlDispGoalFlag(Lvl);
 	lvlDispAllObj(Lvl);
+	lvlDisplayGrass(Lvl, SR);
+	lvlDisplayElastics(Lvl, SR);
+	lvlDisplayRigids(Lvl, SR);
 
 	glColor4f(0.5f, 0.5f, 0.5f, 1.f);
 	glLineStipple(1, 0xCCCC);
@@ -1175,7 +1178,7 @@ void glDispRope(const Elastic* E, SharedResources* SR)
 	glTexCoord2i(0, 0);
 	glVertex2f(vxGetPosition(V1).x-N.x*5.f, vxGetPosition(V1).y-N.y*5.f);
 	
-	glTexCoord2f(elLenght/10.f, 0);
+	glTexCoord2f(elLenght/10.f, 0.f);
 	glVertex2f(vxGetPosition(V2).x-N.x*5.f, vxGetPosition(V2).y-N.y*5.f);
 	
 	glTexCoord2f(elLenght/10.f, 1.f);
@@ -1205,7 +1208,7 @@ void glDispChain(const Rigid* R, SharedResources* SR)
 	glTexCoord2i(0, 0);
 	glVertex2f(vxGetPosition(V1).x-N.x*5.f, vxGetPosition(V1).y-N.y*7.5f);
 	
-	glTexCoord2f(elLenght/15.f, 0);
+	glTexCoord2f(elLenght/15.f, 0.f);
 	glVertex2f(vxGetPosition(V2).x-N.x*7.5f, vxGetPosition(V2).y-N.y*7.5f);
 	
 	glTexCoord2f(elLenght/15.f, 1.f);
@@ -1214,6 +1217,31 @@ void glDispChain(const Rigid* R, SharedResources* SR)
 	
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(vxGetPosition(V1).x+N.x*7.5f, vxGetPosition(V1).y+N.y*7.5f);
+	
+	
+	glEnd();
+	
+	glDisable(GL_TEXTURE_2D);
+}
+
+void glDispSpawn(Vec2 Pos, SharedResources* SR)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "s_spawn")); //46x42
+	
+	glBegin(GL_QUADS);
+	
+	glTexCoord2i(0, 0);
+	glVertex2f(Pos.x-23.f, Pos.y-21.f);
+	
+	glTexCoord2i(1, 0);
+	glVertex2f(Pos.x+23.f, Pos.y-21.f);
+	
+	glTexCoord2i(1,1);
+	glVertex2f(Pos.x+23.f, Pos.y+21.f);
+	
+	glTexCoord2i(0, 1);
+	glVertex2f(Pos.x-23.f, Pos.y+21.f);
 	
 	
 	glEnd();

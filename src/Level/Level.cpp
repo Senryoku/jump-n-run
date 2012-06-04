@@ -25,6 +25,7 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlDispGrass = &glDispGrass;
 	Lvl->lvlDispRope = &glDispRope;
 	Lvl->lvlDispChain = &glDispChain;
+	Lvl->lvlDispSpawn = &glDispSpawn;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
 	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/flag.png"), 0);
 	Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
@@ -762,6 +763,11 @@ void lvlDisplayGrass(Level* Lvl, s_SharedResources* SR)
 void lvlDispGoalFlag(Level* Lvl)
 {
 	Lvl->lvlDispFlag(&Lvl->GoalFlag, Lvl->Goal.x, Lvl->Goal.y);
+}
+
+void lvlDispSpawn(Level* Lvl, s_SharedResources* SR)
+{
+	Lvl->lvlDispSpawn(Lvl->Spawn, SR);
 }
 
 Object* lvlGetObjFromShape(Level* Lvl, Polygon* P)

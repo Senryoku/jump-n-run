@@ -55,6 +55,7 @@ typedef struct s_Level
 	void (*lvlDispGrass)(Polygon* P, s_SharedResources* SR);/**< Pointeur de fonction affichant l'herbe **/
 	void (*lvlDispRope)(const Elastic* E, s_SharedResources* SR); /**< Pointeur de fonction affichant un elastic **/
 	void (*lvlDispChain)(const Rigid* R, s_SharedResources* SR);/**< Pointeur de fonction affichant un rigid **/
+	void (*lvlDispSpawn)(Vec2 V, s_SharedResources* SR); /**< Pointeur de fonction affichant le spawn **/
 } Level;
 
 /** @brief Constructeur
@@ -266,6 +267,7 @@ void lvlDispAllObj(Level* Lvl);
 
 /** @brief Affiche l'herbe sur les object qui utilisent la texture par défaut d'index 0
  * @param[in] Lvl Level auquel s'applique la fonction
+ * @param[in] SR Resources partagées
  **/
 void lvlDisplayGrass(Level* Lvl, s_SharedResources* SR);
 
@@ -273,6 +275,12 @@ void lvlDisplayGrass(Level* Lvl, s_SharedResources* SR);
  * @param[in] Lvl Level auquel s'applique la fonction
  **/
 void lvlDispGoalFlag(Level* Lvl);
+
+/** @brief Affiche le spawn du niveau
+ * @param[in] Lvl Level auquel s'applique la fonction
+ * @param[in] SR Resources partagées
+ **/
+void lvlDispSpawn(Level* Lvl, s_SharedResources* SR);
 
 /** @brief Ajoute un objet texturé
  * @param[in,out] Lvl Level auquel s'applique la fonction

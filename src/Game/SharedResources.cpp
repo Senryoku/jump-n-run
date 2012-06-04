@@ -39,6 +39,7 @@ void shLoadTextures(SharedResources* SR)
 	shAddTexture(SR, "gr_grass", "data/s_ground_grass.png");
 	shAddTexture(SR, "el_rope", "data/s_rope.png");
 	shAddTexture(SR, "rd_chain", "data/s_chain.png");
+	shAddTexture(SR, "s_spawn", "data/s_spawn.png");
 	
 	SR->txCursor.loadFromFile("data/gui/s_cursors.png");
 	

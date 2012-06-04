@@ -125,8 +125,6 @@ void gmPlay(Game* G)
 	fpsInit(&fps);
 	while (G->Window->isOpen())
 	{
-		MouseX = ViewWidth*sf::Mouse::getPosition(*G->Window).x/G->WindowWidth + ViewX;
-		MouseY = ViewHeight*sf::Mouse::getPosition(*G->Window).y/G->WindowHeight + ViewY;
 
 		sf::Event event;
 
@@ -297,6 +295,7 @@ void gmPlay(Game* G)
 
 		lvlDisplayBG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 		lvlDisplayL1(G->Lvl);
+		lvlDispGoalFlag(G->Lvl);
 		lvlDispAllObj(G->Lvl);
 		lvlDisplayElastics(G->Lvl, G->SR);
 		lvlDisplayRigids(G->Lvl, G->SR);
@@ -305,7 +304,6 @@ void gmPlay(Game* G)
 		
 		lvlDisplayGrass(G->Lvl, G->SR);
 		
-		lvlDispGoalFlag(G->Lvl);
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 
@@ -324,6 +322,9 @@ void gmPlay(Game* G)
 		//if (msgCanBeDrawn()) glDrawMenuBox(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
 
 		fpsStep(&fps);
+		
+		MouseX = ViewWidth*sf::Mouse::getPosition(*G->Window).x/G->WindowWidth + ViewX;
+		MouseY = ViewHeight*sf::Mouse::getPosition(*G->Window).y/G->WindowHeight + ViewY;
 
 		//SFML
 		glDrawMenuItems(G->SR, *G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
@@ -333,6 +334,8 @@ void gmPlay(Game* G)
 
 		//if (msgCanBeDrawn())
 		//	glDrawMenuItems(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
+		
+		glDrawCursor(*G->Window,ViewWidth, ViewHeight, sf::Mouse::getPosition(*G->Window).x, sf::Mouse::getPosition(*G->Window).y, shGetCursorSprite(G->SR, SPR_CURSOR));
 
 
 		G->Window->display();

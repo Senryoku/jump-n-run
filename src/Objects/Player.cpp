@@ -491,6 +491,10 @@ void plUpdate(Player* P)
 	}
 	else
 		aniUpdate(CurrentA, P, 1.f);
+	
+	if (P->GrabL != NULL)
+		vxSetPosition(P->vxBodyParts[bpLeftArm2], vxGetPosition(P->VxUL));
+	
 }
 
 void plPhysics(Player* P, World* W)

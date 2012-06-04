@@ -587,6 +587,8 @@ void appRun(LevelEditorApp* App)
 		if(DispL1) lvlDisplayL1(App->Led.Lvl);
 		if(DispL2) lvlDisplayL2(App->Led.Lvl);
 		
+		lvlDispGoalFlag(App->Led.Lvl);
+		
 		if(DispObjects)
 		{
 			lvlDispAllObj(App->Led.Lvl);
@@ -595,7 +597,9 @@ void appRun(LevelEditorApp* App)
 			lvlDisplayRigids(App->Led.Lvl, App->SR);
 		}
 		
-		lvlDispGoalFlag(App->Led.Lvl);
+		lvlDispSpawn(App->Led.Lvl, App->SR);
+		
+		
 		if(DispFore) lvlDisplayFG(App->Led.Lvl, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
