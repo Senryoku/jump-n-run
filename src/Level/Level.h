@@ -50,7 +50,7 @@ typedef struct s_Level
 				Vec2 UL, Vec2 UR, Vec2 DR, Vec2 DL); /**< Pointeur de fonction affichant une texture **/
 	void (*lvlDispTexPoly)(Texture T, Polygon* P, List* L); /**< Pointeur de fonction affichant une texture sur un polygon **/
 	void (*lvlDispFlag)(Flag* F, float X, float Y);/**< Pointeur de fonction affichant le drapeau **/
-	
+
 	void (*lvlDispPlayer)(Player* P, s_SharedResources* SR);/**< Pointeur de fonction affichant le joueur **/
 	void (*lvlDispGrass)(Polygon* P, s_SharedResources* SR);/**< Pointeur de fonction affichant l'herbe **/
 	void (*lvlDispRope)(const Elastic* E, s_SharedResources* SR); /**< Pointeur de fonction affichant un elastic **/
@@ -116,10 +116,25 @@ Vec2 lvlGetSpawn(const Level* lvl);
 **/
 Vec2 lvlGetGoal(const Level* lvl);
 
+/** @brief Retourne un itérateur sur les Objets de Lvl
+ * @param[in] Lvl Level auquel s'applique la fonction
+**/
+Node* lvlGetObjIt(Level* lvl);
+
 /** @brief Accesseur de P1
  * @param[in] Lvl Level auquel s'applique la fonction
 **/
 Player* lvlGetP1(const Level* lvl);
+
+/** @brief Accesseur de DistBG
+ * @param[in] Lvl Level auquel s'applique la fonction
+**/
+float lvlGetDistBG(const Level* Lvl);
+
+/** @brief Accesseur de DistFG
+ * @param[in] Lvl Level auquel s'applique la fonction
+**/
+float lvlGetDistFG(const Level* Lvl);
 
 /** @brief Accesseur de Finished
  * @param[in] Lvl Level auquel s'applique la fonction
@@ -150,6 +165,16 @@ void lvlSetName(Level* lvl, const char* Name);
  * @param[in,out] Lvl Level auquel s'applique la fonction
 **/
 void lvlSetDesc(Level* lvl, const char* Desc);
+
+/** @brief Mutateur de Spawn
+ * @param[in,out] Lvl Level auquel s'applique la fonction
+**/
+void lvlSetSpawn(Level* lvl, Vec2 S);
+
+/** @brief Mutateur de Goal
+ * @param[in,out] Lvl Level auquel s'applique la fonction
+**/
+void lvlSetGoal(Level* lvl, Vec2 G);
 
 /** @brief Charge un niveau à partir d'un fichier
  * @param[in,out] Lvl Level auquel s'applique la fonction

@@ -106,9 +106,24 @@ Vec2 lvlGetGoal(const Level* lvl)
 	return lvl->Goal;
 }
 
+Node* lvlGetObjIt(Level* lvl)
+{
+	return lstFirst(&lvl->Objects);
+}
+
 Player* lvlGetP1(const Level* lvl)
 {
 	return lvl->P1;
+}
+
+float lvlGetDistBG(const Level* Lvl)
+{
+	return Lvl->DistBG;
+}
+
+float lvlGetDistFG(const Level* Lvl)
+{
+	return Lvl->DistFG;
 }
 
 Bool lvlIsFinished(const Level* lvl)
@@ -458,6 +473,16 @@ void lvlSetName(Level* lvl, const char* Name)
 void lvlSetDesc(Level* lvl, const char* Desc)
 {
 	strcpy(lvl->Desc, Desc);
+}
+
+void lvlSetSpawn(Level* lvl, Vec2 S)
+{
+	lvl->Spawn = S;
+}
+
+void lvlSetGoal(Level* lvl, Vec2 G)
+{
+	lvl->Goal = G;
 }
 
 void lvlLoadedInit(Level* Lvl)

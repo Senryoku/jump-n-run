@@ -168,12 +168,12 @@ void lvledDraw(const LevelEditor* Led, char flag)
 
 void lvledSetSpawn(LevelEditor* Led)
 {
-	Led->Lvl->Spawn = vxGetPosition(Led->Mouse);
+	lvlSetSpawn(Led->Lvl, vxGetPosition(Led->Mouse));
 }
 
 void lvledSetGoal(LevelEditor* Led)
 {
-	Led->Lvl->Goal = vxGetPosition(Led->Mouse);
+	lvlSetGoal(Led->Lvl, vxGetPosition(Led->Mouse));
 }
 
 void lvledGrabUpdate(LevelEditor *Led)
@@ -589,7 +589,7 @@ void lvledObject(LevelEditor *Led, Polygon* P, unsigned int T, List CT)
 {
 	if(lstCount(&CT) != polyGetVxCount(P)) return;
 	Object *tmpObj = NULL, *Obj = NULL;
-	Node* it = lstFirst(&Led->Lvl->Objects);
+	Node* it = lvlGetObjIt(Led->Lvl);
 	while(!nodeEnd(it))
 	{
 		tmpObj = (Object*) nodeGetData(it);
@@ -664,7 +664,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	}
 
 	fclose(f);
-	
+
 	return lvlLoad(Led->Lvl, File);
 }
 
@@ -676,25 +676,23 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	FILE* f;
 	f=fopen(File, "w");
 
-	if (f==NULL)
+	if (f == NULL)
 	{
 		printf("Erreur de sauvegarde du fichier %s\n", File);
 		return FALSE;
 	}
 
 	/* Entete du fichier*/
-	fprintf(f, "%s\n%s\n%f, %f ; %f, %f\n", Led->Lvl->Name, Led->Lvl->Desc, lvlGetWorld(Led->Lvl)->Width, lvlGetWorld(Led->Lvl)->Height, Led->Lvl->DistBG, Led->Lvl->DistFG);
-	fprintf(f, "%f, %f ; %f, %f\n", Led->Lvl->Spawn.x, Led->Lvl->Spawn.y, Led->Lvl->Goal.x, Led->Lvl->Goal.y);
+	fprintf(f, "%s\n%s\n%f, %f ; %f, %f\n", lvlGetName(Led->Lvl), lvlGetDesc(Led->Lvl), wdGetWidth(lvlGetWorld(Led->Lvl)), wdGetHeight(lvlGetWorld(Led->Lvl)), lvlGetDistBG(Led->Lvl), lvlGetDistFG(Led->Lvl));
+	fprintf(f, "%f, %f ; %f, %f\n", lvlGetSpawn(Led->Lvl).x, lvlGetSpawn(Led->Lvl).y, lvlGetGoal(Led->Lvl).x, lvlGetGoal(Led->Lvl).y);
 	fprintf(f, "%s\n%s\n%s\n%s\n", Led->backPath, Led->layer1Path, Led->layer2Path, Led->forePath);
 
-	List* L;
 	Node* it;
 	DynArr *Vx = newDynArr();
 	DynArr *Poly = newDynArr();
 
 	//On stocke les vertex qui representent le centre des polygones de plus de 4 cotes pour eviter de les mettre dans le fichier
-	L = &lvlGetWorld(Led->Lvl)->Polygons;
-	it = lstFirst(L);
+	it = wdGetPolyIt(lvlGetWorld(Led->Lvl));
 
 	List* LCenter = newList();
 
@@ -710,8 +708,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	}
 
 	//on écrit les vertex
-	L  = &lvlGetWorld(Led->Lvl)->Vertices;
-	it = lstFirst(L);
+	it = wdGetVertexIt(lvlGetWorld(Led->Lvl));
 
 	while (!nodeEnd(it))
 	{
@@ -727,8 +724,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		it = nodeGetNext(it);
 	}
 
-	L = &lvlGetWorld(Led->Lvl)->Polygons;
-	it = lstFirst(L);
+	it = wdGetPolyIt(lvlGetWorld(Led->Lvl));
 
 	//on écrit les polygones
 	while (!nodeEnd(it))
@@ -749,8 +745,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		it = nodeGetNext(it);
 	}
 
-	L = &lvlGetWorld(Led->Lvl)->Rigids;
-	it = lstFirst(L);
+	it = wdGetRigidIt(lvlGetWorld(Led->Lvl));
 
 	//on écrit les rigides
 	while (!nodeEnd(it))
@@ -763,8 +758,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		it = nodeGetNext(it);
 	}
 
-	L = &lvlGetWorld(Led->Lvl)->Elastics;
-	it = lstFirst(L);
+	it = wdGetElasticIt(lvlGetWorld(Led->Lvl));
 
 	//on écrit les elastiques
 	while (!nodeEnd(it))
@@ -779,14 +773,14 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 	//On écrit les textures
 	unsigned int i;
-	for (i=0; i<daGetSize(&Led->TexturesPath); i++)
+	for (i = 0; i < daGetSize(&Led->TexturesPath); i++)
 	{
 		fprintf(f, "%u #Texture\n%s\n", o_texture, (char*)daGet(&Led->TexturesPath, i));
 	}
 
 	/** @todo Debuger */
 	//On écrit les objects
-	it = lstFirst(&Led->Lvl->Objects);
+	it = lvlGetObjIt(Led->Lvl);
 	while(!nodeEnd(it))
 	{
 		Object* Obj = (Object*) nodeGetData(it);
@@ -798,10 +792,10 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 			fprintf(f, "%f %f\n", V->x, V->y);
 			it2 = nodeGetNext(it2);
 		}
-			
-			
+
+
 		it = nodeGetNext(it);
-		
+
 	}
 
 	fclose(f);
