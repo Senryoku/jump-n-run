@@ -44,17 +44,20 @@ endif
 	
 #A refaire mais là dessuite j'ai la flemme :D
 ifeq ($(OS), Win)
-	@echo off
-	IF exist bin\ ( ) ELSE ( mkdir bin\ )
-	IF exist obj\Core ( ) ELSE ( mkdir obj\Core )
-	IF exist obj\Audio ( ) ELSE ( mkdir obj\Audio )
-	IF exist obj\Physics ( ) ELSE ( mkdir obj\Physics )
-	IF exist obj\Game ( ) ELSE ( mkdir obj\Game )
-	IF exist obj\Score ( ) ELSE ( mkdir obj\Score )
-	IF exist obj\Rendering ( ) ELSE ( mkdir obj\Rendering )
-	IF exist obj\Level ( ) ELSE ( mkdir obj\Level )
+	@echo "Faire make windirs pour les dossiers la PREMIÈRE fois"
 endif
 .PHONY : dirs
+
+windirs :
+	mkdir bin\
+	mkdir obj\Core
+	mkdir obj\Audio
+	mkdir obj\Physics
+	mkdir obj\Game
+	mkdir obj\Score
+	mkdir obj\Rendering
+	mkdir obj\Level
+.PHONY : windirs
 
 $(OBJ)%.o : $(SRC)%.cpp
 	@echo "Compilation du fichier $^" ; \

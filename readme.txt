@@ -10,7 +10,11 @@ Utilisation du Makefile :
 faire make run
 
 -Sous Windows
-Utiliser le projet Codeblocks;
+Utiliser le projet Codeblocks.
+Ou depuis le shell faire:
+	make windirs #Que la première fois"
+	make run
+Pour chaque éxécution faire un make run
 
 == Configuration ==
 
