@@ -63,11 +63,11 @@ $(OBJ)%.o : $(SRC)%.cpp
 #$(OBJ)%.o : $(SRC)%.cpp
 #$(C) $(OPT) $^ -c -o $@
 
-test : $(POINTO) $(OBJ)test.o
+test : $(POINTO) $(OBJ)Test.o
 	@echo "Édition des liens pour $@" ; \
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	
-$(OBJ)test.o : $(SRC)test.cpp
+$(OBJ)Test.o : $(SRC)Test.cpp
 	@echo "Compilation du fichier $^" ; \
 	$(CXX) $(OPT) $^ -c -o $@
 	
