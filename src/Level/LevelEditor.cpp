@@ -873,6 +873,10 @@ Elastic* lvledGetNearestElastic(LevelEditor* Led)
 	return wdGetNearestElastic(lvlGetWorld(Led->Lvl), vxGetPosition(Led->Mouse).x, vxGetPosition(Led->Mouse).y);
 }
 
+Level* lvledGetLvl(const LevelEditor* Led)
+{
+	return Led->Lvl;
+}
 
 void lvledAddTexture(LevelEditor* Led, const char* Path)
 {

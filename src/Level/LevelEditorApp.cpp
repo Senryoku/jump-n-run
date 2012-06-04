@@ -105,18 +105,18 @@ void appRun(LevelEditorApp* App)
 
 
 
-	wdAddVertex(App->Led.Lvl->W, Base);
-	wdAddVertex(App->Led.Lvl->W, Neck);
-	wdAddVertex(App->Led.Lvl->W, HeadLeft);
-	wdAddVertex(App->Led.Lvl->W, HeadRight);
-	wdAddVertex(App->Led.Lvl->W, LeftArm1);
-	wdAddVertex(App->Led.Lvl->W, LeftArm2);
-	wdAddVertex(App->Led.Lvl->W, LeftLeg1);
-	wdAddVertex(App->Led.Lvl->W, LeftLeg2);
-	wdAddVertex(App->Led.Lvl->W, RightArm1);
-	wdAddVertex(App->Led.Lvl->W, RightArm2);
-	wdAddVertex(App->Led.Lvl->W, RightLeg1);
-	wdAddVertex(App->Led.Lvl->W, RightLeg2);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, Base);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, Neck);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, HeadLeft);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, HeadRight);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, LeftArm1);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, LeftArm2);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, LeftLeg1);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, LeftLeg2);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, RightArm1);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, RightArm2);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, RightLeg1);
+	wdAddVertex(lvledGetLvl(&App->Led)->W, RightLeg2);
 
 	Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
 	LA1 = newRigid(Neck, LeftArm1, -1.f);
@@ -137,18 +137,18 @@ void appRun(LevelEditorApp* App)
 	H3 = newRigid(HeadLeft, HeadRight, -1.f);
 
 
-	wdAddRigid(App->Led.Lvl->W, Body);
-	wdAddRigid(App->Led.Lvl->W, LA1);
-	wdAddRigid(App->Led.Lvl->W, LA2);
-	wdAddRigid(App->Led.Lvl->W, RA1);
-	wdAddRigid(App->Led.Lvl->W, RA2);
-	wdAddRigid(App->Led.Lvl->W, LL1);
-	wdAddRigid(App->Led.Lvl->W, LL2);
-	wdAddRigid(App->Led.Lvl->W, RL1);
-	wdAddRigid(App->Led.Lvl->W, RL2);
-	wdAddRigid(App->Led.Lvl->W, H1);
-	wdAddRigid(App->Led.Lvl->W, H2);
-	wdAddRigid(App->Led.Lvl->W, H3);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, Body);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, LA1);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, LA2);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, RA1);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, RA2);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, LL1);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, LL2);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, RL1);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, RL2);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, H1);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, H2);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, H3);
 	 */
 
 	/* Fin du code temporaire pour les states des animations */
@@ -161,10 +161,10 @@ void appRun(LevelEditorApp* App)
 
 
 		//On verifie si on a pas mis le curseur sur la minimap
-		if (MouseWinX >= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl)))*MiniMapScale &&
+		if (MouseWinX >= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led))))*MiniMapScale &&
 			MouseWinX <= App->WindowWidth-20.f &&
 			MouseWinY >= 20.f &&
-			MouseWinY <= 20.f+wdGetHeight(lvlGetWorld(App->Led.Lvl))*MiniMapScale)
+			MouseWinY <= 20.f+wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)))*MiniMapScale)
 			InsideMiniMap = TRUE;
 		else
 			InsideMiniMap = FALSE;
@@ -216,12 +216,12 @@ void appRun(LevelEditorApp* App)
 							{
 								DragMiniMap = TRUE;
 								//Si le curseur n'est pas sur la vue dans la minimap on va pas avoir un drag, on va directement bouger la vue (plus intuitif)
-								if (MouseWinX >= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl))-App->ViewX)*MiniMapScale &&
-									MouseWinX <= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl))-App->ViewX-App->ViewWidth)*MiniMapScale &&
+								if (MouseWinX >= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))-App->ViewX)*MiniMapScale &&
+									MouseWinX <= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))-App->ViewX-App->ViewWidth)*MiniMapScale &&
 									MouseWinY >= 20.f+App->ViewY*MiniMapScale &&
 									MouseWinY <= 20.f+(App->ViewY+App->ViewHeight)*MiniMapScale)
 								{
-									MouseMiniMapDragX = (MouseWinX-(App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl))-App->ViewX)*MiniMapScale));
+									MouseMiniMapDragX = (MouseWinX-(App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))-App->ViewX)*MiniMapScale));
 									MouseMiniMapDragY = (MouseWinY-(20.f+App->ViewY*MiniMapScale));
 								}
 								else
@@ -286,14 +286,14 @@ void appRun(LevelEditorApp* App)
 
 				float fc = App->WindowWidth/App->WindowHeight;
 
-				if (App->ViewWidth > wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale)
+				if (App->ViewWidth > wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))+20.f/MiniMapScale)
 				{
-					App->ViewWidth = wdGetWidth(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale;
+					App->ViewWidth = wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))+20.f/MiniMapScale;
 					App->ViewHeight = App->ViewWidth/fc;
 				}
-				if (App->ViewHeight > wdGetHeight(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale)
+				if (App->ViewHeight > wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)))+20.f/MiniMapScale)
 				{
-					App->ViewHeight = wdGetHeight(lvlGetWorld(App->Led.Lvl))+20.f/MiniMapScale;
+					App->ViewHeight = wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)))+20.f/MiniMapScale;
 					App->ViewWidth = App->ViewHeight*fc;
 				}
 
@@ -325,7 +325,7 @@ void appRun(LevelEditorApp* App)
 						lvledGrab(&App->Led);
 						break;
 					case sf::Keyboard::N :
-						printf("Number of Vertices: %u\nNumber of Polygons: %u\n", lstCount(&lvlGetWorld(App->Led.Lvl)->Vertices), lstCount(&lvlGetWorld(App->Led.Lvl)->Polygons));
+						printf("Number of Vertices: %u\nNumber of Polygons: %u\n", lstCount(&lvlGetWorld(lvledGetLvl(&App->Led))->Vertices), lstCount(&lvlGetWorld(lvledGetLvl(&App->Led))->Polygons));
 						break;
 					case sf::Keyboard::E :
 						lvledGrabEl(&App->Led);
@@ -549,12 +549,12 @@ void appRun(LevelEditorApp* App)
 
 			if (DragMiniMap && sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				MouseWinX = MIN(MAX(MouseWinX-MouseMiniMapDragX, App->WindowWidth-20.f-wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale-10.f), App->WindowWidth-App->ViewWidth*MiniMapScale-10.f);
+				MouseWinX = MIN(MAX(MouseWinX-MouseMiniMapDragX, App->WindowWidth-20.f-wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))*MiniMapScale-10.f), App->WindowWidth-App->ViewWidth*MiniMapScale-10.f);
 
-				MouseWinY = MIN(MAX(MouseWinY-MouseMiniMapDragY, 10.f), (wdGetHeight(lvlGetWorld(App->Led.Lvl))-App->ViewHeight)*MiniMapScale+30.f);
+				MouseWinY = MIN(MAX(MouseWinY-MouseMiniMapDragY, 10.f), (wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)))-App->ViewHeight)*MiniMapScale+30.f);
 
-				toViewX = (MouseWinX - (App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(App->Led.Lvl)))*MiniMapScale))/(wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale)*wdGetWidth(lvlGetWorld(App->Led.Lvl));
-				toViewY = (MouseWinY - 20.f)/(wdGetHeight(lvlGetWorld(App->Led.Lvl))*MiniMapScale)*wdGetHeight(lvlGetWorld(App->Led.Lvl));
+				toViewX = (MouseWinX - (App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led))))*MiniMapScale))/(wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))*MiniMapScale)*wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)));
+				toViewY = (MouseWinY - 20.f)/(wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)))*MiniMapScale)*wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)));
 
 
 			}
@@ -562,14 +562,14 @@ void appRun(LevelEditorApp* App)
 
 
 		//On ajuste la vue
-		toViewX = MIN(MAX(toViewX, -wdGetWidth(lvlGetWorld(App->Led.Lvl))*MiniMapScale), wdGetWidth(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-App->ViewWidth);
-		toViewY = MIN(MAX(toViewY, -10.f/MiniMapScale), wdGetHeight(lvlGetWorld(App->Led.Lvl))+10.f/MiniMapScale-App->ViewHeight);
+		toViewX = MIN(MAX(toViewX, -wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))*MiniMapScale), wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))+10.f/MiniMapScale-App->ViewWidth);
+		toViewY = MIN(MAX(toViewY, -10.f/MiniMapScale), wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)))+10.f/MiniMapScale-App->ViewHeight);
 
 		Wobble(&App->ViewX, toViewX, 0.5f, 0.5f, &ViewXSpeed);
 		Wobble(&App->ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
-		lvlUpdate(App->Led.Lvl, Paused);
+		lvlUpdate(lvledGetLvl(&App->Led), Paused);
 
 		sndmUpdate(shSoundManager(App->SR));
 
@@ -582,26 +582,23 @@ void appRun(LevelEditorApp* App)
 		// Quelle portion de la scène afficher ?
 		glOrtho(0.f+App->ViewX, App->ViewWidth+App->ViewX, App->ViewHeight+App->ViewY, 0.f+App->ViewY, 0.0, 100.0);
 
-		
-		if(DispBack) lvlDisplayBG(App->Led.Lvl, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-		if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
-		if(DispL1) lvlDisplayL1(App->Led.Lvl);
-		if(DispL2) lvlDisplayL2(App->Led.Lvl);
-		
-		lvlDispGoalFlag(App->Led.Lvl);
-		
+		if(DispBack) lvlDisplayBG(lvledGetLvl(&App->Led), App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+		if(DispDebug) gridDraw(&lvlGetWorld(lvledGetLvl(&App->Led))->CollisionGrid);
+		if(DispL1) lvlDisplayL1(lvledGetLvl(&App->Led));
+		if(DispL2) lvlDisplayL2(lvledGetLvl(&App->Led));
+
 		if(DispObjects)
 		{
-			lvlDispAllObj(App->Led.Lvl);
-			lvlDisplayGrass(App->Led.Lvl, App->SR);
-			lvlDisplayElastics(App->Led.Lvl, App->SR);
-			lvlDisplayRigids(App->Led.Lvl, App->SR);
+			lvlDispAllObj(lvledGetLvl(&App->Led));
+			lvlDisplayGrass(lvledGetLvl(&App->Led), App->SR);
+			lvlDisplayElastics(lvledGetLvl(&App->Led), App->SR);
+			lvlDisplayRigids(lvledGetLvl(&App->Led), App->SR);
 		}
-		
+
+		lvlDispGoalFlag(lvledGetLvl(&App->Led));
 		lvlDispSpawn(App->Led.Lvl, App->SR);
-		
-		
-		if(DispFore) lvlDisplayFG(App->Led.Lvl, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+		if(DispFore) lvlDisplayFG(lvledGetLvl(&App->Led), App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 		 glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /// @todo C'est pas terrible ça...
 		glDrawPolyFromList(&App->Led.tmpLstFixed, vec2(MouseX, MouseY));
@@ -610,7 +607,7 @@ void appRun(LevelEditorApp* App)
 			glDrawPolygon(lvledGetNearestPoly(&App->Led));
 
 		//Minimap
-		glDrawMinimap(App->Led.Lvl, App->SR, App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+		glDrawMinimap(lvledGetLvl(&App->Led), App->SR, App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 
 		glPopMatrix();
@@ -763,27 +760,27 @@ void appShowPolygonMenu(LevelEditorApp* App)
 	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon");
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon and Vertices");
-	
+
 	float tmp;
-	Object* Obj = lvlGetObjFromShape(App->Led.Lvl, lvledGetNearestPoly(&App->Led));
+	Object* Obj = lvlGetObjFromShape(lvledGetLvl(&App->Led), lvledGetNearestPoly(&App->Led));
 	if(Obj != NULL)
 	{
 		ItemID IID;
 		tmp = objGetTexture(Obj);
 		IID = msgAddItem(shMessageManager(App->SR), "Object Texture Index", ITEM_VALUE, NULL, &tmp);
 		mniSetIncr(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 1.f);
-		mniSetMinMaxValues(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0, daGetSize(&App->Led.Lvl->Textures)-1);
+		mniSetMinMaxValues(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0, daGetSize(&lvledGetLvl(&App->Led)->Textures)-1);
 		mniSetFloatPrecision(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0);
 	}
 	else
 	{
 		msgAddCloseItem(shMessageManager(App->SR), "Transform into object");
 	}
-	
+
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
 
 	i = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-	
+
 	if (Obj != NULL)
 		objSetTexture(Obj, (unsigned int)tmp);
 
@@ -808,11 +805,11 @@ void appShowPolygonMenu(LevelEditorApp* App)
 		case 3:
 		{
 			List lstTex;
-			
+
 			lvlCreateTexListForPolygon(lvledGetNearestPoly(&App->Led), &lstTex);
-			
+
 			Object* Obj = newObject(lvledGetNearestPoly(&App->Led), 0, lstTex);
-			lstAdd(&App->Led.Lvl->Objects, Obj);
+			lstAdd(&lvledGetLvl(&App->Led)->Objects, Obj);
 		}
 			break;
 		default:
@@ -906,11 +903,11 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			break;
 		case 1 :
 			msgCreateMessage(shMessageManager(App->SR), "Set World Width", 3);
-			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &App->Led.Lvl->W->Width);
-			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &App->Led.Lvl->W->Height);
+			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->W->Width);
+			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->W->Height);
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-			wdResetGrid(lvlGetWorld(App->Led.Lvl));
+			wdResetGrid(lvlGetWorld(lvledGetLvl(&App->Led)));
 			break;
 		case 2 :
 		{
@@ -920,7 +917,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			const char* file = msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 			lvledAddTexture(&App->Led, file);
-			
+
 			break;
 		}
 		case 3 :
