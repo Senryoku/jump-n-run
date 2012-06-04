@@ -26,7 +26,7 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlDispRope = &glDispRope;
 	Lvl->lvlDispChain = &glDispChain;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
-	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/trollface.jpg"), 0);
+	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/flag.png"), 0);
 	Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
 	*ptrTex = Lvl->lvlTexLoad("data/s_ground.png");
 	daAdd(&Lvl->Textures, ptrTex);
@@ -698,7 +698,7 @@ void lvlDisplayElastics(const Level* Lvl, s_SharedResources* SR)
 	Node* it;
 	Elastic* E;
 	it = lstFirst(&Lvl->W->Elastics);
-	
+
 	while (!nodeEnd(it))
 	{
 		E = (Elastic*)nodeGetData(it);
@@ -712,7 +712,7 @@ void lvlDisplayRigids(const Level* Lvl, s_SharedResources* SR)
 	Node* it;
 	Rigid* R;
 	it = lstFirst(&Lvl->W->Rigids);
-	
+
 	while (!nodeEnd(it))
 	{
 		R = (Rigid*)nodeGetData(it);

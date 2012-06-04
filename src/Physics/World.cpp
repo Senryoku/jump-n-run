@@ -595,18 +595,27 @@ void wdRegressionTest()
 	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
 
 	wdAddVertex(W, V1);
+	assert(wdGetVxCount(W) == 1);
 	wdAddVertex(W, V2);
+	assert(wdGetVxCount(W) == 2);
 	wdAddVertex(W, V3);
+	assert(wdGetVxCount(W) == 3);
 
 	wdAddVertex(W, V10);
+	assert(wdGetVxCount(W) == 4);
 	wdAddVertex(W, V11);
+	assert(wdGetVxCount(W) == 5);
 	wdAddVertex(W, V12);
+	assert(wdGetVxCount(W) == 6);
 	wdAddVertex(W, V13);
+	assert(wdGetVxCount(W) == 7);
 
 	wdAddPolygon(W, Poly);
+	assert(wdGetPolyCount(W) == 1);
 	wdAddPolygon(W, Rectangle);
+	assert(wdGetPolyCount(W) == 2);
 
-	for(unsigned int i = 0; i < 100; i++)
+	for(unsigned int i = 0; i < 10000; i++)
 	{
 		wdApplyForce(W, vec2(0.f, 0.6f));
 		wdResolveVextex(W);

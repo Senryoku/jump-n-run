@@ -36,11 +36,16 @@ void rdResolve(Rigid* R)
 	 on a déjà acLength) */
 	if(acLength != 0.f)
 		Vect = vec2Div(Vect, acLength);
-	else
-		Vect = vec2(1.f, 0.f); /* Vecteur quelconque en cas de deux points
-								superposés, il ne peut raisonnablement être déduit des poistions
-								précédentes, en effet, que faire si les points étaient déjà
-								superposés à la frame précédente ?... */
+	else {
+		/* Essai avec les positions précédentes */
+		Vect = vec2Sub(vxGetOldPos(R->V2), vxGetOldPos(R->V1));
+		acLength = vec2Length(Vect);
+		if(acLength != 0.f)
+			Vect = vec2Div(Vect, acLength);
+		else
+			Vect = vec2(1.f, 0.f); /* Vecteur quelconque en cas de deux points
+								superposés depuis 2 frames */
+	}
 
 	if(vxIsFixed(R->V2))
 		vxCorrectPosition(R->V1, vec2Prod(Vect, factor));
@@ -95,6 +100,6 @@ void rdRegressionTest()
 		Diff = MAX(Diff, fabs(vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))) - rdGetLength(Rd)));
 		// printf("Difference a l'equilibre : %f\n", vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))) - rdGetLength(Rd));
 	}
-	printf("Difference maximale constatee : %f\n", Diff);
+	printf("Difference maximale constatee : %f (%f%%)\n", Diff, 100*Diff/rdGetLength(Rd));
 	printf("========= rdRegressionTest End ================\n");
 }
