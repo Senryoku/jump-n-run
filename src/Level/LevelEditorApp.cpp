@@ -19,6 +19,8 @@ void appInit(LevelEditorApp* App, SharedResources* SR)
 	App->SR = SR;
 
 	appWindowInit(App);
+	
+	shSetWindowIcon(SR, App->Window);
 
 	lvledInit(&App->Led, 4000.f, 1600.f, SR);
 	lvledSetLineDraw(&App->Led, &glDrawLine);

@@ -35,11 +35,11 @@ void shLoadTextures(SharedResources* SR)
 	shAddTexture(SR, "mn_shadow", "data/gui/s_box_shadow.png");
 	shAddTexture(SR, "mn_gloss", "data/gui/s_box_gloss.png");
 	shAddTexture(SR, "mn_anim", "data/gui/s_box_anim_strip20.png");
-	shAddTexture(SR, "pl_leg", "data/s_leg.png");
-	shAddTexture(SR, "gr_grass", "data/s_ground_grass.png");
-	shAddTexture(SR, "el_rope", "data/s_rope.png");
-	shAddTexture(SR, "rd_chain", "data/s_chain.png");
-	shAddTexture(SR, "s_spawn", "data/s_spawn.png");
+	shAddTexture(SR, "pl_leg", "data/gfx/s_leg.png");
+	shAddTexture(SR, "gr_grass", "data/gfx/s_ground_grass.png");
+	shAddTexture(SR, "el_rope", "data/gfx/s_rope.png");
+	shAddTexture(SR, "rd_chain", "data/gfx/s_chain.png");
+	shAddTexture(SR, "s_spawn", "data/gfx/s_spawn.png");
 	
 	SR->txCursor.loadFromFile("data/gui/s_cursors.png");
 	
@@ -49,6 +49,8 @@ void shLoadTextures(SharedResources* SR)
 		SR->sprCursor[i].setTextureRect(sf::IntRect(i*16, 0, 16, 24));
 		SR->sprCursor[i].setOrigin(3.f, 5.f);
 	}
+	
+	SR->imgIcon.loadFromFile("data/appIcon.png");
 }
 
 sf::Sprite& shGetCursorSprite(SharedResources* SR, unsigned char i)
@@ -118,4 +120,9 @@ unsigned int shLoadTexture(const SharedResources* SR, const char* Path)
 void shFreeTexture(const SharedResources* SR, unsigned int T)
 {
 	(*SR->FreeTexture)(T);
+}
+
+void shSetWindowIcon(SharedResources* SR, sf::RenderWindow& win)
+{
+	win.setIcon(SR->imgIcon.getSize().x, SR->imgIcon.getSize().y, SR->imgIcon.getPixelsPtr());
 }

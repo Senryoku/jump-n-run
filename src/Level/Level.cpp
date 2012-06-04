@@ -27,9 +27,9 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlDispChain = &glDispChain;
 	Lvl->lvlDispSpawn = &glDispSpawn;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
-	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/flag.png"), 0);
+	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/gfx/s_flag.png"), 0);
 	Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
-	*ptrTex = Lvl->lvlTexLoad("data/s_ground.png");
+	*ptrTex = Lvl->lvlTexLoad("data/gfx/s_ground.png");
 	daAdd(&Lvl->Textures, ptrTex);
 	Lvl->Finished = 0;
 	Lvl->VoidTex = (*Lvl->lvlTexLoad)("");

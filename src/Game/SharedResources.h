@@ -30,6 +30,7 @@ typedef struct s_SharedResources {
 	sf::Font FntMenu;
 	sf::Texture txCursor;
 	sf::Sprite sprCursor[4];
+	sf::Image imgIcon;
 
 } SharedResources;
 
@@ -82,8 +83,16 @@ SoundManager* shSoundManager(SharedResources* SR);
 /** @brief Donne accès au MessageManager
  *
  * @param SR SharedResources auquel s'applique la fonction
+ * @return MessageManager
  **/
 MessageManager* shMessageManager(SharedResources* SR);
+
+/** @brief Change l'iconne d'une fenêtre
+ *
+ * @param SR SharedResources auquel s'applique la fonction
+ * @param win Fenêtre à laquelle s'applique la fonction 
+ **/
+void shSetWindowIcon(SharedResources* SR, sf::RenderWindow& win);
 
 /** @brief Charge une texture en mémoire
  *
