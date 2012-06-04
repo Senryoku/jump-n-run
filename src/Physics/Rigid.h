@@ -77,6 +77,14 @@ float rdGetLength(const Rigid* R);
 **/
 void rdRegressionTest();
 
+
+/** @brief Donne la distance au carré d'un point à la droite
+ * @param[in] E Elastic auquel s'applique la fonction
+ * @param[in] V Position du point
+ * @return Distance au carré
+ **/
+float rdGetSquaredDistanceToPoint(const Rigid* R, Vec2 V);
+
 /** @}
 **/
 

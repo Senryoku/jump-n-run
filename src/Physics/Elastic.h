@@ -105,6 +105,13 @@ float elGetSpring(const Elastic* E);
  **/
 void elRegressionTest();
 
+/** @brief Donne la distance au carré d'un point à la droite
+ * @param[in] E Elastic auquel s'applique la fonction
+ * @param[in] V Position du point
+ * @return Distance au carré
+ **/
+float elGetSquaredDistanceToPoint(const Elastic* E, Vec2 V);
+
 /** @}
 **/
 

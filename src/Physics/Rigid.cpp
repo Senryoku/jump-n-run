@@ -107,3 +107,9 @@ void rdRegressionTest()
 	delVertex(V1);
 	delVertex(V2);
 }
+
+float rdGetSquaredDistanceToPoint(const Rigid* R, Vec2 V)
+{
+	Vec2 d = vec2Normalized(vec2Sub(vxGetPosition(rdGetV2(R)), vxGetPosition(rdGetV1(R))));
+	return vec2SqLength(vec2Sub(V, vec2Add(vec2Prod(d, vec2Dot(d, vec2Sub(V, vxGetPosition(rdGetV1(R))))), vxGetPosition(rdGetV1(R)))));
+}

@@ -34,6 +34,9 @@ void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR)
 
 void lvledFree(LevelEditor *Led)
 {
+	if (Led->GrabEl != NULL)
+		lvledReleaseEl(Led);
+	
 	delLevel(Led->Lvl);
 	unsigned int i;
 	for(i = 0; i < daGetSize(&Led->TexturesPath); i++)

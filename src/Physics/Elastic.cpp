@@ -123,3 +123,9 @@ void elRegressionTest()
 	delVertex(V1);
 	delVertex(V2);
 }
+
+float elGetSquaredDistanceToPoint(const Elastic* E, Vec2 V)
+{
+	Vec2 d = vec2Normalized(vec2Sub(vxGetPosition(elGetV2(E)), vxGetPosition(elGetV1(E))));
+	return vec2SqLength(vec2Sub(V, vec2Add(vec2Prod(d, vec2Dot(d, vec2Sub(V, vxGetPosition(elGetV1(E))))), vxGetPosition(elGetV1(E)))));
+}
