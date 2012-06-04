@@ -3,7 +3,7 @@ Un niveau simple qui affiche de l'herbe
 6000.000000, 1600.000000 ; 1.000000, 1.000000
 133.000015, 1024.000122 ; 5840.000000, 187.499985
 
-data/back_sky.png
+data/gfx/back_sky.png
 
 
 2 #Vertex
