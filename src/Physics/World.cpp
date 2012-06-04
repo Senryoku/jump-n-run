@@ -355,7 +355,7 @@ Rigid* wdGetNearestRigid(World* W, float X, float Y)
 	Vec2 M = vec2(X, Y);
 	
 	
-	it = wdGetElasticIt(W);
+	it = wdGetRigidIt(W);
 	while(!nodeEnd(it))
 	{
 		tmpDist =rdGetSquaredDistanceToPoint((Rigid*)nodeGetData(it), M);
