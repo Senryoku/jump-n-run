@@ -100,6 +100,11 @@ void elSetSpring(Elastic* E, float newSpring);
  **/
 float elGetSpring(const Elastic* E);
 
+/** @brief Test de regression pour Elastic
+ *
+ **/
+void elRegressionTest();
+
 /** @}
 **/
 

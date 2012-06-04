@@ -94,3 +94,32 @@ float elGetSpring(const Elastic* E)
 {
 	return E->Spring;
 }
+
+
+void elRegressionTest()
+{
+	unsigned int i;
+	float Diff = 0;
+	Vertex* V1 = newVertex();
+	Vertex* V2 = newVertex();
+
+	Elastic* E = newElastic(V1, V2, 50.f, 0.2f);
+	
+	printf("========= elRegressionTest Begin ==============\n");
+	for(i = 0; i < 10000; i++)
+	{
+		vxApplyForce(V1, vec2(1.6487f*(i % 29), 2.6875f), 0);
+		vxApplyForce(V2, vec2(5.4575f*(i % 89), -8.575678f), 0);
+		vxResolve(V1, 0.1f, 0.1f);
+		vxResolve(V2, 0.1f, 0.1f);
+		elResolve(E);
+		Diff = MAX(Diff, fabs(vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))) - elGetLength(E)));
+		// printf("Difference a l'equilibre : %f\n", vec2Length(vec2Sub(vxGetPosition(V1), vxGetPosition(V2))) - elGetLength(E));
+	}
+	printf("Difference maximale constatee : %f (%f%%)\n", Diff, 100*Diff/elGetLength(E));
+	printf("========= elRegressionTest End ================\n");
+	
+	delElastic(E);
+	delVertex(V1);
+	delVertex(V2);
+}

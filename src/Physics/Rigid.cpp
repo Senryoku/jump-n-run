@@ -102,4 +102,8 @@ void rdRegressionTest()
 	}
 	printf("Difference maximale constatee : %f (%f%%)\n", Diff, 100*Diff/rdGetLength(Rd));
 	printf("========= rdRegressionTest End ================\n");
+	
+	delRigid(Rd);
+	delVertex(V1);
+	delVertex(V2);
 }
