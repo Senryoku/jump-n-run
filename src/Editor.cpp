@@ -4,15 +4,17 @@
 
 int main(int argc, char** argv)
 {
+	sf::Context C;
+	C.setActive(1);
 	SharedResources SR;
 	shInit(&SR, &glTexLoad, &glTexFree);
 	shLoadAudio(&SR);
+	shLoadTextures(&SR); //Il faut un contexte valid d'OpenGL
+	shLoadFonts(&SR);
 
 	LevelEditorApp App;
 
 	appInit(&App, &SR);
-	shLoadTextures(&SR); //Il faut un contexte valid d'OpenGL
-	shLoadFonts(&SR);
 	appRun(&App);
 	appFree(&App);
 

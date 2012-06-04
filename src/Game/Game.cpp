@@ -112,7 +112,7 @@ void gmPlay(Game* G)
 	Bool DispDebug = FALSE;
 
 	if(G->Lvl == NULL) return;
-	while(wdGetWidth(lvlGetWorld(G->Lvl)) == 0.f) gmMenu(G);
+	if(wdGetWidth(lvlGetWorld(G->Lvl)) == 0.f) gmMenu(G);
 	Vec2 Center;
 	Score Sc;
 

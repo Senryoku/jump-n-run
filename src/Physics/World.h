@@ -308,6 +308,10 @@ void wdResetGrid(World* W);
  **/
 Polygon* wdFindPolygon(World *W, Vertex* V);
 
+/** @brief Test de Régression
+**/
+void wdRegressionTest();
+
 /** @}
 **/
 

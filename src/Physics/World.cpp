@@ -31,12 +31,12 @@ void wdResetGrid(World* W)
 	float CellSize=128.f;
 	gridInit(&W->CollisionGrid, W->Width/CellSize+1, W->Height/CellSize+1);
 	gridSetCellSize(&W->CollisionGrid, CellSize);
-	
+
 	Node* it = lstFirst(&W->Polygons);
 	while(!nodeEnd(it))
 	{
 		gridAddPolygonByBB(&W->CollisionGrid, (Polygon*)nodeGetData(it));
-		
+
 		it=nodeGetNext(it);
 	}
 }
@@ -215,7 +215,6 @@ void wdResolveElastic(World* W)
 
 void wdHandleCollision(World* W)
 {
-
 	CollisionInfo Info;
 	Node* it = lstFirst(&W->Polygons);
 	Node* it2;
@@ -228,32 +227,26 @@ void wdHandleCollision(World* W)
 
 	it = lstFirst(&W->Polygons);
 
-        while(!nodeEnd(it))
-        {
-			if(0)// (polyIsFixed((Polygon*) nodeGetData(it))) //On saute les collisions si le polygone est fixe
-			{
-				it=nodeGetNext(it);
-				continue;
-			}
-            List LExtracted = gridGetPolygonList(&W->CollisionGrid, (Polygon*) nodeGetData(it));
-			//printf("For polygon %i , list size is %u\n", nodeGetData(it), lstCount(&LExtracted));
-			//it2 = lstFirst(&W->Polygons);
-			it2 = lstFirst(&LExtracted);
-                while(!nodeEnd(it2))
-                {
-					if(!polyHasCollided((Polygon*)nodeGetData(it2)))//it != it2)
-					{
-						Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
-						if(Info.P1 != NULL) /* Il y a collision */
-							polyHandleCollision(Info);
-					}
-					it2 = nodeGetNext(it2);
-                }
+	while(!nodeEnd(it))
+	{
+		List LExtracted = gridGetPolygonList(&W->CollisionGrid, (Polygon*) nodeGetData(it));
 
-			lstFree(&LExtracted);
-			polySetCollided((Polygon*)nodeGetData(it), TRUE);
-			it = nodeGetNext(it);
-        }
+		it2 = lstFirst(&LExtracted);
+		while(!nodeEnd(it2))
+		{
+			if(!polyHasCollided((Polygon*)nodeGetData(it2)))//it != it2)
+			{
+				Info = polyCollide( (Polygon*) nodeGetData(it), (Polygon*) nodeGetData(it2));
+				if(Info.P1 != NULL) /* Il y a collision */
+					polyHandleCollision(Info);
+			}
+			it2 = nodeGetNext(it2);
+		}
+
+		lstFree(&LExtracted);
+		polySetCollided((Polygon*)nodeGetData(it), TRUE);
+		it = nodeGetNext(it);
+	}
 }
 
 
@@ -437,8 +430,7 @@ Rigid* wdGetNearestRigid(World* W, float X, float Y)
 
 Polygon* wdGetNearestPoly(World* W, float X, float Y)
 {
-	//unsigned int i; float Dist = INFINITY, tmpDist;
-	Polygon *Nearest = NULL, *tmpPoly;
+	Polygon *tmpPoly;
 
 	List* LExtracted = gridGetPositionList(&W->CollisionGrid, X, Y);
 	Node* it = lstFirst(LExtracted);
@@ -447,23 +439,10 @@ Polygon* wdGetNearestPoly(World* W, float X, float Y)
 		tmpPoly = (Polygon*) nodeGetData(it);
 		if (polyIsInside(tmpPoly, vec2(X, Y)))
 			return tmpPoly;
-		/*
-		for(i = 0; i < daGetSize(&tmpPoly->Vertices); i++)
-		{
-			Vec2 VPos = vxGetPosition((Vertex*) daGet(&tmpPoly->Vertices, i));
-			Vec2 V = vec2(X - VPos.x, Y - VPos.y);
-			tmpDist = vec2SqLength(V);
-			if (tmpDist < Dist)
-			{
-				Dist = tmpDist;
-				Nearest = tmpPoly;
-			}
-		}
-		 */
 		it = nodeGetNext(it);
 	}
 
-	return Nearest;
+	return NULL;
 }
 
 void wdFree(World *W)
@@ -587,4 +566,59 @@ Polygon* wdFindPolygon(World *W, Vertex* V)
 	}
 
 	return NULL;
+}
+
+void wdRegressionTest()
+{
+	printf("\n === Debut du test de regression de World === \n\n");
+	World* W = newWorld(500.f, 500.f);
+
+	Vertex* V1 = newVertex();
+	Vertex* V2 = newVertex();
+	Vertex* V3 = newVertex();
+
+	Vertex* V10 = newVertex();
+	Vertex* V11 = newVertex();
+	Vertex* V12 = newVertex();
+	Vertex* V13 = newVertex();
+
+	vxSetPosition(V1, vec2(0.f, 0.f));
+	vxSetPosition(V2, vec2(10.f, 0.f));
+	vxSetPosition(V3, vec2(0.f, 10.f));
+
+	vxSetPosition(V10, vec2(20.f, 0.f));
+	vxSetPosition(V11, vec2(30.f, 0.f));
+	vxSetPosition(V12, vec2(30.f, 10.f));
+	vxSetPosition(V13, vec2(20.f, 10.f));
+
+	Polygon* Poly = newPolygon(3, V1, V2, V3);
+	Polygon* Rectangle = polyRectangle(V10, V11, V12, V13);
+
+	wdAddVertex(W, V1);
+	wdAddVertex(W, V2);
+	wdAddVertex(W, V3);
+
+	wdAddVertex(W, V10);
+	wdAddVertex(W, V11);
+	wdAddVertex(W, V12);
+	wdAddVertex(W, V13);
+
+	wdAddPolygon(W, Poly);
+	wdAddPolygon(W, Rectangle);
+
+	for(unsigned int i = 0; i < 100; i++)
+	{
+		wdApplyForce(W, vec2(0.f, 0.6f));
+		wdResolveVextex(W);
+		wdUpdateGrid(W, FALSE);
+		for(unsigned int j = 0; j < 4; j++)
+		{
+			wdResolveRigid(W);
+			wdResolveElastic(W);
+			wdHandleCollision(W);
+		}
+	}
+
+	delWorld(W);
+	printf("\n === Fin du test de regression de World ===== \n\n");
 }

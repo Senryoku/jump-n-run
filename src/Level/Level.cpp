@@ -66,7 +66,7 @@ void lvlFree(Level* Lvl)
 		(*Lvl->lvlTexFree)(*((Texture*) daGet(&Lvl->Textures, i))),
 		free((Texture*) daGet(&Lvl->Textures, i));
 	daFree(&Lvl->Textures);
-	
+
 	flFree(&Lvl->GoalFlag);
 }
 
@@ -146,7 +146,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	if (f==NULL)
 	{
 		printf("Erreur de chargement du fichier %s\n", File);
-		
+
 		return FALSE;
 	}
 
@@ -397,7 +397,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 				}
 				else
 					lvlCreateTexListForPolygon(Shape, &lstTex);
-				
+
 				Object* Obj = newObject(Shape, booly, lstTex); //booly est l'indice de la texture
 				lstAdd(&Lvl->Objects, Obj);
 				break;
@@ -425,14 +425,14 @@ void lvlCreateTexListForPolygon(Polygon* P, List* l)
 		for (int i=0; i<4; i++)
 		{
 			V = newVec2();
-			
+
 			V->x = (i == 1 || i == 2);
 			V->y = (i>1);
 			printf("v added: %f,%f\n", V->x, V->y);
-			
+
 			lstAdd(l, V);
 		}
-		
+
 		return;
 	}
 	//On cacule la bounding box
@@ -493,12 +493,12 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 			wdResolveElastic(lvlGetWorld(Lvl));
 			//if(Lvl->P1 != NULL) vxSetFixed(Lvl->P1->Stable, 0);
 			wdHandleCollision(lvlGetWorld(Lvl));
-			
+
 			if (Lvl->P1 != NULL)
 				plPhysics(Lvl->P1, lvlGetWorld(Lvl));
 
 		}
-		
+
 		if (Lvl->P1 != NULL)
 			plUpdate(Lvl->P1);
 	}
