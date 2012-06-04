@@ -586,6 +586,7 @@ void appRun(LevelEditorApp* App)
 		if(DispDebug) gridDraw(&lvlGetWorld(lvledGetLvl(&App->Led))->CollisionGrid);
 		if(DispL1) lvlDisplayL1(lvledGetLvl(&App->Led));
 		if(DispL2) lvlDisplayL2(lvledGetLvl(&App->Led));
+		lvlDispGoalFlag(lvledGetLvl(&App->Led));
 
 		if(DispObjects)
 		{
@@ -595,7 +596,6 @@ void appRun(LevelEditorApp* App)
 			lvlDisplayRigids(lvledGetLvl(&App->Led), App->SR);
 		}
 
-		lvlDispGoalFlag(lvledGetLvl(&App->Led));
 		lvlDispSpawn(App->Led.Lvl, App->SR);
 		if(DispFore) lvlDisplayFG(lvledGetLvl(&App->Led), App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 

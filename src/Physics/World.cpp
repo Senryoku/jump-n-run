@@ -303,7 +303,7 @@ Node* wdGetPolyIt(World* W)
 Vertex* wdGetNearest(World* W, float X, float Y)
 {
 	if (lstEmpty(&W->Vertices)) return NULL;
-	float Dist = powf(25.f, 2.f), tmpDist;
+	float Dist = powf(40.f, 2.f), tmpDist;
 	Vertex* Nearest = NULL;
 
 	Node* it = lstFirst(&W->Vertices);

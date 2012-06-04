@@ -104,7 +104,7 @@ void elRegressionTest()
 	Vertex* V2 = newVertex();
 
 	Elastic* E = newElastic(V1, V2, 50.f, 0.2f);
-	
+
 	printf("========= elRegressionTest Begin ==============\n");
 	for(i = 0; i < 10000; i++)
 	{
@@ -118,7 +118,7 @@ void elRegressionTest()
 	}
 	printf("Difference maximale constatee : %f (%f%%)\n", Diff, 100*Diff/elGetLength(E));
 	printf("========= elRegressionTest End ================\n");
-	
+
 	delElastic(E);
 	delVertex(V1);
 	delVertex(V2);
@@ -126,6 +126,6 @@ void elRegressionTest()
 
 float elGetSquaredDistanceToPoint(const Elastic* E, Vec2 V)
 {
-	Vec2 d = vec2Normalized(vec2Sub(vxGetPosition(elGetV2(E)), vxGetPosition(elGetV1(E))));
-	return vec2SqLength(vec2Sub(V, vec2Add(vec2Prod(d, vec2Dot(d, vec2Sub(V, vxGetPosition(elGetV1(E))))), vxGetPosition(elGetV1(E)))));
+	Vec2 d = vec2Sub(vxGetPosition(elGetV2(E)), vxGetPosition(elGetV1(E)));
+	return vec2SqLength(vec2Sub(V, vec2Add(vec2Prod(d, vec2Dot(d, vec2Sub(V, vxGetPosition(elGetV1(E))))/vec2SqLength(d)), vxGetPosition(elGetV1(E)))));
 }
