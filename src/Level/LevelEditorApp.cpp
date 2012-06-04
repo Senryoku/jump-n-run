@@ -582,6 +582,7 @@ void appRun(LevelEditorApp* App)
 		// Quelle portion de la scène afficher ?
 		glOrtho(0.f+App->ViewX, App->ViewWidth+App->ViewX, App->ViewHeight+App->ViewY, 0.f+App->ViewY, 0.0, 100.0);
 
+		
 		if(DispBack) lvlDisplayBG(App->Led.Lvl, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 		if(DispDebug) gridDraw(&lvlGetWorld(App->Led.Lvl)->CollisionGrid);
 		if(DispL1) lvlDisplayL1(App->Led.Lvl);
@@ -602,7 +603,7 @@ void appRun(LevelEditorApp* App)
 		
 		if(DispFore) lvlDisplayFG(App->Led.Lvl, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
-		glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /** @todo C'est pas terrible ça... **/
+		 glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /// @todo C'est pas terrible ça...
 		glDrawPolyFromList(&App->Led.tmpLstFixed, vec2(MouseX, MouseY));
 
 		if (lvledGetNearestPoly(&App->Led) != NULL)

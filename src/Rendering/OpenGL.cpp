@@ -469,10 +469,12 @@ void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float Vi
 	Vec2 TitleSize = vec2(TitleWidth, 60.f);
 	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
 
-	if (strcmp(moiGetText(moi), "")!=0)
-		glDrawTitleBox(SR, TitlePos, TitleSize);
+	
 
 	glDrawBox(SR, Position, Size, (int)M->SubAnim);
+	
+	if (strcmp(moiGetText(moi), "")!=0)
+		glDrawTitleBox(SR, TitlePos, TitleSize);
 
 	glPopMatrix();
 }
@@ -684,12 +686,15 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 
 	glTexCoord2f(-1.f, 0.f);
 	glVertex2f(Position.x+Size.x, Position.y +Size.y+2.f);
+	
+	glEnd();
+	
 
 	//On dessine le Side
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_side"));
 
 	//Left
-
+	glBegin(GL_QUADS);
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-13.f, Position.y+11.f);
 
@@ -743,7 +748,7 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x-2.f, Position.y +13.f+Size.y);
 
 	//Shine
-
+	glEnd();
 
 	//back anim 800x40
 
@@ -751,6 +756,7 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_anim"));
 
+	glBegin(GL_QUADS);
 	// when texture area is large, bilinear filter the original
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -767,9 +773,13 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 
 	glTexCoord2f((SubAnim)/20.f, (Size.y-9.f)/40.f);
 	glVertex2f(Position.x-2.f, ceilf(Position.y +Size.y+2.f));
+	
+	glEnd();
 
 	//Back
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_shadow"));
+	
+	glBegin(GL_QUADS);
 
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y+11.f);
@@ -784,9 +794,12 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	glVertex2f(Position.x-2.f, Position.y +Size.y+2.f);
 
 
+	glEnd();
 	//gloss
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_gloss"));
+	
+	glBegin(GL_QUADS);
 
 	glTexCoord2f(0.f, 0.f);
 	glVertex2f(Position.x-2.f, Position.y+11.f);

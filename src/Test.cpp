@@ -24,8 +24,7 @@ int main(int argc, char** argv)
 	
 	srand((unsigned int)time(NULL));
 	
-	sf::Context Context;
-	Context.setActive(1);
+	sf::Context Context; Context.setActive(1);
 	SharedResources SR;
 	shInit(&SR, &glTexLoad, &glTexFree);
 	shLoadAudio(&SR);
