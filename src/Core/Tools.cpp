@@ -79,7 +79,7 @@ Config GetConfiguration()
 			sscanf(line, "%s %f\n", id, &value);
 			// printf("Lu : %s, %f\n", id, value);
 			if(strcmp(id, "WindowWidth") == 0) Cfg.WindowWidth = value;
-			if(strcmp(id, "WindowHeigth") == 0) Cfg.WindowHeight = value;
+			if(strcmp(id, "WindowHeight") == 0) Cfg.WindowHeight = value;
 			if(strcmp(id, "FPSLimit") == 0) Cfg.FPSLimit = value;
 			if(strcmp(id, "AntiAliasing") == 0) Cfg.AntiAliasing = value;
 			if(strcmp(id, "VerticalSync") == 0) Cfg.VerticalSync = value;
