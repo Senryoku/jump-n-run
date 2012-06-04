@@ -19,7 +19,7 @@ void appInit(LevelEditorApp* App, SharedResources* SR)
 	App->SR = SR;
 
 	appWindowInit(App);
-	
+
 	shSetWindowIcon(SR, App->Window);
 
 	lvledInit(&App->Led, 4000.f, 1600.f, SR);
@@ -336,8 +336,11 @@ void appRun(LevelEditorApp* App)
 						if(!event.key.shift)
 						{
 							lvledDelPoly(&App->Led);
+							App->Led.Grab = NULL;
+							lvledUpdateNearestPoly(&App->Led);
 						} else {
 							lvledDelVertex(&App->Led);
+							App->Led.Grab = NULL;
 						}
 						break;
 					case sf::Keyboard::P :
