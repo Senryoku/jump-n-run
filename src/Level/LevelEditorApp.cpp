@@ -891,8 +891,8 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			break;
 		case 1 :
 			msgCreateMessage(shMessageManager(App->SR), "Set World Width", 3);
-			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->W->Width);
-			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->W->Height);
+			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &lvlGetWorld(lvledGetLvl(&App->Led))->Width);
+			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &lvlGetWorld(lvledGetLvl(&App->Led))->Height);
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 			wdResetGrid(lvlGetWorld(lvledGetLvl(&App->Led)));
@@ -909,10 +909,11 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			break;
 		}
 		case 3:
-			msgCreateMessage(shMessageManager(App->SR), "Select Background", 3);
+			msgCreateMessage(shMessageManager(App->SR), "Select Background", 4);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
 			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->Led.backPath);
+			msgAddItem(shMessageManager(App->SR), "Distance", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->DistBG);
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.backPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
@@ -933,10 +934,11 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			strcpy(App->Led.layer2Path, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
 		case 6:
-			msgCreateMessage(shMessageManager(App->SR), "Select Foreground", 3);
+			msgCreateMessage(shMessageManager(App->SR), "Select Foreground", 4);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
 			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->Led.forePath);
+			msgAddItem(shMessageManager(App->SR), "Distance", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->DistFG);
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.forePath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
