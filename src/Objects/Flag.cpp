@@ -47,9 +47,8 @@ void flFree(Flag* F)
 	for(unsigned int i = 0; i < daGetSize(&F->Vertices); i++)
 	{
 		delVertex((Vertex*) daGet(&F->Vertices, i));
-		delRigid((Rigid*) daGet(&F->Rigids, i));
 	}
-	for(unsigned int i = daGetSize(&F->Vertices); i < daGetSize(&F->Rigids); i++)
+	for(unsigned int i = 0; i < daGetSize(&F->Rigids); i++)
 	{
 		delRigid((Rigid*) daGet(&F->Rigids, i));
 	}
