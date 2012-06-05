@@ -675,13 +675,13 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 
 Bool lvledSave(LevelEditor *Led, const char* File)
 {
-	printf("Sauvegarde...\n");
+	printf("= Saving Level... ======\nPath : %s\n", File);
 	FILE* f;
 	f=fopen(File, "w");
 
 	if (f == NULL)
 	{
-		printf("Erreur de sauvegarde du fichier %s\n", File);
+		printf("Error saving file %s\n", File);
 		return FALSE;
 	}
 
@@ -801,6 +801,7 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 
 	}
 
+	printf("Level successfuly saved\n========================\n");
 	fclose(f);
 
 	delList(LCenter);
