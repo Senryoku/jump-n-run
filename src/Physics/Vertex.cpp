@@ -5,7 +5,7 @@ Vertex* newVertex()
 	Vertex* V = (Vertex*) malloc(sizeof(Vertex));
 	if(V == NULL)
 	{
-		fprintf(stderr, "Erreur d'allocation memoire (newVertex).\n");
+		fprintf(stderr, "Error allocating memory for vertex\n");
 		exit(1);
 	} else {
 		vxInit(V);

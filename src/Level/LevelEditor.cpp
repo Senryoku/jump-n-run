@@ -629,7 +629,7 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 
 	if (f==NULL)
 	{
-		printf("Erreur de lecture du fichier %s\n", File);
+		printf("Error reading file %s.", File);
 		return FALSE;
 	}
 	//on ignore les premieres lignes

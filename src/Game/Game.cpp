@@ -273,7 +273,7 @@ void gmPlay(Game* G)
 					break;
 				case 1 :
 					scInit(&Sc, Name, lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), Time);
-					if(scSend(&Sc) == 1) { printf("Erreur d'envoi\n"); } else { printf("Envoi Réussi\n"); }
+					if(scSend(&Sc) == 1) { printf("Errror sending score\n"); } else { printf("Score sent succefully!\n"); }
 					scFree(&Sc);
 					G->Window->close();
 					break;

@@ -147,7 +147,7 @@ Bool aniLoadFromFile(Animation* A, const char* File)
 	}
 	else
 	{
-		printf("Erreur de lecture pour le fichier %s\n", File);
+		printf("Cannot read file %s\n", File);
 		return TRUE;
 	}
 		

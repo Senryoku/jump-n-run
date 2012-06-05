@@ -161,7 +161,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 	if (f==NULL)
 	{
-		printf("Erreur de chargement du fichier %s\n", File);
+		printf("Error reading file %s.\n", File);
 
 		return FALSE;
 	}
@@ -169,13 +169,13 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	char lvl[100], description[300], read[300];
 	if (fgets(lvl, 100, f)==NULL)
 	{
-		printf("Le fichier %s ne peut pas être lu (Erreur de lecture du nom)\n", File);
+		printf("Error reading file %s. Level name is missing.\n", File);
 		return FALSE;
 	}
 
 	if (fgets(description, 255, f)==NULL)
 	{
-		printf("Le fichier %s ne peut pas être lu (Erreur de lecture de la description)\n", File);
+		printf("Error reading file %s. Level description is missing.\n", File);
 		return FALSE;
 	}
 
@@ -183,7 +183,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 	if (fgets(read, 300, f)==NULL)
 	{
-		printf("Le fichier %s ne peut pas être lu (Erreur de lecture #3)\n", File);
+		printf("Error reading file %s. Level dimension are missing.\n", File);
 		return FALSE;
 	}
 	else
@@ -206,7 +206,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 	if (fgets(read, 300, f)==NULL)
 	{
-		printf("Le fichier %s ne peut pas être lu (Erreur de lecture #4)\n", File);
+		printf("Error reading file %s. Level spawn and goal are missing\n", File);
 		return FALSE;
 	}
 	else sscanf(read, "%f, %f ; %f, %f", &Lvl->Spawn.x, &Lvl->Spawn.y, &Lvl->Goal.x, &Lvl->Goal.y);

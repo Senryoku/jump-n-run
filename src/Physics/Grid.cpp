@@ -305,16 +305,15 @@ void gridDraw(const Grid* g)
 
 void gridRegressionTest(void)
 {
+	printf("\n === Debut du test de regression de Grid === \n\n");
 	Grid g; List* L; Polygon* P; Vertex* V1, *V2;
 	unsigned int i, j;
-	printf("%u\n", (unsigned int)-2);
 
 	V1=newVertex(); V2=newVertex();
 	vxSetPosition(V1, vec2(0.f, 0.f));
 	vxSetPosition(V2, vec2(32.f, 96.f));
 	P=newPolygon(2, V1, V2);
-	printf("Initialisation de la grille\n");
-	gridInit(&g, 2, 4);
+	gridInit(&g, 36, 20);
 	gridSetCellSize(&g, 32.f);
 
 	//gridAddPolygonToCell(&g, P, 0, 1); gridAddPolygonToCell(&g, P, 0, 1); //On essaye de le rajouter encore une fois, mais ça marchera pas car il y est déjà
@@ -326,8 +325,8 @@ void gridRegressionTest(void)
 			L=gridGetCellList(&g, i, j),
 			printf("List size at position %u, %u is %u\n", i, j, lstCount(L));
 
-	printf("Libération de la grille\n");
 	gridFree(&g);
 	delPolygon(P);
 	delVertex(V1); delVertex(V2);
+	printf("\n === Fin du test de regression de Polygon === \n\n");
 }

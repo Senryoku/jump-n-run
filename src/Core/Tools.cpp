@@ -92,7 +92,7 @@ Config GetConfiguration()
 		if (f != NULL)
 			fprintf(f, "WindowWidth %f\nWindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\nMusic %f\n", Cfg.WindowWidth, Cfg.WindowHeight, Cfg.FPSLimit, Cfg.AntiAliasing, Cfg.VerticalSync, Cfg.PlayMusic);
 		else
-			printf("Erreur d'écriture du fichier de configuration par défaut\n");
+			printf("Error writing to Config.cfg: file cannot be created...\n");
 	}
 	fclose(f);
 
