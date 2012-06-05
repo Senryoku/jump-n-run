@@ -322,6 +322,7 @@ typedef enum enum_objets
 
 /** @brief Test de Regression
  *
+ * Principalement pour tester sous Valgrind
  **/
 void lvlRegressionTest();
 

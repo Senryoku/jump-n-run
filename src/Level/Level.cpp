@@ -50,10 +50,6 @@ void lvlFree(Level* Lvl)
 	(*Lvl->lvlTexFree)(Lvl->VoidTex);
 
 	delWorld(Lvl->W);
-	/*if (Lvl->C != NULL)
-		delCloth(Lvl->C);
-	Lvl->C = NULL;
-	 */
 
 	Node* it = lstFirst(&Lvl->Objects);
 	while(!nodeEnd(it))

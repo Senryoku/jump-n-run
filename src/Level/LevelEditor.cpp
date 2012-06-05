@@ -68,8 +68,14 @@ void lvledResetLevel(LevelEditor *Led)
 {
 	float W = wdGetWidth(lvlGetWorld(Led->Lvl)),
 		H = wdGetHeight(lvlGetWorld(Led->Lvl));
+
 	if (Led->GrabEl != NULL)
 		lvledReleaseEl(Led);
+
+	if(lstCount(&Led->tmpLstFixedFromV) != 0) lstFree(&Led->tmpLstFixedFromV);
+	if(lstCount(&Led->tmpLstDynFromV) != 0) lstFree(&Led->tmpLstDynFromV);
+	if(lstCount(&Led->tmpLstFixed) != 0) lstFree(&Led->tmpLstFixed);
+	if(lstCount(&Led->tmpLstDyn) != 0) lstFree(&Led->tmpLstDyn);
 
 	delLevel(Led->Lvl);
 

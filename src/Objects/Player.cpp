@@ -34,11 +34,6 @@ void plInit(Player* P, World *W)
 	vxSetMass(P->VxDL, 1.5f);
 	vxSetMass(P->VxDR, 1.5f);
 
-	P->VxBalance = newVertex();
-	vxSetPosition(P->VxBalance, P->ULPos);
-	vxSetFixed(P->VxBalance, 1);
-	P->ElBalance = newElastic(P->VxBalance, P->VxUR, -1.f, 0.02f);
-
 	P->Shape = polyRectangle(P->VxUL, P->VxUR, P->VxDR, P->VxDL);
 	wdAddVxFromPoly(W, P->Shape);
 
@@ -65,15 +60,6 @@ void plInit(Player* P, World *W)
 
 	P->aniStand = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniStand, "data/anims/animStand.ani");
-
-
-	/*
-	vxSetPosition(P->VxUL, vec2Rotate(P->ULPos, polyComputeCenter(P->Shape), P->GroundAngle));
-	vxSetPosition(P->VxUR, vec2Rotate(P->URPos, polyComputeCenter(P->Shape), P->GroundAngle));
-	vxSetPosition(P->VxDL, vec2Rotate(P->DLPos, polyComputeCenter(P->Shape), P->GroundAngle));
-	vxSetPosition(P->VxDR, vec2Rotate(P->DRPos, polyComputeCenter(P->Shape), P->GroundAngle));
-	 */
-
 
 	unsigned int i=0;
 	for (i=0; i<polyGetVxCount(P->Shape); i++)
@@ -106,20 +92,6 @@ void plInit(Player* P, World *W)
 	vxSetPosition(P->vxBodyParts[bpRightLeg1], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 30.f)));
 	vxSetPosition(P->vxBodyParts[bpRightLeg2], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 60.f)));
 
-	/*
-	P->BodyPolygons[0] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpBase]);
-	P->BodyPolygons[9] = newPolygon(3, P->vxBodyParts[bpNeck], P->vxBodyParts[bpHeadLeft], P->vxBodyParts[bpHeadRight]);
-	P->BodyPolygons[1] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpLeftArm1]);
-	P->BodyPolygons[2] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpRightArm1]);
-	P->BodyPolygons[3] = newPolygon(2, P->vxBodyParts[bpBase], P->vxBodyParts[bpLeftLeg1]);
-	P->BodyPolygons[4] = newPolygon(2, P->vxBodyParts[bpBase], P->vxBodyParts[bpRightLeg1]);
-	P->BodyPolygons[5] = newPolygon(2, P->vxBodyParts[bpLeftArm1], P->vxBodyParts[bpLeftArm2]);
-	P->BodyPolygons[6] = newPolygon(2, P->vxBodyParts[bpRightArm1], P->vxBodyParts[bpRightArm2]);
-	P->BodyPolygons[7] = newPolygon(2, P->vxBodyParts[bpLeftLeg1], P->vxBodyParts[bpLeftLeg2]);
-	P->BodyPolygons[8] = newPolygon(2, P->vxBodyParts[bpRightLeg1], P->vxBodyParts[bpRightLeg2]);
-	 */
-
-
 	for (int i=0; i<12; i++)
 	{
 		switch (i) {
@@ -146,43 +118,7 @@ void plInit(Player* P, World *W)
 			default:
 				break;
 		}
-		//wdAddRigid(W, P->BodyRigids[i]);
 	}
-
-	//for (int i=0; i<10; i++) wdAddVxFromPoly(W, P->BodyPolygons[i]);
-
-	/*
-	Rigid *LA1, *LA2, *RA1, *RA2, *Body, *LL1, *LL2, *RL1, *RL2, *H1, *H2, *H3;
-	LA1 = newRigid(P->Neck, P->LeftArm1, -1.f);
-	 LA2 = newRigid(P->LeftArm1, P->LeftArm2, -1.f);
-	 RA1 = newRigid(P->Neck, P->RightArm1, -1.f);
-	 RA2 = newRigid(P->RightArm1, P->RightArm2, -1.f);
-
-	 LL1 = newRigid(P->Base, P->LeftLeg1, -1.f);
-	 LL2 = newRigid(P->LeftLeg1, P->LeftLeg2, -1.f);
-	 RL1 = newRigid(P->Base, P->RightLeg1, -1.f);
-	 RL2 = newRigid(P->RightLeg1, P->RightLeg2, -1.f);
-
-
-	Body = newRigid(P->Base, P->Neck, -1.f);
-
-	H1 = newRigid(P->Neck, P->HeadLeft, -1.f);
-	H2 = newRigid(P->Neck, P->HeadRight, -1.f);
-	H3 = newRigid(P->HeadLeft, P->HeadRight, -1.f);
-
-	wdAddRigid(W, Body);
-	wdAddRigid(W, LA1);
-	wdAddRigid(W, LA2);
-	wdAddRigid(W, RA1);
-	wdAddRigid(W, RA2);
-	wdAddRigid(W, LL1);
-	wdAddRigid(W, LL2);
-	wdAddRigid(W, RL1);
-	wdAddRigid(W, RL2);
-	wdAddRigid(W, H1);
-	wdAddRigid(W, H2);
-	wdAddRigid(W, H3);
-	 */
 
 	aniUpdateForCurrentState(P->aniStand, P);
 	aniUpdate(P->aniStand, P, 1.f);
@@ -193,23 +129,14 @@ void plFree(Player* P)
 {
 	if(P->Shape != NULL) delPolygon(P->Shape);
 	P->Shape = NULL;
+	if(P->VxDL != NULL) delVertex(P->VxDL), P->VxDL = NULL;
+	if(P->VxDR != NULL) delVertex(P->VxDR), P->VxDR = NULL;
+	if(P->VxUL != NULL) delVertex(P->VxUL), P->VxUL = NULL;
+	if(P->VxUR != NULL) delVertex(P->VxUR), P->VxUR = NULL;
 	if(P->GrabR != NULL) delRigid(P->GrabR);
 	if(P->GrabL != NULL) delRigid(P->GrabL);
 	P->GrabR = NULL;
 	P->GrabL = NULL;
-
-
-	//for (int i=0; i<10; i++) delPolygon(P->BodyPolygons[i]);
-
-	delVertex(P->VxBalance);
-	delElastic(P->ElBalance);
-	/* On élimne les vertex qui composent la BB du Player */
-	/*
-	delVertex(P->VxUL);
-	delVertex(P->VxUR);
-	delVertex(P->VxDL);
-	delVertex(P->VxDR);
-	 */
 
 	for (int i=0; i<12; i++)
 		delVertex(P->vxBodyParts[i]),
