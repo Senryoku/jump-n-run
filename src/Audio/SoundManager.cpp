@@ -20,7 +20,7 @@ void sndmInit(SoundManager* SM)
 	SM->CurrentTimeOffset = 0.f;
 	SM->DefaultFadingSpeed = 5.f;
 	SM->CurrentMusic = SM->Musics->end();
-	
+
 	//NOT USED
 	//SM->NextMusic=;
 	//Cela évite un crash bizarre...
@@ -30,11 +30,11 @@ void sndmInit(SoundManager* SM)
 
 void sndmFree(SoundManager* SM)
 {
-	
+
 	sndmStopAll(SM);
-	
+
 	lstFree(&(SM->Sounds));
-	
+
 	for (std::map<std::string, sf::SoundBuffer*>::iterator it=SM->SoundBuffers->begin(); it!=SM->SoundBuffers->end(); it++)
 		delete it->second;
 	SM->SoundBuffers->clear();
@@ -42,11 +42,11 @@ void sndmFree(SoundManager* SM)
 	for (std::map<std::string, sf::Music*>::iterator it=SM->Musics->begin(); it!=SM->Musics->end(); it++)
 		delete it->second;
 	SM->Musics->clear();
-	
+
 	delete SM->SoundBuffers;
 	delete SM->Musics;
 	delete SM->Listener;
-	
+
 }
 
 bool sndmLoadSoundFile(SoundManager* SM, const char *Key, const char *File)
@@ -133,7 +133,7 @@ void sndmPlayMusic(SoundManager* SM, bool Loop)
 {
 	std::map<std::string, sf::Music*>::iterator it = SM->Musics->begin();
 	assert(it != SM->Musics->end());
-	
+
 	it->second->setLoop(Loop);
 	it->second->play();
 	SM->CurrentMusic = it;
@@ -198,12 +198,12 @@ void sndmMusicFade(SoundManager* SM, const char *NextKey, float FadeSpeed, bool 
 void sndmMusicFadeToNext(SoundManager* SM, float FadeSpeed, bool Loop)
 {
 	if (SM->IsFading) return; //On est en milieu d'un fade on ne va pas en faire un
-	
+
 	SM->NextMusic = ++SM->CurrentMusic;
 	if (SM->NextMusic == SM->Musics->end())
 		SM->NextMusic = SM->Musics->begin();
 	SM->FadeSpeed = SM->DefaultFadingSpeed;
-	
+
 	SM->FadeSpeed=FadeSpeed;
 	SM->Loop=Loop;
 }
@@ -373,13 +373,12 @@ void sndmStopAll(SoundManager* SM)
 {
 	if (lstEmpty(&SM->Sounds))
 		return;
-	Node* snd, *last_snd;
+	Node* snd;
 	snd=lstFirst(&SM->Sounds);
 
 	while (!nodeEnd(snd))
 	{
 		delete ((sf::Sound*)nodeGetData(snd));
-		last_snd=snd;
 		snd=nodeGetNext(snd);
 		lstPopFront(&SM->Sounds);
 
@@ -421,8 +420,8 @@ Vec2 sndmGetListenerPosition(const SoundManager* SM)
 void sndmRegressionTest()
 {
 	SoundManager SM;
-	
+
 	sndmInit(&SM);
-	
+
 	sndmFree(&SM);
 }

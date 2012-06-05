@@ -873,7 +873,7 @@ void appShowLevelMenu(LevelEditorApp* App)
 void appShowEscapeMenu(LevelEditorApp* App)
 {
 	ItemID IID;
-	msgCreateMessage(shMessageManager(App->SR), "Menu", 12);
+	msgCreateMessage(shMessageManager(App->SR), "Menu", 13);
 	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
 	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
 	msgAddCloseItem(shMessageManager(App->SR), "Add a texture");
@@ -884,6 +884,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 	msgAddCloseItem(shMessageManager(App->SR), "New Level");
 	msgAddCloseItem(shMessageManager(App->SR), "Save (^S)");
 	msgAddCloseItem(shMessageManager(App->SR), "Load (^L)");
+	msgAddCloseItem(shMessageManager(App->SR), "Test Level");
 	msgAddCloseItem(shMessageManager(App->SR), "Quit");
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
 	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -960,6 +961,11 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			lvledLoad(&App->Led, App->WorkingPath);
 			break;
 		case 10 :
+			App->Window.close();
+			lvledTestLevel(&App->Led);
+			appWindowInit(App);
+			break;
+		case 11 :
 			App->Window.close();
 			break;
 		default :

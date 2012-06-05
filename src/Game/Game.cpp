@@ -242,9 +242,9 @@ void gmPlay(Game* G)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 			plGetUp(lvlGetP1(G->Lvl));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
             plMoveL(lvlGetP1(G->Lvl));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
             plMoveR(lvlGetP1(G->Lvl));
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
