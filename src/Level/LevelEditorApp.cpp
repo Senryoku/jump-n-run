@@ -884,7 +884,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 	msgAddCloseItem(shMessageManager(App->SR), "New Level");
 	msgAddCloseItem(shMessageManager(App->SR), "Save (^S)");
 	msgAddCloseItem(shMessageManager(App->SR), "Load (^L)");
-	msgAddCloseItem(shMessageManager(App->SR), "Test Level");
+	msgAddCloseItem(shMessageManager(App->SR), "Test Level (T)");
 	msgAddCloseItem(shMessageManager(App->SR), "Quit");
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
 	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
