@@ -1,6 +1,4 @@
 #include "Game.h"
-#include <Objects/Animation.h>
-#include <Game/Message.h>
 
 /* Fonctions d'usage interne **/
 void gmShowEscapeMenu(Game* G);
@@ -32,6 +30,8 @@ void gmInit(Game* G, SharedResources* SR)
 	}
 
 	G->Lvl = newLevel(0.f, 0.f);
+
+	G->Time = 0;
 
 	G->SR = SR;
 
@@ -118,13 +118,14 @@ void gmPlay(Game* G)
 	Vec2 Center;
 	Score Sc;
 
-	lvlLoadedInit(G->Lvl);
-
 	float ViewX = 0.f, ViewY = 0.f, MouseX = 0.f, MouseY = 0.f, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
-	sf::Clock Clk;
 	FPSCounter fps;
 	fpsInit(&fps);
+
+	lvlLoadedInit(G->Lvl);
+	gmResetClk(G);
+
 	while (G->Window->isOpen())
 	{
 
@@ -176,9 +177,6 @@ void gmPlay(Game* G)
 			{
 				switch(event.key.code)
 				{
-					case sf::Keyboard::F :
-						G->Lvl->P1->IsFree = !G->Lvl->P1->IsFree;
-						break;
 					case sf::Keyboard::Comma :
 						DispDebug = !DispDebug;
 						break;
@@ -244,8 +242,6 @@ void gmPlay(Game* G)
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 			plGetUp(lvlGetP1(G->Lvl));
-        //if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             plMoveL(lvlGetP1(G->Lvl));
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -258,7 +254,7 @@ void gmPlay(Game* G)
 
 		if(lvlIsGoalReached(G->Lvl))
 		{
-			float Time = Clk.getElapsedTime().asMilliseconds()/10.f;
+			gmPauseClk(G);
 			lvlSetFinished(G->Lvl, 1);
 			char Name[255];
 			msgCreateMessage(shMessageManager(G->SR), "Congrat's !", 4);
@@ -273,13 +269,13 @@ void gmPlay(Game* G)
 				case 0 :
 					break;
 				case 1 :
-					scInit(&Sc, Name, lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), Time);
+					scInit(&Sc, Name, lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), G->Time);
 					if(scSend(&Sc) == 1) { printf("Error sending score.\n"); } else { printf("Score successfully submited\n"); }
 					scFree(&Sc);
 					// Pas de break exprès
 				case 2:
 					gmMenu(G);
-					if(G->Lvl != NULL) lvlLoadedInit(G->Lvl);
+					if(G->Lvl != NULL) lvlLoadedInit(G->Lvl), gmResetClk(G);
 					break;
 				case 3 :
 					G->Window->close();
@@ -293,7 +289,7 @@ void gmPlay(Game* G)
 		glClear(GL_COLOR_BUFFER_BIT);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		Center = polyComputeCenter(lvlGetP1(G->Lvl)->Shape);
+		Center = polyComputeCenter(plGetShape(lvlGetP1(G->Lvl)));
 		ViewX = MAX(0, MIN(Center.x - ViewWidth/2, wdGetWidth(lvlGetWorld(G->Lvl)) - ViewWidth));
 		ViewY = MAX(0, MIN(Center.y - ViewHeight/2, wdGetHeight(lvlGetWorld(G->Lvl)) - ViewHeight));
 		glOrtho(ViewX, ViewX + ViewWidth, ViewY + ViewHeight, ViewY, 0.0, 100.0);
@@ -317,7 +313,7 @@ void gmPlay(Game* G)
 
 		if(DispDebug)
 		{
-			glDrawPolygon(lvlGetP1(G->Lvl)->Shape);
+			glDrawPolygon(plGetShape(lvlGetP1(G->Lvl)));
 			wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
 		}
 
@@ -338,6 +334,8 @@ void gmPlay(Game* G)
 		if (DispDebug)
 			glDrawFPS(G->SR, *G->Window, fpsGetString(&fps));
 
+		glDrawTime(G->SR, *G->Window, G->Time + G->Clk.getElapsedTime().asMilliseconds()/10.f);
+
 		//if (msgCanBeDrawn())
 		//	glDrawMenuItems(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
 
@@ -352,8 +350,10 @@ void gmPlay(Game* G)
 
 void gmShowEscapeMenu(Game* G)
 {
-	msgCreateMessage(shMessageManager(G->SR), "Menu", 3);
+	gmPauseClk(G);
+	msgCreateMessage(shMessageManager(G->SR), "Menu", 4);
 	msgAddCloseItem(shMessageManager(G->SR), "Main Menu");
+	msgAddCloseItem(shMessageManager(G->SR), "Restart Level");
 	msgAddCloseItem(shMessageManager(G->SR), "Quit");
 	msgAddCloseItem(shMessageManager(G->SR), "Return");
 	ItemID Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, G->WindowWidth, G->WindowHeight, G->WindowWidth, G->WindowHeight);
@@ -361,13 +361,32 @@ void gmShowEscapeMenu(Game* G)
 	{
 		case 0 :
 			gmMenu(G);
-			if(G->Lvl != NULL) lvlLoadedInit(G->Lvl);
+			if(G->Lvl != NULL) lvlLoadedInit(G->Lvl), gmResetClk(G);
 			break;
 		case 1 :
+			if(G->Lvl != NULL) lvlLoadedInit(G->Lvl), gmResetClk(G);
+			break;
+		case 2 :
 			G->Window->close();
 			break;
 		default :
 			break;
 	}
+	gmRestartClk(G);
 }
 
+void gmResetClk(Game* G)
+{
+	G->Time = 0;
+	G->Clk.restart();
+}
+
+void gmPauseClk(Game* G)
+{
+	G->Time += G->Clk.getElapsedTime().asMilliseconds()/10.f;
+}
+
+void gmRestartClk(Game* G)
+{
+	G->Clk.restart();
+}

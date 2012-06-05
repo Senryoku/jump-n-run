@@ -40,7 +40,7 @@ typedef struct SPlayer
 	/* char* Texture */
 
 	PlayerDirection Dir;
-	
+
 	sf::Clock timer;
 
 	Rigid* GrabR;
@@ -65,8 +65,7 @@ typedef struct SPlayer
 	CollisionInfo VxULStatus, VxURStatus, VxDRStatus, VxDLStatus,
 		RdUStatus, RdRStatus, RdDStatus, RdLStatus;
 	unsigned int State;
-	
-	Bool IsFree; ///< c'est un ragdoll ou pas
+
 	AnimPositions Positions;
 	AnimAngles Angles;
 	Animation* aniJump, *aniRun, *aniFall, *aniHello, *aniStand;

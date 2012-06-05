@@ -468,10 +468,10 @@ void glDrawMenuBox(SharedResources* SR, sf::RenderTarget& win, Menu* M, float Vi
 
 	Vec2 TitleSize = vec2(TitleWidth, 60.f);
 	Vec2 TitlePos = vec2(Position.x+Size.x/2.f-TitleSize.x/2.f, Position.y-TitleSize.y);
-	
+
 	if (strcmp(moiGetText(moi), "")!=0)
 		glDrawTitleBox(SR, TitlePos, TitleSize);
-	
+
 	glDrawBox(SR, Position, Size, (int)M->SubAnim);
 
 	glPopMatrix();
@@ -588,6 +588,37 @@ void glDrawFPS(SharedResources* SR, sf::RenderTarget& win, const std::string& FP
 	win.popGLStates();
 }
 
+void glDrawTime(SharedResources* SR, sf::RenderTarget& win, unsigned int Time)
+{
+	std::ostringstream oss;
+	oss << "Time : ";
+	if(Time/6000 < 10) oss << "0";
+	oss << Time/6000 << ":";
+	if((Time/100)%60 < 10) oss << "0";
+	oss << (Time/100)%60 << ":";
+	if(Time%100 < 10) oss << "0";
+	oss << Time%100;
+	sf::Text Text;
+	Text.setFont(shFntMenu(SR));
+	Text.setString(oss.str());
+	Text.setPosition(win.getSize().x - 250.f, 5.f);
+	Text.setColor(sf::Color::Black);
+	win.pushGLStates();
+	Text.move(-1.5f, 0.f);
+	win.draw(Text);
+	Text.move(3.f, 0.f);
+	win.draw(Text);
+	Text.move(-1.5f, -1.5f);
+	win.draw(Text);
+	Text.move(0.f, 1.5f);
+	win.draw(Text);
+
+	Text.setColor(sf::Color::White);
+	Text.move(0.f, -1.5f);
+	win.draw(Text);
+	win.popGLStates();
+}
+
 void glDrawPolyFromList(List* L, Vec2 MousePos)
 {
 	if (lstCount(L) <= 0) return;
@@ -684,9 +715,9 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 
 	glTexCoord2f(-1.f, 0.f);
 	glVertex2f(Position.x+Size.x, Position.y +Size.y+2.f);
-	
+
 	glEnd();
-	
+
 
 	//On dessine le Side
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_side"));
@@ -771,12 +802,12 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 
 	glTexCoord2f((SubAnim)/20.f, (Size.y-9.f)/40.f);
 	glVertex2f(Position.x-2.f, ceilf(Position.y +Size.y+2.f));
-	
+
 	glEnd();
 
 	//Back
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_shadow"));
-	
+
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0.f, 0.f);
@@ -796,7 +827,7 @@ void glDrawBox(SharedResources* SR, Vec2 Position, Vec2 Size, int SubAnim)
 	//gloss
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "mn_gloss"));
-	
+
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0.f, 0.f);
@@ -1153,25 +1184,25 @@ void glDispGrass(Polygon* P, SharedResources* SR)
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "gr_grass")); //66x18
-	
+
 	glBegin(GL_QUADS);
 
 	glTexCoord2i(0, 0);
 	glVertex2f(vxGetPosition(V1).x-N.x*18.f, vxGetPosition(V1).y-N.y*18.f);
-	
+
 	glTexCoord2f(l/66.f, 0);
 	glVertex2f(vxGetPosition(V2).x-N.x*18.f, vxGetPosition(V2).y-N.y*18.f);
-	
+
 	glTexCoord2f(l/66.f, 1.f);
 	glVertex2f(vxGetPosition(V2).x+N.x*18.f, vxGetPosition(V2).y+N.y*18.f);
-	
-	
+
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(vxGetPosition(V1).x+N.x*18.f, vxGetPosition(V1).y+N.y*18.f);
-	
-	
+
+
 	glEnd();
-	
+
 	glDisable(GL_TEXTURE_2D);
 }
 
@@ -1180,28 +1211,28 @@ void glDispRope(const Elastic* E, SharedResources* SR)
 	Vertex *V1 = elGetV1(E), *V2 = elGetV2(E);
 	Vec2 N = vec2Normalized(vec2Ortho(vec2Sub(vxGetPosition(V2), vxGetPosition(V1))));
 	float elLenght = elGetLength(E);
-	
+
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "el_rope")); //84x84; je veux de la taille 15
-	
+
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2i(0, 0);
 	glVertex2f(vxGetPosition(V1).x-N.x*5.f, vxGetPosition(V1).y-N.y*5.f);
-	
+
 	glTexCoord2f(elLenght/10.f, 0.f);
 	glVertex2f(vxGetPosition(V2).x-N.x*5.f, vxGetPosition(V2).y-N.y*5.f);
-	
+
 	glTexCoord2f(elLenght/10.f, 1.f);
 	glVertex2f(vxGetPosition(V2).x+N.x*5.f, vxGetPosition(V2).y+N.y*5.f);
-	
-	
+
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(vxGetPosition(V1).x+N.x*5.f, vxGetPosition(V1).y+N.y*5.f);
-	
-	
+
+
 	glEnd();
-	
+
 	glDisable(GL_TEXTURE_2D);
 }
 
@@ -1210,28 +1241,28 @@ void glDispChain(const Rigid* R, SharedResources* SR)
 	Vertex *V1 = rdGetV1(R), *V2 = rdGetV2(R);
 	Vec2 N = vec2Normalized(vec2Ortho(vec2Sub(vxGetPosition(V2), vxGetPosition(V1))));
 	float elLenght = rdGetLength(R);
-	
+
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "rd_chain")); //84x84; je veux de la taille 10
-	
+
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2i(0, 0);
 	glVertex2f(vxGetPosition(V1).x-N.x*5.f, vxGetPosition(V1).y-N.y*7.5f);
-	
+
 	glTexCoord2f(elLenght/15.f, 0.f);
 	glVertex2f(vxGetPosition(V2).x-N.x*7.5f, vxGetPosition(V2).y-N.y*7.5f);
-	
+
 	glTexCoord2f(elLenght/15.f, 1.f);
 	glVertex2f(vxGetPosition(V2).x+N.x*7.5f, vxGetPosition(V2).y+N.y*7.5f);
-	
-	
+
+
 	glTexCoord2f(0.f, 1.f);
 	glVertex2f(vxGetPosition(V1).x+N.x*7.5f, vxGetPosition(V1).y+N.y*7.5f);
-	
-	
+
+
 	glEnd();
-	
+
 	glDisable(GL_TEXTURE_2D);
 }
 
@@ -1239,24 +1270,24 @@ void glDispSpawn(Vec2 Pos, SharedResources* SR)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "s_spawn")); //46x42
-	
+
 	glBegin(GL_QUADS);
-	
+
 	glTexCoord2i(0, 0);
 	glVertex2f(Pos.x-23.f, Pos.y-21.f);
-	
+
 	glTexCoord2i(1, 0);
 	glVertex2f(Pos.x+23.f, Pos.y-21.f);
-	
+
 	glTexCoord2i(1,1);
 	glVertex2f(Pos.x+23.f, Pos.y+21.f);
-	
+
 	glTexCoord2i(0, 1);
 	glVertex2f(Pos.x-23.f, Pos.y+21.f);
-	
-	
+
+
 	glEnd();
-	
+
 	glDisable(GL_TEXTURE_2D);
 }
 

@@ -10,6 +10,8 @@
 #include "FPSCounter.h"
 #include <Audio/SoundManager.h>
 #include <Game/SharedResources.h>
+#include <Objects/Animation.h>
+#include <Game/Message.h>
 
 /** @defgroup Game Game
  *
@@ -23,9 +25,13 @@ typedef struct
 	sf::RenderWindow* Window;
 	float WindowWidth;
 	float WindowHeight;
+	sf::Clock Clk;
+	unsigned int Time;
+
 	float testy;
 	Bool testyBool;
 	float test2;
+
 	SharedResources* SR; ///< Resources partagŽes
 } Game;
 
@@ -39,7 +45,7 @@ void gmInit(Game* G, SharedResources* SR);
 
 /** @brief Libération des ressources utilisées par Game
  *
- * @param G Game
+ * @param[in,out] G Game
 **/
 void gmFree(Game* G);
 
@@ -51,14 +57,14 @@ void gmMenu(Game* G);
 
 /** @brief Lance le jeu sur le niveau portée par Game
  *
- * @param G Game
+ * @param[in,out] G Game
 **/
 void gmPlay(Game* G);
 
 /** @brief Charge un niveau depuis un fichier
  *
- * @param G Game
- * @param Path Chemin du fichier de niveau à charger
+ * @param[in,out] G Game
+ * @param[in] Path Chemin du fichier de niveau à charger
 **/
 void gmLoadLvl(Game* G, const char* Path);
 
@@ -70,9 +76,24 @@ void gmUpdateMenu(Game* G);
 
 /** @brief Dessine le menu
  *
- * @param G Game
+ * @param[in] G Game
  **/
 void gmDrawMenu(Game* G);
+
+/** @brief Réinitialise le temps
+ * @param[in,out] G Game
+**/
+void gmResetClk(Game* G);
+
+/** @brief Met en pause le décompte du temps
+ * @param[in,out] G Game
+**/
+void gmPauseClk(Game* G);
+
+/** @brief Relance le décompte du temps
+ * @param[in,out] G Game
+**/
+void gmRestartClk(Game* G);
 
 /** @}
 **/

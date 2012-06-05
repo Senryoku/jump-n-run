@@ -8,6 +8,7 @@
 #include <SFML/OpenGL.hpp>
 #include <Game/SharedResources.h>
 #include <Objects/Player.h>
+#include <sstream>
 
 typedef GLuint Texture;
 struct s_Flag;
@@ -85,5 +86,10 @@ void glDispTexPoly(Texture T, Polygon* P, List* L);
  *
 **/
 void glDispFlag(s_Flag* F, float X, float Y);
+
+/** @brief Affiche le Temps
+ *
+**/
+void glDrawTime(SharedResources* SR, sf::RenderTarget& win, unsigned int Time);
 #endif
 

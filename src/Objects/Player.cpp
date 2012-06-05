@@ -10,18 +10,16 @@ Player* newPlayer(World* W)
 
 void plInit(Player* P, World *W)
 {
-	P->IsFree = FALSE;
-	
 	P->ULPos = vec2(-20.f, -70.f);
 	P->URPos = vec2(20.f, -70.f);
 	P->DLPos = vec2(-35.f, 70.f);
 	P->DRPos = vec2(35.f, 70.f);
-	
+
 	strcpy(P->SndFoot[0], "snd_step1");
 	strcpy(P->SndFoot[1], "snd_step2");
 
 	P->timer.restart();
-	
+
 	P->VxUL = newVertex();
 	vxSetPosition(P->VxUL, P->ULPos);
 	P->VxUR = newVertex();
@@ -47,27 +45,27 @@ void plInit(Player* P, World *W)
 	P->GroundAngle = M_PI_2;
 
 	P->Dir = DIR_RIGHT;
-	
+
 	animAnglesStatesInit(&P->Angles);
 	animPositionsStatesInit(&P->Positions);
-	
+
 	P->aniRun = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniRun, "data/anims/animRun.ani");
 	//aniSetForce(P->aniRun, 0.65f);
-	
+
 	P->aniJump = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniJump, "data/anims/animJump.ani");
 	aniSetForce(P->aniJump, 0.65f);
-	
+
 	P->aniFall = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniFall, "data/anims/animFall.ani");
-	
+
 	P->aniHello = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniHello, "data/anims/animHello.ani");
-	
+
 	P->aniStand = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
 	aniLoadFromFile(P->aniStand, "data/anims/animStand.ani");
-	
+
 
 	/*
 	vxSetPosition(P->VxUL, vec2Rotate(P->ULPos, polyComputeCenter(P->Shape), P->GroundAngle));
@@ -107,7 +105,7 @@ void plInit(Player* P, World *W)
 	vxSetPosition(P->vxBodyParts[bpLeftLeg2], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 60.f)));
 	vxSetPosition(P->vxBodyParts[bpRightLeg1], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 30.f)));
 	vxSetPosition(P->vxBodyParts[bpRightLeg2], vec2Add(vxGetPosition(P->vxBodyParts[bpBase]), vec2(0.f, 60.f)));
-	
+
 	/*
 	P->BodyPolygons[0] = newPolygon(2, P->vxBodyParts[bpNeck], P->vxBodyParts[bpBase]);
 	P->BodyPolygons[9] = newPolygon(3, P->vxBodyParts[bpNeck], P->vxBodyParts[bpHeadLeft], P->vxBodyParts[bpHeadRight]);
@@ -120,8 +118,8 @@ void plInit(Player* P, World *W)
 	P->BodyPolygons[7] = newPolygon(2, P->vxBodyParts[bpLeftLeg1], P->vxBodyParts[bpLeftLeg2]);
 	P->BodyPolygons[8] = newPolygon(2, P->vxBodyParts[bpRightLeg1], P->vxBodyParts[bpRightLeg2]);
 	 */
-	
-	
+
+
 	for (int i=0; i<12; i++)
 	{
 		switch (i) {
@@ -150,7 +148,7 @@ void plInit(Player* P, World *W)
 		}
 		//wdAddRigid(W, P->BodyRigids[i]);
 	}
-	
+
 	//for (int i=0; i<10; i++) wdAddVxFromPoly(W, P->BodyPolygons[i]);
 
 	/*
@@ -185,7 +183,7 @@ void plInit(Player* P, World *W)
 	wdAddRigid(W, H2);
 	wdAddRigid(W, H3);
 	 */
-	
+
 	aniUpdateForCurrentState(P->aniStand, P);
 	aniUpdate(P->aniStand, P, 1.f);
 
@@ -199,8 +197,8 @@ void plFree(Player* P)
 	if(P->GrabL != NULL) delRigid(P->GrabL);
 	P->GrabR = NULL;
 	P->GrabL = NULL;
-	
-	
+
+
 	//for (int i=0; i<10; i++) delPolygon(P->BodyPolygons[i]);
 
 	delVertex(P->VxBalance);
@@ -212,7 +210,7 @@ void plFree(Player* P)
 	delVertex(P->VxDL);
 	delVertex(P->VxDR);
 	 */
-	
+
 	for (int i=0; i<12; i++)
 		delVertex(P->vxBodyParts[i]),
 		delRigid(P->BodyRigids[i]);
@@ -285,13 +283,13 @@ void plCorrectPosition(Player* P, Vec2 Pos)
 		vxSetPosition(P->VxDL, vec2Add(vxGetPosition(P->VxDL), Pos));
 		vxSetPosition(P->VxDR, vec2Add(vxGetPosition(P->VxDR), Pos));
 	}
-	
+
 	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
 	P->PrevCenter = P->Center;
 	P->Center = polyComputeCenter(P->Shape);
 	v = vec2Normalized(v);
 	vxSetPosition(P->vxBodyParts[bpBase], vec2Add(P->Center, vec2Prod(v, -15.f)));
-	
+
 	aniUpdateForCurrentState(P->aniStand, P);
 	aniUpdate(P->aniStand, P, 1.f);
 }
@@ -431,12 +429,12 @@ void plReleaseL(Player* P, World* W)
 
 void plUpdate(Player* P, s_SharedResources* SR)
 {
-		
+
 	P->GroundVec = vec2Ortho(P->Normal);
-	
+
 	// Mise à jour quelques States
 	Vec2 RdBottom = vec2Normalized(vec2Sub(vxGetPosition(P->VxDR), vxGetPosition(P->VxDL)));
-	
+
 	if(RdBottom.x < 0.f)
 	{
 		P->State = P->State | PL_UPSIDEDOWN;
@@ -451,23 +449,23 @@ void plUpdate(Player* P, s_SharedResources* SR)
 			P->State = P->State | PL_FALLING_R;
 		}
 	}
-	
+
 	if(P->GrabL != NULL) P->State = P->State | PL_GRABL;
 	if(P->GrabR != NULL) P->State = P->State | PL_GRABR;
-	
+
 	Vec2 v = vec2Sub(vxGetPosition(P->VxUL), vxGetPosition(P->VxDL));
 	P->PrevCenter = P->Center;
 	P->Center = polyComputeCenter(P->Shape);
 	v = vec2Normalized(v);
 	vxSetPosition(P->vxBodyParts[bpBase], vec2Add(P->Center, vec2Prod(v, -15.f)));
-		
-	
+
+
 	Vec2 speed = vec2Sub(P->Center, P->PrevCenter);
 	//printf("speed:%f,%f\n",speed.x, speed.y);
-	
+
 	Animation* CurrentA;
 
-	
+
 	if (!(P->State & PL_ON_GROUND) && ABS(speed.y) > 0.1f)
 	{
 		if (speed.y<2.f)
@@ -485,18 +483,18 @@ void plUpdate(Player* P, s_SharedResources* SR)
 		else
 			CurrentA = P->aniHello;
 	}
-	
+
 	if (P->timer.getElapsedTime().asSeconds() > 20.f)
 		P->timer.restart();
-	
+
 	unsigned int LastState;
-	
+
 	if (aniGetType(CurrentA) == ANIM_POSITIONS)
 		LastState = P->Positions.CurrentState;
 	else
 		LastState = P->Angles.CurrentState;
-	
-	
+
+
 	if (ABS(speed.x) > 1.f)
 	{
 		float spp = vec2Length(speed);
@@ -504,10 +502,10 @@ void plUpdate(Player* P, s_SharedResources* SR)
 	}
 	else
 		aniUpdate(CurrentA, P, 1.f);
-	
+
 	if (P->GrabL != NULL)
 		vxSetPosition(P->vxBodyParts[bpLeftArm2], vxGetPosition(P->VxUL));
-	
+
 	if (aniGetType(CurrentA) == ANIM_POSITIONS)
 	{
 		if (CurrentA == P->aniRun && LastState != P->Positions.CurrentState)
@@ -518,44 +516,44 @@ void plUpdate(Player* P, s_SharedResources* SR)
 		if (CurrentA == P->aniRun && LastState != P->Angles.CurrentState)
 			sndmPlay(shSoundManager(SR), P->SndFoot[LastState]);
 	}
-	
+
 }
 
 void plPhysics(Player* P, World* W)
 {
 	/* Mise à jour spécifique de Player */
-	
-	
+
+
 	P->RdUStatus = P->RdRStatus = P->RdDStatus =
 	P->RdLStatus = P->VxURStatus = P->VxULStatus =
 	P->VxDLStatus = P->VxDRStatus = nullCollisionInfo();
 	polyResolve(plGetShape(P));
-	
+
 	//for (i=0; i<10; i++) polyResolve(P->BodyPolygons[i]);
 	for (int i=0; i<12; i++)
 	{
 		vxResolve(P->vxBodyParts[i], 0.5f, 0.5f);
 		rdResolve(P->BodyRigids[i]);
 	}
-	
+
 	float dif = vxGetPosition(P->VxDL).x - vxGetOldPos(P->VxDL).x;
 	if (dif >= 0.f && ABS(dif) > 0.2f)
 		P->Dir = DIR_RIGHT;
 	else
 		P->Dir = DIR_LEFT;
-	
+
 	List LExtracted = gridGetPolygonList(&W->CollisionGrid, P->Shape);
-	
+
 	Node* it;
 	CollisionInfo Info;
-	
+
 	P->State = PL_NOSTATE;
 	P->Normal = vec2(0.f, 0.f);
-	
+
 	it = lstFirst(&LExtracted);
 	while(!nodeEnd(it))
 	{
-		
+
 		Info = polyCollide(plGetShape(P), (Polygon*) nodeGetData(it));
 		if(Info.P1 != NULL)
 		{
@@ -572,8 +570,8 @@ void plPhysics(Player* P, World* W)
 				P->State = P->State | PL_HAS_SUPPORT;
 				if(P->Normal.y < -0.5f) P->State = P->State | PL_ON_GROUND;
 			}
-			
-			
+
+
 			/* Test des propriétés de la collision */
 			if(Info.Edge == plGetRdU(P)) P->RdUStatus = Info;
 			else if(Info.Edge == plGetRdR(P)) P->RdRStatus = Info;
@@ -583,8 +581,8 @@ void plPhysics(Player* P, World* W)
 			else if(Info.V == plGetVxUR(P)) P->VxURStatus = Info;
 			else if(Info.V == plGetVxDR(P)) P->VxDRStatus = Info;
 			else if(Info.V == plGetVxDL(P)) P->VxDLStatus = Info;
-			
-			
+
+
 			polyHandleCollision(Info);
 		}
 		it = nodeGetNext(it);
