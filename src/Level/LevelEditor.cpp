@@ -36,7 +36,7 @@ void lvledFree(LevelEditor *Led)
 {
 	if (Led->GrabEl != NULL)
 		lvledReleaseEl(Led);
-	
+
 	delLevel(Led->Lvl);
 	unsigned int i;
 	for(i = 0; i < daGetSize(&Led->TexturesPath); i++)
@@ -808,6 +808,11 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 	delDynArr(Vx);
 
 	return TRUE;
+}
+
+Object* lvledGetObjClipboard(LevelEditor* Led)
+{
+	return Led->objClipboard;
 }
 
 void lvledCopyObject(LevelEditor* Led)

@@ -259,6 +259,10 @@ Bool lvledLoad(LevelEditor *Led, const char* File);
  **/
 Bool lvledSave(LevelEditor *Led, const char* File);
 
+/** @brief Accesseur de objClipboard
+**/
+Object* lvledGetObjClipboard(LevelEditor* Led);
+
 /** @brief Créé une copie en mémoire de l'objet le plus proche de la souris
  *
  * Coller à l'aide de ledPasteObject

@@ -676,7 +676,7 @@ void appShowVertexMenu(LevelEditorApp* App)
 	msgCreateMenu(shMessageManager(App->SR), 4);
 	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
 	msgAddItem(shMessageManager(App->SR), "Mass", ITEM_INPUT_VALUE, NULL, &V->Mass);
-	msgAddCloseItem(shMessageManager(App->SR), "Delete this Vertex");
+	msgAddCloseItem(shMessageManager(App->SR), "Delete this Vertex (Shift+Del)");
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
 
 	IID = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -761,13 +761,13 @@ void appShowElasticMenu(LevelEditorApp* App)
 void appShowPolygonMenu(LevelEditorApp* App)
 {
 	ItemID i;
-	msgCreateMenu(shMessageManager(App->SR), 5);
-	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
-	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon");
-	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon and Vertices");
-
 	float tmp;
 	Object* Obj = lvlGetObjFromShape(lvledGetLvl(&App->Led), lvledGetNearestPoly(&App->Led));
+	msgCreateMenu(shMessageManager(App->SR), 5 + ((Obj != NULL) ? 1 : 0));
+	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
+	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon (Del)");
+	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon and Vertices");
+
 	if(Obj != NULL)
 	{
 		ItemID IID;
@@ -776,6 +776,7 @@ void appShowPolygonMenu(LevelEditorApp* App)
 		mniSetIncr(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 1.f);
 		mniSetMinMaxValues(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0, daGetSize(&lvledGetLvl(&App->Led)->Textures)-1);
 		mniSetFloatPrecision(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0);
+		msgAddCloseItem(shMessageManager(App->SR), "Copy this Object (^C)");
 	}
 	else
 	{
@@ -807,16 +808,23 @@ void appShowPolygonMenu(LevelEditorApp* App)
 			lvledUpdateNearestPoly(&App->Led);
 			break;
 		}
-		case 3:
+		if(Obj == NULL)
 		{
-			List lstTex;
+			case 3:
+			{
+				List lstTex;
 
-			lvlCreateTexListForPolygon(lvledGetNearestPoly(&App->Led), &lstTex);
+				lvlCreateTexListForPolygon(lvledGetNearestPoly(&App->Led), &lstTex);
 
-			Object* Obj = newObject(lvledGetNearestPoly(&App->Led), 0, lstTex);
-			lstAdd(&lvledGetLvl(&App->Led)->Objects, Obj);
+				Object* Obj = newObject(lvledGetNearestPoly(&App->Led), 0, lstTex);
+				lstAdd(&lvledGetLvl(&App->Led)->Objects, Obj);
+				break;
+			}
+		} else {
+			case 4:
+				lvledCopyObject(&App->Led);
+				break;
 		}
-			break;
 		default:
 			break;
 	}
@@ -825,15 +833,12 @@ void appShowPolygonMenu(LevelEditorApp* App)
 void appShowLevelMenu(LevelEditorApp* App)
 {
 	ItemID i;
-	ItemID IID;
-	msgCreateMenu(shMessageManager(App->SR), 8);
+	Bool ObjClipboard = lvledGetObjClipboard(&App->Led) != NULL;
+	msgCreateMenu(shMessageManager(App->SR), 4 + ((ObjClipboard) ? 1 : 0));
 	msgAddCloseItem(shMessageManager(App->SR), "Add a Box (B)");
 	msgAddCloseItem(shMessageManager(App->SR), "Place Spawning Point Here (J)");
 	msgAddCloseItem(shMessageManager(App->SR), "Place Goal Here (K)");
-	msgAddCloseItem(shMessageManager(App->SR), "Select Background");
-	msgAddCloseItem(shMessageManager(App->SR), "Select Layer1");
-	msgAddCloseItem(shMessageManager(App->SR), "Select Layer2");
-	msgAddCloseItem(shMessageManager(App->SR), "Select Foreground");
+	if(ObjClipboard) msgAddCloseItem(shMessageManager(App->SR), "Paste Object (^V)");
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
 
 	i = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -850,6 +855,59 @@ void appShowLevelMenu(LevelEditorApp* App)
 		case 2 :
 			lvledSetGoal(&App->Led);
 			break;
+		if(ObjClipboard)
+		{
+			case 3 :
+				lvledPasteObject(&App->Led);
+				break;
+		}
+		default:
+			break;
+	}
+}
+
+void appShowEscapeMenu(LevelEditorApp* App)
+{
+	ItemID IID;
+	msgCreateMessage(shMessageManager(App->SR), "Menu", 9);
+	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
+	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
+	msgAddCloseItem(shMessageManager(App->SR), "Add a texture");
+	msgAddCloseItem(shMessageManager(App->SR), "Select Background");
+	msgAddCloseItem(shMessageManager(App->SR), "Select Layer1");
+	msgAddCloseItem(shMessageManager(App->SR), "Select Layer2");
+	msgAddCloseItem(shMessageManager(App->SR), "Select Foreground");
+	msgAddCloseItem(shMessageManager(App->SR), "Quit");
+	msgAddCloseItem(shMessageManager(App->SR), "Return");
+	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+	switch (Choice)
+	{
+		case 0 :
+			msgCreateMessage(shMessageManager(App->SR), "Set Working Path", 2);
+			IID = msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
+			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->WorkingPath);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
+			break;
+		case 1 :
+			msgCreateMessage(shMessageManager(App->SR), "Set World Width", 3);
+			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->W->Width);
+			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->W->Height);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			wdResetGrid(lvlGetWorld(lvledGetLvl(&App->Led)));
+			break;
+		case 2 :
+		{
+			msgCreateMessage(shMessageManager(App->SR), "", 3);
+			msgAddItem(shMessageManager(App->SR), "Enter the path to the image file", ITEM_LABEL, NULL, NULL);
+			msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			const char* file = msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			lvledAddTexture(&App->Led, file);
+
+			break;
+		}
 		case 3:
 			msgCreateMessage(shMessageManager(App->SR), "Select Background", 3);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
@@ -882,50 +940,7 @@ void appShowLevelMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.forePath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		default:
-			break;
-	}
-}
-
-void appShowEscapeMenu(LevelEditorApp* App)
-{
-	ItemID IID;
-	msgCreateMessage(shMessageManager(App->SR), "Menu", 5);
-	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
-	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
-	msgAddCloseItem(shMessageManager(App->SR), "Add a texture");
-	msgAddCloseItem(shMessageManager(App->SR), "Quit");
-	msgAddCloseItem(shMessageManager(App->SR), "Return");
-	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-	switch (Choice)
-	{
-		case 0 :
-			msgCreateMessage(shMessageManager(App->SR), "Set Working Path", 2);
-			IID = msgAddItem(shMessageManager(App->SR), "WorkingPath", ITEM_INPUT, NULL, NULL);
-			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), App->WorkingPath);
-			msgAddCloseItem(shMessageManager(App->SR), "Ok");
-			strcpy(App->WorkingPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
-			break;
-		case 1 :
-			msgCreateMessage(shMessageManager(App->SR), "Set World Width", 3);
-			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->W->Width);
-			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &lvledGetLvl(&App->Led)->W->Height);
-			msgAddCloseItem(shMessageManager(App->SR), "Ok");
-			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-			wdResetGrid(lvlGetWorld(lvledGetLvl(&App->Led)));
-			break;
-		case 2 :
-		{
-			msgCreateMessage(shMessageManager(App->SR), "", 3);
-			msgAddItem(shMessageManager(App->SR), "Enter the path to the image file", ITEM_LABEL, NULL, NULL);
-			msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
-			msgAddCloseItem(shMessageManager(App->SR), "Ok");
-			const char* file = msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-			lvledAddTexture(&App->Led, file);
-
-			break;
-		}
-		case 3 :
+		case 7 :
 			App->Window.close();
 			break;
 		default :

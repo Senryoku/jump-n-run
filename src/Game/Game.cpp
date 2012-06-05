@@ -2,6 +2,8 @@
 #include <Objects/Animation.h>
 #include <Game/Message.h>
 
+/* Fonctions d'usage interne **/
+void gmShowEscapeMenu(Game* G);
 
 void gmInit(Game* G, SharedResources* SR)
 {
@@ -135,7 +137,7 @@ void gmPlay(Game* G)
 				G->Window->close();
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-				G->Window->close();
+				gmShowEscapeMenu(G);
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
@@ -301,9 +303,9 @@ void gmPlay(Game* G)
 		lvlDisplayRigids(G->Lvl, G->SR);
 
 		lvlDisplayPlayer(G->Lvl, G->SR);
-		
+
 		lvlDisplayGrass(G->Lvl, G->SR);
-		
+
 		lvlDisplayL2(G->Lvl);
 		lvlDisplayFG(G->Lvl, ViewX, ViewY, ViewWidth, ViewHeight);
 
@@ -322,7 +324,7 @@ void gmPlay(Game* G)
 		//if (msgCanBeDrawn()) glDrawMenuBox(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
 
 		fpsStep(&fps);
-		
+
 		MouseX = ViewWidth*sf::Mouse::getPosition(*G->Window).x/G->WindowWidth + ViewX;
 		MouseY = ViewHeight*sf::Mouse::getPosition(*G->Window).y/G->WindowHeight + ViewY;
 
@@ -334,7 +336,7 @@ void gmPlay(Game* G)
 
 		//if (msgCanBeDrawn())
 		//	glDrawMenuItems(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
-		
+
 		glDrawCursor(*G->Window,ViewWidth, ViewHeight, sf::Mouse::getPosition(*G->Window).x, sf::Mouse::getPosition(*G->Window).y, shGetCursorSprite(G->SR, SPR_CURSOR));
 
 
@@ -344,4 +346,24 @@ void gmPlay(Game* G)
 	}
 }
 
+void gmShowEscapeMenu(Game* G)
+{
+	msgCreateMessage(shMessageManager(G->SR), "Menu", 3);
+	msgAddCloseItem(shMessageManager(G->SR), "Main Menu");
+	msgAddCloseItem(shMessageManager(G->SR), "Quit");
+	msgAddCloseItem(shMessageManager(G->SR), "Return");
+	ItemID Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, G->WindowWidth, G->WindowHeight, G->WindowWidth, G->WindowHeight);
+	switch (Choice)
+	{
+		case 0 :
+			gmMenu(G);
+			if(G->Lvl != NULL) lvlLoadedInit(G->Lvl);
+			break;
+		case 1 :
+			G->Window->close();
+			break;
+		default :
+			break;
+	}
+}
 
