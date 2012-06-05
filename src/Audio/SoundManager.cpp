@@ -114,6 +114,7 @@ void sndmPlay(SoundManager* SM, const char *Key)
 	snd->setBuffer(*(it->second));
 	snd->setRelativeToListener(1); //Le son est joué sans tenir compte de la position
 	snd->play();
+	//Ces appels provoquent des leaks, faute à SFML!
 
 }
 

@@ -48,7 +48,6 @@ typedef struct SPlayer
 	Vertex* vxBodyParts[12];
 	Rigid* BodyRigids[12];
 
-	Vec2 Speed;
 	Vec2 Normal, GroundVec;
 	Vec2 Center, PrevCenter;
 	Vec2 ULPos, URPos, DLPos, DRPos;

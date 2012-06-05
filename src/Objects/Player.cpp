@@ -69,14 +69,12 @@ void plInit(Player* P, World *W)
 	P->GrabL = NULL;
 	P->VxULStatus = P->VxURStatus = P->VxDRStatus = P->VxDLStatus =
 		P->RdUStatus = P->RdRStatus = P->RdDStatus = P->RdLStatus = nullCollisionInfo();
-	P->Speed = vec2(0.f, 0.f);
 	P->State = PL_NOSTATE;
 	plResetJump(P);
 
 	/* On crée les vertices du personnage, pour l'animation et quand il meurt */
 	for (int i=0; i<12; i++)
 		P->vxBodyParts[i] = newVertex();
-	//P->Neck = newVertex(), P->HeadLeft = newVertex(), P->HeadRight = newVertex(), P->Base = newVertex(), P->LeftArm1 = newVertex(), P->LeftArm2 = newVertex(), P->RightArm1 = newVertex(), P->RightArm2 = newVertex(), P->LeftLeg1 = newVertex(), P->LeftLeg2 = newVertex(), P->RightLeg1 = newVertex(), P->RightLeg2 = newVertex();
 
 	vxSetPosition(P->vxBodyParts[bpBase], vec2(0.f, 100.f));
 	Vec2 B = vxGetPosition(P->vxBodyParts[bpBase]);
@@ -512,16 +510,6 @@ void plPhysics(Player* P, World* W)
 	lstFree(&LExtracted);
 }
 
-/*
-void plSetPosition(Player* P, float x, float y)
-{
-	Vec2 LL2, RL2;
-	LL2 =vec2Sub(vxGetPosition(P->vxBodyParts[bpLeftLeg2]), vxGetPosition(P->vxBodyParts[bpBase]));
-	RL2 =vec2Sub(vxGetPosition(P->vxBodyParts[bpRightLeg2]), vxGetPosition(P->vxBodyParts[bpBase]));
-	vxSetPosition(P->Base, vec2(x, y));
-	vxSetPosition(P->LeftLeg2, vec2(x+LL2.x, y+LL2.y));
-	vxSetPosition(P->RightLeg2, vec2(x+RL2.x, y+RL2.y));
-}*/
 
 AnimAngles* plGetAnimAnglesState(Player* P)
 {

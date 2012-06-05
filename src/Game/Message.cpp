@@ -162,7 +162,7 @@ void msgDisplay(MessageManager* MM, sf::RenderWindow& win, float ViewX, float Vi
 				break; // ça évite de doubler l'event avec les bouttons
 			}
 			
-			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && mnGetCurrentItem(MM->Messages) == NULL)
+			if (event.type == sf::Event::MouseButtonPressed && mnGetCurrentItem(MM->Messages) == NULL)
 			{
 				CloseMessage(MM);
 				MM->LastChoice = INVALID_ITEM_ID;
