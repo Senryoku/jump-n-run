@@ -574,7 +574,7 @@ void appRun(LevelEditorApp* App)
 		Wobble(&App->ViewY, toViewY, 0.5f, 0.5f, &ViewYSpeed);
 
 		/* == Mise à jour du niveau == */
-		lvlUpdate(lvledGetLvl(&App->Led), Paused);
+		lvlUpdate(lvledGetLvl(&App->Led), Paused, App->SR);
 
 		sndmUpdate(shSoundManager(App->SR));
 

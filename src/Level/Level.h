@@ -197,9 +197,10 @@ void lvlLoadedInit(Level* Lvl);
  * notament aux collisions, ils ne sont pas ajoutés directement à la
  * simulation, il faut donc effectuer certaines vérification manuellement.
  * @param[in,out] Lvl Level à mettre à jour
- * @param Paused Le monde est il en pause?
+ * @param[in] Paused Le monde est il en pause?
+ * @param[in,out] SR Resources Partagées
 **/
-void lvlUpdate(Level* Lvl, Bool Paused);
+void lvlUpdate(Level* Lvl, Bool Paused, s_SharedResources* SR);
 
 /** @brief Retourne vrai si l'objectif est atteint par le joueur
  * @param Lvl Level auquel s'applique la fonction

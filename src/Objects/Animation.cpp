@@ -21,6 +21,11 @@ void animPositionsStatesInit(AnimPositions* pos)
 		pos->Spd[i] = 0.f;
 }
 
+AnimType aniGetType(const Animation* A)
+{
+	return A->Type;
+}
+
 void aniInit(Animation* A, AnimType Type, AnimTriggers Triggers, Bool Repeat)
 {
 	A->States = newDynArr();

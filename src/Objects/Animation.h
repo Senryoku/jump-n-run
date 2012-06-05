@@ -186,13 +186,6 @@ Bool aniIsEnded(const Animation* A);
  */
 unsigned int aniGetStatesCount(const Animation* A);
 
-/** @brief Accesseur de CurentState
- *
- * @param[in] A Animation à laquelle s'applique la fonction
- * @return Valeur de CurrentState
- */
-unsigned int aniGetCurrentState(const Animation* A);
-
 /** @brief Mutateur de CurrentState
  *
  * @param[in,out] A Animation à laquelle s'applique la fonction
@@ -256,6 +249,14 @@ void aniSetForce(Animation* A, float Force);
  * @return Valeur de Force
  */
 float aniGetForce(const Animation* A);
+
+
+/** @brief Accesseur de Type
+ *
+ * @param[in] A Animation à laquelle s'applique la fonction
+ * @return type d'animation
+ */
+AnimType aniGetType(const Animation* A);
 
 /** @brief Mutateur de Friction
  *

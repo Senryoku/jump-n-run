@@ -493,7 +493,7 @@ void lvlLoadedInit(Level* Lvl)
 	plCorrectPosition(Lvl->P1, Lvl->Spawn);
 }
 
-void lvlUpdate(Level* Lvl, Bool Paused)
+void lvlUpdate(Level* Lvl, Bool Paused, s_SharedResources* SR)
 {
 	unsigned int i;
 
@@ -526,7 +526,7 @@ void lvlUpdate(Level* Lvl, Bool Paused)
 		}
 
 		if (Lvl->P1 != NULL)
-			plUpdate(Lvl->P1);
+			plUpdate(Lvl->P1, SR);
 	}
 	else
 	{

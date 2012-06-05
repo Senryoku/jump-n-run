@@ -31,6 +31,8 @@
 
 typedef unsigned char PlayerDirection;
 
+struct s_SharedResources;
+
 typedef struct SPlayer
 {
 	Polygon* Shape;
@@ -68,6 +70,7 @@ typedef struct SPlayer
 	AnimPositions Positions;
 	AnimAngles Angles;
 	Animation* aniJump, *aniRun, *aniFall, *aniHello, *aniStand;
+	char SndFoot[2][20];
 } Player;
 
 /** @brief Constructeur
@@ -114,13 +117,18 @@ void plCorrectPosition(Player* P, Vec2 V);
 **/
 void plSetShape(Player* P, Polygon* Shape);
 
-/** @brief Mise ‡ jour du joueur (Physique, Informations...)
+/** @brief Mise à jour du joueur (animations)
+ *
+ * @param P Joueur
+ * @param SR Resources partagées
+**/
+void plUpdate(Player* P, s_SharedResources* SR);
+
+/** @brief Mise à jour du joueur (Physique)
  *
  * @param P Joueur
  * @param W Monde physique dans lequel Èvolue le joueur
-**/
-void plUpdate(Player* P);
-
+ **/
 void plPhysics(Player* P, World* W);
 
 /** @brief DÈplacement vers la droite
@@ -146,8 +154,10 @@ void plRotateL(Player* P);
 /** @brief Saut
  *
  * @param P Joueur
+ * @param[in,out] SR Resources partagées
 **/
-void plJump(Player* P);
+void plJump(Player* P, s_SharedResources* SR);
+
 /** @brief Reset du Saut
  *
  * @param P Joueur

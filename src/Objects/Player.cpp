@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <Game/SharedResources.h>
 
 Player* newPlayer(World* W)
 {
@@ -15,6 +16,9 @@ void plInit(Player* P, World *W)
 	P->URPos = vec2(20.f, -70.f);
 	P->DLPos = vec2(-35.f, 70.f);
 	P->DRPos = vec2(35.f, 70.f);
+	
+	strcpy(P->SndFoot[0], "snd_step1");
+	strcpy(P->SndFoot[1], "snd_step2");
 
 	P->timer.restart();
 	
@@ -347,13 +351,14 @@ void plRotateL(Player* P)
 	vxApplyForce(P->VxDL, vec2(Force, Force), 0);
 }
 
-void plJump(Player* P)
+void plJump(Player* P, s_SharedResources* SR)
 {
 	if ((P->State & PL_ON_GROUND) && !P->Jumping)
 	{
 		polyApplyForce(P->Shape, vec2Prod(P->Normal, 20.f), 0);
 		P->Jumping = TRUE;
 		P->JumpVec = vec2Prod(P->Normal, 2.f);
+		sndmPlay(shSoundManager(SR), "snd_step1");
 	}
 	else if (P->Jumping)
 	{
@@ -424,7 +429,7 @@ void plReleaseL(Player* P, World* W)
 	P->GrabL = NULL;
 }
 
-void plUpdate(Player* P)
+void plUpdate(Player* P, s_SharedResources* SR)
 {
 		
 	P->GroundVec = vec2Ortho(P->Normal);
@@ -461,6 +466,7 @@ void plUpdate(Player* P)
 	//printf("speed:%f,%f\n",speed.x, speed.y);
 	
 	Animation* CurrentA;
+
 	
 	if (!(P->State & PL_ON_GROUND) && ABS(speed.y) > 0.1f)
 	{
@@ -483,6 +489,13 @@ void plUpdate(Player* P)
 	if (P->timer.getElapsedTime().asSeconds() > 20.f)
 		P->timer.restart();
 	
+	unsigned int LastState;
+	
+	if (aniGetType(CurrentA) == ANIM_POSITIONS)
+		LastState = P->Positions.CurrentState;
+	else
+		LastState = P->Angles.CurrentState;
+	
 	
 	if (ABS(speed.x) > 1.f)
 	{
@@ -495,11 +508,23 @@ void plUpdate(Player* P)
 	if (P->GrabL != NULL)
 		vxSetPosition(P->vxBodyParts[bpLeftArm2], vxGetPosition(P->VxUL));
 	
+	if (aniGetType(CurrentA) == ANIM_POSITIONS)
+	{
+		if (CurrentA == P->aniRun && LastState != P->Positions.CurrentState)
+			sndmPlay(shSoundManager(SR), P->SndFoot[LastState]);
+	}
+	else
+	{
+		if (CurrentA == P->aniRun && LastState != P->Angles.CurrentState)
+			sndmPlay(shSoundManager(SR), P->SndFoot[LastState]);
+	}
+	
 }
 
 void plPhysics(Player* P, World* W)
 {
 	/* Mise à jour spécifique de Player */
+	
 	
 	P->RdUStatus = P->RdRStatus = P->RdDStatus =
 	P->RdLStatus = P->VxURStatus = P->VxULStatus =
