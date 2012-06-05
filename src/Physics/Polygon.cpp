@@ -567,6 +567,11 @@ BBox polyGetBBox(const Polygon* P)
 	return B;
 }
 
+GridBBox polyGetGridBBox(const Polygon* P)
+{
+	return P->GridPos;
+}
+
 void polyTranslate(Polygon* P, Vec2 V)
 {
 	unsigned int i;

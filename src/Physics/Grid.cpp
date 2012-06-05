@@ -139,8 +139,6 @@ void gridUpdatePolygonPositionByBB(Grid* g, Polygon* p)
 	t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
 	if (!p->GridPos.Valid)
 	{
-		l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
-		t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
 		for (i=l; i<=r; i++)
 			for (j=t; j<=b; j++)
 				gridAddPolygonToCell(g, p, i, j);
@@ -160,8 +158,6 @@ void gridUpdatePolygonPositionByBB(Grid* g, Polygon* p)
 		else
 		{
 			gridRemovePolygon(g, p);
-			l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
-			t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
 			for (i=l; i<=r; i++)
 				for (j=t; j<=b; j++)
 					gridAddPolygonToCell(g, p, i, j);
@@ -234,15 +230,16 @@ List gridGetPolygonList(const Grid* g, Polygon* p)
 
 void gridRemovePolygon(Grid* g, Polygon* p)
 {
-	BBox B = polyGetBBox(p);
-	unsigned int l, t, r, b, i, j;
-	l = MAX(0, B.Left/g->CellWidth); r = MIN(g->HCells-1, B.Right/g->CellWidth);
-	t = MAX(0, B.Top/g->CellHeight); b = MIN(g->VCells-1, B.Bottom/g->CellHeight);
-	for (i=l; i<=r; i++)
-		for (j=t; j<=b; j++)
+	GridBBox B = polyGetGridBBox(p);
+	unsigned int i, j;
+	for (i=B.Left; i<=B.Right; i++)
+	{
+		for (j=B.Top; j<=B.Bottom; j++)
 		{
-			lstDel(&g->Table[i][j], p);
+			gridRemovePolygonFromCell(g, p, i, j);
+			//printf("Removed from cell x:%u, y:%u\n", i,j);
 		}
+	}
 }
 
 void gridRemovePolygonByForce(Grid* g, Polygon* p)
@@ -311,19 +308,44 @@ void gridRegressionTest(void)
 
 	V1=newVertex(); V2=newVertex();
 	vxSetPosition(V1, vec2(0.f, 0.f));
-	vxSetPosition(V2, vec2(32.f, 96.f));
+	vxSetPosition(V2, vec2(30.f, 98.f));
 	P=newPolygon(2, V1, V2);
 	gridInit(&g, 36, 20);
 	gridSetCellSize(&g, 32.f);
-
-	//gridAddPolygonToCell(&g, P, 0, 1); gridAddPolygonToCell(&g, P, 0, 1); //On essaye de le rajouter encore une fois, mais ça marchera pas car il y est déjà
-
+	
 	gridAddPolygonByBB(&g, P);
+
+	unsigned int size = lstCount(gridGetCellList(&g, 0, 1));
+	gridAddPolygonToCell(&g, P, 0, 1); //On essaye de le rajouter encore une fois, mais ça marchera pas car il y est déjà
+	assert(size == lstCount(gridGetCellList(&g, 0, 1)));
+
 
 	for (i=0; i<g.HCells; i++)
 		for (j=0; j<g.VCells; j++)
 			L=gridGetCellList(&g, i, j),
-			printf("List size at position %u, %u is %u\n", i, j, lstCount(L));
+			assert(lstCount(L) == (i == 0 && j <= 3));
+	
+	vxSetPosition(V1, vec2(62.f, 140.f));
+	
+	gridUpdatePolygonPositionByBB(&g, P);
+	
+	for (i=0; i<g.HCells; i++)
+		for (j=0; j<g.VCells; j++)
+			L=gridGetCellList(&g, i, j),
+			assert(lstCount(L) <= 1);
+	
+	gridRemovePolygon(&g, P);
+	
+	for (i=0; i<g.HCells; i++)
+		for (j=0; j<g.VCells; j++)
+			L=gridGetCellList(&g, i, j),
+			assert(lstCount(L) == 0);
+	
+	gridAddPolygonByBB(&g, P);
+	
+	List PL = gridGetPolygonList(&g, P);
+	assert(lstCount(&PL) == 0); //Le polygone lui même c'est pas dans la liste
+	lstFree(&PL);
 
 	gridFree(&g);
 	delPolygon(P);

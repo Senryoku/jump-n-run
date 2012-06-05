@@ -166,6 +166,11 @@ typedef struct
  **/
 BBox polyGetBBox(const Polygon* P);
 
+/** @brief Retourne une la DERNIÊRE bounding box  sauvegardée du polygone
+ * @return BBox
+ **/
+GridBBox polyGetGridBBox(const Polygon* P);
+
 /** @brief Retourne une struct CollisionInfo vide
  *
 **/

@@ -7,6 +7,7 @@ int main(int argc, char** argv)
 	rdRegressionTest();
 	elRegressionTest();
 	polyRegressionTest();
+	gridRegressionTest();
 	wdRegressionTest();
 	return 0;
 }
