@@ -674,7 +674,7 @@ void appShowVertexMenu(LevelEditorApp* App)
 
 	ItemID IID;
 	msgCreateMenu(shMessageManager(App->SR), 4);
-	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
+	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic) (F)");
 	msgAddItem(shMessageManager(App->SR), "Mass", ITEM_INPUT_VALUE, NULL, &V->Mass);
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Vertex (Shift+Del)");
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
@@ -764,7 +764,7 @@ void appShowPolygonMenu(LevelEditorApp* App)
 	float tmp;
 	Object* Obj = lvlGetObjFromShape(lvledGetLvl(&App->Led), lvledGetNearestPoly(&App->Led));
 	msgCreateMenu(shMessageManager(App->SR), 5 + ((Obj != NULL) ? 1 : 0));
-	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic)");
+	msgAddCloseItem(shMessageManager(App->SR), "Toogle Status (Fixed/Dynamic) (C)");
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon (Del)");
 	msgAddCloseItem(shMessageManager(App->SR), "Delete this Polygon and Vertices");
 
@@ -878,8 +878,8 @@ void appShowEscapeMenu(LevelEditorApp* App)
 	msgAddCloseItem(shMessageManager(App->SR), "Select Layer2");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Foreground");
 	msgAddCloseItem(shMessageManager(App->SR), "New Level");
-	msgAddCloseItem(shMessageManager(App->SR), "Save");
-	msgAddCloseItem(shMessageManager(App->SR), "Load");
+	msgAddCloseItem(shMessageManager(App->SR), "Save (^S)");
+	msgAddCloseItem(shMessageManager(App->SR), "Load (^L)");
 	msgAddCloseItem(shMessageManager(App->SR), "Quit");
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
 	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
