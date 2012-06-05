@@ -110,7 +110,7 @@ void scCollectFree(DynArr* DA)
 	unsigned int i;
 	for(i = 0; i < daGetSize(DA); i++)
 		delScore((Score*) daGet(DA, i));
-		daFree(DA);
+	daFree(DA);
 }
 
 void scFree(Score *S)

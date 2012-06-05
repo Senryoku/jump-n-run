@@ -834,7 +834,8 @@ void appShowLevelMenu(LevelEditorApp* App)
 {
 	ItemID i;
 	Bool ObjClipboard = lvledGetObjClipboard(&App->Led) != NULL;
-	msgCreateMenu(shMessageManager(App->SR), 4 + ((ObjClipboard) ? 1 : 0));
+	msgCreateMenu(shMessageManager(App->SR), 5 + ((ObjClipboard) ? 1 : 0));
+	msgAddCloseItem(shMessageManager(App->SR), "Add a Vertex");
 	msgAddCloseItem(shMessageManager(App->SR), "Add a Box (B)");
 	msgAddCloseItem(shMessageManager(App->SR), "Place Spawning Point Here (J)");
 	msgAddCloseItem(shMessageManager(App->SR), "Place Goal Here (K)");
@@ -845,19 +846,22 @@ void appShowLevelMenu(LevelEditorApp* App)
 
 	switch (i) {
 		case 0:
+			lvledNewVertex(&App->Led);
+			break;
+		case 1:
 		{
 			lvledCreateBox(&App->Led, 100);
 			break;
 		}
-		case 1 :
+		case 2 :
 			lvledSetSpawn(&App->Led);
 			break;
-		case 2 :
+		case 3 :
 			lvledSetGoal(&App->Led);
 			break;
 		if(ObjClipboard)
 		{
-			case 3 :
+			case 4 :
 				lvledPasteObject(&App->Led);
 				break;
 		}

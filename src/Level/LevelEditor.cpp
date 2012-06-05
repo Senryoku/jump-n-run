@@ -71,6 +71,7 @@ void lvledResetLevel(LevelEditor *Led)
 
 	if (Led->GrabEl != NULL)
 		lvledReleaseEl(Led);
+	lvledRelease(Led, 0);
 
 	if(lstCount(&Led->tmpLstFixedFromV) != 0) lstFree(&Led->tmpLstFixedFromV);
 	if(lstCount(&Led->tmpLstDynFromV) != 0) lstFree(&Led->tmpLstDynFromV);
@@ -84,6 +85,8 @@ void lvledResetLevel(LevelEditor *Led)
 	{
 		free((char*) daGet(&Led->TexturesPath, i));
 	}
+	daFree(&Led->TexturesPath);
+	daInit(&Led->TexturesPath);
 
 	Led->NearestPolygon = NULL;
 
