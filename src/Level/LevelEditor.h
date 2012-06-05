@@ -47,8 +47,24 @@ typedef struct
 	Polygon* NearestPolygon;
 } LevelEditor;
 
+/** @brief Initialisation
+ *
+ * @param Led LevelEditor auquel s'applique la fonction
+ * @param Width Largeur du monde
+ * @param Height Hauteur du monde
+ * @param SR SharedResources
+**/
 void lvledInit(LevelEditor *Led, float Width, float Height, SharedResources* SR);
+
+/** @brief Libération
+ *
+ **/
 void lvledFree(LevelEditor *Led);
+
+/** @brief Réinitialise le niveau
+ *
+**/
+void lvledResetLevel(LevelEditor *Led);
 
 /* Mutateurs */
 /** @brief Défini la fonction d'affichage d'une ligne (Aides à l'édition)

@@ -64,6 +64,26 @@ void lvledFree(LevelEditor *Led)
 	}
 }
 
+void lvledResetLevel(LevelEditor *Led)
+{
+	float W = wdGetWidth(lvlGetWorld(Led->Lvl)),
+		H = wdGetHeight(lvlGetWorld(Led->Lvl));
+	if (Led->GrabEl != NULL)
+		lvledReleaseEl(Led);
+
+	delLevel(Led->Lvl);
+
+	unsigned int i;
+	for(i = 0; i < daGetSize(&Led->TexturesPath); i++)
+	{
+		free((char*) daGet(&Led->TexturesPath, i));
+	}
+
+	Led->NearestPolygon = NULL;
+
+	Led->Lvl = newLevel(W, H);
+}
+
 void lvledSetLineDraw(LevelEditor* Led, void (*lineDraw) (float X1, float Y1, float X2, float Y2, float R, float G, float B, float A))
 {
 	Led->lineDraw = lineDraw;
