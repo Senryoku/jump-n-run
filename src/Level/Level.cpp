@@ -501,10 +501,7 @@ void lvlUpdate(Level* Lvl, Bool Paused, s_SharedResources* SR)
 		wdApplyForce(lvlGetWorld(Lvl), vec2(0.f, 0.6f));
 		wdResolveVextex(lvlGetWorld(Lvl));
 
-		if(!Lvl->Finished)
-			flApplyForce(&Lvl->GoalFlag, vec2(0.f, 0.6f), 1);
-		else
-			flApplyForce(&Lvl->GoalFlag, vec2(5.f + (rand()%100)/20, 0.6f), 1);
+		flApplyForce(&Lvl->GoalFlag, vec2(5.f + (rand()%100)/20, 0.6f), 1);
 		flResolve(&Lvl->GoalFlag, 0.5f, 0.5f);
 
 		wdUpdateGrid(lvlGetWorld(Lvl), FALSE);
