@@ -240,7 +240,7 @@ void glDrawMenuItems(SharedResources* SR, sf::RenderTarget& win, Menu* M, float 
 	 }
 
 
-	 float yoffset = 5.f, selOffset;
+	 float yoffset = 5.f, selOffset = 0.f;
 	 for (i=0; i<moiGetItemCount(moi); i++)
 	 {
 		 I = moiGetItem(moi, i);

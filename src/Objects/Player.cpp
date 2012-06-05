@@ -48,21 +48,21 @@ void plInit(Player* P, World *W)
 	animPositionsStatesInit(&P->Positions);
 	
 	P->aniRun = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniRun, "data/animRun.txt");
+	aniLoadFromFile(P->aniRun, "data/anims/animRun.ani");
 	//aniSetForce(P->aniRun, 0.65f);
 	
 	P->aniJump = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniJump, "data/animJump.txt");
+	aniLoadFromFile(P->aniJump, "data/anims/animJump.ani");
 	aniSetForce(P->aniJump, 0.65f);
 	
 	P->aniFall = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniFall, "data/animFall.txt");
+	aniLoadFromFile(P->aniFall, "data/anims/animFall.ani");
 	
 	P->aniHello = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniHello, "data/animHello.txt");
+	aniLoadFromFile(P->aniHello, "data/anims/animHello.ani");
 	
 	P->aniStand = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniStand, "data/animStand.txt");
+	aniLoadFromFile(P->aniStand, "data/anims/animStand.ani");
 	
 
 	/*
