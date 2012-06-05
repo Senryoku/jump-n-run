@@ -129,10 +129,6 @@ void plFree(Player* P)
 {
 	if(P->Shape != NULL) delPolygon(P->Shape);
 	P->Shape = NULL;
-	if(P->VxDL != NULL) delVertex(P->VxDL), P->VxDL = NULL;
-	if(P->VxDR != NULL) delVertex(P->VxDR), P->VxDR = NULL;
-	if(P->VxUL != NULL) delVertex(P->VxUL), P->VxUL = NULL;
-	if(P->VxUR != NULL) delVertex(P->VxUR), P->VxUR = NULL;
 	if(P->GrabR != NULL) delRigid(P->GrabR);
 	if(P->GrabL != NULL) delRigid(P->GrabL);
 	P->GrabR = NULL;
@@ -147,7 +143,6 @@ void plFree(Player* P)
 	delAnimation(P->aniRun);
 	delAnimation(P->aniHello);
 	delAnimation(P->aniStand);
-
 }
 
 void delPlayer(Player* P)
