@@ -37,8 +37,8 @@ void sndmFree(SoundManager* SM)
 		delete it->second;
 	SM->Musics->clear();
 	
-	free(SM->SoundBuffers);
-	free(SM->Musics);
+	delete SM->SoundBuffers;
+	delete SM->Musics;
 }
 
 bool sndmLoadSoundFile(SoundManager* SM, const char *Key, const char *File)

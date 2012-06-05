@@ -133,6 +133,7 @@ $(OBJ)TestPhysics.o :
 
 	
 TestMenu :$(OBJ)TestMenu.o $(POINTO)
+	@$(RM) -f $(BIN)$@
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	valgrind --leak-check=full --tool=memcheck ./$(BIN)$@
 	
