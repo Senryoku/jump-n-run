@@ -142,18 +142,19 @@ void lstRegressionTest()
 	printf("============== lstRegressionTest Begin ==============\n");
 	List* L = newList();
 	assert(lstEmpty(L));
+	int var[500];
 	for(i = 0; i < 500; i++)
 	{
-		lstAdd(L, (void*) i);
-		assert(lstHaveElem(L, (void*) i));
-		assert(!lstHaveElem(L, (void*) (i + 1)));
+		lstAdd(L, (void*) &var[i]);
+		assert(lstHaveElem(L, (void*) &var[i]));
+		assert(!lstHaveElem(L, (void*) &var[i+1]));
 		assert(!lstEmpty(L));
 		assert(lstCount(L) == i + 1);
 	}
 	for(i = 0; i < 500; i++)
 	{
 		assert(lstCount(L) == 500 - i);
-		lstDel(L, (void*) i);
+		lstDel(L, (void*) &var[i]);
 	}
 	assert(lstEmpty(L));
 	delList(L);

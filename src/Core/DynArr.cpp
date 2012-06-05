@@ -128,19 +128,20 @@ void daRegressionTest()
 {
 	DynArr* DA = newDynArr();
 	unsigned int i;
+	int var[100];
 	printf("============== daRegressionTest Begin ==============\n");
 	for(i = 0; i < 100; i++)
 	{
-		daAdd(DA, (void*) i);
-		assert(daGet(DA, i) == (void*) i);
+		daAdd(DA, (void*) &var[i]);
+		assert(daGet(DA, i) == (void*) &var[i]);
 		assert(daGetSize(DA) <= daGetCapacity(DA));
 	}
 	i = daGetSize(DA);
 	daDel(DA, 50);
-	assert(daGet(DA, 50) == (void*) 51);
+	assert(daGet(DA, 50) == (void*) &var[51]);
 	assert(daGetSize(DA) == i - 1);
 	daFastDel(DA, 50);
-	assert(daGet(DA, 50) == (void*) 99);
+	assert(daGet(DA, 50) == (void*) &var[99]);
 	assert(daGetSize(DA) == i - 2);
 	delDynArr(DA);
 
@@ -149,8 +150,8 @@ void daRegressionTest()
 	assert(daGetCapacity(DA) == 21);
 	for(i = 0; i < 21; i++)
 	{
-		daAdd(DA, (void*) i);
-		assert(daGet(DA, i) == (void*) i);
+		daAdd(DA, (void*) &var[i]);
+		assert(daGet(DA, i) == (void*) &var[i]);
 		assert(daGetSize(DA) <= daGetCapacity(DA));
 	}
 	assert(daGetCapacity(DA) == 21);

@@ -328,5 +328,5 @@ void gridRegressionTest(void)
 	gridFree(&g);
 	delPolygon(P);
 	delVertex(V1); delVertex(V2);
-	printf("\n === Fin du test de regression de Polygon === \n\n");
+	printf("\n === Fin du test de regression de Grid === \n\n");
 }
