@@ -49,7 +49,7 @@ endif
 .PHONY : dirs
 
 windirs :
-	mkdir bin\
+	mkdir bin
 	mkdir obj\Core
 	mkdir obj\Audio
 	mkdir obj\Physics
@@ -57,21 +57,45 @@ windirs :
 	mkdir obj\Score
 	mkdir obj\Rendering
 	mkdir obj\Level
+	mkdir obj\Menu
+	mkdir obj\Objects
 .PHONY : windirs
 
 $(OBJ)%.o : $(SRC)%.cpp
-	@echo "Compilation du fichier $^" ; \
+	@echo "Compilation du fichier $^"
 	$(CXX) $(OPT) $^ -c -o $@
 	
 #$(OBJ)%.o : $(SRC)%.cpp
 #$(C) $(OPT) $^ -c -o $@
 
 test : $(POINTO) $(OBJ)Test.o
-	@echo "Édition des liens pour $@" ; \
+	@echo "Édition des liens pour $@"
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	
+Editor : $(POINTO) $(OBJ)Editor.o
+	@echo "Édition des liens pour $@"
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	
+runEditor : Editor
+ifeq ($(OS), Win)
+	$(BIN)Editor.exe
+else
+	./$(BIN)Editor
+endif
+	
+runMain : Main
+ifeq ($(OS), Win)
+	$(BIN)Main.exe
+else
+	./$(BIN)Main
+endif
+	
+Main : $(POINTO) $(OBJ)Main.o
+	@echo "Édition des liens pour $@"
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	
 $(OBJ)Test.o : $(SRC)Test.cpp
-	@echo "Compilation du fichier $^" ; \
+	@echo "Compilation du fichier $^"
 	$(CXX) $(OPT) $^ -c -o $@
 	
 debug : debug_option all
@@ -81,7 +105,11 @@ debug_option :
 
 run : dirs all
 	@echo "Éxécution de $(BIN)test" ; \
-	./$(BIN)test
+	ifeq ($(OS), Win)
+		$(BIN)test.exe
+	else
+		./$(BIN)test
+	endif
 .PHONY : run
 
 valgrind : all
