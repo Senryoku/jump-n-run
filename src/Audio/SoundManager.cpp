@@ -6,9 +6,10 @@
 void sndmInit(SoundManager* SM)
 {
 	lstInit(&SM->Sounds);
-	SM->SoundBuffers = new std::map<std::string, SoundBuffer*>;
-	SM->Musics = new std::map<std::string, Music*>;
-	SM->Listener.setPosition(0.f, 0.f, 5.f);
+	SM->SoundBuffers = new std::map<std::string, sf::SoundBuffer*>;
+	SM->Musics = new std::map<std::string, sf::Music*>;
+	SM->Listener = new sf::Listener;
+	SM->Listener->setPosition(0.f, 0.f, 5.f);
 	SM->FadeSpeed=0.f;
 	SM->IsFading=0;
 	SM->Loop=1;
@@ -19,6 +20,8 @@ void sndmInit(SoundManager* SM)
 	SM->CurrentTimeOffset = 0.f;
 	SM->DefaultFadingSpeed = 5.f;
 	SM->CurrentMusic = SM->Musics->end();
+	
+	//NOT USED
 	//SM->NextMusic=;
 	//Cela évite un crash bizarre...
 	//SM->SoundBuffers.clear();
@@ -27,8 +30,11 @@ void sndmInit(SoundManager* SM)
 
 void sndmFree(SoundManager* SM)
 {
+	
 	sndmStopAll(SM);
+	
 	lstFree(&(SM->Sounds));
+	
 	for (std::map<std::string, sf::SoundBuffer*>::iterator it=SM->SoundBuffers->begin(); it!=SM->SoundBuffers->end(); it++)
 		delete it->second;
 	SM->SoundBuffers->clear();
@@ -39,6 +45,8 @@ void sndmFree(SoundManager* SM)
 	
 	delete SM->SoundBuffers;
 	delete SM->Musics;
+	delete SM->Listener;
+	
 }
 
 bool sndmLoadSoundFile(SoundManager* SM, const char *Key, const char *File)
@@ -367,12 +375,12 @@ void sndmStopAll(SoundManager* SM)
 	Node* snd, *last_snd;
 	snd=lstFirst(&SM->Sounds);
 
-	while (snd!=NULL)
+	while (!nodeEnd(snd))
 	{
 		delete ((sf::Sound*)nodeGetData(snd));
 		last_snd=snd;
 		snd=nodeGetNext(snd);
-		lstRem(&SM->Sounds, last_snd);
+		lstPopFront(&SM->Sounds);
 
 	}
 
@@ -395,16 +403,25 @@ void sndmStopAllMusic(SoundManager* SM)
 
 void sndmSetListenerPosition(SoundManager* SM, const Vec2& Position)
 {
-	SM->Listener.setPosition(Position.x, Position.y, 5.f);
+	SM->Listener->setPosition(Position.x, Position.y, 5.f);
 }
 
 Vec2 sndmGetListenerPosition(const SoundManager* SM)
 {
 	//vec2(float, float) ne marche pas ?!
 	Vec2 V;
-	V.x=SM->Listener.getPosition().x;
-	V.y=SM->Listener.getPosition().y;
+	V.x=SM->Listener->getPosition().x;
+	V.y=SM->Listener->getPosition().y;
 	return V;
 	//return vec2(SM->Listener.GetPosition().x, SM->Listener.GetPosition().y);
 }
 
+
+void sndmRegressionTest()
+{
+	SoundManager SM;
+	
+	sndmInit(&SM);
+	
+	sndmFree(&SM);
+}

@@ -7,7 +7,9 @@
 #include <assert.h>
 #include <Core/Vec2.h>
 #include <new>
-#include "SoundImpl.h"
+#include <SFML/Audio.hpp>
+//Utiliser des typedef fait des leaks, donc on est obligés d'utiliser directement SFML
+//Il y a un leak de 16b de la part de Listener
 
 /**
  * @defgroup SoundManager SoundManager
@@ -19,9 +21,9 @@
 
 typedef struct {
 	List Sounds;
-	std::map<std::string, SoundBuffer*>* SoundBuffers;
-	std::map<std::string, Music*>* Musics;
-	SoundListener Listener;
+	std::map<std::string, sf::SoundBuffer*>* SoundBuffers;
+	std::map<std::string, sf::Music*>* Musics;
+	sf::Listener* Listener;
 
 	//Pour le fading entre deux musiques
 	float FadeSpeed;
@@ -30,8 +32,8 @@ typedef struct {
 	float DefaultFadingSpeed;
 	float LastTimeOffset;
 	float CurrentTimeOffset;
-	std::map<std::string, Music*>::iterator NextMusic;
-	std::map<std::string, Music*>::iterator CurrentMusic;
+	std::map<std::string, sf::Music*>::iterator NextMusic;
+	std::map<std::string, sf::Music*>::iterator CurrentMusic;
 	bool IsFading, Loop, Paused;
 } SoundManager;
 
@@ -262,6 +264,13 @@ void sndmSetListenerPosition(SoundManager* SM, const Vec2& Position);
  * @param SM SoundManager auquel s'applique la fonction
  */
 Vec2 sndmGetListenerPosition(const SoundManager* SM);
+
+
+/**
+ * @brief Test de regression
+
+ */
+void sndmRegressionTest();
 
 
 ///@}

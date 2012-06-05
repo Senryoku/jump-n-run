@@ -9,6 +9,7 @@
  * @defgroup SharedResources SharedRessources
  * Structure qui réunit tous les managers et qui est là pour être instancé une seule fois. C'est cette structure qui sera passée de module en module pour partager des resources telles que des managers ou des images
  * préfixe: sh
+ * SFML crée (des fois) des leaks (32 otets ou plus) pour listener et texture, impossible corriger cela avec des allocations dynamiques ou autres.
  * @todo Mettre ici des pointeurs vers les fonction pour charger et liberér les images pour faire ça plus général
  * @{
  */

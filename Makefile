@@ -118,6 +118,7 @@ MODULES = "Core/Vec2 Physics/Vertex Physics/Polygon"
 #À compléter encore avec une règle génerale selon cette liste de modules
 	
 TestCore : $(OBJ)Core/Vec2.o $(OBJ)Core/DynArr.o $(OBJ)Core/md5.o $(OBJ)Core/List.o $(OBJ)Core/Tools.o $(OBJ)Core/Node.o $(OBJ)TestCore.o
+	@$(RM) -f $(BIN)$@
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
 	
@@ -125,6 +126,7 @@ $(OBJ)TestCore.o :
 	$(CXX) $(OPT) $(TESTS)TestCore.cpp -c -o $@
 	
 TestPhysics : $(POINTO) $(OBJ)TestPhysics.o
+	@$(RM) -f $(BIN)$@
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
 	
@@ -142,11 +144,21 @@ $(OBJ)TestMenu.o :
 	
 
 TestLevel : $(POINTO) $(OBJ)TestLevel.o
+	@$(RM) -f $(BIN)$@
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
 	#./$(BIN)$@
 	
 $(OBJ)TestLevel.o :
 	$(CXX) $(OPT) $(TESTS)TestLevel.cpp -c -o $@
+	
+	
+TestSoundManager :$(OBJ)TestSoundManager.o $(POINTO)
+	@$(RM) -f $(BIN)$@
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind --leak-check=full --tool=memcheck ./$(BIN)$@
+	
+$(OBJ)TestSoundManager.o :
+	$(CXX) $(OPT) $(TESTS)TestSoundManager.cpp -c -o $@
 
  
