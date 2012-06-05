@@ -7,7 +7,7 @@ int main()
 	sf::Context C;
 	C.setActive(1);
 	lvlRegressionTest();
-	lvledRegressionTest();
+	//lvledRegressionTest();
 
 	
 	return 0;

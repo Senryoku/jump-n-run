@@ -791,7 +791,7 @@ void lvlRegressionTest()
 	Level *L = newLevel(0, 0);
 
 	lvlLoad(L, "levels/SlidingBoxes.lvl");
-	lvlLoadedInit(L);
+	//lvlLoadedInit(L);
 
 	delLevel(L);
 	printf("=== lvlRegressionTest End =====\n");

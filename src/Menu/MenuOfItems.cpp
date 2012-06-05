@@ -163,3 +163,23 @@ void moiSetFriction(MenuOfItems* M, float Friction)
 {
 	M->Friction = Friction;
 }
+
+void moiRegressionTest()
+{
+	printf("=== moiRegressionTest Begin ===\n");
+	MenuOfItems moi;
+	
+	moiInit(&moi, "teste", 4);
+	
+	for (int i=0; i<4; i++)
+		moiAddItem(&moi, "texte", ITEM_INPUT, NULL, NULL);
+	
+	moiSetCursor(&moi, 0);
+	moiMoveCursor(&moi, MENU_GO_UP);
+	
+	assert(moiGetItemSelectedID(&moi) == 3);
+	
+	
+	moiFree(&moi);
+	printf("=== moiRegressionTest End =====\n");
+}

@@ -116,13 +116,6 @@ info:
 
 MODULES = "Core/Vec2 Physics/Vertex Physics/Polygon"
 #À compléter encore avec une règle génerale selon cette liste de modules
-
-testVec2 : $(OBJ)Core/Vec2.o $(OBJ)testVec2.o
-	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	valgrind --leak-check=full --tool=memcheck ./$(BIN)testVec2
-	
-$(OBJ)testVec2.o :
-	$(CXX) $(OPT) $(TESTS)TestVec2.cpp -c -o $@
 	
 TestCore : $(OBJ)Core/Vec2.o $(OBJ)Core/DynArr.o $(OBJ)Core/md5.o $(OBJ)Core/List.o $(OBJ)Core/Tools.o $(OBJ)Core/Node.o $(OBJ)TestCore.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
@@ -139,14 +132,13 @@ $(OBJ)TestPhysics.o :
 	$(CXX) $(OPT) $(TESTS)TestPhysics.cpp -c -o $@
 
 	
-TestMenuItem : $(OBJ)Menu/MenuItem.o $(OBJ)TestMenuItem.o $(POINTO)
+TestMenu :$(OBJ)TestMenu.o $(POINTO)
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	./$(BIN)$@
-	valgrind --leak-check=full --tool=memcheck ./$(BIN)testMenuItem
+	valgrind --leak-check=full --tool=memcheck ./$(BIN)$@
 	
-$(OBJ)TestMenuItem.o :
-	$(CXX) $(OPT) $(TESTS)TestMenuItem.cpp -c -o $@
-
+$(OBJ)TestMenu.o :
+	$(CXX) $(OPT) $(TESTS)TestMenu.cpp -c -o $@
+	
 
 TestLevel : $(POINTO) $(OBJ)TestLevel.o
 	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)

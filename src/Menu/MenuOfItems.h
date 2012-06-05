@@ -175,6 +175,10 @@ void moiSetForce(MenuOfItems* M, float Force);
  **/
 void moiSetFriction(MenuOfItems* M, float Friction);
 
+/** @brief Test de regression
+ **/
+void moiRegressionTest();
+
 /**@}*/
 
 #endif

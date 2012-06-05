@@ -148,6 +148,7 @@ void foo(void*);
 ///@todo vérifier les erreurs données par valgrind
 void mniRegressionTest(void)
 {
+	printf("=== mniRegressionTest Begin ===\n");
 	MenuItem I, I2, input, inputvalue, inputmulti, I3, I4, M, value;
 	MenuID MID =1;
 	float data = 10.f; Bool b = 0;
@@ -192,6 +193,7 @@ void mniRegressionTest(void)
 	mniFree(&I4);
 	mniFree(&M);
 	mniFree(&value);
+	printf("=== mniRegressionTest End =====\n");
 }
 
 void foo(void)

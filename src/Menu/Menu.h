@@ -404,5 +404,9 @@ float mnGetMessageScale(const Menu* M);
  **/
 void mnSetArg(Menu* M, void* Arg);
 
+/** @brief Test de regression
+ **/
+void mnRegressionTest();
+
 /**@}*/
 #endif
