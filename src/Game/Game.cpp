@@ -261,10 +261,11 @@ void gmPlay(Game* G)
 			float Time = Clk.getElapsedTime().asMilliseconds()/10.f;
 			lvlSetFinished(G->Lvl, 1);
 			char Name[255];
-			msgCreateMessage(shMessageManager(G->SR), "Bravo !", 4);
-			msgAddItem(shMessageManager(G->SR), "Pseudonyme", ITEM_INPUT, NULL, NULL);
-			msgAddCloseItem(shMessageManager(G->SR), "Envoyer le score");
-			msgAddCloseItem(shMessageManager(G->SR), "Quitter");
+			msgCreateMessage(shMessageManager(G->SR), "Congrat's !", 4);
+			msgAddItem(shMessageManager(G->SR), "Player Name", ITEM_INPUT, NULL, NULL);
+			msgAddCloseItem(shMessageManager(G->SR), "Send Score");
+			msgAddCloseItem(shMessageManager(G->SR), "Main Menu");
+			msgAddCloseItem(shMessageManager(G->SR), "Quit");
 			strcpy(Name, msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight));
 			ItemID Choice = msgGetLastChoice(shMessageManager(G->SR));
 			switch (Choice)
@@ -273,11 +274,14 @@ void gmPlay(Game* G)
 					break;
 				case 1 :
 					scInit(&Sc, Name, lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), Time);
-					if(scSend(&Sc) == 1) { printf("Errror sending score\n"); } else { printf("Score sent succefully!\n"); }
+					if(scSend(&Sc) == 1) { printf("Error sending score.\n"); } else { printf("Score successfully submited\n"); }
 					scFree(&Sc);
-					G->Window->close();
+					// Pas de break exprès
+				case 2:
+					gmMenu(G);
+					if(G->Lvl != NULL) lvlLoadedInit(G->Lvl);
 					break;
-				case 2 :
+				case 3 :
 					G->Window->close();
 					break;
 				default :

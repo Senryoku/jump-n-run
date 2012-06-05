@@ -869,7 +869,7 @@ void appShowLevelMenu(LevelEditorApp* App)
 void appShowEscapeMenu(LevelEditorApp* App)
 {
 	ItemID IID;
-	msgCreateMessage(shMessageManager(App->SR), "Menu", 9);
+	msgCreateMessage(shMessageManager(App->SR), "Menu", 11);
 	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
 	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
 	msgAddCloseItem(shMessageManager(App->SR), "Add a texture");
@@ -877,6 +877,8 @@ void appShowEscapeMenu(LevelEditorApp* App)
 	msgAddCloseItem(shMessageManager(App->SR), "Select Layer1");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Layer2");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Foreground");
+	msgAddCloseItem(shMessageManager(App->SR), "Save");
+	msgAddCloseItem(shMessageManager(App->SR), "Load");
 	msgAddCloseItem(shMessageManager(App->SR), "Quit");
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
 	ItemID Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
@@ -942,7 +944,13 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.forePath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		case 7 :
+		case 7:
+			lvledSave(&App->Led, App->WorkingPath);
+			break;
+		case 8:
+			lvledLoad(&App->Led, App->WorkingPath);
+			break;
+		case 9 :
 			App->Window.close();
 			break;
 		default :
