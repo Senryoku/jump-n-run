@@ -788,3 +788,15 @@ void lvlAddTexture(Level* Lvl, Texture T)
 	*ptrTex = T;
 	daAdd(&Lvl->Textures, ptrTex);
 }
+
+void lvlRegressionTest()
+{
+	printf("=== lvlRegressionTest Begin ===\n");
+	Level *L = newLevel(0, 0);
+
+	lvlLoad(L, "levels/SlidingBoxes.lvl");
+	lvlLoadedInit(L);
+
+	delLevel(L);
+	printf("=== lvlRegressionTest End =====\n");
+}

@@ -915,3 +915,22 @@ void lvledAddTexture(LevelEditor* Led, const char* Path)
 	strcpy(path, Path);
 	daAdd(&Led->TexturesPath, path);
 }
+
+void lvledRegressionTest()
+{
+	SharedResources SR;
+	shInit(&SR, &glTexLoad, &glTexFree);
+	shLoadAudio(&SR);
+	shLoadTextures(&SR);
+	shLoadFonts(&SR);
+	printf("=== lvledRegressionTest Begin ===\n");
+	LevelEditor Led;
+	lvledInit(&Led, 0.f, 0.f, &SR);
+	lvledLoad(&Led, "levels/SlidingBoxes.lvl");
+	lvledFree(&Led);
+	lvledInit(&Led, 0.f, 0.f, &SR);
+	lvledLoad(&Led, "levels/SlidingBoxes.lvl");
+	lvledResetLevel(&Led);
+	lvledFree(&Led);
+	printf("=== lvledRegressionTest End =====\n");
+}

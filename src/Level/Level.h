@@ -320,7 +320,10 @@ typedef enum enum_objets
 	o_object
 } e_led_objets;
 
-
+/** @brief Test de Regression
+ *
+ **/
+void lvlRegressionTest();
 
 /** @}
 **/

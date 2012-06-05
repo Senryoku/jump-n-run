@@ -338,6 +338,11 @@ Level* lvledGetLvl(const LevelEditor* Led);
  */
 void lvledAddTexture(LevelEditor* Led, const char* Path);
 
+/** @brief Test de Regression
+ *
+ **/
+void lvledRegressionTest();
+
 /** @}
 **/
 
