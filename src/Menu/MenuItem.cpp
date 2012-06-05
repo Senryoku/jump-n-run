@@ -118,7 +118,7 @@ void mniSetInput(MenuItem* I, const char* Text)
 	assert(I->Type == ITEM_INPUT_VALUE || I->Type == ITEM_INPUT ||I->Type == ITEM_INPUT_MULTILINE);
 	
 	if (I->Type == ITEM_INPUT_VALUE)
-		*I->Str = Text;
+		*I->Str = Text, sscanf(I->Str->c_str(), "%f", (float*)I->Data);
 	else
 		*static_cast<std::string*>(I->Data) = Text;
 	
@@ -143,29 +143,64 @@ void mniRunFunction(MenuItem* I)
 }
 
 void foo(void);
+void foo(void*);
 
 ///@todo vérifier les erreurs données par valgrind
 void mniRegressionTest(void)
 {
-	MenuItem I, I2;
-	float data;
+	MenuItem I, I2, input, inputvalue, inputmulti, I3, I4, M, value;
+	MenuID MID =1;
+	float data = 10.f; Bool b = 0;
 
 	mniInit(&I, "Item 1", ITEM_LABEL, NULL, NULL);
-	mniInit(&I2, "Item2", ITEM_BUTTON, &foo, &data);
-
-	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
+	mniInit(&I2, "Item2", ITEM_BUTTON, &foo, NULL);
+	mniInit(&input, "input", ITEM_INPUT, NULL, NULL);
+	mniInit(&inputmulti, "multi", ITEM_INPUT_MULTILINE, NULL, NULL);
+	mniInit(&inputvalue, "val", ITEM_INPUT_VALUE, NULL, &data);
+	mniInit(&value, "val", ITEM_VALUE, NULL, &data);
+	mniInitWithArg(&I3, "val", &foo, &data);
+	mniInit(&I4, "text", ITEM_CHECKBOX, NULL, &b);
+	mniInit(&M, "switcher", ITEM_MENU_SWITCHER, NULL, &MID);
+	
+	mniUse(NULL, &I4, TRUE, MENU_GO_UP, 'e', 0);
+	
+	assert(b == TRUE);
+	
+	mniRunFunction(&I3);
+	
+	mniSetIncr(&value, 1.f);
+	mniSetMinMaxValues(&value, 0.f, 20.f);
+	mniSetFloatPrecision(&value, 2);
+	
+	mniSetInput(&inputvalue, "4");
+	
+	assert(data == 4.f);
+	assert(strcmp( mniGetText(&I), "Item 1") == 0);
+	assert(strcmp( mniGetText(&I2), "Item2") == 0);
 	mniSetText(&I, "Nouveau texte");
-	printf("Item 1 text: %s\nItem 2 text: %s\n", mniGetText(&I), mniGetText(&I2));
+	assert(strcmp( mniGetText(&I), "Nouveau texte") == 0);
 
 	mniRunFunction(&I2);
+	mniRunFunction(&I3);
 
 	mniFree(&I);
 	mniFree(&I2);
+	mniFree(&input);
+	mniFree(&inputmulti);
+	mniFree(&inputvalue);
+	mniFree(&I3);
+	mniFree(&I4);
+	mniFree(&M);
+	mniFree(&value);
 }
 
 void foo(void)
 {
 	printf("foo\n");
+}
+void foo(void* a)
+{
+	printf("foo:%f\n",*(float*)a);
 }
 
 void mniUse(SMenu* M, MenuItem* I, Bool EnterPressed, ItemDirection IDir, unsigned char KeyCode, Bool Del)

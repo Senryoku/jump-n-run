@@ -1218,17 +1218,17 @@ void glDispRope(const Elastic* E, SharedResources* SR)
 	glBegin(GL_QUADS);
 
 	glTexCoord2i(0, 0);
-	glVertex2f(vxGetPosition(V1).x-N.x*5.f, vxGetPosition(V1).y-N.y*5.f);
+	glVertex2f(vxGetPosition(V1).x-N.x*4.f, vxGetPosition(V1).y-N.y*4.f);
 
-	glTexCoord2f(elLenght/10.f, 0.f);
-	glVertex2f(vxGetPosition(V2).x-N.x*5.f, vxGetPosition(V2).y-N.y*5.f);
+	glTexCoord2f(elLenght/8.f, 0.f);
+	glVertex2f(vxGetPosition(V2).x-N.x*4.f, vxGetPosition(V2).y-N.y*4.f);
 
-	glTexCoord2f(elLenght/10.f, 1.f);
-	glVertex2f(vxGetPosition(V2).x+N.x*5.f, vxGetPosition(V2).y+N.y*5.f);
+	glTexCoord2f(elLenght/8.f, 1.f);
+	glVertex2f(vxGetPosition(V2).x+N.x*4.f, vxGetPosition(V2).y+N.y*4.f);
 
 
 	glTexCoord2f(0.f, 1.f);
-	glVertex2f(vxGetPosition(V1).x+N.x*5.f, vxGetPosition(V1).y+N.y*5.f);
+	glVertex2f(vxGetPosition(V1).x+N.x*4.f, vxGetPosition(V1).y+N.y*4.f);
 
 
 	glEnd();

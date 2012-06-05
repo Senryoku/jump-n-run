@@ -933,4 +933,5 @@ void lvledRegressionTest()
 	lvledResetLevel(&Led);
 	lvledFree(&Led);
 	printf("=== lvledRegressionTest End =====\n");
+	shFree(&SR);
 }
