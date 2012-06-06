@@ -138,19 +138,6 @@ Bool lvlLoad(Level* Lvl, const char* File)
 {
 	printf("= Loading... ===========\n");
 
-	/* Recherche du nom du fichier */
-	char Path[255], Name[255];
-	char* tmp;
-	strcpy(Path, File);
-	tmp = strtok(Path , "/");
-	while(tmp != NULL)
-	{
-		strcpy(Name, tmp);
-		tmp = strtok(NULL, "/");
-	}
-
-	strcpy(Lvl->MD5, md5FromFile(File).c_str());
-	printf("MD5 : %s\n", Lvl->MD5);
 
 
 	FILE* f;
@@ -162,6 +149,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 		return FALSE;
 	}
+	
 
 	char lvl[100], description[300], read[300];
 	if (fgets(lvl, 100, f)==NULL)
@@ -189,6 +177,21 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	lvlFree(Lvl);
 
 	lvlInit(Lvl, width, height);
+	
+	
+	/* Recherche du nom du fichier */
+	char Path[255], Name[255];
+	char* tmp;
+	strcpy(Path, File);
+	tmp = strtok(Path , "/");
+	while(tmp != NULL)
+	{
+		strcpy(Name, tmp);
+		tmp = strtok(NULL, "/");
+	}
+	
+	strcpy(Lvl->MD5, md5FromFile(File).c_str());
+	printf("MD5 : %s\n", Lvl->MD5);
 
 	strcpy(Lvl->Filename, Name);
 	printf("Filename : %s\n", Lvl->Filename);

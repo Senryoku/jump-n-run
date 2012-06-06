@@ -871,7 +871,7 @@ void appShowLevelMenu(LevelEditorApp* App)
 void appShowEscapeMenu(LevelEditorApp* App)
 {
 	ItemID IID;
-	msgCreateMessage(shMessageManager(App->SR), "Menu", 13);
+	msgCreateMessage(shMessageManager(App->SR), "Menu", 14);
 	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
 	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
 	msgAddCloseItem(shMessageManager(App->SR), "Add a texture");
@@ -882,6 +882,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 	msgAddCloseItem(shMessageManager(App->SR), "New Level");
 	msgAddCloseItem(shMessageManager(App->SR), "Save (^S)");
 	msgAddCloseItem(shMessageManager(App->SR), "Load (^L)");
+	msgAddCloseItem(shMessageManager(App->SR), "Load Level from list");
 	msgAddCloseItem(shMessageManager(App->SR), "Test Level (T)");
 	msgAddCloseItem(shMessageManager(App->SR), "Quit");
 	msgAddCloseItem(shMessageManager(App->SR), "Return");
@@ -907,12 +908,24 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			break;
 		case 2 :
 		{
-			msgCreateMessage(shMessageManager(App->SR), "", 3);
+			msgCreateMessage(shMessageManager(App->SR), "", 4);
 			msgAddItem(shMessageManager(App->SR), "Enter the path to the image file", ITEM_LABEL, NULL, NULL);
 			msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			IID = msgAddCloseItem(shMessageManager(App->SR), "Cancel");
 			const char* file = msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
-			lvledAddTexture(&App->Led, file);
+			if (msgGetLastChoice(shMessageManager(App->SR)) != IID)
+			{
+				if (FileExists(file))
+					lvledAddTexture(&App->Led, file);
+				else
+				{
+					msgCreateMessage(shMessageManager(App->SR), "Error", 2);
+					msgAddItem(shMessageManager(App->SR), "The file doesn't exist!", ITEM_LABEL, NULL, NULL);
+					msgAddCloseItem(shMessageManager(App->SR), "Ok");
+					msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+				}
+			}
 
 			break;
 		}
@@ -960,12 +973,34 @@ void appShowEscapeMenu(LevelEditorApp* App)
 		case 9:
 			lvledLoad(&App->Led, App->WorkingPath);
 			break;
-		case 10 :
+		case 10:
+		{
+			std::vector<std::string> files;
+			GetLevels("levels", files);
+			
+			msgCreateMessage(shMessageManager(App->SR), "Level List", (unsigned int)files.size()+1);
+			for (int i=0; i<files.size(); i++)
+				msgAddCloseItem(shMessageManager(App->SR), files[i].c_str());
+			
+			msgAddCloseItem(shMessageManager(App->SR), "Cancel");
+			
+			Choice = msgGetChoice(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			
+			if (Choice < files.size())
+			{
+				strcpy(App->WorkingPath, ("levels/"+files[Choice]).c_str());
+				lvledLoad(&App->Led, App->WorkingPath);
+			}
+			
+			files.clear();
+			break;
+		}
+		case 11 :
 			App->Window.close();
 			lvledTestLevel(&App->Led);
 			appWindowInit(App);
 			break;
-		case 11 :
+		case 12 :
 			App->Window.close();
 			break;
 		default :

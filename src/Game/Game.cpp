@@ -1,24 +1,5 @@
 #include "Game.h"
 
-int gmGetLevels(std::string dir, std::vector<std::string> &files)
-{
-    DIR *dp;
-    struct dirent *dirp;
-    if((dp  = opendir(dir.c_str())) == NULL) {
-        printf("Cannot get acces to dir\n");
-        return 1;
-    }
-	
-	files.clear();
-	
-    while ((dirp = readdir(dp)) != NULL) {
-		if (strstr(dirp->d_name, ".lvl") != NULL)
-			files.push_back(std::string(dirp->d_name));
-    }
-    closedir(dp);
-    return 0;
-}
-
 /* Fonctions d'usage interne **/
 void gmShowEscapeMenu(Game* G);
 
@@ -123,7 +104,7 @@ void gmMenu(Game* G)
 		case 1:
 		{
 			std::vector<std::string> files;
-			gmGetLevels("levels", files);
+			GetLevels("levels", files);
 			
 			msgCreateMessage(shMessageManager(G->SR), "Level List", (unsigned int)files.size()+1);
 			for (int i=0; i<files.size(); i++)

@@ -2,6 +2,9 @@
 #define _TOOLS_H_
 
 #include <assert.h>
+#include <dirent.h>
+#include <vector>
+#include <string>
 
 typedef char Bool;
 
@@ -49,6 +52,10 @@ void Wobble(float *CurrentPosition, float TargetPosition, float Force,float Fric
 
 Bool DirectoryExists(const char* Dir);
 Bool CreateDirectory(const char* Dir);
+
+int GetLevels(std::string dir, std::vector<std::string> &files);
+
+Bool FileExists(const char* File);
 
 Config GetConfiguration();
 

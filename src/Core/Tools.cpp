@@ -21,6 +21,20 @@
 
 #endif
 
+Bool FileExists(const char* File)
+{
+	FILE* f;
+	f = fopen(File, "r");
+	
+	if (f != NULL)
+	{
+		fclose(f);
+		return TRUE;
+	}
+	
+	return FALSE;
+}
+
 
 void Wobble(float *CurrentPosition, float TargetPosition, float Force,float Friction, float *Spd)
 {
@@ -53,6 +67,25 @@ Bool CreateDirectory(const char* Dir)
 		printf("Pas possible de créer le dossier %s\n", Dir);
 
 	return success;
+}
+
+int GetLevels(std::string dir, std::vector<std::string> &files)
+{
+    DIR *dp;
+    struct dirent *dirp;
+    if((dp  = opendir(dir.c_str())) == NULL) {
+        printf("Cannot get acces to dir\n");
+        return 1;
+    }
+	
+	files.clear();
+	
+    while ((dirp = readdir(dp)) != NULL) {
+		if (strstr(dirp->d_name, ".lvl") != NULL)
+			files.push_back(std::string(dirp->d_name));
+    }
+    closedir(dp);
+    return 0;
 }
 
 Config GetConfiguration()
