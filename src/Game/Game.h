@@ -20,19 +20,14 @@
  **/
 typedef struct
 {
-	Level* Lvl;
-	Menu GameMenu;
-	sf::RenderWindow* Window;
-	float WindowWidth;
-	float WindowHeight;
-	sf::Clock Clk;
-	unsigned int Time;
+	Level* Lvl; /**< Niveau en cours **/
+	sf::RenderWindow* Window; /**< Fenêtre de rendu **/
+	float WindowWidth; /**< Largeur de la fenêtre **/
+	float WindowHeight; /**< Hauteur de la fenêtre **/
+	sf::Clock Clk; /**< Horloge **/
+	unsigned int Time; /**< Temps (score) courrant **/
 
-	float testy;
-	Bool testyBool;
-	float test2;
-
-	SharedResources* SR; ///< Resources partagŽes
+	SharedResources* SR; ///< Resources partagées
 } Game;
 
 /** @brief Initialise le jeu

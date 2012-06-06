@@ -18,7 +18,7 @@ void gmInit(Game* G, SharedResources* SR)
 		G->Window->setVerticalSyncEnabled(1);
 	else
 		G->Window->setFramerateLimit((unsigned int) Cfg.FPSLimit);
-	
+
 	shSetWindowIcon(SR, *G->Window);
 
 	glDisable(GL_DEPTH_TEST);
@@ -37,39 +37,6 @@ void gmInit(Game* G, SharedResources* SR)
 
 	G->SR = SR;
 
-	ItemID IID;
-	mnInit(&G->GameMenu, G->SR);
-	mnSetItemSelectedZoomFactor(&G->GameMenu, 1.f);
-	mnSetItemNormalZoomFactor(&G->GameMenu, 0.75f);
-
-	mnAddMenu(&G->GameMenu, "Main Menu", 9);
-	mnAddItem(&G->GameMenu, 0, "Item 1", ITEM_BUTTON, NULL, NULL);
-	IID = mnAddItem(&G->GameMenu, 0, "Value", ITEM_VALUE, NULL, &G->testy);
-	mniSetIncr(mnGetItem(&G->GameMenu, 0, IID), 10000000.f);
-	mniSetFloatPrecision(mnGetItem(&G->GameMenu, 0, IID), 3);
-	//mniSetMinMaxValues(mnGetItem(&G->GameMenu, 0, IID), -10.f, 110.f);
-	G->testy = 0.f;
-	mnAddItem(&G->GameMenu, 0, "Input", ITEM_INPUT, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "Input multiligne", ITEM_INPUT_MULTILINE, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "Input value", ITEM_INPUT_VALUE, NULL, &G->testy);
-	mnAddItemMenuSwitcher(&G->GameMenu, 0, "go to Options", 1);
-	mnAddItem(&G->GameMenu, 0, "Label 1", ITEM_LABEL, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "------\n------", ITEM_LABEL, NULL, NULL);
-	mnAddItem(&G->GameMenu, 0, "Checkbox", ITEM_CHECKBOX, NULL, &G->testyBool);
-
-	mnAddMenu(&G->GameMenu, "Options", 4);
-	mnAddItem(&G->GameMenu, 1, "Whaaaaaow", ITEM_BUTTON, NULL, NULL);
-	mnAddItem(&G->GameMenu, 1, "CraAAaAzYy!!", ITEM_BUTTON, NULL, NULL);
-	mnAddItemMenuSwitcher(&G->GameMenu, 1, "A Secreeeet", 2);
-	mnAddItemMenuSwitcher(&G->GameMenu, 1, "Back", 0);
-
-	mnAddMenu(&G->GameMenu, "", 3);
-	mnAddItem(&G->GameMenu, 2, "I HAVE NO TITLE!!!! HA HA HA!", ITEM_LABEL, NULL, NULL);
-	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go to main MENU!!!!!!", 0);
-	mnAddItemMenuSwitcher(&G->GameMenu, 2, "Go Back!", 1);
-
-	mnSetHide(&G->GameMenu, TRUE);
-
 	G->Window->setActive();
 }
 
@@ -79,7 +46,6 @@ void gmFree(Game* G)
 	G->Window->setActive(0);
 	G->Window->close();
 	//delete G->Window; // Provoque une segfault sous Windows
-	mnFree(&G->GameMenu);
 }
 
 void gmLoadLvl(Game* G, const char* Path)
@@ -202,9 +168,6 @@ void gmPlay(Game* G)
 					case sf::Keyboard::Comma :
 						DispDebug = !DispDebug;
 						break;
-					case sf::Keyboard::M :
-						mnSetHide(&G->GameMenu, !mnGetHide(&G->GameMenu));
-						break;
 					case sf::Keyboard::J :
 					{
 						msgCreateMessage(shMessageManager(G->SR), "test message", 4);
@@ -248,9 +211,6 @@ void gmPlay(Game* G)
 						break;
 				}
 			}
-
-			mnHandleEvent(&G->GameMenu, event);
-			//msgHandleEvent(event);
 		}
 
 		//msgUpdate();
@@ -339,34 +299,19 @@ void gmPlay(Game* G)
 			wdDraw(lvlGetWorld(G->Lvl), &glDrawVertex, &glDrawElastic, &glDrawRigid, &glDrawPolygon);
 		}
 
-		float menuPosx = G->Window->getSize().x/2.f - moiGetSize(mnGetCurrentMenu(&G->GameMenu)).x/2.f;
-		mnUpdate(&G->GameMenu, vec2(menuPosx, 100.f), vec2(menuPosx, -mnGetHeight(&G->GameMenu) - 100.f));
-		glDrawMenuBox(G->SR, *G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
-
-		//if (msgCanBeDrawn()) glDrawMenuBox(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
-
 		fpsStep(&fps);
 
 		MouseX = ViewWidth*sf::Mouse::getPosition(*G->Window).x/G->WindowWidth + ViewX;
 		MouseY = ViewHeight*sf::Mouse::getPosition(*G->Window).y/G->WindowHeight + ViewY;
-
-		//SFML
-		glDrawMenuItems(G->SR, *G->Window, &G->GameMenu, ViewX, ViewY, ViewWidth, ViewHeight);
 
 		if (DispDebug)
 			glDrawFPS(G->SR, *G->Window, fpsGetString(&fps));
 
 		glDrawTime(G->SR, *G->Window, G->Time + G->Clk.getElapsedTime().asMilliseconds()/10.f);
 
-		//if (msgCanBeDrawn())
-		//	glDrawMenuItems(*G->Window, msgGetMenu(), ViewX, ViewY, ViewWidth, ViewHeight);
-
 		glDrawCursor(*G->Window,ViewWidth, ViewHeight, sf::Mouse::getPosition(*G->Window).x, sf::Mouse::getPosition(*G->Window).y, shGetCursorSprite(G->SR, SPR_CURSOR));
 
-
 		G->Window->display();
-
-		//if (msgCanDisplay()) msgDisplay(*G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
 	}
 }
 
