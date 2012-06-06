@@ -1266,6 +1266,34 @@ void glDispChain(const Rigid* R, SharedResources* SR)
 	glDisable(GL_TEXTURE_2D);
 }
 
+void glDispGrab(Vec2 V1, Vec2 V2, float Lenght, SharedResources* SR)
+{
+	Vec2 N = vec2Normalized(vec2Ortho(vec2Sub(V2,V1)));
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, shGetTexture(SR, "rd_chain")); //84x84; je veux de la taille 10
+	
+	glBegin(GL_QUADS);
+	
+	glTexCoord2i(0, 0);
+	glVertex2f(V1.x-N.x*5.f, V1.y-N.y*7.5f);
+	
+	glTexCoord2f(Lenght/15.f, 0.f);
+	glVertex2f(V2.x-N.x*7.5f, V2.y-N.y*7.5f);
+	
+	glTexCoord2f(Lenght/15.f, 1.f);
+	glVertex2f(V2.x+N.x*7.5f, V2.y+N.y*7.5f);
+	
+	
+	glTexCoord2f(0.f, 1.f);
+	glVertex2f(V1.x+N.x*7.5f, V1.y+N.y*7.5f);
+	
+	
+	glEnd();
+	
+	glDisable(GL_TEXTURE_2D);
+}
+
 void glDispSpawn(Vec2 Pos, SharedResources* SR)
 {
 	glEnable(GL_TEXTURE_2D);

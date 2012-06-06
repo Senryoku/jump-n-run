@@ -95,8 +95,7 @@ Vec2 vec2Rotate(Vec2 V, Vec2 Origin, float R)
 
 float vec2Angle(Vec2 V)
 {
-	Vec2 V2 = vec2Normalized(V);
-	return (acosf((vec2Dot(V2, vec2(0.f, 1.f))) < 0.f)?-1:1)*acosf(vec2Dot(V2, vec2(1.f, 0.f)));
+	return acosf(V.x/vec2Length(V));
 }
 
 #include <assert.h>

@@ -118,8 +118,9 @@ void plInit(Player* P, World *W)
 		}
 	}
 
-	aniUpdateForCurrentState(P->aniStand, P);
-	aniUpdate(P->aniStand, P, 1.f);
+	P->CurrentAnim = P->aniStand;
+	aniUpdateForCurrentState(P->CurrentAnim, P);
+	aniUpdate(P->CurrentAnim, P, 1.f);
 
 }
 
@@ -383,25 +384,23 @@ void plUpdate(Player* P, s_SharedResources* SR)
 	Vec2 speed = vec2Sub(P->Center, P->PrevCenter);
 	//printf("speed:%f,%f\n",speed.x, speed.y);
 
-	Animation* CurrentA;
-
 
 	if (!(P->State & PL_ON_GROUND) && ABS(speed.y) > 0.1f)
 	{
 		if (speed.y<2.f)
-			CurrentA = P->aniJump;
+			P->CurrentAnim = P->aniJump;
 		else
-			CurrentA = P->aniFall;
+			P->CurrentAnim = P->aniFall;
 		P->timer.restart();
 	}
 	else
 	{
 		if (ABS(speed.x) > 1.f)
-			CurrentA = P->aniRun, P->timer.restart();
+			P->CurrentAnim = P->aniRun, P->timer.restart();
 		else if (P->timer.getElapsedTime().asSeconds() < 5.f)
-			CurrentA = P->aniStand;
+			P->CurrentAnim = P->aniStand;
 		else
-			CurrentA = P->aniHello;
+			P->CurrentAnim = P->aniHello;
 	}
 
 	if (P->timer.getElapsedTime().asSeconds() > 20.f)
@@ -409,34 +408,39 @@ void plUpdate(Player* P, s_SharedResources* SR)
 
 	unsigned int LastState;
 
-	if (aniGetType(CurrentA) == ANIM_POSITIONS)
+	if (aniGetType(P->CurrentAnim) == ANIM_POSITIONS)
 		LastState = P->Positions.CurrentState;
 	else
 		LastState = P->Angles.CurrentState;
 
 
-	if (ABS(speed.x) > 1.f)
+	if (ABS(speed.x) > 1.f && P->CurrentAnim == P->aniRun)
 	{
 		float spp = vec2Length(speed);
-		aniUpdate(CurrentA, P, MAX(0.25f, spp/10.f));
+		aniUpdate(P->CurrentAnim, P, MAX(0.25f, spp/10.f));
 	}
 	else
-		aniUpdate(CurrentA, P, 1.f);
+		aniUpdate(P->CurrentAnim, P, 1.f);
+		
 
-	if (P->GrabL != NULL)
-		vxSetPosition(P->vxBodyParts[bpLeftArm2], vxGetPosition(P->VxUL));
-
-	if (aniGetType(CurrentA) == ANIM_POSITIONS)
+	if (aniGetType(P->CurrentAnim) == ANIM_POSITIONS)
 	{
-		if (CurrentA == P->aniRun && LastState != P->Positions.CurrentState)
+		if (P->CurrentAnim == P->aniRun && LastState != P->Positions.CurrentState)
 			sndmPlay(shSoundManager(SR), P->SndFoot[LastState]);
 	}
 	else
 	{
-		if (CurrentA == P->aniRun && LastState != P->Angles.CurrentState)
+		if (P->CurrentAnim == P->aniRun && LastState != P->Angles.CurrentState)
 			sndmPlay(shSoundManager(SR), P->SndFoot[LastState]);
 	}
 
+}
+
+float plGetCurrentStateAngle(Player* P, BodyParts bp)
+{
+	assert(aniGetType(P->CurrentAnim) == ANIM_ANGLES);
+	AnimAngles* A =(AnimAngles*)daGet(P->CurrentAnim->States, P->Angles.CurrentState);
+	return A->Angles[bp];
 }
 
 void plPhysics(Player* P, World* W)

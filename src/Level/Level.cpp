@@ -26,6 +26,7 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	Lvl->lvlDispRope = &glDispRope;
 	Lvl->lvlDispChain = &glDispChain;
 	Lvl->lvlDispSpawn = &glDispSpawn;
+	Lvl->lvlDispGrab = &glDispGrab;
 	Lvl->DistBG = Lvl->DistFG = 1.f;
 	flInit(&Lvl->GoalFlag, 4.f, 4.f, 25, 40, Lvl->lvlTexLoad("data/gfx/s_flag.png"), 0);
 	Texture* ptrTex = (Texture*) malloc(sizeof(Texture));
@@ -627,6 +628,23 @@ void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H)
 void lvlDisplayPlayer(const Level* Lvl, s_SharedResources* SR)
 {
 	(*Lvl->lvlDispPlayer)(Lvl->P1, SR);
+	
+	/*if (Lvl->P1->GrabL != NULL)
+	{
+		Vec2 V2 = vxGetPosition(rdGetV2(Lvl->P1->GrabL));
+		Vec2 V1 = vec2Sub(vxGetPosition(Lvl->P1->vxBodyParts[bpLeftArm2]), vxGetPosition(Lvl->P1->vxBodyParts[bpLeftArm2]));
+		V1 = vec2Rotate(V1, vec2(0.f, 0.f), plGetCurrentStateAngle(Lvl->P1, bpLeftArm2));
+		V1 = vec2Add(V1, vxGetPosition(Lvl->P1->vxBodyParts[bpLeftArm2]));
+		(*Lvl->lvlDispGrab)(V1, V2, rdGetLength(Lvl->P1->GrabL), SR);
+	}
+		
+	
+	if (Lvl->P1->GrabR != NULL)
+	{
+		//(*Lvl->lvlDispGrab)(Lvl->P1->vxBodyParts[(Lvl->P1->Dir == DIR_LEFT) ? bpLeftArm2 : bpRightArm2],rdGetV2(Lvl->P1->GrabR), rdGetLength(Lvl->P1->GrabR), SR);
+	}
+	 */
+	
 }
 
 void lvlDisplayL1(const Level* Lvl)

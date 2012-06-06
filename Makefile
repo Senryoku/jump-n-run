@@ -63,18 +63,18 @@ windirs :
 
 $(OBJ)%.o : $(SRC)%.cpp
 	@echo "Compilation du fichier $^"
-	$(CXX) $(OPT) $^ -c -o $@
+	@$(CXX) $(OPT) $^ -c -o $@
 	
 #$(OBJ)%.o : $(SRC)%.cpp
 #$(C) $(OPT) $^ -c -o $@
 
 test : $(POINTO) $(OBJ)Test.o
 	@echo "Édition des liens pour $@"
-	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	@$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	
 Editor : $(POINTO) $(OBJ)Editor.o
 	@echo "Édition des liens pour $@"
-	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	@$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	
 runEditor : Editor
 ifeq ($(OS), Win)
@@ -92,11 +92,11 @@ endif
 	
 Main : $(POINTO) $(OBJ)Main.o
 	@echo "Édition des liens pour $@"
-	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	@$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	
 $(OBJ)Test.o : $(SRC)Test.cpp
 	@echo "Compilation du fichier $^"
-	$(CXX) $(OPT) $^ -c -o $@
+	@$(CXX) $(OPT) $^ -c -o $@
 	
 debug : debug_option all
 
@@ -104,12 +104,12 @@ debug_option :
 #OPT = -g
 
 run : dirs all
-	@echo "Éxécution de $(BIN)test" ; \
-	ifeq ($(OS), Win)
-		$(BIN)test.exe
-	else
-		./$(BIN)test
-	endif
+	@echo "Éxécution de $(BIN)test" 
+ifeq ($(OS), Win)
+	$(BIN)test.exe
+else
+	./$(BIN)test
+endif
 .PHONY : run
 
 valgrind : all

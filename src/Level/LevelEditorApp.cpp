@@ -89,7 +89,7 @@ void appRun(LevelEditorApp* App)
 
 	/* Code temporel permettant de créer des states d'animation */
 
-	/*Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
+	Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
 
 	vxSetPosition(Base, vec2(150.f, 330.f));
 	Vec2 B = vxGetPosition(Base);
@@ -151,7 +151,7 @@ void appRun(LevelEditorApp* App)
 	wdAddRigid(lvledGetLvl(&App->Led)->W, H1);
 	wdAddRigid(lvledGetLvl(&App->Led)->W, H2);
 	wdAddRigid(lvledGetLvl(&App->Led)->W, H3);
-	 */
+	 
 
 	/* Fin du code temporaire pour les states des animations */
 
@@ -397,7 +397,7 @@ void appRun(LevelEditorApp* App)
 						break;
 
 					/* code de sauvegarde de l'animation */
-						/*
+						
 					case sf::Keyboard::A :
 						FILE* f; Vertex* V; Vec2 Pos; float Angle;
 						f = fopen("animPos.txt", "w");
@@ -486,7 +486,7 @@ void appRun(LevelEditorApp* App)
 
 						fclose(f);
 						break;
-						*/
+						
 
 					default:
 						break;
@@ -645,20 +645,6 @@ void appRun(LevelEditorApp* App)
 		App->Window.display();
 	}
 
-	/*
-	delVertex(Neck);
-	delVertex(Base);
-	delVertex(HeadLeft);
-	delVertex(HeadRight);
-	delVertex(LeftArm1);
-	delVertex(LeftArm2);
-	delVertex(RightArm1);
-	delVertex(RightArm2);
-	delVertex(LeftLeg1);
-	delVertex(LeftLeg2);
-	delVertex(RightLeg1);
-	delVertex(RightLeg2);
-	*/
 
 }
 

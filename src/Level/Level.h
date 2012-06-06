@@ -56,6 +56,7 @@ typedef struct s_Level
 	void (*lvlDispRope)(const Elastic* E, s_SharedResources* SR); /**< Pointeur de fonction affichant un elastic **/
 	void (*lvlDispChain)(const Rigid* R, s_SharedResources* SR);/**< Pointeur de fonction affichant un rigid **/
 	void (*lvlDispSpawn)(Vec2 V, s_SharedResources* SR); /**< Pointeur de fonction affichant le spawn **/
+	void (*lvlDispGrab)(Vec2, Vec2, float, s_SharedResources*);/**< Pointeur de fonction affichant le grab du joueur **/
 } Level;
 
 /** @brief Constructeur

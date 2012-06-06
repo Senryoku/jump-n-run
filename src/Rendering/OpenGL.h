@@ -45,6 +45,8 @@ void glDispChain(const Rigid* R, SharedResources* SR);
 
 void glDispSpawn(Vec2 Pos, SharedResources* SR);
 
+void glDispGrab(Vec2 V1, Vec2 V2, float Lenght, SharedResources* SR);
+
 
 /** @brief Charge une texture en mémoire
  *

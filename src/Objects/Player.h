@@ -64,6 +64,7 @@ typedef struct SPlayer
 	AnimPositions Positions;
 	AnimAngles Angles;
 	Animation* aniJump, *aniRun, *aniFall, *aniHello, *aniStand;
+	Animation* CurrentAnim;
 	char SndFoot[2][20];
 } Player;
 
@@ -223,6 +224,8 @@ void plSetPosition(Player* P, float x, float y);
 AnimAngles* plGetAnimAnglesState(Player* P);
 
 AnimPositions* plGetAnimPositionsState(Player* P);
+
+float plGetCurrentStateAngle(Player* P, BodyParts bp);
 
 /** @}
 **/
