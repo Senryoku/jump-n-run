@@ -224,7 +224,7 @@ void gmPlay(Game* G)
 				case 0 :
 					break;
 				case 1 :
-					scInit(&Sc, Name, lvlGetFilename(G->Lvl), lvlGetMD5(G->Lvl), G->Time);
+					scInit(&Sc, Name, lvlGetName(G->Lvl), lvlGetMD5(G->Lvl), G->Time);
 					if(scSend(&Sc) == 1) { printf("Error sending score.\n"); } else { printf("Score successfully submited\n"); }
 					scFree(&Sc);
 					// Pas de break exprès
@@ -346,20 +346,20 @@ void gmShowScores(Game* G)
 	DynArr *DA = scCollect(lvlGetName(G->Lvl), lvlGetMD5(G->Lvl));
 	Score* sc;
 	char Text[1024];
-	
+
 	if (daGetSize(DA) == 0)
 	{
 		msgCreateMessage(shMessageManager(G->SR), "Scores", 2);
 		msgAddItem(shMessageManager(G->SR), "There are no scores for this level!", ITEM_LABEL, NULL, NULL);
 		msgAddCloseItem(shMessageManager(G->SR), "Ok");
-		
+
 		msgDisplay(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
-		
+
 		return;
 	}
-	
+
 	msgCreateMessage(shMessageManager(G->SR), "Scores", MIN(daGetSize(DA), 15)+1);
-	
+
 	for (unsigned int i=0; i< MIN(daGetSize(DA), 15); i++)
 	{
 		sc = (Score*)daGet(DA, i);
@@ -374,9 +374,9 @@ void gmShowScores(Game* G)
 		sprintf(Text, "%u. %s    %s",i+1, sc->Player, oss.str().c_str());
 		msgAddItem(shMessageManager(G->SR), Text, ITEM_LABEL, NULL, NULL);
 	}
-	
+
 	msgAddCloseItem(shMessageManager(G->SR), "Close");
 	scCollectFree(DA);
 	msgDisplay(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
-	
+
 }

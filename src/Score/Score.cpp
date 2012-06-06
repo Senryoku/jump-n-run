@@ -124,7 +124,7 @@ void scFree(Score *S)
 
 void scRegressionTest()
 {
-	DynArr* DA = scCollect("tmpTest.lvl~", "a5dba1ec4e99f18fb814a3e908fc7ad9");
+	DynArr* DA = scCollect("Niveau Simple", "eef982595a3558cb6a4075dfd62ac65e");
 	//if(ErrorCode == 0)
 	if(daGetSize(DA) != 0)
 	{
