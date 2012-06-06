@@ -979,7 +979,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			GetLevels("levels", files);
 			
 			msgCreateMessage(shMessageManager(App->SR), "Level List", (unsigned int)files.size()+1);
-			for (int i=0; i<files.size(); i++)
+			for (int i=0; i<(int)files.size(); i++)
 				msgAddCloseItem(shMessageManager(App->SR), files[i].c_str());
 			
 			msgAddCloseItem(shMessageManager(App->SR), "Cancel");

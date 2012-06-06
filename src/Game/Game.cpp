@@ -10,6 +10,7 @@ void gmInit(Game* G, SharedResources* SR)
 	G->WindowWidth = Cfg.WindowWidth;
 	G->WindowHeight = Cfg.WindowHeight;
 	G->Window = new sf::RenderWindow(sf::VideoMode(G->WindowWidth, G->WindowHeight), "Jump n'Run", sf::Style::Default, sf::ContextSettings(32));
+	G->WindowIsActive = TRUE;
 
 	G->Window->setKeyRepeatEnabled(0);
 	G->Window->setMouseCursorVisible(1);
@@ -73,14 +74,14 @@ void gmMenu(Game* G)
 			GetLevels("levels", files);
 			
 			msgCreateMessage(shMessageManager(G->SR), "Level List", (unsigned int)files.size()+1);
-			for (int i=0; i<files.size(); i++)
+			for (int i=0; i<(int)files.size(); i++)
 				msgAddCloseItem(shMessageManager(G->SR), files[i].c_str());
 			
 			msgAddCloseItem(shMessageManager(G->SR), "Cancel");
 			
 			Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
 			
-			if (Choice < files.size())
+			if (Choice < (ItemID)files.size())
 				gmLoadLvl(G, ("levels/"+files[Choice]).c_str());
 			
 			files.clear();
@@ -130,6 +131,12 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
+			
+			if (event.type == sf::Event::LostFocus)
+				G->WindowIsActive = FALSE;
+			
+			if (event.type == sf::Event::GainedFocus)
+				G->WindowIsActive = TRUE;
 
 			if(event.type == sf::Event::MouseButtonPressed)
 			{
@@ -217,22 +224,26 @@ void gmPlay(Game* G)
 
 		lvlUpdate(G->Lvl, FALSE, G->SR);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-            plJump(lvlGetP1(G->Lvl), G->SR);
-		else
-			plResetJump(lvlGetP1(G->Lvl));
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
-			plGetUp(lvlGetP1(G->Lvl));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            plMoveL(lvlGetP1(G->Lvl));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-            plMoveR(lvlGetP1(G->Lvl));
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-            plRotateR(lvlGetP1(G->Lvl));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-            plRotateL(lvlGetP1(G->Lvl));
+		if (G->WindowIsActive)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+				plJump(lvlGetP1(G->Lvl), G->SR);
+			else
+				plResetJump(lvlGetP1(G->Lvl));
+			
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+				plGetUp(lvlGetP1(G->Lvl));
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+				plMoveL(lvlGetP1(G->Lvl));
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+				plMoveR(lvlGetP1(G->Lvl));
+			
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+				plRotateR(lvlGetP1(G->Lvl));
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+				plRotateL(lvlGetP1(G->Lvl));
+		}
+		
 
 		if(lvlIsGoalReached(G->Lvl))
 		{

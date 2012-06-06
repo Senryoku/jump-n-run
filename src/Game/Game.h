@@ -26,6 +26,7 @@ typedef struct
 	float WindowHeight; /**< Hauteur de la fenêtre **/
 	sf::Clock Clk; /**< Horloge **/
 	unsigned int Time; /**< Temps (score) courrant **/
+	Bool WindowIsActive;
 
 	SharedResources* SR; ///< Resources partagées
 } Game;
