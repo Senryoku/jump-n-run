@@ -2,6 +2,8 @@
 #define _GAME_H_
 
 #include <string.h>
+#include <dirent.h>
+#include <vector>
 
 #include <Rendering/OpenGL.h>
 #include <Level/Level.h>
@@ -94,6 +96,8 @@ void gmPauseClk(Game* G);
  * @param[in,out] G Game
 **/
 void gmRestartClk(Game* G);
+
+int gmGetLevels(std::string dir, std::vector<std::string> &files);
 
 /** @}
 **/

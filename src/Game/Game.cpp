@@ -1,5 +1,24 @@
 #include "Game.h"
 
+int gmGetLevels(std::string dir, std::vector<std::string> &files)
+{
+    DIR *dp;
+    struct dirent *dirp;
+    if((dp  = opendir(dir.c_str())) == NULL) {
+        printf("Cannot get acces to dir\n");
+        return 1;
+    }
+	
+	files.clear();
+	
+    while ((dirp = readdir(dp)) != NULL) {
+		if (strstr(dirp->d_name, ".lvl") != NULL)
+			files.push_back(std::string(dirp->d_name));
+    }
+    closedir(dp);
+    return 0;
+}
+
 /* Fonctions d'usage interne **/
 void gmShowEscapeMenu(Game* G);
 
@@ -90,9 +109,10 @@ void gmLoadLvl(Game* G, const char* Path)
 void gmMenu(Game* G)
 {
 	ItemID IID;
-	msgCreateMessage(shMessageManager(G->SR), "JumpNRun", 3);
+	msgCreateMessage(shMessageManager(G->SR), "JumpNRun", 4);
 	IID = msgAddItem(shMessageManager(G->SR), "Level", ITEM_INPUT, NULL, NULL);
 	mniSetInput(mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID), "levels/");
+	msgAddCloseItem(shMessageManager(G->SR), "Select Level from List");
 	msgAddCloseItem(shMessageManager(G->SR), "Play");
 	msgAddCloseItem(shMessageManager(G->SR), "Quit");
 	ItemID Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, 0, 0, G->WindowWidth, G->WindowHeight);
@@ -100,10 +120,29 @@ void gmMenu(Game* G)
 	{
 		case 0 :
 			break;
-		case 1 :
+		case 1:
+		{
+			std::vector<std::string> files;
+			gmGetLevels("levels", files);
+			
+			msgCreateMessage(shMessageManager(G->SR), "Level List", (unsigned int)files.size()+1);
+			for (int i=0; i<files.size(); i++)
+				msgAddCloseItem(shMessageManager(G->SR), files[i].c_str());
+			
+			msgAddCloseItem(shMessageManager(G->SR), "Cancel");
+			
+			Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
+			
+			if (Choice < files.size())
+				gmLoadLvl(G, ("levels/"+files[Choice]).c_str());
+			
+			files.clear();
+			break;
+		}
+		case 2 :
 			gmLoadLvl(G, msgGetLastInput(shMessageManager(G->SR)));
 			break;
-		case 2 :
+		case 3 :
 			G->Window->close();
 			break;
 		default :
