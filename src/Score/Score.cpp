@@ -79,6 +79,7 @@ DynArr* scCollect(const char LvlName[255], const char LvlMD5[255])
 	if(Response.getStatus() == sf::Http::Response::Ok)
 	{
 		ResString = (char*) malloc(sizeof(char)*Response.getBody().size());
+		printf("%s\n", ResString);
 		strcpy(ResString, Response.getBody().c_str());
 		Line = strtok(ResString, "\n");
 		sscanf(Line, "%u", &ErrorCode);
@@ -102,6 +103,7 @@ DynArr* scCollect(const char LvlName[255], const char LvlMD5[255])
 		ErrorCode = 50;
 	}
 	//return ErrorCode;
+	free(ResString);
 	return DA;
 }
 

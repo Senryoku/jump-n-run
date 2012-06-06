@@ -100,6 +100,12 @@ void gmPauseClk(Game* G);
 **/
 void gmRestartClk(Game* G);
 
+/** @brief Affiche les scores du niveau chargé
+ * @param[in,out] G Game
+ **/
+void gmShowScores(Game* G);
+
+
 
 /** @}
 **/

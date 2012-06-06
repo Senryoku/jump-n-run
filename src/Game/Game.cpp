@@ -293,9 +293,10 @@ void gmPlay(Game* G)
 void gmShowEscapeMenu(Game* G)
 {
 	gmPauseClk(G);
-	msgCreateMessage(shMessageManager(G->SR), "Menu", 4);
+	msgCreateMessage(shMessageManager(G->SR), "Menu", 5);
 	msgAddCloseItem(shMessageManager(G->SR), "Main Menu");
 	msgAddCloseItem(shMessageManager(G->SR), "Restart Level");
+	msgAddCloseItem(shMessageManager(G->SR), "Show Scores");
 	msgAddCloseItem(shMessageManager(G->SR), "Quit");
 	msgAddCloseItem(shMessageManager(G->SR), "Return");
 	ItemID Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, G->WindowWidth, G->WindowHeight, G->WindowWidth, G->WindowHeight);
@@ -308,6 +309,9 @@ void gmShowEscapeMenu(Game* G)
 			if(gmReloadLevel(G)) lvlLoadedInit(G->Lvl), gmResetClk(G); else gmShowEscapeMenu(G);
 			break;
 		case 2 :
+			gmShowScores(G);
+			break;
+		case 3 :
 			G->Window->close();
 			break;
 		default :
@@ -335,4 +339,44 @@ void gmRestartClk(Game* G)
 Bool gmReloadLevel(Game* G)
 {
 	return gmLoadLvl(G, G->Path);
+}
+
+void gmShowScores(Game* G)
+{
+	DynArr *DA = scCollect(lvlGetName(G->Lvl), lvlGetMD5(G->Lvl));
+	Score* sc;
+	char Text[1024];
+	
+	if (daGetSize(DA) == 0)
+	{
+		msgCreateMessage(shMessageManager(G->SR), "Scores", 2);
+		msgAddItem(shMessageManager(G->SR), "There are no scores for this level!", ITEM_LABEL, NULL, NULL);
+		msgAddCloseItem(shMessageManager(G->SR), "Ok");
+		
+		msgDisplay(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
+		
+		return;
+	}
+	
+	msgCreateMessage(shMessageManager(G->SR), "Scores", daGetSize(DA)+1);
+	
+	for (unsigned int i=0; i<daGetSize(DA); i++)
+	{
+		sc = (Score*)daGet(DA, i);
+		std::ostringstream oss;
+		oss << "Time : ";
+		if(sc->Time/6000 < 10) oss << "0";
+		oss << sc->Time/6000 << ":";
+		if((sc->Time/100)%60 < 10) oss << "0";
+		oss << (sc->Time/100)%60 << ":";
+		if(sc->Time%100 < 10) oss << "0";
+		oss << sc->Time%100;
+		sprintf(Text, "%u. %s    %s",i, sc->Player, oss.str().c_str());
+		msgAddItem(shMessageManager(G->SR), Text, ITEM_LABEL, NULL, NULL);
+	}
+	
+	msgAddCloseItem(shMessageManager(G->SR), "Close");
+	scCollectFree(DA);
+	msgDisplay(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
+	
 }
