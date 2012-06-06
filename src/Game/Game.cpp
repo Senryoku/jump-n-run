@@ -358,9 +358,9 @@ void gmShowScores(Game* G)
 		return;
 	}
 	
-	msgCreateMessage(shMessageManager(G->SR), "Scores", daGetSize(DA)+1);
+	msgCreateMessage(shMessageManager(G->SR), "Scores", MIN(daGetSize(DA), 15)+1);
 	
-	for (unsigned int i=0; i<daGetSize(DA); i++)
+	for (unsigned int i=0; i< MIN(daGetSize(DA), 15); i++)
 	{
 		sc = (Score*)daGet(DA, i);
 		std::ostringstream oss;
@@ -371,7 +371,7 @@ void gmShowScores(Game* G)
 		oss << (sc->Time/100)%60 << ":";
 		if(sc->Time%100 < 10) oss << "0";
 		oss << sc->Time%100;
-		sprintf(Text, "%u. %s    %s",i, sc->Player, oss.str().c_str());
+		sprintf(Text, "%u. %s    %s",i+1, sc->Player, oss.str().c_str());
 		msgAddItem(shMessageManager(G->SR), Text, ITEM_LABEL, NULL, NULL);
 	}
 	
