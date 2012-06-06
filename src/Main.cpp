@@ -13,6 +13,7 @@ int main(int argc, char** argv)
 	Game G;
 
 	gmInit(&G, &SR);
+	gmLoadLvl(&G, "levels/MainMenu.lvl");
 	gmPlay(&G);
 	gmFree(&G);
 
