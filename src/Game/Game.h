@@ -20,6 +20,7 @@
  **/
 typedef struct
 {
+	char Path[255]; /**< Chemin du niveau en cours **/
 	Level* Lvl; /**< Niveau en cours **/
 	sf::RenderWindow* Window; /**< Fenêtre de rendu **/
 	float WindowWidth; /**< Largeur de la fenêtre **/
@@ -61,8 +62,16 @@ void gmPlay(Game* G);
  *
  * @param[in,out] G Game
  * @param[in] Path Chemin du fichier de niveau à charger
+ * @return Vrai si le niveau a bien été chargé
 **/
-void gmLoadLvl(Game* G, const char* Path);
+Bool gmLoadLvl(Game* G, const char* Path);
+
+/** @brief Recharge le niveau précédement chargé
+ *
+ * @param[in,out] G Game
+ * @return Vrai si le niveau a bien été chargé
+ **/
+Bool gmReloadLevel(Game* G);
 
 /** @brief Utilise les input pour le menu
  *

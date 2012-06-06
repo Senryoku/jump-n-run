@@ -38,6 +38,8 @@ void gmInit(Game* G, SharedResources* SR)
 
 	G->SR = SR;
 
+	strcpy(G->Path, "");
+
 	G->Window->setActive();
 }
 
@@ -49,46 +51,49 @@ void gmFree(Game* G)
 	//delete G->Window; // Provoque une segfault sous Windows
 }
 
-void gmLoadLvl(Game* G, const char* Path)
+Bool gmLoadLvl(Game* G, const char* Path)
 {
-	lvlLoad(G->Lvl, Path);
+	strcpy(G->Path, Path);
+	return lvlLoad(G->Lvl, Path);
 }
 
 void gmMenu(Game* G)
 {
 	ItemID IID;
 	msgCreateMessage(shMessageManager(G->SR), "JumpNRun", 4);
-	IID = msgAddItem(shMessageManager(G->SR), "Level", ITEM_INPUT, NULL, NULL);
-	mniSetInput(mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID), "levels/");
 	msgAddCloseItem(shMessageManager(G->SR), "Select Level from List");
+	IID = msgAddItem(shMessageManager(G->SR), "Level Path", ITEM_INPUT, NULL, NULL);
+	mniSetInput(mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID), G->Path);
 	msgAddCloseItem(shMessageManager(G->SR), "Play");
 	msgAddCloseItem(shMessageManager(G->SR), "Quit");
 	ItemID Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, 0, 0, G->WindowWidth, G->WindowHeight);
 	switch (Choice)
 	{
-		case 0 :
-			break;
-		case 1:
+		case 0:
 		{
 			std::vector<std::string> files;
 			GetLevels("levels", files);
-			
+
 			msgCreateMessage(shMessageManager(G->SR), "Level List", (unsigned int)files.size()+1);
 			for (int i=0; i<(int)files.size(); i++)
 				msgAddCloseItem(shMessageManager(G->SR), files[i].c_str());
-			
+
 			msgAddCloseItem(shMessageManager(G->SR), "Cancel");
-			
+
 			Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
-			
+
 			if (Choice < (ItemID)files.size())
-				gmLoadLvl(G, ("levels/"+files[Choice]).c_str());
-			
+			{
+				if(gmLoadLvl(G, ("levels/"+files[Choice]).c_str())) { lvlLoadedInit(G->Lvl); gmResetClk(G); } else { gmMenu(G); }
+			}
+
 			files.clear();
 			break;
 		}
+		case 1 :
+			break;
 		case 2 :
-			gmLoadLvl(G, msgGetLastInput(shMessageManager(G->SR)));
+			if(gmLoadLvl(G, msgGetLastInput(shMessageManager(G->SR)))) lvlLoadedInit(G->Lvl), gmResetClk(G); else gmMenu(G);
 			break;
 		case 3 :
 			G->Window->close();
@@ -101,20 +106,17 @@ void gmMenu(Game* G)
 void gmPlay(Game* G)
 {
 	Bool DispDebug = FALSE;
-
-	if(G->Lvl == NULL) return;
-	if(wdGetWidth(lvlGetWorld(G->Lvl)) == 0.f) gmMenu(G);
 	Vec2 Center;
 	Score Sc;
+	FPSCounter fps;
 
 	float ViewX = 0.f, ViewY = 0.f, MouseX = 0.f, MouseY = 0.f, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
-	FPSCounter fps;
+	if(G->Lvl == NULL) return;
+	if (strcmp(G->Path, "") != 0) lvlLoadedInit(G->Lvl), gmResetClk(G); // Cas du lancement via l'éditeur
+	while(strcmp(G->Path, "") == 0) gmMenu(G);
+
 	fpsInit(&fps);
-
-	lvlLoadedInit(G->Lvl);
-	gmResetClk(G);
-
 	while (G->Window->isOpen())
 	{
 
@@ -131,10 +133,10 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::Resized)
 				printf("Resized ! %u, %u \n", event.size.width, event.size.height);
-			
+
 			if (event.type == sf::Event::LostFocus)
 				G->WindowIsActive = FALSE;
-			
+
 			if (event.type == sf::Event::GainedFocus)
 				G->WindowIsActive = TRUE;
 
@@ -175,52 +177,11 @@ void gmPlay(Game* G)
 					case sf::Keyboard::Comma :
 						DispDebug = !DispDebug;
 						break;
-					case sf::Keyboard::J :
-					{
-						msgCreateMessage(shMessageManager(G->SR), "test message", 4);
-						msgAddItem(shMessageManager(G->SR), "Hello I'm a message! Do you like me?", ITEM_LABEL, NULL, NULL);
-						msgAddCloseItem(shMessageManager(G->SR), "Yes");
-						msgAddCloseItem(shMessageManager(G->SR), "Bah...");
-						msgAddCloseItem(shMessageManager(G->SR), "No");
-						//msgAddItemWithArg(shMessageManager(G->SR), "Yes", &CloseMessage, shMessageManager(G->SR));
-						ItemID i = msgGetChoice(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
-
-						msgCreateMessage(shMessageManager(G->SR), "Alert", 3);
-						if (i==1)
-							msgAddItem(shMessageManager(G->SR), "Coool :D!", ITEM_LABEL, NULL, NULL);
-						else if (i==2)
-							msgAddItem(shMessageManager(G->SR), "that makes me sad...", ITEM_LABEL, NULL, NULL);
-						else if (i==3)
-							msgAddItem(shMessageManager(G->SR), "D: You're an orrible person", ITEM_LABEL, NULL, NULL);
-						else
-							msgAddItem(shMessageManager(G->SR), "Y U NO ANSWER?", ITEM_LABEL, NULL, NULL);
-
-						//msgAddItem(shMessageManager(G->SR), "Why", ITEM_INPUT, NULL, NULL);
-						float a=3.f;
-						ItemID IID = msgAddItem(shMessageManager(G->SR), "floty", ITEM_VALUE, NULL, &a);
-						MenuItem* I = mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID);
-						mniSetMinMaxValues(I, -10.f, 10.f);
-						mniSetIncr(I, 0.5f);
-						mniSetFloatPrecision(I, 1); //Toujours à la fin car ça fait la mise à jour sur le texte
-
-
-						msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
-
-						const char* t = msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
-
-						msgCreateMessage(shMessageManager(G->SR), "Alert", 2);
-						msgAddItem(shMessageManager(G->SR), t, ITEM_LABEL, NULL, NULL);
-						msgAddCloseItem(shMessageManager(G->SR), "Dismiss");
-						msgDisplay(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight);
-						break;
-					}
 					default:
 						break;
 				}
 			}
 		}
-
-		//msgUpdate();
 
 		lvlUpdate(G->Lvl, FALSE, G->SR);
 
@@ -230,29 +191,30 @@ void gmPlay(Game* G)
 				plJump(lvlGetP1(G->Lvl), G->SR);
 			else
 				plResetJump(lvlGetP1(G->Lvl));
-			
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 				plGetUp(lvlGetP1(G->Lvl));
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 				plMoveL(lvlGetP1(G->Lvl));
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 				plMoveR(lvlGetP1(G->Lvl));
-			
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 				plRotateR(lvlGetP1(G->Lvl));
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 				plRotateL(lvlGetP1(G->Lvl));
 		}
-		
+
 
 		if(lvlIsGoalReached(G->Lvl))
 		{
 			gmPauseClk(G);
 			lvlSetFinished(G->Lvl, 1);
 			char Name[255];
-			msgCreateMessage(shMessageManager(G->SR), "Congrat's !", 4);
+			msgCreateMessage(shMessageManager(G->SR), "Congrat's !", 5);
 			msgAddItem(shMessageManager(G->SR), "Player Name", ITEM_INPUT, NULL, NULL);
 			msgAddCloseItem(shMessageManager(G->SR), "Send Score");
+			msgAddCloseItem(shMessageManager(G->SR), "Restart Level");
 			msgAddCloseItem(shMessageManager(G->SR), "Main Menu");
 			msgAddCloseItem(shMessageManager(G->SR), "Quit");
 			strcpy(Name, msgGetInput(shMessageManager(G->SR), *G->Window, ViewX, ViewY, ViewWidth, ViewHeight));
@@ -266,11 +228,13 @@ void gmPlay(Game* G)
 					if(scSend(&Sc) == 1) { printf("Error sending score.\n"); } else { printf("Score successfully submited\n"); }
 					scFree(&Sc);
 					// Pas de break exprès
-				case 2:
-					gmMenu(G);
-					if(G->Lvl != NULL) lvlLoadedInit(G->Lvl), gmResetClk(G);
+				case 2 :
+					if(gmReloadLevel(G)) lvlLoadedInit(G->Lvl), gmResetClk(G); else gmShowEscapeMenu(G);
 					break;
-				case 3 :
+				case 3:
+					gmMenu(G);
+					break;
+				case 4 :
 					G->Window->close();
 					break;
 				default :
@@ -339,10 +303,9 @@ void gmShowEscapeMenu(Game* G)
 	{
 		case 0 :
 			gmMenu(G);
-			if(G->Lvl != NULL) lvlLoadedInit(G->Lvl), gmResetClk(G);
 			break;
 		case 1 :
-			if(G->Lvl != NULL) lvlLoadedInit(G->Lvl), gmResetClk(G);
+			if(gmReloadLevel(G)) lvlLoadedInit(G->Lvl), gmResetClk(G); else gmShowEscapeMenu(G);
 			break;
 		case 2 :
 			G->Window->close();
@@ -367,4 +330,9 @@ void gmPauseClk(Game* G)
 void gmRestartClk(Game* G)
 {
 	G->Clk.restart();
+}
+
+Bool gmReloadLevel(Game* G)
+{
+	return gmLoadLvl(G, G->Path);
 }

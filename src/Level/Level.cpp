@@ -149,7 +149,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 		return FALSE;
 	}
-	
+
 
 	char lvl[100], description[300], read[300];
 	if (fgets(lvl, 100, f)==NULL)
@@ -177,8 +177,8 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	lvlFree(Lvl);
 
 	lvlInit(Lvl, width, height);
-	
-	
+
+
 	/* Recherche du nom du fichier */
 	char Path[255], Name[255];
 	char* tmp;
@@ -189,7 +189,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		strcpy(Name, tmp);
 		tmp = strtok(NULL, "/");
 	}
-	
+
 	strcpy(Lvl->MD5, md5FromFile(File).c_str());
 	printf("MD5 : %s\n", Lvl->MD5);
 
@@ -631,7 +631,7 @@ void lvlDisplayBG(const Level* Lvl, float X, float Y, float W, float H)
 void lvlDisplayPlayer(const Level* Lvl, s_SharedResources* SR)
 {
 	(*Lvl->lvlDispPlayer)(Lvl->P1, SR);
-	
+
 	/*if (Lvl->P1->GrabL != NULL)
 	{
 		Vec2 V2 = vxGetPosition(rdGetV2(Lvl->P1->GrabL));
@@ -640,14 +640,14 @@ void lvlDisplayPlayer(const Level* Lvl, s_SharedResources* SR)
 		V1 = vec2Add(V1, vxGetPosition(Lvl->P1->vxBodyParts[bpLeftArm2]));
 		(*Lvl->lvlDispGrab)(V1, V2, rdGetLength(Lvl->P1->GrabL), SR);
 	}
-		
-	
+
+
 	if (Lvl->P1->GrabR != NULL)
 	{
 		//(*Lvl->lvlDispGrab)(Lvl->P1->vxBodyParts[(Lvl->P1->Dir == DIR_LEFT) ? bpLeftArm2 : bpRightArm2],rdGetV2(Lvl->P1->GrabR), rdGetLength(Lvl->P1->GrabR), SR);
 	}
 	 */
-	
+
 }
 
 void lvlDisplayL1(const Level* Lvl)
