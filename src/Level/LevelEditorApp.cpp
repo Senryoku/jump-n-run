@@ -871,9 +871,11 @@ void appShowLevelMenu(LevelEditorApp* App)
 void appShowEscapeMenu(LevelEditorApp* App)
 {
 	ItemID IID;
-	msgCreateMessage(shMessageManager(App->SR), "Menu", 14);
+	msgCreateMessage(shMessageManager(App->SR), "Menu", 16);
 	msgAddCloseItem(shMessageManager(App->SR), "Set Working Path");
 	msgAddCloseItem(shMessageManager(App->SR), "Set World Size");
+	msgAddCloseItem(shMessageManager(App->SR), "Set Level title");
+	msgAddCloseItem(shMessageManager(App->SR), "Set Level description");
 	msgAddCloseItem(shMessageManager(App->SR), "Add a texture");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Background");
 	msgAddCloseItem(shMessageManager(App->SR), "Select Layer1");
@@ -906,7 +908,27 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 			wdResetGrid(lvlGetWorld(lvledGetLvl(&App->Led)));
 			break;
-		case 2 :
+		case 2:
+		{
+			msgCreateMessage(shMessageManager(App->SR), "Set Level Title", 2);
+			IID = msgAddItem(shMessageManager(App->SR), "Level Title", ITEM_INPUT, NULL, NULL);
+			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), lvlGetName(lvledGetLvl(&App->Led)));
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			const char* title = msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			lvlSetName(lvledGetLvl(&App->Led), title);
+			break;
+		}
+		case 3:
+		{
+			msgCreateMessage(shMessageManager(App->SR), "Set Level Description", 2);
+			IID = msgAddItem(shMessageManager(App->SR), "Level Description", ITEM_INPUT, NULL, NULL);
+			mniSetInput(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), lvlGetDesc(lvledGetLvl(&App->Led)));
+			msgAddCloseItem(shMessageManager(App->SR), "Ok");
+			const char* desc = msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+			lvlSetDesc(lvledGetLvl(&App->Led), desc);
+			break;
+		}
+		case 4 :
 		{
 			msgCreateMessage(shMessageManager(App->SR), "", 4);
 			msgAddItem(shMessageManager(App->SR), "Enter the path to the image file", ITEM_LABEL, NULL, NULL);
@@ -929,7 +951,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 
 			break;
 		}
-		case 3:
+		case 5:
 			msgCreateMessage(shMessageManager(App->SR), "Select Background", 4);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
@@ -938,7 +960,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.backPath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		case 4:
+		case 6:
 			msgCreateMessage(shMessageManager(App->SR), "Select Layer1", 3);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
@@ -946,7 +968,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.layer1Path, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		case 5:
+		case 7:
 			msgCreateMessage(shMessageManager(App->SR), "Select Layer2", 3);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
@@ -954,7 +976,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.layer2Path, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		case 6:
+		case 8:
 			msgCreateMessage(shMessageManager(App->SR), "Select Foreground", 4);
 			msgAddItem(shMessageManager(App->SR), "Enter an image path. Save and Reload the level to see the change.", ITEM_LABEL, NULL, NULL);
 			IID = msgAddItem(shMessageManager(App->SR), "Path", ITEM_INPUT, NULL, NULL);
@@ -963,17 +985,17 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			strcpy(App->Led.forePath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
-		case 7:
+		case 9:
 			lvledSave(&App->Led, "levels/Backup.lvl");
 			lvledResetLevel(&App->Led);
 			break;
-		case 8:
+		case 10:
 			lvledSave(&App->Led, App->WorkingPath);
 			break;
-		case 9:
+		case 11:
 			lvledLoad(&App->Led, App->WorkingPath);
 			break;
-		case 10:
+		case 12:
 		{
 			std::vector<std::string> files;
 			GetLevels("levels", files);
@@ -995,12 +1017,12 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			files.clear();
 			break;
 		}
-		case 11 :
+		case 13 :
 			App->Window.close();
 			lvledTestLevel(&App->Led);
 			appWindowInit(App);
 			break;
-		case 12 :
+		case 14 :
 			App->Window.close();
 			break;
 		default :
