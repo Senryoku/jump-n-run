@@ -89,7 +89,7 @@ void appRun(LevelEditorApp* App)
 
 	/* Code temporel permettant de créer des states d'animation */
 
-	Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
+	/*Vertex* Neck = newVertex(), *HeadLeft = newVertex(), * HeadRight = newVertex(), * Base = newVertex(), * LeftArm1 = newVertex(), * LeftArm2 = newVertex(), * RightArm1 = newVertex(), * RightArm2 = newVertex(), * LeftLeg1 = newVertex(), * LeftLeg2 = newVertex(), * RightLeg1 = newVertex(), * RightLeg2 = newVertex();
 
 	vxSetPosition(Base, vec2(150.f, 330.f));
 	Vec2 B = vxGetPosition(Base);
@@ -150,7 +150,7 @@ void appRun(LevelEditorApp* App)
 	wdAddRigid(lvledGetLvl(&App->Led)->W, RL2);
 	wdAddRigid(lvledGetLvl(&App->Led)->W, H1);
 	wdAddRigid(lvledGetLvl(&App->Led)->W, H2);
-	wdAddRigid(lvledGetLvl(&App->Led)->W, H3);
+	wdAddRigid(lvledGetLvl(&App->Led)->W, H3);*/
 	 
 
 	/* Fin du code temporaire pour les states des animations */
@@ -160,7 +160,18 @@ void appRun(LevelEditorApp* App)
 	fpsInit(&fps);
 	while (App->Window.isOpen())
 	{
-
+		
+		if (wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led))) > 6000.f || wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led))) > 3000.f)
+		{
+			//La minimap est à redimensionner. le max de la minimap est de 6000 x 3000 en dimensions réelles du niveau
+			float fc = wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))/wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)));
+			if (fc >0.5f)
+				MiniMapScale = 0.05f*(6000.f/wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led))));
+			else
+				MiniMapScale = 0.05f*(3000.f/wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led))));
+		}
+		else
+			MiniMapScale = 0.05f;
 
 		//On verifie si on a pas mis le curseur sur la minimap
 		if (MouseWinX >= App->WindowWidth-20.f-(wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led))))*MiniMapScale &&
@@ -397,7 +408,7 @@ void appRun(LevelEditorApp* App)
 						break;
 
 					/* code de sauvegarde de l'animation */
-						
+					/*	
 					case sf::Keyboard::A :
 						FILE* f; Vertex* V; Vec2 Pos; float Angle;
 						f = fopen("animPos.txt", "w");
@@ -486,6 +497,7 @@ void appRun(LevelEditorApp* App)
 
 						fclose(f);
 						break;
+					 */
 						
 
 					default:
@@ -612,7 +624,7 @@ void appRun(LevelEditorApp* App)
 			glDrawPolygon(lvledGetNearestPoly(&App->Led));
 
 		//Minimap
-		glDrawMinimap(lvledGetLvl(&App->Led), App->SR, App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
+		glDrawMinimap(lvledGetLvl(&App->Led), App->SR, App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight, MiniMapScale);
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
 
 		glPopMatrix();
@@ -885,8 +897,10 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			break;
 		case 1 :
 			msgCreateMessage(shMessageManager(App->SR), "Set World Width", 3);
-			msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &lvlGetWorld(lvledGetLvl(&App->Led))->Width);
-			msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &lvlGetWorld(lvledGetLvl(&App->Led))->Height);
+			IID = msgAddItem(shMessageManager(App->SR), "World Width", ITEM_INPUT_VALUE, NULL, &lvlGetWorld(lvledGetLvl(&App->Led))->Width);
+			mniSetFloatPrecision(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0);
+			IID = msgAddItem(shMessageManager(App->SR), "World Height", ITEM_INPUT_VALUE, NULL, &lvlGetWorld(lvledGetLvl(&App->Led))->Height);
+			mniSetFloatPrecision(mnGetItem(msgGetMenu(shMessageManager(App->SR)), 0, IID), 0);
 			msgAddCloseItem(shMessageManager(App->SR), "Ok");
 			msgDisplay(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 			wdResetGrid(lvlGetWorld(lvledGetLvl(&App->Led)));

@@ -988,9 +988,9 @@ void glDrawTitleBox(SharedResources* SR, Vec2 Position, Vec2 Size)
 }
 
 
-void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight)
+void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& win, float ViewX, float ViewY, float ViewWidth, float ViewHeight, float sc)
 {
-	float sc = 0.05f;
+	//float sc = 0.05f;
 	glPushMatrix();
 	glTranslatef(ViewX+ViewWidth, ViewY, 0.f);
 

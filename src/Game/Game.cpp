@@ -18,6 +18,8 @@ void gmInit(Game* G, SharedResources* SR)
 		G->Window->setVerticalSyncEnabled(1);
 	else
 		G->Window->setFramerateLimit((unsigned int) Cfg.FPSLimit);
+	
+	shSetWindowIcon(SR, *G->Window);
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND) ;

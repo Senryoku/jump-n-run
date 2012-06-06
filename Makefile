@@ -74,23 +74,23 @@ test : $(POINTO) $(OBJ)Test.o
 	
 Editor : $(POINTO) $(OBJ)Editor.o
 	@echo "Édition des liens pour $@"
-	@$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	@$(CXX) $(OPT) $^ -o $(BIN)"JumpnRun Level Editor" $(LIBS)
 	
 runEditor : Editor
 ifeq ($(OS), Win)
-	$(BIN)Editor.exe
+	$(BIN)JumpnRun\ Level\ Editor.exe
 else
-	./$(BIN)Editor
+	./$(BIN)JumpnRun\ Level\ Editor
 endif
 	
-runMain : Main
+runGame : JumpnRun
 ifeq ($(OS), Win)
-	$(BIN)Main.exe
+	$(BIN)JumpnRun.exe
 else
-	./$(BIN)Main
+	./$(BIN)JumpnRun
 endif
 	
-Main : $(POINTO) $(OBJ)Main.o
+JumpnRun : $(POINTO) $(OBJ)Main.o
 	@echo "Édition des liens pour $@"
 	@$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
 	
