@@ -44,12 +44,12 @@ Bool scSend(const Score* S)
 	sf::Http::Request Request("JumpNRun/submit.php");
 	Request.setMethod(sf::Http::Request::Post);
 	Request.setBody(Body);
-	sf::Http::Response Response = http.sendRequest(Request);
+	sf::Http::Response Resp = http.sendRequest(Request);
 
-	sf::Http::Response::Status status = Response.getStatus();
+	sf::Http::Response::Status status = Resp.getStatus();
 	if (status == sf::Http::Response::Ok)
 	{
-	    //std::cout << Response.getBody() << std::endl; // Debug
+		std::cout << Resp.getBody() << std::endl; // Debug
 		return 0;
 	} else {
 		return 1;
@@ -94,7 +94,7 @@ DynArr* scCollect(const char LvlName[255], const char LvlMD5[255])
 			for(i = 0; i < NbScore; i++)
 			{
 				Line = strtok(NULL, "\n");
-				sscanf(Line, "%s %s %s %u", Player, Hour, Date, &Time);
+				sscanf(Line, "%s | %s %s | %u", Player, Hour, Date, &Time);
 				daAdd(DA, newScore(Player, Hour, Date, Time));
 			}
 		}

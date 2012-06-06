@@ -19,7 +19,6 @@ int main(int argc, char** argv)
 	appFree(&App);
 
 	shFree(&SR);
-
 	return EXIT_SUCCESS;
 }
 

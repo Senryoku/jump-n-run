@@ -225,7 +225,7 @@ void gmPlay(Game* G)
 					break;
 				case 1 :
 					scInit(&Sc, Name, lvlGetName(G->Lvl), lvlGetMD5(G->Lvl), G->Time);
-					if(scSend(&Sc) == 1) { printf("Error sending score.\n"); } else { printf("Score successfully submited\n"); }
+					if(scSend(&Sc) == 1) { printf("Error sending score.\n"); }
 					scFree(&Sc);
 					// Pas de break exprès
 				case 2 :
@@ -238,6 +238,7 @@ void gmPlay(Game* G)
 					G->Window->close();
 					break;
 				default :
+					gmMenu(G);
 					break;
 			}
 		}
