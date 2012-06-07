@@ -6,6 +6,13 @@ void gmShowEscapeMenu(Game* G);
 void gmInit(Game* G, SharedResources* SR)
 {
 	Config Cfg = GetConfiguration();
+	
+	if (Cfg.PlayMusic != 0.f)
+	{
+		sndmStopAllMusic(shSoundManager(SR));
+		sndmPlayMusic(shSoundManager(SR));
+	}
+		
 
 	G->WindowWidth = Cfg.WindowWidth;
 	G->WindowHeight = Cfg.WindowHeight;

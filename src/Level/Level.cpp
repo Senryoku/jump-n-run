@@ -487,6 +487,8 @@ void lvlSetGoal(Level* lvl, Vec2 G)
 
 void lvlLoadedInit(Level* Lvl)
 {
+	if (Lvl->P1 != NULL)
+		delPlayer(Lvl->P1);
 	Lvl->P1 = newPlayer(lvlGetWorld(Lvl));
 
 	plCorrectPosition(Lvl->P1, Lvl->Spawn);
