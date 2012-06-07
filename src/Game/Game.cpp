@@ -187,7 +187,7 @@ void gmPlay(Game* G)
 
 		if (G->WindowIsActive)
 		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 				plJump(lvlGetP1(G->Lvl), G->SR);
 			else
 				plResetJump(lvlGetP1(G->Lvl));
@@ -356,7 +356,6 @@ void gmShowScores(Game* G)
 
 		msgDisplay(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
 
-		scCollectFree(DA);
 		return;
 	}
 	
