@@ -25,13 +25,13 @@ Bool FileExists(const char* File)
 {
 	FILE* f;
 	f = fopen(File, "r");
-	
+
 	if (f != NULL)
 	{
 		fclose(f);
 		return TRUE;
 	}
-	
+
 	return FALSE;
 }
 
@@ -77,9 +77,9 @@ int GetLevels(std::string dir, std::vector<std::string> &files)
         printf("Cannot get acces to dir\n");
         return 1;
     }
-	
+
 	files.clear();
-	
+
     while ((dirp = readdir(dp)) != NULL) {
 		if (strstr(dirp->d_name, ".lvl") != NULL)
 			files.push_back(std::string(dirp->d_name));
@@ -96,8 +96,8 @@ Config GetConfiguration()
 	float value;
 
 	/* Options par défaut */
-	Cfg.WindowWidth = 1200.f;
-	Cfg.WindowHeight = 800.f;
+	Cfg.WindowWidth = 800.f;
+	Cfg.WindowHeight = 600.f;
 	Cfg.FPSLimit = 60.f;
 	Cfg.AntiAliasing = 1.f;
 	Cfg.VerticalSync = 1.f;
