@@ -50,7 +50,7 @@ Bool scSend(const Score* S)
 	sf::Http::Response::Status status = Resp.getStatus();
 	if (status == sf::Http::Response::Ok)
 	{
-		std::cout << Resp.getBody() << std::endl; // Debug
+		// std::cout << Resp.getBody() << std::endl; // Debug
 		return 0;
 	} else {
 		return 1;

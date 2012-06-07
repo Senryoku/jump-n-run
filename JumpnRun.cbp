@@ -43,11 +43,25 @@
 				<Option output="CoreTest" prefix_auto="1" extension_auto="1" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
 			</Target>
 			<Target title="Game">
 				<Option output="bin\Game" prefix_auto="1" extension_auto="1" />
 				<Option type="0" />
 				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="LevelTest">
+				<Option output="LevelTest" prefix_auto="1" extension_auto="1" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
 			</Target>
 		</Build>
 		<Compiler>
@@ -67,16 +81,19 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Audio\SoundManager.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Audio\SoundManager.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Core\DynArr.cpp" />
 		<Unit filename="src\Core\DynArr.h" />
@@ -98,71 +115,85 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Game\FPSCounter.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Game\Game.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Game\Game.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Game\Message.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Game\Message.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Game\SharedResources.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Game\SharedResources.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Level\Level.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Level\Level.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Level\LevelEditor.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Level\LevelEditor.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Level\LevelEditorApp.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Level\LevelEditorApp.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Main.cpp">
 			<Option target="Game" />
@@ -171,175 +202,209 @@
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Menu\Menu.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Menu\MenuItem.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Menu\MenuItem.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Menu\MenuOfItems.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Menu\MenuOfItems.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Objects\Animation.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Objects\Animation.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Objects\Flag.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Objects\Flag.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Objects\Object.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Objects\Object.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Objects\Player.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Objects\Player.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Elastic.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Elastic.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Grid.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Grid.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Physics.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Polygon.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Polygon.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Rigid.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Rigid.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Vertex.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\Vertex.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\World.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Physics\World.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="PhysicsTest" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Rendering\OpenGL.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Rendering\OpenGL.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Score\Score.cpp">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="src\Score\Score.h">
 			<Option target="Debug" />
 			<Option target="Release" />
 			<Option target="Game" />
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="tests\TestCore.cpp">
 			<Option target="CoreTest" />
 		</Unit>
 		<Unit filename="tests\TestGrid.cpp">
 			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="tests\TestLevel.cpp">
+			<Option target="LevelTest" />
 		</Unit>
 		<Unit filename="tests\TestPhysics.cpp">
 			<Option target="PhysicsTest" />
