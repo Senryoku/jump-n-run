@@ -1,4 +1,5 @@
 #include "SharedResources.h"
+#include <Rendering/OpenGL.h> //Nécessaire pour le test de regression
 
 
 void shInit(SharedResources* SR, unsigned int (*funcLoadTexture)(const char*), void (*funcFreeTexture)(unsigned int))
@@ -125,4 +126,17 @@ void shFreeTexture(const SharedResources* SR, unsigned int T)
 void shSetWindowIcon(SharedResources* SR, sf::RenderWindow& win)
 {
 	win.setIcon(SR->imgIcon.getSize().x, SR->imgIcon.getSize().y, SR->imgIcon.getPixelsPtr());
+}
+
+void shRegressionTest()
+{
+	sf::Context Context; Context.setActive(1);
+	SharedResources SR;
+	shInit(&SR, &glTexLoad, &glTexFree);
+	shLoadAudio(&SR);
+	shLoadTextures(&SR); //Il faut un contexte valid d'OpenGL
+	shLoadFonts(&SR);
+
+	
+	shFree(&SR);
 }

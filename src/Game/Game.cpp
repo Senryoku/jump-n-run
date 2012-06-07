@@ -358,10 +358,12 @@ void gmShowScores(Game* G)
 
 		return;
 	}
+	
+	unsigned int maxScores = MIN(daGetSize(DA), 20);
 
-	msgCreateMessage(shMessageManager(G->SR), "Scores", MIN(daGetSize(DA), 15)+1);
+	msgCreateMessage(shMessageManager(G->SR), "Scores", maxScores+1);
 
-	for (unsigned int i=0; i< MIN(daGetSize(DA), 15); i++)
+	for (unsigned int i=0; i< maxScores; i++)
 	{
 		sc = (Score*)daGet(DA, i);
 		std::ostringstream oss;

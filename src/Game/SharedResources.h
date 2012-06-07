@@ -123,7 +123,6 @@ const sf::Font& shFntMenu(const SharedResources* SR);
  * @param SR SharedResources auquel s'applique la fonction
  * @param Path Chemin de la texture à charger
  **/
-
 unsigned int shLoadTexture(const SharedResources* SR, const char* Path);
 
 /** @brief Libère une texture
@@ -133,6 +132,12 @@ unsigned int shLoadTexture(const SharedResources* SR, const char* Path);
  * @param T texture à libérer
  **/
 void shFreeTexture(const SharedResources* SR, unsigned int T);
+
+/** @brief Test de regression
+ *
+ * Le module Audio de SFML (basé sur OpenAL) provoque des leaks avec les appels
+ **/
+void shRegressionTest();
 
 
 

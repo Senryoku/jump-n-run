@@ -42,7 +42,6 @@ ifeq ($(OS), Linux)
 	@./configure.sh bin obj src
 endif
 	
-#A refaire mais là dessuite j'ai la flemme :D
 ifeq ($(OS), Win)
 	@echo "Faire make windirs pour les dossiers la PREMIÈRE fois"
 endif
@@ -188,5 +187,21 @@ TestSoundManager :$(OBJ)TestSoundManager.o $(POINTO)
 	
 $(OBJ)TestSoundManager.o :
 	$(CXX) $(OPT) $(TESTS)TestSoundManager.cpp -c -o $@
+	
+TestScore : $(POINTO) $(OBJ)TestScore.o
+	@$(RM) -f $(BIN)$@
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
+	
+$(OBJ)TestScore.o :
+	$(CXX) $(OPT) $(TESTS)TestScore.cpp -c -o $@
+	
+TestSharedResources : $(POINTO) $(OBJ)TestSharedResources.o
+	@$(RM) -f $(BIN)$@
+	$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
+	valgrind -v --leak-check=full --tool=memcheck ./$(BIN)$@
+	
+$(OBJ)TestSharedResources.o :
+	$(CXX) $(OPT) $(TESTS)TestSharedResources.cpp -c -o $@
 
  
