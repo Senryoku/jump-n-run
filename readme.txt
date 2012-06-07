@@ -1,9 +1,17 @@
-﻿== Compilation ==
+﻿=================
+= Jump'n'Run ====
+=================
+
+== Compilation ==
 
 Prérequis :
 OpenGL (-libopengl32)
 SFML 2.0 RC http://www.sfml-dev.org/download.php#2.0-rc
 ou dernière version de SFML 2 (à mon avis plus simple grâce à CMake) : https://github.com/LaurentGomila/SFML
+
+Récupération de la dernière version :
+http://code.google.com/p/jump-n-run/
+svn checkout http://jump-n-run.googlecode.com/svn/trunk/ jump-n-run-read-only
 
 Utilisation du Makefile :
 -Sous Unix (OS X ou Linux testés)
