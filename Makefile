@@ -75,14 +75,14 @@ Editor : $(POINTO) $(OBJ)Editor.o
 	@echo "Édition des liens pour $@"
 	@$(CXX) $(OPT) $^ -o $(BIN)"JumpnRun Level Editor" $(LIBS)
 	
-runEditor : Editor
+runEditor : dirs Editor
 ifeq ($(OS), Win)
 	$(BIN)JumpnRun\ Level\ Editor.exe
 else
 	./$(BIN)JumpnRun\ Level\ Editor
 endif
 	
-runGame : JumpnRun
+runGame : dirs JumpnRun
 ifeq ($(OS), Win)
 	$(BIN)JumpnRun.exe
 else
@@ -113,10 +113,15 @@ endif
 
 valgrind : all
 	valgrind --leak-check=full --tool=memcheck ./$(BIN)test
-:PHONY valgrind
+.PHONY : valgrind
+
+help:
+	@echo "runEditor\t\tLance l'éditeur (compile si nécessaire)\nrunGame\t\tLance le jeu (compile si nécessaire)\nclean\t\tÉlimine les fichier .o et exécutable\ncleanTest\t\tÉlimine les exécutables des tests de regression\nTest(nom d'un module)\t\tCompile et lance sous valgrind un test de regression"
+.PHONY : help
+
 
 clean:
-	@$(RM) -vf $(OBJ)*.o $(OBJ)*/*.o $(BIN)test $(BIN)testvec2
+	@$(RM) -vf $(OBJ)*.o $(OBJ)*/*.o $(BIN)*
 .PHONY : clean
 
 cleanTest:
