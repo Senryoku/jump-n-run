@@ -35,6 +35,12 @@ void glDrawMinimap(s_Level* Lvl, SharedResources* SR, const sf::RenderTarget& wi
 
 void glDrawCursor(sf::RenderTarget& win, float ViewWidth, float ViewHeight, float MouseX, float MouseY, sf::Sprite& sprCursor);
 
+/** @brief affiche un joueur
+ *
+ * Cette fonction n'est valide que pour des animations à angles car les animation à positions sont destinées au motion tracking et on ne peut pas en faire. Donc on utilise les angles car ils donnent une simulation plutôt réaliste et simple à modifier
+ * @param P Player à dessiner
+ * @param SR resources partagées
+ */
 void glDispPlayer(Player* P, SharedResources* SR);
 
 void glDispGrass(Polygon* P, SharedResources* SR);
@@ -44,8 +50,6 @@ void glDispRope(const Elastic* E, SharedResources* SR);
 void glDispChain(const Rigid* R, SharedResources* SR);
 
 void glDispSpawn(Vec2 Pos, SharedResources* SR);
-
-void glDispGrab(Vec2 V1, Vec2 V2, float Lenght, SharedResources* SR);
 
 
 /** @brief Charge une texture en mémoire

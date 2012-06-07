@@ -140,9 +140,6 @@ info:
 
 
 #Tests de regression
-
-MODULES = "Core/Vec2 Physics/Vertex Physics/Polygon"
-#À compléter encore avec une règle génerale selon cette liste de modules
 	
 TestCore : $(OBJ)Core/Vec2.o $(OBJ)Core/DynArr.o $(OBJ)Core/md5.o $(OBJ)Core/List.o $(OBJ)Core/Tools.o $(OBJ)Core/Node.o $(OBJ)TestCore.o
 	@$(RM) -f $(BIN)$@

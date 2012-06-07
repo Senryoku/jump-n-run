@@ -436,12 +436,6 @@ void plUpdate(Player* P, s_SharedResources* SR)
 
 }
 
-float plGetCurrentStateAngle(Player* P, BodyParts bp)
-{
-	assert(aniGetType(P->CurrentAnim) == ANIM_ANGLES);
-	AnimAngles* A =(AnimAngles*)daGet(P->CurrentAnim->States, P->Angles.CurrentState);
-	return A->Angles[bp];
-}
 
 void plPhysics(Player* P, World* W)
 {

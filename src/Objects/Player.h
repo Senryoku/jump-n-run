@@ -69,18 +69,23 @@ typedef struct SPlayer
 } Player;
 
 /** @brief Constructeur
+ * @param[in,out] W monde ou se trouve le joueur
 **/
 Player* newPlayer(World* W);
 
 /** @brief Initialisation
+ * @param[in,out] Player auquel s'applique la fonction
+ * @param[in,out] W monde ou se trouve le joueur
 **/
 void plInit(Player* P, World* W);
 
 /** @brief Libération
+ * @param[in,out] Player auquel s'applique la fonction
 **/
 void plFree(Player* P);
 
 /** @brief Destructeur
+ * @param[in,out] Player auquel s'applique la fonction
 **/
 void delPlayer(Player* P);
 
@@ -221,11 +226,18 @@ void plCreateRigids(Player* P, World* W);
  */
 void plSetPosition(Player* P, float x, float y);
 
+/** @brief Accesseur d'un state d'angles du joueur
+ * @param P Player auquel s'applique la fonction
+ * @return pointeur vers le state du joueur
+ */
 AnimAngles* plGetAnimAnglesState(Player* P);
 
+/** @brief Accesseur d'un state de positions du joueur
+ * @param P Player auquel s'applique la fonction
+ * @return pointeur vers le state du joueur
+ */
 AnimPositions* plGetAnimPositionsState(Player* P);
 
-float plGetCurrentStateAngle(Player* P, BodyParts bp);
 
 /** @}
 **/
