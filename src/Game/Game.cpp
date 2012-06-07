@@ -356,6 +356,7 @@ void gmShowScores(Game* G)
 
 		msgDisplay(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
 
+		scCollectFree(DA);
 		return;
 	}
 	

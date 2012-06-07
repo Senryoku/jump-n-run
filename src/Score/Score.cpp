@@ -23,6 +23,7 @@ void scInit(Score* S, const char Player[255], const char LvlName[255], const cha
 
 Bool scSend(const Score* S)
 {
+	if(!scIsValid(S)) return 1;
 	sf::Http http;
 	http.setHost("http://maretverdant.free.fr");
 
@@ -60,6 +61,8 @@ Bool scSend(const Score* S)
 DynArr* scCollect(const char LvlName[255], const char LvlMD5[255])
 {
 	DynArr* DA = newDynArr();
+	if(strcmp(LvlName, "") == 0 || strcmp(LvlMD5, "") == 0)
+		return DA;
 	unsigned int ErrorCode, NbScore, i, Time;
 	char *ResString, *Line, Player[255], Hour[255], Date[255];
 	sf::Http http;
@@ -84,12 +87,8 @@ DynArr* scCollect(const char LvlName[255], const char LvlMD5[255])
 		sscanf(Line, "%u", &ErrorCode);
 		if(ErrorCode == 0)
 		{
-			//printf("Avant daInit \n");
-			//daInit(DA);
-			//printf("Apres daInit \n");
 			Line = strtok(NULL, "\n");
 			sscanf(Line, "%u", &NbScore);
-			//printf("Nb Score : %u\n", NbScore);
 			daReserve(DA, NbScore);
 			for(i = 0; i < NbScore; i++)
 			{
@@ -98,11 +97,9 @@ DynArr* scCollect(const char LvlName[255], const char LvlMD5[255])
 				daAdd(DA, newScore(Player, Hour, Date, Time));
 			}
 		}
-	} else {
-		ErrorCode = 50;
+		free(ResString);
 	}
-	//return ErrorCode;
-	free(ResString);
+
 	return DA;
 }
 
@@ -136,4 +133,12 @@ void scRegressionTest()
 		}
 		scCollectFree(DA);
 	}
+}
+
+Bool scIsValid(const Score* S)
+{
+	return ((strcmp(S->Player, "") != 0)
+	&& (strcmp(S->LvlName, "") != 0)
+	&& (strcmp(S->LvlMD5, "") != 0)
+	&& (S->Time > 0));
 }

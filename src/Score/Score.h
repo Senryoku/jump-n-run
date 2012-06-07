@@ -80,9 +80,17 @@ void scCollectFree(DynArr* DA);
 **/
 void scFree(Score *S);
 
+/** @brief Vérifie que le score passé en argument est valable
+ *
+ * @param[in] S Score à vérifier
+ * @return Vrai s'il semble valide
+**/
+Bool scIsValid(const Score* S);
+
 /** @brief Test de Régression
 **/
 void scRegressionTest();
+
 
 /** @}
 **/
