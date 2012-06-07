@@ -67,10 +67,6 @@ $(OBJ)%.o : $(SRC)%.cpp
 #$(OBJ)%.o : $(SRC)%.cpp
 #$(C) $(OPT) $^ -c -o $@
 
-test : $(POINTO) $(OBJ)Test.o
-	@echo "Édition des liens pour $@"
-	@$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	
 Editor : $(POINTO) $(OBJ)Editor.o
 	@echo "Édition des liens pour $@"
 	@$(CXX) $(OPT) $^ -o $(BIN)"JumpnRun Level Editor" $(LIBS)
@@ -92,23 +88,15 @@ endif
 JumpnRun : $(POINTO) $(OBJ)Main.o
 	@echo "Édition des liens pour $@"
 	@$(CXX) $(OPT) $^ -o $(BIN)$@ $(LIBS)
-	
-$(OBJ)Test.o : $(SRC)Test.cpp
-	@echo "Compilation du fichier $^"
-	@$(CXX) $(OPT) $^ -c -o $@
+
 	
 debug : debug_option all
 
 debug_option :
 #OPT = -g
 
-run : dirs all
-	@echo "Éxécution de $(BIN)test" 
-ifeq ($(OS), Win)
-	$(BIN)test.exe
-else
-	./$(BIN)test
-endif
+run : runGame
+	@echo "Éxecution de Jump'n'Run"
 .PHONY : run
 
 valgrind : all
