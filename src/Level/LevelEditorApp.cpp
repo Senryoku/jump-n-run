@@ -165,9 +165,9 @@ void appRun(LevelEditorApp* App)
 		{
 			//La minimap est à redimensionner. le max de la minimap est de 6000 x 3000 en dimensions réelles du niveau
 			float fc = wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led)))/wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led)));
-			if (fc >0.5f)
+			if (fc >2.f)
 				MiniMapScale = 0.05f*(6000.f/wdGetWidth(lvlGetWorld(lvledGetLvl(&App->Led))));
-			else
+			else if (wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led))) > 3000.f)
 				MiniMapScale = 0.05f*(3000.f/wdGetHeight(lvlGetWorld(lvledGetLvl(&App->Led))));
 		}
 		else
