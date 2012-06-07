@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <vector>
 #include <string>
+#include <SFML/Window/Joystick.hpp>
 
 typedef char Bool;
 
@@ -23,6 +24,9 @@ typedef struct
 	float AntiAliasing;
 	float VerticalSync;
 	float PlayMusic;
+	unsigned int joyButJump, joyButL, joyButR, joyButUp, joyRestart;
+	sf::Joystick::Axis joyAxisMove;
+	bool UseJoystick;
 } Config;
 
 #define MIN( X, Y ) ( (X) < (Y) ? (X) : (Y) ) /* Deux macros qui déterminent le min et le max */

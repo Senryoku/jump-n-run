@@ -102,6 +102,13 @@ Config GetConfiguration()
 	Cfg.AntiAliasing = 1.f;
 	Cfg.VerticalSync = 1.f;
 	Cfg.PlayMusic = 0.f;
+	Cfg.joyButJump = 16;
+	Cfg.joyButL = 13;
+	Cfg.joyButR = 14;
+	Cfg.joyAxisMove = sf::Joystick::X;
+	Cfg.joyButUp = 17;
+	Cfg.UseJoystick = true;
+	Cfg.joyRestart = 18;
 
 	FILE* f;
 	f = fopen("Config.cfg", "r");
@@ -117,6 +124,13 @@ Config GetConfiguration()
 			if(strcmp(id, "AntiAliasing") == 0) Cfg.AntiAliasing = value;
 			if(strcmp(id, "VerticalSync") == 0) Cfg.VerticalSync = value;
 			if(strcmp(id, "Music") == 0) Cfg.PlayMusic = value;
+			if(strcmp(id, "JoyJump") == 0) Cfg.joyButJump = (unsigned int)value;
+			if(strcmp(id, "JoyMove") == 0) Cfg.joyAxisMove = static_cast<sf::Joystick::Axis>(value);
+			if(strcmp(id, "JoyL") == 0) Cfg.joyButL = (unsigned int)value;
+			if(strcmp(id, "JoyR") == 0) Cfg.joyButR = (unsigned int)value;
+			if(strcmp(id, "JoyUp") == 0) Cfg.joyButUp = (unsigned int)value;
+			if(strcmp(id, "UseJoy") == 0) Cfg.UseJoystick = (bool)value;
+			if(strcmp(id, "JoyRestart") == 0) Cfg.joyRestart = (bool)value;
 		}
 	} else {
 		/* Création d'un fichier de configuration par défaut */

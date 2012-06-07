@@ -115,9 +115,13 @@ void gmPlay(Game* G)
 	if(G->Lvl == NULL) return;
 	if (strcmp(G->Path, "") != 0) lvlLoadedInit(G->Lvl), gmResetClk(G); // Cas du lancement via l'éditeur
 	while(strcmp(G->Path, "") == 0) gmMenu(G);
-	//Bool UseJoystick;
 	
-	//UseJoystick = sf::Joystick::isConnected(0);
+	Bool UseJoystick;
+	
+	Config cfg = GetConfiguration();
+	
+	
+	UseJoystick = sf::Joystick::isConnected(0) && cfg.UseJoystick;
 
 	fpsInit(&fps);
 	while (G->Window->isOpen())
@@ -139,13 +143,16 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::LostFocus)
 				G->WindowIsActive = FALSE;
-			/*
+		
 			if (event.type == sf::Event::JoystickConnected)
-				UseJoystick = TRUE;
+				UseJoystick = cfg.UseJoystick;
+			
+			if (cfg.UseJoystick && event.type == sf::Event::JoystickButtonPressed && event.joystickButton.button == cfg.joyRestart)
+				if(gmReloadLevel(G)) lvlLoadedInit(G->Lvl), gmResetClk(G);
 			
 			if (event.type == sf::Event::JoystickDisconnected)
 				UseJoystick = FALSE;
-			 */
+			 
 
 			if (event.type == sf::Event::GainedFocus)
 				G->WindowIsActive = TRUE;
@@ -197,30 +204,34 @@ void gmPlay(Game* G)
 
 		if (G->WindowIsActive)
 		{
-			/*
-			Bool joyJump = TRUE, joyL = TRUE, joyR = TRUE, joyUp = TRUE, joyRotL = TRUE, joyRotR = TRUE;
+			
+			Bool joyJump = 0, joyL = 0, joyR = 0, joyUp = 0, joyRotL = 0, joyRotR = 0;
 			if (UseJoystick)
 			{
-				joyJump = sf::Joystick::isButtonPressed(0, 0);
-				joyL = sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 100.f;
+				joyJump = sf::Joystick::isButtonPressed(0, cfg.joyButJump);
+				joyL = sf::Joystick::getAxisPosition(0, cfg.joyAxisMove) < -20.f;
+				joyR = sf::Joystick::getAxisPosition(0, cfg.joyAxisMove) > 20.f;
+				joyRotL = sf::Joystick::isButtonPressed(0, cfg.joyButL);
+				joyRotR = sf::Joystick::isButtonPressed(0, cfg.joyButR);
+				joyUp = sf::Joystick::isButtonPressed(0, cfg.joyButUp);
 			}
-			*/
 			
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+			
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || joyJump)
 				plJump(lvlGetP1(G->Lvl), G->SR);
 			else
 				plResetJump(lvlGetP1(G->Lvl));
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) || joyUp)
 				plGetUp(lvlGetP1(G->Lvl));
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A) || joyL)
 				plMoveL(lvlGetP1(G->Lvl));
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || joyR )
 				plMoveR(lvlGetP1(G->Lvl));
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || joyRotR)
 				plRotateR(lvlGetP1(G->Lvl));
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || joyRotL)
 				plRotateL(lvlGetP1(G->Lvl));
 		}
 
