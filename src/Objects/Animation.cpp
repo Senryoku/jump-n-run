@@ -190,9 +190,6 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 	unsigned char TriggerCount = 0;
 	AnimTriggers Triggering = ANIM_NECK; // = 1
 	float prevdt = 0.5f, dt = 0.5f;
-	/**
-	 @todo la tête on s'en fout un peu vu que l'on dessine quelquechose dessus, elle n'est importante que lorsque l'on fait un ragdoll, et dans ce cas l'animation n'affecte plus le joueur 
-	 */
 	
 	/* Mise à jour des angles ou des positions */
 	if (A->Type == ANIM_POSITIONS)
@@ -323,7 +320,6 @@ void aniUpdate(Animation* A, SPlayer* P, float Step)
 			}
 			else
 			{
-				///@todo On pourrait ici obtenir l'angle du membre pour mettre à jour l'état du state mais
 				if (i<bpHeadLeft)
 				{
 					Vertex* from;

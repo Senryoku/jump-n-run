@@ -115,6 +115,9 @@ void gmPlay(Game* G)
 	if(G->Lvl == NULL) return;
 	if (strcmp(G->Path, "") != 0) lvlLoadedInit(G->Lvl), gmResetClk(G); // Cas du lancement via l'éditeur
 	while(strcmp(G->Path, "") == 0) gmMenu(G);
+	//Bool UseJoystick;
+	
+	//UseJoystick = sf::Joystick::isConnected(0);
 
 	fpsInit(&fps);
 	while (G->Window->isOpen())
@@ -136,6 +139,13 @@ void gmPlay(Game* G)
 
 			if (event.type == sf::Event::LostFocus)
 				G->WindowIsActive = FALSE;
+			/*
+			if (event.type == sf::Event::JoystickConnected)
+				UseJoystick = TRUE;
+			
+			if (event.type == sf::Event::JoystickDisconnected)
+				UseJoystick = FALSE;
+			 */
 
 			if (event.type == sf::Event::GainedFocus)
 				G->WindowIsActive = TRUE;
@@ -187,6 +197,15 @@ void gmPlay(Game* G)
 
 		if (G->WindowIsActive)
 		{
+			/*
+			Bool joyJump = TRUE, joyL = TRUE, joyR = TRUE, joyUp = TRUE, joyRotL = TRUE, joyRotR = TRUE;
+			if (UseJoystick)
+			{
+				joyJump = sf::Joystick::isButtonPressed(0, 0);
+				joyL = sf::Joystick::getAxisPosition(0, sf::Joystick::X) > 100.f;
+			}
+			*/
+			
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 				plJump(lvlGetP1(G->Lvl), G->SR);
 			else

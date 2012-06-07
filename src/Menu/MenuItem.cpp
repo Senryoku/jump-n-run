@@ -145,7 +145,6 @@ void mniRunFunction(MenuItem* I)
 void foo(void);
 void foo(void*);
 
-///@todo vérifier les erreurs données par valgrind
 void mniRegressionTest(void)
 {
 	printf("=== mniRegressionTest Begin ===\n");

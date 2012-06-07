@@ -343,7 +343,7 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 	
 	if (event.type == sf::Event::TextEntered)
 	{
-		unsigned int c;
+		unsigned int c = 0;
 		sf::Utf32::encodeAnsi(event.text.unicode, &c);
 		//if (i>=32 && i<=126) /* printables chars */
 		mniUse(M, mnGetCurrentItem(M), FALSE, MOVE_NONE, (unsigned char) c, FALSE);

@@ -18,7 +18,7 @@ void lvlInit(Level* Lvl, float Width, float Height)
 	lstInit(&Lvl->Objects);
 	Lvl->lvlTexLoad = &glTexLoad;
 	Lvl->lvlTexFree = &glTexFree;
-	Lvl->lvlDisplayTex = &glDisplayTex; ///@todo Mettre une fonction our charger ça
+	Lvl->lvlDisplayTex = &glDisplayTex;
 	Lvl->lvlDispTexPoly = &glDispTexPoly;
 	Lvl->lvlDispFlag = &glDispFlag;
 	Lvl->lvlDispPlayer = &glDispPlayer;
@@ -274,7 +274,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 					if (polyFixed)
 					{
 						polySetFixed(p, TRUE);
-						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p); ///@todo accesseur
+						gridAddPolygonByBB(&lvlGetWorld(Lvl)->CollisionGrid, p); 
 					}
 
 					daAdd(Poly, p);

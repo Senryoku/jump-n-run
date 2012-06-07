@@ -810,7 +810,6 @@ Bool lvledSave(LevelEditor *Led, const char* File)
 		fprintf(f, "%u #Texture\n%s\n", o_texture, (char*)daGet(&Led->TexturesPath, i));
 	}
 
-	/** @todo Debuger */
 	//On écrit les objects
 	it = lvlGetObjIt(Led->Lvl);
 	while(!nodeEnd(it))

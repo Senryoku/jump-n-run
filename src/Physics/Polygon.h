@@ -13,7 +13,6 @@
  *
  * Polygone convexe composé de Vertex reliés par des Rigid
  * Préfixe des méthodes : poly
- * @todo Test de régression complet
  * @{
 **/
 

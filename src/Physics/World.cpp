@@ -103,7 +103,6 @@ void wdDelPolygon(World* W, Polygon* P)
 	/* On retire le centre du polygon de la liste de vertices */
 	if(polyGetCenter(P) != NULL) lstDel(&W->Vertices, polyGetCenter(P));
 	lstDel(&W->Polygons, P);
-	///@todo l'enlever de la grille!
 	gridRemovePolygonByForce(&W->CollisionGrid, P);
 }
 

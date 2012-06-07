@@ -9,9 +9,6 @@
  *
  * Permet la création/édition de Niveau
  * Préfixe des méthodes : lvled
- * @todo Ajouter des fonctions de manipulation internes des objets (changement de
- * spring pour les elastics, ajout de contraintes internes pour les polygones... etc)
- * @todo Documentation :]
  * @{
 **/
 

@@ -617,7 +617,7 @@ void appRun(LevelEditorApp* App)
 		if(DispFore) lvlDisplayFG(lvledGetLvl(&App->Led), App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight);
 
 		if(DispDebug) lvledDraw(&App->Led, LVLED_RULE | LVLED_LIMITS);
-		 glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY)); /// @todo C'est pas terrible ça...
+		 glDrawPolyFromList(&App->Led.tmpLstDyn, vec2(MouseX, MouseY));
 		glDrawPolyFromList(&App->Led.tmpLstFixed, vec2(MouseX, MouseY));
 
 		if (lvledGetNearestPoly(&App->Led) != NULL)
