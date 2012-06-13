@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <ctime>
 
 #if defined(_WIN32) || defined(__WIN32__)
 // Windows
@@ -69,7 +70,7 @@ Bool CreateDirectory(const char* Dir)
 	return success;
 }
 
-int GetLevels(std::string dir, std::vector<std::string> &files)
+int GetFiles(std::string dir, std::vector<std::string> &files, const char* ext)
 {
     DIR *dp;
     struct dirent *dirp;
@@ -81,7 +82,7 @@ int GetLevels(std::string dir, std::vector<std::string> &files)
 	files.clear();
 
     while ((dirp = readdir(dp)) != NULL) {
-		if (strstr(dirp->d_name, ".lvl") != NULL)
+		if (strstr(dirp->d_name, ext) != NULL)
 			files.push_back(std::string(dirp->d_name));
     }
     closedir(dp);
@@ -151,4 +152,11 @@ void printError(const char *func, const char *file, int line)
 	char tmp[300];
 	sprintf(tmp, "Error at function %s. In file %s at line %d", func, file, line);
 	perror(tmp);
+}
+
+void printDateHour(char* s, time_t t)
+{
+	tm* now = localtime(&t);
+	sprintf(s,"%d_%d_%d_%d%d%d",now->tm_mday, now->tm_mon, now->tm_year+1900, now->tm_hour, now->tm_min, now->tm_sec);
+		  
 }

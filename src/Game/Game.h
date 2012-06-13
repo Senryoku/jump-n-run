@@ -12,6 +12,7 @@
 #include <Game/SharedResources.h>
 #include <Objects/Animation.h>
 #include <Game/Message.h>
+#include "Replay.h"
 
 /** @defgroup Game Game
  *
@@ -28,7 +29,9 @@ typedef struct
 	sf::Clock Clk; /**< Horloge **/
 	unsigned int Time; /**< Temps (score) courrant **/
 	Bool WindowIsActive;
-
+	Replay* Rep;
+	char ReplayFile[1024];
+	Bool IsAReplay;
 	SharedResources* SR; ///< Resources partagées
 } Game;
 
@@ -65,6 +68,14 @@ void gmPlay(Game* G);
  * @return Vrai si le niveau a bien été chargé
 **/
 Bool gmLoadLvl(Game* G, const char* Path);
+
+/** @brief Charge une replay
+ *
+ * @param[in,out] G Game
+ * @param[in] Path Chemin du replay de niveau à charger
+ * @return Vrai si le replay a bien été chargé
+ **/
+Bool gmLoadReplay(Game* G, const char* Path);
 
 /** @brief Recharge le niveau précédement chargé
  *

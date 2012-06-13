@@ -998,7 +998,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 		case 12:
 		{
 			std::vector<std::string> files;
-			GetLevels("levels", files);
+			GetFiles("levels", files, ".lvl");
 			
 			msgCreateMessage(shMessageManager(App->SR), "Level List", (unsigned int)files.size()+1);
 			for (int i=0; i<(int)files.size(); i++)

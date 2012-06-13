@@ -7,6 +7,9 @@
 
 int main(int argc, char** argv)
 {
+	if (!DirectoryExists("replays"))
+		CreateDirectory("replays");
+	
 	sf::Context C;
 	C.setActive(1);
 	SharedResources SR;

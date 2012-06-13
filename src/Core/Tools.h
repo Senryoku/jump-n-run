@@ -57,11 +57,13 @@ void Wobble(float *CurrentPosition, float TargetPosition, float Force,float Fric
 Bool DirectoryExists(const char* Dir);
 Bool CreateDirectory(const char* Dir);
 
-int GetLevels(std::string dir, std::vector<std::string> &files);
+int GetFiles(std::string dir, std::vector<std::string> &files, const char* ext);
 
 Bool FileExists(const char* File);
 
 Config GetConfiguration();
+
+void printDateHour(char* s, time_t t);
 
 
 

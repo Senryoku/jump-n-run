@@ -46,7 +46,10 @@ void gmInit(Game* G, SharedResources* SR)
 	G->SR = SR;
 
 	strcpy(G->Path, "");
-
+	
+	G->Rep = NULL;
+	G->IsAReplay = FALSE;;
+	strcpy(G->ReplayFile, "");
 	G->Window->setActive();
 }
 
@@ -55,20 +58,93 @@ void gmFree(Game* G)
 	if(G->Lvl != NULL) delLevel(G->Lvl);
 	G->Window->setActive(0);
 	G->Window->close();
+	if (G->Rep != NULL)
+	{
+		delReplay(G->Rep);
+
+	}
 	//delete G->Window; // Provoque une segfault sous Windows
 }
 
 Bool gmLoadLvl(Game* G, const char* Path)
 {
-	strcpy(G->Path, Path);
-	return lvlLoad(G->Lvl, Path);
+	Bool r;
+	r = lvlLoad(G->Lvl, Path);
+	if (r)
+	{
+		strcpy(G->Path, Path);
+		char date[1024], name[1024];
+		printDateHour(date, time(NULL));
+		sprintf(name, "replays/%s_%s.rp",lvlGetName(G->Lvl),date);
+		
+		if (G->Rep != NULL)
+			delReplay(G->Rep);
+
+		G->Rep = newReplay();
+		rpInitRecording(G->Rep, name, lvlGetFilename(G->Lvl));
+		strcpy(G->ReplayFile, name);
+		
+		G->IsAReplay = FALSE;
+	}
+	
+	return r;
+}
+
+Bool gmLoadReplay(Game* G, const char* Path)
+{
+	Bool r;
+	char lvl[255];
+	if (G->Rep != NULL)
+		delReplay(G->Rep);
+
+	G->Rep = newReplay();
+	rpInitReading(G->Rep, Path, lvl);
+	
+	r = lvlLoad(G->Lvl, lvl);
+	if (!r)
+	{
+		printf("Level %s doesn't exist\n", lvl);
+		delReplay(G->Rep);
+		
+		G->Rep = NULL;
+	}
+	else
+	{
+		G->IsAReplay = TRUE;
+		strcpy(G->Path, lvl);
+		strcpy(G->ReplayFile, Path);
+		/*
+		rpAction Action;
+		
+		do
+		{
+			Action = rpReadAction(G->Rep);
+			printf("==ACTION==\n");
+			if (Action & ACTION_MOVELEFT)
+				printf("Move left\n");
+			
+			if (Action & ACTION_MOVERIGHT)
+				printf("Move right\n");
+			
+			if (Action & ACTION_JUMP)
+				printf("Jump\n");
+			
+		} while (Action != END_OF_FILE);
+		
+		delReplay(G->Rep);
+		G->Rep = NULL;
+		 */
+	}
+	
+	return r;
 }
 
 void gmMenu(Game* G)
 {
 	ItemID IID;
-	msgCreateMessage(shMessageManager(G->SR), "JumpNRun", 4);
+	msgCreateMessage(shMessageManager(G->SR), "JumpNRun", 5);
 	msgAddCloseItem(shMessageManager(G->SR), "Select Level from List");
+	msgAddCloseItem(shMessageManager(G->SR), "Play a replay");
 	IID = msgAddItem(shMessageManager(G->SR), "Level Path", ITEM_INPUT, NULL, NULL);
 	mniSetInput(mnGetItem(msgGetMenu(shMessageManager(G->SR)), 0, IID), G->Path);
 	msgAddCloseItem(shMessageManager(G->SR), "Play");
@@ -79,7 +155,7 @@ void gmMenu(Game* G)
 		case 0:
 		{
 			std::vector<std::string> files;
-			GetLevels("levels", files);
+			GetFiles("levels", files, ".lvl");
 
 			msgCreateMessage(shMessageManager(G->SR), "Level List", (unsigned int)files.size()+1);
 			for (int i=0; i<(int)files.size(); i++)
@@ -98,11 +174,31 @@ void gmMenu(Game* G)
 			break;
 		}
 		case 1 :
+		{
+			std::vector<std::string> files;
+			GetFiles("replays", files, ".rp");
+			
+			msgCreateMessage(shMessageManager(G->SR), "Replays List", (unsigned int)files.size());
+			for (int i=0; i<(int)files.size()-1; i++)
+				if (strcmp(files[i].c_str(), G->ReplayFile) != 0)
+				msgAddCloseItem(shMessageManager(G->SR), files[i].c_str());
+			
+			msgAddCloseItem(shMessageManager(G->SR), "Cancel");
+			
+			Choice = msgGetChoice(shMessageManager(G->SR), *G->Window, 0.f, 0.f, G->WindowWidth, G->WindowHeight);
+			
+			if (Choice < (ItemID)files.size()-1)
+			{
+				if(gmLoadReplay(G, ("replays/"+files[Choice]).c_str())) { lvlLoadedInit(G->Lvl); gmResetClk(G); } else { gmMenu(G); }
+			}
+			
+			files.clear();
 			break;
-		case 2 :
+		}
+		case 3 :
 			if(gmLoadLvl(G, msgGetLastInput(shMessageManager(G->SR)))) lvlLoadedInit(G->Lvl), gmResetClk(G); else gmMenu(G);
 			break;
-		case 3 :
+		case 4 :
 			G->Window->close();
 			break;
 		default :
@@ -116,6 +212,8 @@ void gmPlay(Game* G)
 	Vec2 Center;
 	Score Sc;
 	FPSCounter fps;
+	
+	rpAction Action;
 
 	float ViewX = 0.f, ViewY = 0.f, MouseX = 0.f, MouseY = 0.f, ViewWidth = G->WindowWidth, ViewHeight = G->WindowHeight;
 
@@ -133,7 +231,7 @@ void gmPlay(Game* G)
 	fpsInit(&fps);
 	while (G->Window->isOpen())
 	{
-
+		Action = 0;
 		sf::Event event;
 
 		while (G->Window->pollEvent(event))
@@ -155,7 +253,18 @@ void gmPlay(Game* G)
 				UseJoystick = cfg.UseJoystick;
 			
 			if (cfg.UseJoystick && event.type == sf::Event::JoystickButtonPressed && event.joystickButton.button == cfg.joyRestart)
-				if(gmReloadLevel(G)) lvlLoadedInit(G->Lvl), gmResetClk(G);
+			{
+				if (!G->IsAReplay)
+				{
+					delReplay(G->Rep);
+					G->Rep = NULL;
+					remove(G->ReplayFile);
+					printf("replay: %s\n",G->ReplayFile);
+				}
+				
+				if(gmReloadLevel(G))
+					lvlLoadedInit(G->Lvl), gmResetClk(G);
+			}
 			
 			if (event.type == sf::Event::JoystickDisconnected)
 				UseJoystick = FALSE;
@@ -212,35 +321,73 @@ void gmPlay(Game* G)
 		if (G->WindowIsActive)
 		{
 			
-			Bool joyJump = 0, joyL = 0, joyR = 0, joyUp = 0, joyRotL = 0, joyRotR = 0;
-			if (UseJoystick)
+			if (G->IsAReplay)
 			{
-				joyJump = sf::Joystick::isButtonPressed(0, cfg.joyButJump);
-				joyL = sf::Joystick::getAxisPosition(0, cfg.joyAxisMove) < -20.f;
-				joyR = sf::Joystick::getAxisPosition(0, cfg.joyAxisMove) > 20.f;
-				joyRotL = sf::Joystick::isButtonPressed(0, cfg.joyButL);
-				joyRotR = sf::Joystick::isButtonPressed(0, cfg.joyButR);
-				joyUp = sf::Joystick::isButtonPressed(0, cfg.joyButUp);
+				rpAction Action = rpReadAction(G->Rep);
+				
+				if (Action != END_OF_FILE)
+				{
+					if (Action & ACTION_JUMP)
+						plJump(lvlGetP1(G->Lvl), G->SR);
+					else
+						plResetJump(lvlGetP1(G->Lvl));
+					
+					if (Action & ACTION_GETUP)
+						plGetUp(lvlGetP1(G->Lvl));
+					
+					if (Action & ACTION_MOVELEFT)
+						plMoveL(lvlGetP1(G->Lvl));
+					
+					if (Action & ACTION_MOVERIGHT)
+						plMoveR(lvlGetP1(G->Lvl));
+					
+					if (Action & ACTION_ROTLEFT)
+						plRotateL(lvlGetP1(G->Lvl));
+					
+					if (Action & ACTION_ROTRIGHT)
+						plRotateR(lvlGetP1(G->Lvl));
+				}
+				else
+				{
+					gmShowEscapeMenu(G);
+				}
+			}
+			else
+			{
+				Bool joyJump = 0, joyL = 0, joyR = 0, joyUp = 0, joyRotL = 0, joyRotR = 0;
+				if (UseJoystick)
+				{
+					joyJump = sf::Joystick::isButtonPressed(0, cfg.joyButJump);
+					joyL = sf::Joystick::getAxisPosition(0, cfg.joyAxisMove) < -20.f;
+					joyR = sf::Joystick::getAxisPosition(0, cfg.joyAxisMove) > 20.f;
+					joyRotL = sf::Joystick::isButtonPressed(0, cfg.joyButL);
+					joyRotR = sf::Joystick::isButtonPressed(0, cfg.joyButR);
+					joyUp = sf::Joystick::isButtonPressed(0, cfg.joyButUp);
+				}
+				
+				
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || joyJump)
+					plJump(lvlGetP1(G->Lvl), G->SR), Action |= ACTION_JUMP;
+				else
+					plResetJump(lvlGetP1(G->Lvl));
+				
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) || joyUp)
+					plGetUp(lvlGetP1(G->Lvl)), Action |= ACTION_GETUP;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A) || joyL)
+					plMoveL(lvlGetP1(G->Lvl)), Action |= ACTION_MOVELEFT;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || joyR )
+					plMoveR(lvlGetP1(G->Lvl)), Action |= ACTION_MOVERIGHT;
+				
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || joyRotR)
+					plRotateR(lvlGetP1(G->Lvl)), Action |= ACTION_ROTRIGHT;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || joyRotL)
+					plRotateL(lvlGetP1(G->Lvl)), Action |= ACTION_ROTLEFT;
 			}
 			
-			
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || joyJump)
-				plJump(lvlGetP1(G->Lvl), G->SR);
-			else
-				plResetJump(lvlGetP1(G->Lvl));
-
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) || joyUp)
-				plGetUp(lvlGetP1(G->Lvl));
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A) || joyL)
-				plMoveL(lvlGetP1(G->Lvl));
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || joyR )
-				plMoveR(lvlGetP1(G->Lvl));
-
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) || joyRotR)
-				plRotateR(lvlGetP1(G->Lvl));
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || joyRotL)
-				plRotateL(lvlGetP1(G->Lvl));
 		}
+		
+		if (!G->IsAReplay)
+			rpAddAction(G->Rep, Action);
 
 
 		if(lvlIsGoalReached(G->Lvl))
@@ -250,7 +397,10 @@ void gmPlay(Game* G)
 			char Name[255];
 			msgCreateMessage(shMessageManager(G->SR), "Congrat's !", 5);
 			msgAddItem(shMessageManager(G->SR), "Player Name", ITEM_INPUT, NULL, NULL);
-			msgAddCloseItem(shMessageManager(G->SR), "Send Score");
+			if (G->IsAReplay)
+				msgAddItem(shMessageManager(G->SR), "Send Score", ITEM_LABEL, NULL, NULL);
+			else
+				msgAddCloseItem(shMessageManager(G->SR), "Send Score");
 			msgAddCloseItem(shMessageManager(G->SR), "Restart Level");
 			msgAddCloseItem(shMessageManager(G->SR), "Main Menu");
 			msgAddCloseItem(shMessageManager(G->SR), "Quit");
