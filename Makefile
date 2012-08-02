@@ -27,10 +27,10 @@ LIBS := -framework sfml-system -framework sfml-window -framework sfml-graphics -
 endif
 ifeq ($(OS), Win)
 RM = del
-LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-network -lsfml-system -lopengl32
+LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-network -lsfml-system -lopengl32 -static-libgcc -static-libstdc++
 endif
 
-all : dirs test 
+all : dirs runGame 
 	@echo "\n\n\t== Faire 'make run' pour lancer l'application ==\n\n"
 
 

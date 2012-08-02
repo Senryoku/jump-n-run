@@ -352,7 +352,7 @@ void mnHandleEvent(Menu* M, const sf::Event& event)
 		//printf("text entered: %c", c);
 	}
 	
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
 		mniUse(M ,mnGetCurrentItem(M), FALSE, MOVE_NONE, 0, TRUE);
 	
 	if (Enter)
