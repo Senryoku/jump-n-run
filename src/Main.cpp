@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	Game G;
 
 	gmInit(&G, &SR);
-	gmLoadLvl(&G, "levels/MainMenu.lvl");
+	gmLoadLvl(&G, (ResourcePath()+"levels/MainMenu.lvl").c_str());
 	gmPlay(&G);
 	gmFree(&G);
 

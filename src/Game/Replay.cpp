@@ -1,5 +1,6 @@
 
 #include "Replay.h"
+#include <Core/ResourcePath.h>
 
 
 Replay* newReplay()
@@ -20,7 +21,7 @@ void rpInitRecording(Replay* R, const char* File, const char LevelFile[255])
 {
 	R->f = fopen(File, "wb");
 	char file[255] ;
-	sprintf(file, "levels/%s",LevelFile);
+	sprintf(file,(ResourcePath()+"levels/%s").c_str(),LevelFile);
 	if (R->f == NULL)
 		printf("Error creating replay file %s\n", File);
 	else

@@ -13,6 +13,7 @@
 #include <Objects/Animation.h>
 #include <Game/Message.h>
 #include "Replay.h"
+#include <Core/ResourcePath.h>
 
 /** @defgroup Game Game
  *

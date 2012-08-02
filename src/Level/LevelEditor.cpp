@@ -642,10 +642,10 @@ void lvledObject(LevelEditor *Led, Polygon* P, unsigned int T, List CT)
 
 void lvledTestLevel(LevelEditor *Led)
 {
-	lvledSave(Led, "levels/tmpTest.lvl~");
+	lvledSave(Led, (ResourcePath()+"levels/tmpTest.lvl~").c_str());
 	Game G;
 	gmInit(&G, Led->SR);
-	gmLoadLvl(&G, "levels/tmpTest.lvl~");
+	gmLoadLvl(&G, (ResourcePath()+"levels/tmpTest.lvl~").c_str());
 	gmPlay(&G);
 	gmFree(&G);
 }
@@ -934,10 +934,10 @@ void lvledRegressionTest()
 	printf("=== lvledRegressionTest Begin ===\n");
 	LevelEditor Led;
 	lvledInit(&Led, 0.f, 0.f, &SR);
-	lvledLoad(&Led, "levels/SlidingBoxes.lvl");
+	lvledLoad(&Led, (ResourcePath()+"levels/SlidingBoxes.lvl").c_str());
 	lvledFree(&Led);
 	lvledInit(&Led, 0.f, 0.f, &SR);
-	lvledLoad(&Led, "levels/SlidingBoxes.lvl");
+	lvledLoad(&Led, (ResourcePath()+"levels/SlidingBoxes.lvl").c_str());
 	lvledResetLevel(&Led);
 	lvledFree(&Led);
 	printf("=== lvledRegressionTest End =====\n");

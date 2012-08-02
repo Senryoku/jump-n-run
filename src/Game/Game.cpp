@@ -155,7 +155,7 @@ void gmMenu(Game* G)
 		case 0:
 		{
 			std::vector<std::string> files;
-			GetFiles("levels", files, ".lvl");
+			GetFiles(ResourcePath()+"levels", files, ".lvl");
 
 			msgCreateMessage(shMessageManager(G->SR), "Level List", (unsigned int)files.size()+1);
 			for (int i=0; i<(int)files.size(); i++)
@@ -167,7 +167,7 @@ void gmMenu(Game* G)
 
 			if (Choice < (ItemID)files.size())
 			{
-				if(gmLoadLvl(G, ("levels/"+files[Choice]).c_str())) { lvlLoadedInit(G->Lvl); gmResetClk(G); } else { gmMenu(G); }
+				if(gmLoadLvl(G, (ResourcePath()+"levels/"+files[Choice]).c_str())) { lvlLoadedInit(G->Lvl); gmResetClk(G); } else { gmMenu(G); }
 			}
 
 			files.clear();

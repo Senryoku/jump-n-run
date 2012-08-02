@@ -42,7 +42,7 @@ void shLoadTextures(SharedResources* SR)
 	shAddTexture(SR, "rd_chain", "data/gfx/s_chain.png");
 	shAddTexture(SR, "s_spawn", "data/gfx/s_spawn.png");
 	
-	SR->txCursor.loadFromFile("data/gui/s_cursors.png");
+	SR->txCursor.loadFromFile((ResourcePath()+"data/gui/s_cursors.png").c_str());
 	
 	for (int i=0; i<4; i++)
 	{
@@ -51,7 +51,7 @@ void shLoadTextures(SharedResources* SR)
 		SR->sprCursor[i].setOrigin(3.f, 5.f);
 	}
 	
-	SR->imgIcon.loadFromFile("data/appIcon.png");
+	SR->imgIcon.loadFromFile((ResourcePath()+"data/appIcon.png").c_str());
 }
 
 sf::Sprite& shGetCursorSprite(SharedResources* SR, unsigned char i)
@@ -85,23 +85,23 @@ MessageManager* shMessageManager(SharedResources* SR)
 
 void shLoadFonts(SharedResources* SR)
 {
-	SR->FntMenu.loadFromFile("data/gui/fnt_menu.ttf");
+	SR->FntMenu.loadFromFile((ResourcePath()+"data/gui/fnt_menu.ttf").c_str());
 }
 
 void shLoadAudio(SharedResources* SR)
 {
-	sndmLoadSoundFile(SR->SM, "snd_button", "data/sfx/snd_button.ogg");
-	sndmLoadSoundFile(SR->SM, "snd_menu", "data/sfx/snd_menu.ogg");
-	sndmLoadSoundFile(SR->SM, "snd_select", "data/sfx/snd_select.ogg");
-	sndmLoadSoundFile(SR->SM, "snd_msg", "data/sfx/snd_msg.ogg");
-	sndmLoadSoundFile(SR->SM, "snd_step1", "data/sfx/snd_step1.ogg");
-	sndmLoadSoundFile(SR->SM, "snd_step2", "data/sfx/snd_step2.ogg");
+	sndmLoadSoundFile(SR->SM, "snd_button", (ResourcePath()+"data/sfx/snd_button.ogg").c_str());
+	sndmLoadSoundFile(SR->SM, "snd_menu", (ResourcePath()+"data/sfx/snd_menu.ogg").c_str());
+	sndmLoadSoundFile(SR->SM, "snd_select", (ResourcePath()+"data/sfx/snd_select.ogg").c_str());
+	sndmLoadSoundFile(SR->SM, "snd_msg", (ResourcePath()+"data/sfx/snd_msg.ogg").c_str());
+	sndmLoadSoundFile(SR->SM, "snd_step1", (ResourcePath()+"data/sfx/snd_step1.ogg").c_str());
+	sndmLoadSoundFile(SR->SM, "snd_step2", (ResourcePath()+"data/sfx/snd_step2.ogg").c_str());
 	
 	char file[255], key[20];
 	
 	for (int i=1; i<=11; i++)
 	{
-		sprintf(file, "data/music/music%u.ogg",i);
+		sprintf(file, (ResourcePath()+"data/music/music%u.ogg").c_str(),i);
 		sprintf(key, "music%u",i);
 		sndmLoadMusicFile(SR->SM, key, file);
 	}

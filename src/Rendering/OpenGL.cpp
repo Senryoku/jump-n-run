@@ -109,7 +109,7 @@ Texture glTexLoad(const char* Path)
 	if(Path[0] != '\0')
 	{
 		#ifdef SFML_SYSTEM_MACOS
-		LoadSuccess = image.loadFromFile(Path); //À rajouter ResourcePath selon compilation
+		LoadSuccess = image.loadFromFile(ResourcePath()+Path); //À rajouter ResourcePath selon compilation
 		#else
 		LoadSuccess = image.loadFromFile(Path);
 		#endif

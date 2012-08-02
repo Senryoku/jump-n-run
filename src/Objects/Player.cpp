@@ -45,21 +45,21 @@ void plInit(Player* P, World *W)
 	animPositionsStatesInit(&P->Positions);
 
 	P->aniRun = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniRun, "data/anims/animRun.ani");
+	aniLoadFromFile(P->aniRun, (ResourcePath()+"data/anims/animRun.ani").c_str());
 	//aniSetForce(P->aniRun, 0.65f);
 
 	P->aniJump = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniJump, "data/anims/animJump.ani");
+	aniLoadFromFile(P->aniJump, (ResourcePath()+"data/anims/animJump.ani").c_str());
 	aniSetForce(P->aniJump, 0.65f);
 
 	P->aniFall = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniFall, "data/anims/animFall.ani");
+	aniLoadFromFile(P->aniFall, (ResourcePath()+"data/anims/animFall.ani").c_str());
 
 	P->aniHello = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniHello, "data/anims/animHello.ani");
+	aniLoadFromFile(P->aniHello, (ResourcePath()+"data/anims/animHello.ani").c_str());
 
 	P->aniStand = newAnimation(ANIM_ANGLES, ANIM_ALL_TRIGGERS, TRUE);
-	aniLoadFromFile(P->aniStand, "data/anims/animStand.ani");
+	aniLoadFromFile(P->aniStand, (ResourcePath()+"data/anims/animStand.ani").c_str());
 
 	unsigned int i=0;
 	for (i=0; i<polyGetVxCount(P->Shape); i++)

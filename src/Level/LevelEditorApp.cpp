@@ -28,7 +28,7 @@ void appInit(LevelEditorApp* App, SharedResources* SR)
 	lvledSetElDraw(&App->Led, &glDrawElastic);
 	lvledSetRdDraw(&App->Led, &glDrawRigid);
 	lvledSetPolyDraw(&App->Led, &glDrawPolygon);
-	lvledLoad(&App->Led, "levels/tmpEditor.lvl");
+	lvledLoad(&App->Led, (ResourcePath()+"levels/tmpEditor.lvl").c_str());
 	strcpy(App->WorkingPath, "levels/tmpEditor.lvl");
 	App->WindowIsActive = TRUE;
 
@@ -364,13 +364,13 @@ void appRun(LevelEditorApp* App)
 						break;
 					case sf::Keyboard::S :
 						if (event.key.control)
-							lvledSave(&App->Led, App->WorkingPath);
+							lvledSave(&App->Led, (ResourcePath()+App->WorkingPath).c_str());
 						break;
 					case sf::Keyboard::L :
 						if (event.key.control)
 						{
 							lvledResetNearestPoly(&App->Led);
-							lvledLoad(&App->Led, App->WorkingPath);
+							lvledLoad(&App->Led, (ResourcePath()+App->WorkingPath).c_str());
 						}
 						else
 							DispDebug = !DispDebug;
@@ -986,19 +986,19 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			strcpy(App->Led.forePath, msgGetInput(shMessageManager(App->SR), App->Window, App->ViewX, App->ViewY, App->ViewWidth, App->ViewHeight));
 			break;
 		case 9:
-			lvledSave(&App->Led, "levels/Backup.lvl");
+			lvledSave(&App->Led, (ResourcePath()+"levels/Backup.lvl").c_str());
 			lvledResetLevel(&App->Led);
 			break;
 		case 10:
-			lvledSave(&App->Led, App->WorkingPath);
+			lvledSave(&App->Led, (ResourcePath()+App->WorkingPath).c_str());
 			break;
 		case 11:
-			lvledLoad(&App->Led, App->WorkingPath);
+			lvledLoad(&App->Led, (ResourcePath()+App->WorkingPath).c_str());
 			break;
 		case 12:
 		{
 			std::vector<std::string> files;
-			GetFiles("levels", files, ".lvl");
+			GetFiles((ResourcePath()+"levels").c_str(), files, ".lvl");
 			
 			msgCreateMessage(shMessageManager(App->SR), "Level List", (unsigned int)files.size()+1);
 			for (int i=0; i<(int)files.size(); i++)
@@ -1011,7 +1011,7 @@ void appShowEscapeMenu(LevelEditorApp* App)
 			if (Choice < files.size())
 			{
 				strcpy(App->WorkingPath, ("levels/"+files[Choice]).c_str());
-				lvledLoad(&App->Led, App->WorkingPath);
+				lvledLoad(&App->Led, (ResourcePath()+App->WorkingPath).c_str());
 			}
 			
 			files.clear();

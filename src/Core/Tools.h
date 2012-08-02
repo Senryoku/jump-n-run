@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <SFML/Window/Joystick.hpp>
+#include <Core/ResourcePath.h>
 
 typedef char Bool;
 
