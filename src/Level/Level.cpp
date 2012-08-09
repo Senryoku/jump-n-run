@@ -156,12 +156,16 @@ Bool lvlLoad(Level* Lvl, const char* File)
 		printf("Error reading file %s. Level name is missing.\n", File);
 		return FALSE;
 	}
+	else
+	lvl[strlen(lvl)-1] = '\0';
 
 	if (fgets(description, 255, f)==NULL)
 	{
 		printf("Error reading file %s. Level description is missing.\n", File);
 		return FALSE;
 	}
+	else
+	description[strlen(description)-1] = '\0';
 
 	float width, height, DistBG = 1.f, DistFG = 1.f;
 
@@ -219,22 +223,22 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 	//back
 	if (fgets(read, 255, f) == NULL) ERROR();
-	*strstr(read, "\n") = '\0';
+	read[strlen(read)-1] = '\0';
 	Lvl->Background = (*Lvl->lvlTexLoad)(read);
 
 	//layer 1
 	if (fgets(read, 255, f) == NULL) ERROR();
-	*strstr(read, "\n") = '\0';
+	read[strlen(read)-1] = '\0';
 	Lvl->Layer1 = (*Lvl->lvlTexLoad)(read);
 
 	//layer 2
 	if (fgets(read, 255, f) == NULL) ERROR();
-	*strstr(read, "\n") = '\0';
+	read[strlen(read)-1] = '\0';
 	Lvl->Layer2 = (*Lvl->lvlTexLoad)(read);
 
 	//foreground
 	if (fgets(read, 255, f) == NULL) ERROR();
-	*strstr(read, "\n") = '\0';
+	read[strlen(read)-1] = '\0';
 	Lvl->Foreground = (*Lvl->lvlTexLoad)(read);
 
 	//liste des vertex
@@ -245,7 +249,7 @@ Bool lvlLoad(Level* Lvl, const char* File)
 	{
 		item=o_end;
 		polyFixed=FALSE;
-		sscanf(read, "%u %u %i #\n", &item, &nVertex, &booly);
+		sscanf(read, "%u %u %i", &item, &nVertex, &booly);
 		polyFixed = (Bool)booly;
 
 		switch (item)

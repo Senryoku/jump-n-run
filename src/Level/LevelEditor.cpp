@@ -670,10 +670,12 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	if (fgets(Led->layer1Path, 255, f) == NULL) ERROR();
 	if (fgets(Led->layer2Path, 255, f) == NULL) ERROR();
 	if (fgets(Led->forePath, 255, f) == NULL) ERROR();
-	*strstr(Led->backPath, "\n") = '\0';
-	*strstr(Led->layer1Path, "\n") = '\0';
-	*strstr(Led->layer2Path, "\n") = '\0';
-	*strstr(Led->forePath, "\n") = '\0';
+	
+	//Fgets laisse à la fin le caractère \n et il faut l'enlever
+	Led->backPath[strlen(Led->backPath)-1] = '\0';
+	Led->layer1Path[strlen(Led->layer1Path)-1] = '\0';
+	Led->layer2Path[strlen(Led->layer2Path)-1] = '\0';
+	Led->forePath[strlen(Led->forePath)-1] = '\0';
 
 	//on libere l'array des paths des textures
 	for (i=0; i<daGetSize(&Led->TexturesPath); i++)

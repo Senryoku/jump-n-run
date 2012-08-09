@@ -7,8 +7,8 @@
 
 int main(int argc, char** argv)
 {
-	if (!DirectoryExists("replays"))
-		CreateDirectory("replays");
+	if (!DirectoryExists((ResourcePath()+"replays").c_str()))
+		CreateDirectory((ResourcePath()+"replays").c_str());
 	
 	sf::Context C;
 	C.setActive(1);

@@ -112,12 +112,12 @@ Config GetConfiguration()
 	Cfg.joyRestart = 18;
 
 	FILE* f;
-	f = fopen("Config.cfg", "r");
+	f = fopen((ResourcePath()+"Config.cfg").c_str(), "r");
 	if(f != NULL)
 	{
 		while (fgets(line, 255, f) != NULL)
 		{
-			sscanf(line, "%s %f\n", id, &value);
+			sscanf(line, "%s %f", id, &value);
 			// printf("Lu : %s, %f\n", id, value);
 			if(strcmp(id, "WindowWidth") == 0) Cfg.WindowWidth = value;
 			if(strcmp(id, "WindowHeight") == 0) Cfg.WindowHeight = value;
@@ -135,7 +135,7 @@ Config GetConfiguration()
 		}
 	} else {
 		/* Création d'un fichier de configuration par défaut */
-		f = fopen("Config.cfg", "w");
+		f = fopen((ResourcePath()+"Config.cfg").c_str(), "w");
 
 		if (f != NULL)
 			fprintf(f, "WindowWidth %f\nWindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\nMusic %f\n", Cfg.WindowWidth, Cfg.WindowHeight, Cfg.FPSLimit, Cfg.AntiAliasing, Cfg.VerticalSync, Cfg.PlayMusic);

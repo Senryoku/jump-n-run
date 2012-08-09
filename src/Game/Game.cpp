@@ -75,7 +75,7 @@ Bool gmLoadLvl(Game* G, const char* Path)
 		strcpy(G->Path, Path);
 		char date[1024], name[1024];
 		printDateHour(date, time(NULL));
-		sprintf(name, "replays/%s_%s.rp",lvlGetName(G->Lvl),date);
+		sprintf(name, (ResourcePath()+"replays/%s_%s.rp").c_str(),lvlGetName(G->Lvl),date);
 		
 		if (G->Rep != NULL)
 			delReplay(G->Rep);
@@ -176,7 +176,7 @@ void gmMenu(Game* G)
 		case 1 :
 		{
 			std::vector<std::string> files;
-			GetFiles("replays", files, ".rp");
+			GetFiles((ResourcePath()+"replays").c_str(), files, ".rp");
 			
 			msgCreateMessage(shMessageManager(G->SR), "Replays List", (unsigned int)files.size());
 			for (int i=0; i<(int)files.size()-1; i++)
@@ -189,7 +189,7 @@ void gmMenu(Game* G)
 			
 			if (Choice < (ItemID)files.size()-1)
 			{
-				if(gmLoadReplay(G, ("replays/"+files[Choice]).c_str())) { lvlLoadedInit(G->Lvl); gmResetClk(G); } else { gmMenu(G); }
+				if(gmLoadReplay(G, (ResourcePath()+"replays/"+files[Choice]).c_str())) { lvlLoadedInit(G->Lvl); gmResetClk(G); } else { gmMenu(G); }
 			}
 			
 			files.clear();
