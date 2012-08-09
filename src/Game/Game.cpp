@@ -180,8 +180,11 @@ void gmMenu(Game* G)
 			
 			msgCreateMessage(shMessageManager(G->SR), "Replays List", (unsigned int)files.size());
 			for (int i=0; i<(int)files.size()-1; i++)
-				if (strcmp(files[i].c_str(), G->ReplayFile) != 0)
-				msgAddCloseItem(shMessageManager(G->SR), files[i].c_str());
+			{
+				printf("file: %s. myFile: %s.\n", files[i].c_str(), G->ReplayFile);
+				if (strcmp((ResourcePath() + "replays/" + files[i]).c_str(), G->ReplayFile) != 0)
+					msgAddCloseItem(shMessageManager(G->SR), files[i].c_str());
+			}
 			
 			msgAddCloseItem(shMessageManager(G->SR), "Cancel");
 			
@@ -252,7 +255,7 @@ void gmPlay(Game* G)
 			if (event.type == sf::Event::JoystickConnected)
 				UseJoystick = cfg.UseJoystick;
 			
-			if (cfg.UseJoystick && event.type == sf::Event::JoystickButtonPressed && event.joystickButton.button == cfg.joyRestart)
+			if ((cfg.UseJoystick && event.type == sf::Event::JoystickButtonPressed && event.joystickButton.button == cfg.joyRestart) || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R))
 			{
 				if (!G->IsAReplay)
 				{

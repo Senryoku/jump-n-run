@@ -672,7 +672,9 @@ Bool lvledLoad(LevelEditor *Led, const char* File)
 	if (fgets(Led->forePath, 255, f) == NULL) ERROR();
 	
 	//Fgets laisse à la fin le caractère \n et il faut l'enlever
+	printf("avant edition: %s<end>\n", Led->backPath);
 	Led->backPath[strlen(Led->backPath)-1] = '\0';
+	printf("après edition: %s<end>\n", Led->backPath);
 	Led->layer1Path[strlen(Led->layer1Path)-1] = '\0';
 	Led->layer2Path[strlen(Led->layer2Path)-1] = '\0';
 	Led->forePath[strlen(Led->forePath)-1] = '\0';

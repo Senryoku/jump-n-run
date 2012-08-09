@@ -223,7 +223,9 @@ Bool lvlLoad(Level* Lvl, const char* File)
 
 	//back
 	if (fgets(read, 255, f) == NULL) ERROR();
+	printf("read back: %s <end>\n", read);
 	read[strlen(read)-1] = '\0';
+	printf("read back2: %s <end>\n", read);
 	Lvl->Background = (*Lvl->lvlTexLoad)(read);
 
 	//layer 1

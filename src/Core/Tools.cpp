@@ -157,6 +157,6 @@ void printError(const char *func, const char *file, int line)
 void printDateHour(char* s, time_t t)
 {
 	tm* now = localtime(&t);
-	sprintf(s,"%d_%d_%d_%d%d%d",now->tm_mday, now->tm_mon, now->tm_year+1900, now->tm_hour, now->tm_min, now->tm_sec);
+	sprintf(s,"%d-%d-%d_%d-%d-%d",now->tm_mday, now->tm_mon, now->tm_year+1900, now->tm_hour, now->tm_min, now->tm_sec);
 		  
 }
