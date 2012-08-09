@@ -131,14 +131,14 @@ Config GetConfiguration()
 			if(strcmp(id, "JoyR") == 0) Cfg.joyButR = (unsigned int)value;
 			if(strcmp(id, "JoyUp") == 0) Cfg.joyButUp = (unsigned int)value;
 			if(strcmp(id, "UseJoy") == 0) Cfg.UseJoystick = (bool)value;
-			if(strcmp(id, "JoyRestart") == 0) Cfg.joyRestart = (bool)value;
+			if(strcmp(id, "JoyRestart") == 0) Cfg.joyRestart = (unsigned int)value;
 		}
 	} else {
 		/* Création d'un fichier de configuration par défaut */
 		f = fopen((ResourcePath()+"Config.cfg").c_str(), "w");
 
 		if (f != NULL)
-			fprintf(f, "WindowWidth %f\nWindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\nMusic %f\n", Cfg.WindowWidth, Cfg.WindowHeight, Cfg.FPSLimit, Cfg.AntiAliasing, Cfg.VerticalSync, Cfg.PlayMusic);
+			fprintf(f, "WindowWidth %f\nWindowHeight %f\nFPSLimit %f\nAntiAlising %f\nVerticalSync %f\nMusic %f\nJoyJump %u\nJoyMove %u\nJoyL %u\nJoyR %u\nJoyUp %u\nUseJoy %u\nJoyRestart %u\n", Cfg.WindowWidth, Cfg.WindowHeight, Cfg.FPSLimit, Cfg.AntiAliasing, Cfg.VerticalSync, Cfg.PlayMusic, Cfg.joyButJump, static_cast<unsigned int>(Cfg.joyAxisMove), Cfg.joyButL, Cfg.joyButR, Cfg.joyButUp, (unsigned int)Cfg.UseJoystick, Cfg.joyRestart);
 		else
 			printf("Error writing to Config.cfg: file cannot be created...\n");
 	}
