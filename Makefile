@@ -8,7 +8,6 @@ POINTCPP = $(wildcard $(SRC)*/*.cpp) #$(wildcard $(SRC)*.cpp)
 POINTOP := $(POINTC:.c=.o) $(POINTCPP:.cpp=.o)
 POINTO = $(patsubst src/%,$(OBJ)%,$(POINTOP)) #$(POINTOP:src=obj)
 
-OPT := -Wall -pedantic -Wno-long-long -O2 -g -I "$(SRC)"
 
 
 ifeq ($(SHELL), sh.exe) 
@@ -17,6 +16,7 @@ else
 OS := $(shell uname)
 endif
 
+STD := -std=c++0x
 ifeq ($(OS), Linux)
 RM = rm
 LIBS := -lsfml-network -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lGL
@@ -24,11 +24,15 @@ endif
 ifeq ($(OS), Darwin)
 RM = rm
 LIBS := -framework sfml-system -framework sfml-window -framework sfml-graphics -framework sfml-audio -framework sfml-network -framework OpenGL
+CXX := xcrun clang++
+STD := -std=c++11 -stdlib=libc++
 endif
 ifeq ($(OS), Win)
 RM = del
 LIBS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-network -lsfml-system -lopengl32 -static-libgcc -static-libstdc++
 endif
+
+OPT := -Wall -pedantic -Wno-long-long -O2 -g -I "$(SRC)" $(STD)
 
 all : dirs runGame 
 	@echo "\n\n\t== Faire 'make run' pour lancer l'application ==\n\n"
