@@ -2,8 +2,9 @@
 ____________
 
 ## Présentation
-C'est un jeu de courses avec un bonhomme. Un éditeur de niveau permet de créer de très larges mondes avec plein d'obstacles. 
-La physique avancée permet de gérer des polygones fixes ou pas, des  points et des contraintes rigides et élastiques (ressorts). On peu aussi importer des images personnalisées pour créer n'importe quel objet et le mettre dans le niveau. 
+Jump'n'Run est un jeu de plateforme développé dans le cadre de la licence d'informatique de Lyon1 dans lequel le joueur contrôle un personnage entièrement soumis à la physique et dont le but est d'arriver le plus rapidement possible à la fin de chaque niveau.
+Un éditeur de niveau permet de créer de très larges mondes avec un grand nombre d'obstacles. 
+La physique avancée permet de gérer des polygones fixes ou non, des  points et des contraintes rigides et élastiques (ressorts). Il est également possible d'importer des images personnalisées pour créer n'importe quel objet et utiliser comme textures dans le niveau. 
 
 ## Captures d'écran
 ![img1](http://i.imgur.com/yZ9MJ.png)
